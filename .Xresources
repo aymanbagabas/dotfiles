@@ -1,0 +1,207 @@
+! Xft settings ---------------------------------------------------------------
+
+Xft*dpi:        96
+Xft*antialias:  true
+Xft*rgba:       rgb
+Xft*hinting:    true
+Xft*hintstyle:  hintslight
+
+!URxvt*depth: 32
+!URxvt*background: rgba:2627/2627/2627/df29
+!URxvt*foreground: #F2F1ED
+URxvt*geometry: 100x30
+
+! scrollbar style - rxvt (default), plain (most compact), next, or xterm
+! URxvt*scrollstyle: rxvt
+URxvt*scrollBar: false
+
+! do not scroll with output
+URxvt*scrollTtyOutput: false
+
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer: true
+
+! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress: true
+
+URxvt*font: -*-Termsyn-Medium-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:pixelsize=16:antialias=false:hinting=false:autohint=false
+URxvt*BoldFont: -*-Termsyn-Bold-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:bold:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:bold:pixelsize=16:antialias=false:hinting=false:autohint=false
+
+URxvt*iconFile:    /usr/share/icons/elementary/apps/48/Terminal.svg
+ncmpcpp*iconFile:    /usr/share/icons/elementary/apps/48/audio-player.svg
+htop*iconFile:    /usr/share/icons/elementary/apps/48//htop.svg
+alsamixer*iconFile:    /usr/share/icons/elementary/apps/48/gnome-audio.svg
+
+URxvt*loginShell: true
+
+! URxvt*termName:screen-256color
+
+URxvt*perl-ext-common:  default,matcher,fullscreen,vtwheel,clipboard
+URxvt*keysym.F11: perl:fullscreen:switch
+URxvt*keysym.Home: \e[7~
+URxvt*keysym.End: \e[8~
+URxvt*url-launcher:      /usr/bin/firefox
+URxvt*matcher.button:   1
+URxvt*colorUL: #4682B4
+
+! URxvt*cutchars: `"'&()urxvt*,;<=>?@[]{|}$`
+
+! Xcursor --------------------------------------------------------------------
+
+Xcursor*theme: Vanilla-DMZ-AA
+Xcursor*size:  22
+
+! terminal colors ------------------------------------------------------------
+
+! tangoesque scheme
+!*background: #020202
+!*foreground: #F2F1ED
+! Black (not tango) + DarkGrey
+!*color0:  #000000
+!*color8:  #555753
+! DarkRed + Red
+!*color1:  #ff6565
+!*color9:  #ff8d8d
+! DarkGreen + Green
+!*color2:  #93d44f
+!*color10: #c8e7a8
+! DarkYellow + Yellow
+!*color3:  #eab93d
+!*color11: #ffc123
+! DarkBlue + Blue
+!*color4:  #204a87
+!*color12: #3465a4
+! DarkMagenta + Magenta
+!*color5:  #ce5c00
+!*color13: #f57900
+!DarkCyan + Cyan (both not tango)
+!*color6:  #89b6e2
+!*color14: #46a4ff
+! LightGrey + White
+!*color7:  #cccccc
+!*color15: #ffffff
+
+!Black
+!*color0: #393434
+!*color8: #404040
+!Red
+!*color1: #802F2F
+!*color9: #E07777
+!Green
+!*color2: #424242
+!*color10: #8C8282
+!Yellow
+!*color3: #A36B6B
+!*color11: #DE8E8E
+!Blue
+!*color4: #872727
+!*color12: #C43939
+!Magenta
+!*color5: #7D6363
+!*color13: #9E7D7D
+!Cyan
+!*color6: #855555
+!*color14: #B86E6E
+!White
+!*color7: #b2b2b2
+!*color15: #bdbdbd
+
+!*background:             #262729
+!*foreground:             #f8f8f2
+! Black
+!*color0:                 #262729
+!*color8:                 #262729
+! Red
+!*color1:                 #f92671
+!*color9:                 #ff669d
+! Green
+!*color2:                 #a6e22e
+!*color10:                #beed5f
+! Yellow
+!*color3:                 #fd971f
+!*color11:                #e6db74
+! Blue
+!*color4:                 #1692d0
+!*color12:                #66d9ef
+! Magenta
+!*color5:                 #9e6ffe
+!*color13:                #df92f6
+! Cyan
+!*color6:                 #5e7175
+!*color14:                #a3babf
+! White
+!*color7:                 #ffffff
+!*color15:                #ffffff
+! Cursor
+!*cursorColor:            #b5d2dd
+
+! Solarized color scheme for the X Window System
+!
+! http://ethanschoonover.com/solarized
+
+
+! Common
+
+#define S_yellow        #b58900
+#define S_orange        #cb4b16
+#define S_red           #dc322f
+#define S_magenta       #d33682
+#define S_violet        #6c71c4
+#define S_blue          #268bd2
+#define S_cyan          #2aa198
+#define S_green         #859900
+
+
+! Dark
+
+#define S_base03        #002b36
+#define S_base02        #073642
+#define S_base01        #586e75
+#define S_base00        #657b83
+#define S_base0         #839496
+#define S_base1         #93a1a1
+#define S_base2         #eee8d5
+#define S_base3         #fdf6e3
+
+
+! Light
+
+! #define S_base03        #fdf6e3
+! #define S_base02        #eee8d5
+! #define S_base01        #93a1a1
+! #define S_base00        #839496
+! #define S_base0         #657b83
+! #define S_base1         #586e75
+! #define S_base2         #073642
+! #define S_base3         #002b36
+
+
+! To only apply colors to your terminal, for example, prefix
+! the color assignment statement with its name. Example:
+!
+! URxvt*background:            S_base03
+
+*background:              S_base03
+*foreground:              S_base0
+*fading:                  40
+*fadeColor:               S_base03
+*cursorColor:             S_base1
+*pointerColorBackground:  S_base01
+*pointerColorForeground:  S_base1
+
+*color0:                  S_base02
+*color1:                  S_red
+*color2:                  S_green
+*color3:                  S_yellow
+*color4:                  S_blue
+*color5:                  S_magenta
+*color6:                  S_cyan
+*color7:                  S_base2
+*color9:                  S_orange
+*color8:                  S_base03
+*color10:                 S_base01
+*color11:                 S_base00
+*color12:                 S_base0
+*color13:                 S_violet
+*color14:                 S_base1
+*color15:                 S_base3

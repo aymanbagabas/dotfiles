@@ -1,0 +1,152 @@
+map <C-Right> :tabmove! +1<CR>
+map <C-Left> :tabmove! -1<CR>
+map <S-Right> gt
+map <S-Left> gT
+
+loadplugins '\.(js|penta)$'
+group user
+
+" Options {{{
+" -----------------------------------------------------------------------------
+
+colorscheme solarized-dark
+" set defsearch=g
+set guioptions-=br
+set guioptions+=n
+set hlfind
+
+" }}}
+" Status line {{{
+" -----------------------------------------------------------------------------
+
+hi -a StatusLine height: 18px; font-family: Termsyn; font-size: 14px; font-weight: normal;
+"hi -a StatusLineNormal color: white !important; background:#262729 !important;
+"hi -a StatusLineBroken color: #FF669D !important; background: #262729 !important;
+"hi -a StatusLineSecure color: #BEED5F !important; background: #262729 !important;
+"hi -a StatusLineExtended color: white !important; background: #262729 !important;
+
+"}}}
+" Command line {{{
+"hi Normal               color: white; background: #262729; font-family: Termsyn; font-size: 14px;
+"hi CmdLine              background: #262729; color: white; font-family: Termsyn; padding: 1px; font-size: 14px;
+"hi CmdLine>*            font-family: Termsyn; font-size: 14px;
+
+"hi CompDesc             color: white; width: 50%;
+"hi CompIcon             width: 16px; min-width: 16px; display: inline-block; margin-right: .5ex;
+"hi CompItem[selected]   color: #262729; background: #1793D1;
+"hi CompMsg              font-style: Termsyn; margin-left: 16px;
+"hi CompResult           width: 45%; overflow: hidden;
+"hi CompTitle            color: #262729; background: #262729;
+"hi CompTitle>*          color: #ffffff; padding: 1px 0.5ex; padding: 1px 0.5ex;
+"hi Filter               color: #262729; background: #FF669D; font-weight: bold;
+
+"hi FrameIndicator       background-color: #FD971F; opacity: 0.5; z-index: 999; position: Termsyn; top: 0; bottom: 0; left: 0; right: 0;
+" }}}
+" Font {{{
+" -----------------------------------------------------------------------------
+
+hi FontCode -a font-family: Termsyn important; font-size: 10pt !important;
+hi FontFixed -a font-family: Termsyn !important; font-size: 10pt !important;
+hi Normal -a font-family: Termsyn !important; font-size: 10pt !important;
+
+"}}}
+" Mappings {{{
+" -----------------------------------------------------------------------------
+
+map , <Leader>
+nmap -builtin <Leader>p :set private!<CR>
+nmap -builtin <Leader>, :noh<CR>
+nmap -builtin ; :
+nmap -builtin : ;
+vmap -builtin ; :
+vmap -builtin : ;
+nmap -builtin <C-S-n> :tabmove! +1<CR>
+nmap -builtin <C-S-p> :tabmove! -1<CR>
+" Normal mode
+nnoremap <C-a>      <pass>
+nnoremap <C-c>      <pass>
+" Insert mode
+inoremap <C-a>      <pass>
+inoremap <C-c>      <pass>
+
+"}}}
+" Toggle Styles {{{
+" -----------------------------------------------------------------------------
+
+map -builtin <F3> :styletoggle<Space>-name<Space>hybrid<CR>
+
+"}}}
+" Style: Hybrid Colourscheme {{{
+" -----------------------------------------------------------------------------
+
+style -name hybrid http://*,https://*,file://*,about:blank <<EOM
+  * {
+    color: #839496 !important;
+    background: #002B36 !important;
+    border-color: #5E7175 !important;
+  }
+  a, a * {
+    color: #B58900 !important;
+    text-decoration: none !important;
+  }
+  a:hover, a:hover * {
+    color: #CB4B16 !important;
+  }
+  a:visited, a:visited * {
+    color: #D33682 !important;
+  }
+  a:visited:hover, a:visited:hover * {
+    color: #6C71C4 !important;
+  }
+EOM
+styledisable -name=hybrid
+
+"}}}
+" Style: Minimalistic Tabs {{{
+" -----------------------------------------------------------------------------
+
+style -name minitabs chrome://* <<EOM
+  #TabsToolbar toolbarbutton {
+    display: none !important;
+  }
+"  .tabbrowser-tab .tab-icon-image
+"    {visibility: hidden !important;}
+  .tabbrowser-tabs {
+    background: #073642 !important;
+  }
+  .tabbrowser-tabs {
+    background: #073642 !important;
+  }
+  .tabbrowser-tab {
+    -moz-appearance: none !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0px !important;
+    background: #073642 !important;
+    border: none !important;
+    color: #93a1a1 !important;
+    font-family: Termsyn;
+    font-size: 10pt !important;
+    height: 18px !important;
+    margin: 0 !important;
+    min-height: 18px !important;
+  }
+  .tabbrowser-tab:not([pinned]) {
+    max-width: 168px !important;
+    min-width: 168px !important;
+  }
+  .tabbrowser-tab:not([fadein]) {
+    max-width: 0px !important;
+    min-width: 0px !important;
+  }
+  .tabbrowser-tab:hover {
+    background: #073642 !important;
+    color: #657b83 !important;
+  }
+  .tabbrowser-tab[selected] {
+    -moz-appearance: none !important;
+    background: #073642 !important;
+    color: #fdf6e3 !important;
+  }
+EOM
+
+"}}}
