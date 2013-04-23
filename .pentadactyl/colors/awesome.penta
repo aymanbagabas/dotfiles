@@ -1,0 +1,131 @@
+" name: awesome
+
+hi StatusLine           height: 16px; -moz-appearance: statusbar;
+hi StatusLine           color: white; background: #262729; font-family: Termsyn; font-size: 12pt;
+
+hi Normal               color: white; background: #262729; font-family: Termsyn; font-size: 14px;
+hi CmdLine              background: #262729; color: white; font-family: Termsyn; padding: 1px; font-size: 14px;
+hi CmdLine>*            font-family: Termsyn; font-size: 14px;
+
+hi CompDesc             color: #262729; width: 50%;
+hi CompIcon             width: 16px; min-width: 16px; display: inline-block; margin-right: .5ex;
+hi CompItem[selected]   color: #ffffff; background: #282828;
+hi CompMsg              font-style: italic; margin-left: 16px;
+hi CompResult           width: 45%; overflow: hidden;
+hi CompTitle            color: #B21600; background: #5a667f;
+hi CompTitle>*          color: #ffffff; padding: 1px 0.5ex; padding: 1px 0.5ex;
+hi Filter               color: #ffffff; background: #ff88bb; font-weight: bold;
+
+hi FrameIndicator       background-color: #cc5555; opacity: 0.5; z-index: 999; position: Termsyn; top: 0; bottom: 0; left: 0; right: 0;
+
+hi Bell                 font-family: Termsyn; font-size: 12pt; border: 0 none; background-color: black;
+hi ErrorMsg             color: #ff8888; font-family: Termsyn; font-size: 12pt; font-weight: normal;
+hi Hint::after          content: attr(number); font-size: 14px;
+hi HintActive           background: #99eebb; color: #333333;
+hi HintElem             background-color: #ffbb88; color: #000d18;
+hi HintImage            opacity: .5;
+hi InfoMsg              color: #ffffff; background: #262729;
+hi Message              white-space: normal; min-width: 100%; padding-left: 2em; text-indent: -2em; display: block;
+hi WarningMsg           font-family: Termsyn; font-size: 12pt; color: #cc5555; background: #262729;
+hi ModeMsg              font-family: Termsyn; font-size: 12pt; color: #ffffff; background: #262729;
+hi MoreMsg              font-family: Termsyn; font-size: 12pt; color: #99eebb; background: #262729;
+hi NonText              font-family: Termsyn; font-size: 12pt; color: #B21600; min-height: 16px; padding-left: 2px;
+hi Question             font-family: Termsyn; font-size: 12pt; color: #99eebb; background: #262729; font-weight: bold;
+hi String               font-family: Termsyn; font-size: 12pt; color: #99eebb; background: #262729;
+hi Tag                  font-family: Termsyn; font-size: 12pt; color: #B21600; background: #262729;
+hi Title                font-family: Termsyn; font-size: 12pt; color: #1f1f1f; background: #262729; font-weight: bold;
+hi URL                  text-decoration: none; color: #99eebb; background: inherit;
+hi URL:hover            text-decoration: underline; cursor: pointer;
+hi LineNr               font-family: Termsyn; font-size: 12pt; color: orange; background: #262729;
+
+style -name statusbar chrome://* <<EOM
+#status-bar statusbarpanel { padding: 0 1px !important; }
+statusbarpanel > * { margin: 0 !important; padding: 0 2px 0 0 !important; }
+EOM
+
+" minimalistic tabs """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+style -name minitabs chrome://* <<EOM
+
+.tab-close-button {
+  display: none !important;
+}
+
+.tabs-newtab-button {
+  display: none !important;
+}
+
+#.tabbrowser-tab .tab-icon-image
+    {visibility: hidden !important;}
+
+#appmenu-toolbar-button > .toolbarbutton-menu-dropmarker {
+  display: none !important;
+}
+
+#addon-bar {
+  max-height: 16px !important;
+  min-height: 16px !important;
+}
+
+#TabsToolbar toolbarbutton {
+  -moz-appearance: none !important;
+  color: #ffffff !important;
+  background: black !important;   
+  border: none !important;
+  max-height: 16px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+TabsToolbar toolbarbutton {
+  display: none !important;
+}
+ 
+.tabbrowser-tabs {
+  background: #262729 !important;
+}
+ 
+.tabbrowser-tab {
+  -moz-appearance: none !important;
+  -moz-border-radius: 0 !important;
+  border-radius: 0px !important;
+  background: #262729 !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-family: Termsyn;
+  font-size: 12pt !important;
+  height: 16px !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+}
+ 
+.tabbrowser-tab:not([pinned]) {
+  max-width: 250px !important;
+  min-width: 160px !important;
+}
+
+.tabbrowser-tab:not([fadein]) {
+  max-width: 1px !important;
+  min-width: 1px !important;
+}
+
+.tabbrowser-tab:hover {
+  background: #262729 !important;
+  color: #1793D1 !important;
+}
+ 
+.tabbrowser-tab[selected] {
+  -moz-appearance: none !important;
+  background: #1793D1 !important;
+  color: #262729 !important;
+}
+
+personal-bookmarks {
+  -moz-appearance: none !important;
+  border: none !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  -moz-border-radius: 0 !important;
+}
+EOM
+
+"For other descriptions of each item, please see ``Styling'' section included with Pentadactyl
