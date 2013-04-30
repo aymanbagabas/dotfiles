@@ -520,7 +520,7 @@ vicious.register(mygmail, vicious.widgets.gmail,
       })
       notify_shown = true
     end
-    return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɠ " .. args["{count}"] .. " </span></span>"
+    return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɠ " .. args["{count}"] .. "</span></span>"
   else
     notify_shown = false
     return ''
@@ -897,7 +897,6 @@ globalkeys = awful.util.table.join(
     
         -- Menus
     awful.key({ modkey,           }, "space", function () mymainmenu:show() end),
-    awful.key({ modkey,           }, "c", function () showNavMenu() end),
     awful.key({ altkey }, "Tab", function () awful.menu.clients() end),
        
     -- Toggle mouse screen wibox
@@ -1060,7 +1059,10 @@ clientkeys = awful.util.table.join(
    
    -- Move client to monitor
    awful.key({ modkey, "Shift"   }, "F1", function (c) awful.client.movetoscreen(c, 1) end),
-   awful.key({ modkey, "Shift"   }, "F2", function (c) awful.client.movetoscreen(c, 2) end)
+   awful.key({ modkey, "Shift"   }, "F2", function (c) awful.client.movetoscreen(c, 2) end),
+   
+   -- alt space
+   awful.key({ altkey,           }, "space", function () showNavMenu() end)
         
 )
 
