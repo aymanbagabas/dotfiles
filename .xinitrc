@@ -13,7 +13,8 @@ mpdscribble &
 urxvtd -q -o -f &
 setxkbmap -layout "us, ara" -option "grp:alt_shift_toggle"
 lightsOn.sh 120 &
-#(sleep 5 && devmon) &
+wicd-client -o &
+(sleep 5 && devmon) &
 #(sleep 10 && conky -c ~/.conky/.conkyrc) &
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources

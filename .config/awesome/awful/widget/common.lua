@@ -86,7 +86,7 @@ function common.list_update(w, buttons, label, data, objects)
         bgb:set_bgimage(bg_image)
         ib:set_image(icon)
         w:add(bgb)
-        --tb:set_align("center")
+        tb:set_align("center")
    end
 end
 

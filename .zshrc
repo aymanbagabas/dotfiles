@@ -32,7 +32,8 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git archlinux extract themes)
+plugins=(git archlinux extract themes zsh-syntax-highlighting)
+# zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting
 
 source $ZSH/oh-my-zsh.sh
 
@@ -44,7 +45,6 @@ SAVEHIST=10000
 
 export PATH=$PATH:$HOME/bin
 export EDITOR=vim
-export PYTHONPATH=/usr/lib/python3.3/site-packages
 export LC_ALL=en_US.UTF-8
 bindkey -v
 
@@ -77,13 +77,10 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}"  history-beginning-search-forward
 
 [ ! "$UID" = "0" ] && fortune | cowsay -f eyes
-[ -r /etc/profile.d/cnf.sh ] && . /etc/profile.d/cnf.sh
+[ -r /etc/profile.d/cnf.sh ] && . /etc/profile.d/cnf.sh # command-not-found hook https://aur.archlinux.org/packages.php?ID=52305
 
 # dir colors
 eval `dircolors ~/.dir_colors`
-
-#-- Command Coloring --#
-. live-command-coloring.sh
 
 # Prompt
 local return_code="%(?..%{$fg[red]%}%{$fg[white]$bg[red]%}%?)"
@@ -96,20 +93,18 @@ function zle-keymap-select {
   zle reset-prompt
 }
 zle -N zle-keymap-select
+bindkey -a u undo
+bindkey -a '^R' redo
+bindkey '^?' backward-delete-char
+bindkey '^H' backward-delete-char
 
 function zle-line-finish {
   vim_mode=$vim_ins_mode
 }
 zle -N zle-line-finish
 
-#PROMPT="%{$fg[white]%}%~%{$reset_color%} $(git_prompt_info)
-#%{$fg[red]%}●%{$fg[green]%}●%{$fg[blue]%}●%{$reset_color%} "
+# PROMPT='' agnoster theme
 RPROMPT='${return_code}${vim_mode}'
-
-#ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}["
-#ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
-#ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$fg[green]%}"
-#ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 #. /usr/share/zsh/site-contrib/powerline.zsh
 

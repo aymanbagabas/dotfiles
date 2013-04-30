@@ -41,7 +41,7 @@ theme.bg_systray = theme.bg_normal
 theme.fg_normal = theme.colors.base01
 theme.fg_focus = theme.colors.base03
 theme.fg_urgent = theme.colors.base3
-theme.fg_minimize   = theme.colors.base0
+theme.fg_minimize   = theme.colors.base1
 
 theme.border_width  = 1
 theme.border_normal = theme.bg_normal
@@ -57,13 +57,15 @@ theme.border_marked = theme.bg_urgent
 -- mouse_finder_[color|timeout|animate_timeout|radius|factor]
 -- Example:
 --theme.taglist_bg_focus = "#262729"
+theme.taglist_bg_color = theme.colors.base3
+theme.taglist_fg_color = theme.colors.base01
 theme.taglist_bg_focus = theme.colors.base3
 theme.taglist_fg_focus = theme.colors.base03
 theme.tasklist_fg_focus = theme.colors.base03
 theme.tasklist_bg_focus = theme.bg_normal
 theme.titlebar_fg_normal = theme.colors.base03
 theme.titlebar_bg_normal = theme.colors.base1
-theme.tooltip_bg_color = theme.colors.base0
+theme.tooltip_bg_color = theme.colors.base1
 theme.tooltip_fg_color = theme.colors.base03
 theme.tooltip_border_width = theme.menu_border_width
 
@@ -132,7 +134,7 @@ theme.awesome_icon = "/home/mony/.config/awesome/icons/awesome16.png"
 
 -- Define the icon theme for application icons. If not set then the icons 
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = "faenza"
+theme.icon_theme = "Faenza"
 
 return theme
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
