@@ -89,6 +89,7 @@ mail = "thunderbird"
 mailcli = terminal .. " -e mutt"
 calc = "mate-calc"
 htop = terminal .. " -name htop -e htop"
+sysmon = "mate-system-monitor"
 lock = "slimlock"
 
 volmixer = terminal .. " -name alsamixer -e alsamixer"
@@ -402,6 +403,7 @@ cal.register(mytextclock, "<b><u>%s</u></b>")
 -- }}}
 
 -- {{{ System
+local function updates()
         local f, infos
         f = io.popen("yaourt -Qua")
         infos = f:read("*all")
@@ -411,7 +413,6 @@ cal.register(mytextclock, "<b><u>%s</u></b>")
             title = "Updates"
         end
         f:close()
-local function updates()
         showpac = naughty.notify({
                   text = infos,
                   title = title,
@@ -447,7 +448,9 @@ cpuwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.u
 -- {{{ Memory
 memwidget = wibox.widget.textbox()
 vicious.register(memwidget, vicious.widgets.mem, "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƞ $1%</span></span>", 3)
-memwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(htop, false) end)))
+memwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(htop) end),
+                                        awful.button({ altkey }, 1, function () awful.util.spawn(sysmon) end)
+                                        ))
 blingbling.popups.htop(memwidget, { title_color = beautiful.colors.blue , user_color = beautiful.colors.green , root_color = beautiful.colors.red , terminal =  terminal })
 -- }}}
 -- {{{ Net Widget
