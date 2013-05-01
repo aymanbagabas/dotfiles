@@ -442,36 +442,29 @@ function (widget, args)
 cpu_t:set_text(args[1] .. "% " .. args[2] .. "% " .. args[3] .. "% " .. args[4] .. "%")
 return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ə " .. args[1] .. "%</span></span>"
 end, 3)
-cpuwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(htop, false) end)))
+cpuwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(sysmon) end)))
 -- }}}
 
 -- {{{ Memory
 memwidget = wibox.widget.textbox()
 vicious.register(memwidget, vicious.widgets.mem, "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƞ $1%</span></span>", 3)
-memwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(htop) end),
-                                        awful.button({ altkey }, 1, function () awful.util.spawn(sysmon) end)
-                                        ))
 blingbling.popups.htop(memwidget, { title_color = beautiful.colors.blue , user_color = beautiful.colors.green , root_color = beautiful.colors.red , terminal =  terminal })
 -- }}}
 -- {{{ Net Widget
 local wicd = require("wicd")
 
 net = wibox.widget.textbox()
-netwidget = nil
+netwidget = blingbling.net()
+
 ip_addr=string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")
-gateway= string.match(string.match(awful.util.pread("ip route show"),"default%svia%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")
 ext_ip = awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1")
 
-net_t = awful.tooltip({ objects = { net }})
+net_t = awful.tooltip({ objects = { net, netwidget }})
 vicious.register(net, vicious.widgets.wifi,
 function (widget, args)
-if args["{ssid}"] == "N/A" then
-    netwidget = blingbling.net({interface = eth, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11", label = "Ƥ"})
-    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip)
-    return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
-elseif args["{ssid}"] ~= "N/A" then
+if args["{ssid}"] ~= "N/A" then
     netwidget = blingbling.net({interface = wlan, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11", label = "ƥ"})
-	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip)
+	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: \nWAN IP: " .. ext_ip)
 	if args["{linp}"] >= 75 then
          return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
     elseif args["{linp}"] >= 40 then
@@ -482,7 +475,9 @@ elseif args["{ssid}"] ~= "N/A" then
          return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƨ </span></span>"
     end
 else
-    return "Off "
+    netwidget = blingbling.net({interface = eth, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11", label = "Ƥ"})
+    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: \nWAN IP: " .. ext_ip)
+    return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
 end
 end, 10, wlan)
 net_t:add_to_object(net)
