@@ -10,6 +10,48 @@ set incsearch		" do incremental searching
 set nocompatible " Be IMproved
 filetype off                   " required!
 
+" => Vundle
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+ " let Vundle manage Vundle
+ " required! 
+ Bundle 'gmarik/vundle'
+
+ " My Bundles here:
+ "
+ " original repos on github
+ Bundle 'tpope/vim-fugitive'
+ Bundle 'Lokaltog/vim-easymotion'
+ Bundle 'Lokaltog/vim-powerline'
+ Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+ Bundle 'tpope/vim-rails.git'
+ Bundle 'tpope/vim-pathogen'
+ Bundle 'scrooloose/syntastic'
+ Bundle 'scrooloose/nerdtree'
+ Bundle 'altercation/vim-colors-solarized'
+ "Bundle 'jistr/vim-nerdtree-tabs'
+ Bundle 'techlivezheng/vim-plugin-minibufexpl'
+ Bundle 'sollidsnake/vterm'
+ " vim-scripts repos
+ Bundle 'L9'
+ Bundle 'FuzzyFinder'
+ Bundle 'lua.vim'
+ " non github repos
+ Bundle 'git://git.wincent.com/command-t.git'
+ " ...
+
+ filetype plugin indent on     " required!
+ "
+ " Brief help
+ " :BundleList          - list configured bundles
+ " :BundleInstall(!)    - install(update) bundles
+ " :BundleSearch(!) foo - search(or refresh cache first) for foo
+ " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+ "
+ " see :h vundle for more details or wiki for FAQ
+ " NOTE: comments after Bundle command are not allowed..
+
 " => Keys
 map Q gq " Don't use Ex mode, use Q for formatting
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
@@ -20,6 +62,14 @@ map ^[[7~ <Home>
 map ^[[8~ <End>
 imap ^[[7~ <Home>
 imap ^[[8~ <End>
+
+nmap <C-V> "+gP
+imap <C-V> <ESC><C-V>i
+vmap <C-C> "+y
+vmap <C-V> p
+
+map <C-n> :NERDTreeToggle<CR>
+map <C-t> :TMiniBufExplorer<CR>  
 
 " => Interface
 
@@ -111,44 +161,23 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-" => Vundle
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
- " let Vundle manage Vundle
- " required! 
- Bundle 'gmarik/vundle'
-
- " My Bundles here:
- "
- " original repos on github
- Bundle 'tpope/vim-fugitive'
- Bundle 'Lokaltog/vim-easymotion'
- Bundle 'Lokaltog/vim-powerline'
- Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
- Bundle 'tpope/vim-rails.git'
- " vim-scripts repos
- Bundle 'L9'
- Bundle 'FuzzyFinder'
- " non github repos
- Bundle 'git://git.wincent.com/command-t.git'
- " ...
-
- filetype plugin indent on     " required!
- "
- " Brief help
- " :BundleList          - list configured bundles
- " :BundleInstall(!)    - install(update) bundles
- " :BundleSearch(!) foo - search(or refresh cache first) for foo
- " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
- "
- " see :h vundle for more details or wiki for FAQ
- " NOTE: comments after Bundle command are not allowed..
-
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
+
+" => autocmd
+autocmd vimenter * if !argc() | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent loadview 
 
 " => Plugins settings
 let g:Powerline_symbols = 'fancy'
 let g:Powerline_colorscheme = 'solarized256'
-
+call pathogen#infect()
+let g:miniBufExplMapWindowNavVim = 1
+let g:miniBufExplMapWindowNavArrows = 1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplModSelTarget = 1
+let g:miniBufExplUseSingleClick = 1
+let NERDTreeChDirMode=2
+let NERDTreeQuitOnOpen=1

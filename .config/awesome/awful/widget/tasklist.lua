@@ -45,11 +45,11 @@ local function tasklist_label(c, args)
     local name = ""
 
     -- symbol to use to indicate certain client properties
-    local sticky = args.sticky or theme.tasklist_sticky or '[S] ' --"▪"
-    local ontop = args.ontop or theme.tasklist_ontop or '[T] ' --'⌃'
-    local floating = args.floating or theme.tasklist_floating or '[F] ' -- '✈'
-    local maximized_horizontal = args.maximized_horizontal or theme.tasklist_maximized_horizontal or '[M] ' --  '⬌'
-   local maximized_vertical = args.maximized_vertical or theme.tasklist_maximized_vertical or '' -- '⬍'
+    local sticky = args.sticky or theme.tasklist_sticky or '▪'
+    local ontop = args.ontop or theme.tasklist_ontop or '⌃'
+    local floating = args.floating or theme.tasklist_floating or '✈'
+    local maximized_horizontal = args.maximized_horizontal or theme.tasklist_maximized_horizontal or '⬌'
+    local maximized_vertical = args.maximized_vertical or theme.tasklist_maximized_vertical or '⬍'
 
     if c.sticky then name = name .. sticky end
     if c.ontop then name = name .. ontop end
@@ -57,29 +57,34 @@ local function tasklist_label(c, args)
     if c.maximized_horizontal then name = name .. maximized_horizontal end
     if c.maximized_vertical then name = name .. maximized_vertical end
     if c.minimized then
-        name = name .. (util.escape(c.icon_name) or util.escape(c.name) or util.escape("<untitled>"))
+        name = (util.escape(c.name) or util.escape(c.icon_name) or util.escape("<untitled>")) .. name
     else
-        name = name .. (util.escape(c.name) or util.escape("<untitled>"))
+        name = (util.escape(c.name) or util.escape("<untitled>")) .. name
     end
+    
+    if (c.class == "Caja") then
+    name = name .. " - " .. c.instance
+    end
+    
     if capi.client.focus == c then
         bg = bg_focus
         if fg_focus then
-            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>"..name.."</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>" .. name .. "</span>"
         else
-            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..name.."</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>" .. name .. "</span>"
         end
     elseif c.urgent and fg_urgent then
         bg = bg_urgent
-        text = text .. "<span color='"..util.color_strip_alpha(fg_urgent).."'>"..name.."</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_urgent).."'>" .. name .. "</span>"
     elseif c.minimized and fg_minimize and bg_minimize then
         bg = bg_minimize
-        text = text .. "<span color='"..util.color_strip_alpha(fg_minimize).."'>"..name.."</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_minimize).."'>" .. name .. "</span>"
     else
         bg = bg_normal
-        text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..name.."</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>" .. name .. "</span>"
     end
     text = text .. "</span>"
-        
+    
     --return text, bg, nil, c.icon
     return text, bg, nil, nil
 end

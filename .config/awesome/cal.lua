@@ -31,9 +31,10 @@ local cal = {}
 local tooltip
 local state = {}
 local current_day_format = "<u>%s</u>"
+local weekStart = 2
 
 function displayMonth(month,year,weekStart)
-local t,wkSt=os.time{year=year, month=month+1, day=0},weekStart or 1
+local t,wkSt=os.time{year=year, month=month+1, day=0},weekStart or 2
 local d=os.date("*t",t)
 local mthDays,stDay=d.day,(d.wday-d.day-wkSt+1)%7
 
@@ -43,7 +44,7 @@ for x=0,6 do
 lines = lines .. os.date("%a ",os.time{year=2006,month=1,day=x+wkSt})
 end
 
-lines = lines .. "\n" .. os.date(" %V",os.time{year=year,month=month,day=1})
+lines = lines .. "\n" .. os.date(" %U",os.time{year=year,month=month,day=1})
 
 local writeLine = 1
 while writeLine < (stDay + 1) do
@@ -56,7 +57,7 @@ end
                 local t = os.time{year=year,month=month,day=d}
                 if writeLine == 8 then
                         writeLine = 1
-                        lines = lines .. "\n" .. os.date(" %V",t)
+                        lines = lines .. "\n" .. os.date(" %U",t)
                 end
                 if os.date("%Y-%m-%d") == os.date("%Y-%m-%d", t) then
                         x = string.format(current_day_format, d)
@@ -73,21 +74,26 @@ end
         if stDay + mthDays < 29 then
                 lines = lines .. "\n"
         end
-        local header = os.date(" %B %Y\n",os.time{year=year,month=month,day=1})
+        local header = os.date(" %B %Y\n",os.time{year=year,month=month,day=2})
 
 return header .. "\n" .. lines
 end
 
 
-function cal.register(mywidget, custom_current_day_format)
-if custom_current_day_format then current_day_format = custom_current_day_format end
+function cal.register(mywidget, custom_current_day_format, c_weekStart)
+if custom_current_day_format then 
+current_day_format = custom_current_day_format 
+end
+if c_weekStart then
+weekStart = c_weekStart
+end
 
 if not tooltip then
 tooltip = awful.tooltip({})
                 function tooltip:update()
                         local month, year = os.date('%m'), os.date('%Y')
                         state = {month, year}
-                        tooltip:set_text(string.format('%s', displayMonth(month, year, 2)))
+                        tooltip:set_text(string.format('%s', displayMonth(month, year, weekStart)))
                 end
                 tooltip:update()
 end
@@ -124,7 +130,7 @@ end
 
 function switchMonth(delta)
 state[1] = state[1] + (delta or 1)
-local text = string.format('%s', displayMonth(state[1], state[2], 2)) -- font_desc="monospace"
+local text = string.format('%s', displayMonth(state[1], state[2], weekStart)) -- font_desc="monospace"
 tooltip:set_text(text)
 end
 

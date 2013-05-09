@@ -77,7 +77,7 @@ run_once("wmname LG3D")
 -- }}}
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvtc -name Terminal"
+terminal = "urxvtq -name Terminal"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 dmenu = "dmenu_path_c | dmenu -i -p 'Run command:' -fn '" .. beautiful.dfont .. "' -h '18' -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '" .. beautiful.bg_focus .. "' -sf '" .. beautiful.fg_focus .. "'"
@@ -102,8 +102,8 @@ prev_music = "mpc prev"
 next_music = "mpc next"
 toggle_play = "mpc toggle"
 
-eth = "enp2s0"
-wlan = "wlp3s0"
+eth = "eth0"
+wlan = "wlan0"
 
 -- Naughty
 naughty.config.defaults.timeout = 7
@@ -184,7 +184,7 @@ end
 
 require('freedesktop.utils')
   freedesktop.utils.terminal = terminal  -- default: "xterm"
-  freedesktop.utils.icon_theme = { 'Faenza', 'gnome' } -- look inside /usr/share/icons/, default: nil (don't use icon theme)
+  freedesktop.utils.icon_theme = { 'Faenza', 'Faience' } -- look inside /usr/share/icons/, default: nil (don't use icon theme)
 require('freedesktop.menu')
 
 function mvscr()
@@ -270,7 +270,7 @@ local tag_t = ttag()
 local scr_n = mvscr()
 
 if not menu then
-menu = {theme = { width = 200 }}
+menu = {}
 end
 c = capi.client.focus
 
@@ -310,7 +310,7 @@ fclient = {
         }
         }
 local mynav = {
-        {awful.util.escape(c.name),
+        {awful.util.escape(c.class),
             fclient, c.icon
         },
         {"Move to Tag",
@@ -341,46 +341,46 @@ myawesomemenu = {
 }
 
 exitmenu = {
-   { "Shutdown", "poweroff", "/usr/share/icons/Faenza/actions/48/system-shutdown.png" },
-   { "Restart", "reboot", "/usr/share/icons/Faenza/actions/48/view-refresh.png" },
-   { "Lock", "slimlock", "/usr/share/icons/Faenza/actions/48/system-lock-screen.png" },
+   { "Shutdown", "poweroff", freedesktop.utils.lookup_icon({ icon='system-shutdown' }) },
+   { "Restart", "reboot", freedesktop.utils.lookup_icon({ icon='view-refresh' }) },
+   { "Lock", "slimlock", freedesktop.utils.lookup_icon({ icon='system-lock-screen' }) },
    { "awesome", myawesomemenu, beautiful.awesome_icon }
 }
 
 volume = {
-   { "Un/Mute", "amixer set Master toggle", "/usr/share/icons/Faenza/status/48/audio-volume-muted.png" },
-   { "30%", "amixer set Master 30%", "/usr/share/icons/Faenza/status/48/audio-volume-low.png" },
-   { "50%", "amixer set Master 50%", "/usr/share/icons/Faenza/status/48/audio-volume-low.png" },
-   { "80%", "amixer set Master 80%", "/usr/share/icons/Faenza/status/48/audio-volume-medium.png" },
-   { "100%", "amixer set Master 100%", "/usr/share/icons/Faenza/status/48/audio-volume-high.png" },
+   { "Un/Mute", "amixer set Master toggle", freedesktop.utils.lookup_icon({ icon='audio-volume-muted' }) },
+   { "30%", "amixer set Master 30%", freedesktop.utils.lookup_icon({ icon='audio-volume-low' }) },
+   { "50%", "amixer set Master 50%", freedesktop.utils.lookup_icon({ icon='audio-volume-low' }) },
+   { "80%", "amixer set Master 80%", freedesktop.utils.lookup_icon({ icon='audio-volume-medium' }) },
+   { "100%", "amixer set Master 100%", freedesktop.utils.lookup_icon({ icon='audio-volume-high' }) },
    { "Mixer", volmixer }
 }
 
 musicmenu = {
-   { "Play/Pause", "mpc toggle", "/usr/share/icons/Faenza/actions/48/stock_media-play.png" },
-   { "Stop", "mpc stop", "/usr/share/icons/Faenza/actions/48/stock_media-stop.png" },
-   { "Previous", "mpc prev", "/usr/share/icons/Faenza/actions/48/stock_media-prev.png" },
-   { "Next", "mpc next", "/usr/share/icons/Faenza/actions/48/stock_media-next.png" },
-   { "CLI", mpdplr, "/usr/share/icons/Faenza/apps/48/multimedia-volume-control.png" },
-   { "GUI", mpdgui, "/usr/share/icons/Faenza/apps/48/multimedia-volume-control.png" },
-   { "Volume", volume, "/usr/share/icons/Faenza/status/48/stock_volume.png" }
+   { "Play/Pause", "mpc toggle", freedesktop.utils.lookup_icon({ icon='stock_media-play' }) },
+   { "Stop", "mpc stop", freedesktop.utils.lookup_icon({ icon='stock_media-stop' }) },
+   { "Previous", "mpc prev", freedesktop.utils.lookup_icon({ icon='stock_media-prev' }) },
+   { "Next", "mpc next", freedesktop.utils.lookup_icon({ icon='stock_media-next' }) },
+   { "CLI", mpdplr, freedesktop.utils.lookup_icon({ icon='multimedia-volume-control' }) },
+   { "GUI", mpdgui, freedesktop.utils.lookup_icon({ icon='multimedia-volume-control' }) },
+   { "Volume", volume, freedesktop.utils.lookup_icon({ icon='stock_volume' }) }
 
 }
 
 mymenu = awful.util.table.join({
-                                    { "File Manager", fileman, "/usr/share/icons/Faenza/apps/48/file-manager.png" },
-                                    { "Browser", browser, "/usr/share/icons/Faenza/apps/48/browser.png" },
-                                    { "Terminal", terminal, "/usr/share/icons/Faenza/apps/48/Terminal.png" },
+                                    { "File Manager", fileman, freedesktop.utils.lookup_icon({ icon='file-manager' }) },
+                                    { "Browser", browser, freedesktop.utils.lookup_icon({ icon='browser' }) },
+                                    { "Terminal", terminal, freedesktop.utils.lookup_icon({ icon='terminal' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
-                                    { "Files", myplacesmenu.myplacesmenu(), "/usr/share/icons/Faenza/places/48/folder-home.png"},
+                                    { "Files", myplacesmenu.myplacesmenu(), freedesktop.utils.lookup_icon({ icon='folder-home' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil}
                                     },
                                     freedesktop.menu.new(),
                                     {
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
-                                    { "Music", musicmenu, "/usr/share/icons/Faenza/apps/48/multimedia-volume-control.png" },
+                                    { "Music", musicmenu, freedesktop.utils.lookup_icon({ icon='multimedia-volume-control' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
-                                    { "Exit", exitmenu, "/usr/share/icons/Faenza/actions/48/exit.png"}
+                                    { "Exit", exitmenu, freedesktop.utils.lookup_icon({ icon='exit' }) }
 })
 
 mymainmenu = awful.menu({ items = mymenu 
@@ -397,42 +397,40 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Clock
 -- Create a textclock widget
-mytextclock = awful.widget.textclock("<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƕ %I:%M %p </span></span>")
-cal.register(mytextclock, "<b><u>%s</u></b>")
+mytextclock = awful.widget.textclock("<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƕ %I:%M %p </span></span>")
+cal.register(mytextclock, "<b><u>%s</u></b>", 1)
 
 -- }}}
 
 -- {{{ System
-local function updates()
-        local f, infos
-        f = io.popen("yaourt -Qua")
-        infos = f:read("*all")
-        if (infos == '') then
-            title = "No Updates"
-        else
-            title = "Updates"
-        end
-        f:close()
-        showpac = naughty.notify({
-                  text = infos,
-                  title = title,
-                  timeout	= 0,
-                  hover_timeout = 0,
-                  })
-end
 syswidget = wibox.widget.textbox()
+sys_t = awful.tooltip({ objects = { syswidget } })
+u_pkgs = 0
 vicious.register(syswidget, vicious.widgets.pkg, function (widget, args)
+                                                 local u, info
+                                                 u = io.popen("pacman -Qu")
+                                                 info = u:read("*all")
+                                                 u:close()
+                                                 sys_t:set_text("<b>Updates:</b>\n\n" .. info)
                                                  if (args[1] > 0) then
-                                                 return "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɔ " .. args[1] .. " </span></span>"
+                                                   if (u_pkgs ~= args[1]) then
+                                                     naughty.notify({
+                                                     text = info,
+                                                     title = "Updates:",
+                                                     position = "top_right",
+                                                     timeout = 7
+                                                     })
+                                                     u_pkgs = args[1]
+                                                   end
+                                                   return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɔ " .. args[1] .. " </span></span>"
                                                  else
-                                                 return ""
-                                                 end end, 60, "Arch")
-                                                 
-syswidget:connect_signal('mouse::enter', function () updates(path) end)
-syswidget:connect_signal('mouse::leave', function () naughty.destroy(showpac) end)
-syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("urxvtc -e yaourt -Syua --noconfirm") end)))
+                                                   u_pkgs = 0
+                                                   return ""
+                                                 end 
+end, 60, "Arch")
+sys_t:add_to_object(syswidget)
+syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -name Updates -e yaourt -Syua --noconfirm") end)))
  -- }}}
--- }}}
 
 -- {{{ CPU
 cpuwidget = wibox.widget.textbox()
@@ -440,46 +438,54 @@ cpu_t = awful.tooltip({ objects = { cpuwidget }, })
 vicious.register(cpuwidget, vicious.widgets.cpu, 
 function (widget, args)
 cpu_t:set_text(args[1] .. "% " .. args[2] .. "% " .. args[3] .. "% " .. args[4] .. "%")
-return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ə " .. args[1] .. "%</span></span>"
+return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ə " .. args[1] .. "%</span></span>"
 end, 3)
+cpu_t:add_to_object(cpuwidget)
 cpuwidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(sysmon) end)))
 -- }}}
 
 -- {{{ Memory
 memwidget = wibox.widget.textbox()
-vicious.register(memwidget, vicious.widgets.mem, "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƞ $1%</span></span>", 3)
+vicious.register(memwidget, vicious.widgets.mem, "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƞ $1%</span></span>", 3)
 blingbling.popups.htop(memwidget, { title_color = beautiful.colors.blue , user_color = beautiful.colors.green , root_color = beautiful.colors.red , terminal =  terminal })
 -- }}}
 -- {{{ Net Widget
 local wicd = require("wicd")
 
 net = wibox.widget.textbox()
-netwidget = blingbling.net()
+netwidget = blingbling.net({interface = nil, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11"})
 
-ip_addr=string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")
-ext_ip = awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1")
 
 net_t = awful.tooltip({ objects = { net, netwidget }})
 vicious.register(net, vicious.widgets.wifi,
 function (widget, args)
+ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
+gateway = (string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
+ext_ip = (awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1")) or ''
 if args["{ssid}"] ~= "N/A" then
-    netwidget = blingbling.net({interface = wlan, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11", label = "ƥ"})
-	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: \nWAN IP: " .. ext_ip)
+    netwidget:set_interface(wlan)
+	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip)
 	if args["{linp}"] >= 75 then
-         return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
+         return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
     elseif args["{linp}"] >= 40 then
-         return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ʀ </span></span>"
+         return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ʀ </span></span>"
     elseif args["{linp}"] >= 20 then
-         return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƨ </span></span>"
+         return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƨ </span></span>"
     else
-         return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƨ </span></span>"
+         return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƨ </span></span>"
     end
 else
-    netwidget = blingbling.net({interface = eth, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11", label = "Ƥ"})
-    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: \nWAN IP: " .. ext_ip)
-    return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
+    if gateway == '' then
+    netwidget:set_interface(nil)
+    net_t:set_text("no internet connection")
+    return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɨ </span></span>"
+    else
+    netwidget:set_interface(eth)
+    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip)
+    return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
+    end
 end
-end, 10, wlan)
+end, 5, wlan)
 net_t:add_to_object(net)
 net_t:add_to_object(netwidget)
 
@@ -494,7 +500,7 @@ netwidget:buttons(net:buttons(awful.util.table.join(awful.button({ }, 1, functio
 -- machine mail.google.com login YOUR_MAIL password YOUR_PASS
 mygmail = wibox.widget.textbox()
 gmail_t = awful.tooltip({ objects = { mygmail },})
-notify_shown = false
+g_notify = false
 vicious.register(mygmail, vicious.widgets.gmail,
  function (widget, args)
   gmail_t:set_text(args["{subject}"])
@@ -502,7 +508,7 @@ vicious.register(mygmail, vicious.widgets.gmail,
   notify_title = ""
   notify_text = ""
   if (args["{count}"] > 0 ) then
-    if (notify_shown == false) then
+    if (g_notify == false) then
       if (args["{count}"] == 1) then
           notify_title = "You got a new mail"
           notify_text = '"' .. args["{subject}"] .. '"'
@@ -516,11 +522,11 @@ vicious.register(mygmail, vicious.widgets.gmail,
           timeout = 7,
           position = "top_right",
       })
-      notify_shown = true
+      g_notify = true
     end
-    return "<span background='" ..beautiful.colors.base0 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɠ " .. args["{count}"] .. "</span></span>"
+    return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɠ " .. args["{count}"] .. "</span></span>"
   else
-    notify_shown = false
+    g_notify = false
     return ''
   end
 end, 60)
@@ -531,7 +537,7 @@ mygmail:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.uti
 volwidget = wibox.widget.textbox()
 vol_t = awful.tooltip({ objects = { volwidget, volume_master } })
 
-volume_master = blingbling.volume({height = 18, graph_color = beautiful.colors.base03, graph_background_color = "#00000000", background_color = beautiful.colors.base1, width = 40, show_text = true, background_text_color = "#00000000", bar = false, label ="$percent%"})
+volume_master = blingbling.volume({height = 18, graph_color = beautiful.colors.base03, graph_background_color = "#00000000", background_color = beautiful.colors.base1, width = 40, show_text = true, text_color = beautiful.colors.base03, background_text_color = "#00000000", bar = false, label ="$percent%"})
 volume_master:update_master()
 volume_master:set_master_control()
 vol_t:add_to_object(volume_master)
@@ -542,15 +548,15 @@ vol_t:add_to_object(volwidget)
 --local label = { ["♫"] = " ", ["♩"] = "M" }
     if (args[2] == "♩") then
     vol_t:set_text("Muted")
-    return "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ʃ</span></span>"
+    return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ʃ</span></span>"
     elseif (args[1] == 0) then
-    return "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƣ</span></span>"
+    return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƣ</span></span>"
     elseif (args[1] <= 30 and args[1] > 0) then
-    return "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƣ</span></span>"
+    return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƣ</span></span>"
     elseif (args[1] <= 60) then
-    return "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ơ</span></span>"
+    return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ơ</span></span>"
     elseif (args[1] >= 61) then
-    return "<span background='" ..beautiful.colors.base1 .. "' foreground='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƪ</span></span>"
+    return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƪ</span></span>"
     end
 end, 1, "Master")
 
@@ -635,7 +641,7 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
 
 -- {{{ Keyboard layout
 xkbw = wibox.widget.textbox()
-bashets.register("xkb.sh", {widget = xkbw, update_time = 1, format = "<span foreground='" .. beautiful.fg_focus .. "'>$1</span>"})
+bashets.register("xkb.sh", {widget = xkbw, update_time = 1, format = "<span color='" .. beautiful.fg_focus .. "'>$1</span>"})
 xkbw:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("xkb-switch -n", false) end)))
 -- }}}
 
@@ -651,10 +657,10 @@ space = wibox.widget.textbox()
 space:set_text(" ")
 ----------------------
 rtar = wibox.widget.textbox()
-rtar:set_markup("<span foreground='" .. beautiful.fg_focus .. "'>ƛ</span>")
+rtar:set_markup("<span color='" .. beautiful.fg_focus .. "'>ƛ</span>")
 rtar:buttons(awful.util.table.join(awful.button({ }, 1, function () mymainmenu:toggle() end)))
 ltar = wibox.widget.textbox()
-ltar:set_markup("<span foreground='" .. beautiful.fg_focus .. "'> Ɲ</span>")
+ltar:set_markup("<span color='" .. beautiful.fg_focus .. "'> Ɲ</span>")
 arrr = wibox.widget.imagebox()
 arrr:set_image(icons .. "/arrows/arrr.png")
 arrl = wibox.widget.imagebox()
@@ -770,6 +776,7 @@ for s = 1, screen.count() do
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mytaglist[s])
     left_layout:add(arr16)
+    left_layout:add(space)
     left_layout:add(mylayoutbox[s])
     left_layout:add(arr16)
     left_layout:add(mypromptbox[s]) 
@@ -1151,7 +1158,7 @@ awful.rules.rules = {
       properties = { tag = tags[2][2], floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
-    { rule = { class = "Gimp" },
+    { rule = { class = "Gimp-2.8" },
       properties = { tag = tags[1][6], maximized = true } },
     { rule = { class = "URxvt" },
       properties = { size_hints_honor = false } },

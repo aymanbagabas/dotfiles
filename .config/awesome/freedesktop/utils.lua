@@ -21,7 +21,6 @@ all_icon_sizes = {
     'categories',
     'status',
     'mimetypes',
-    'scalable',
     --[['128x128',
     '96x96',
     '72x72',
@@ -31,7 +30,9 @@ all_icon_sizes = {
     '32x32',
     '24x24',
     '22x22',
-    '16x16']]--
+    '16x16',
+    '8x8',--]]
+    'scalable'
 }
 all_icon_types = {
     '128',
@@ -78,7 +79,7 @@ function file_exists(filename)
 end
 
 function lookup_icon(arg)
-    if arg.icon:sub(1, 1) == '/' and (arg.icon:find('.+%.png') or arg.icon:find('.+%.svg')) then
+    if arg.icon:sub(1, 1) == '/' and (arg.icon:find('.+%.png') or arg.icon:find('.+%.xpm') or arg.icon:find('.+%.svg')) then
         -- icons with absolute path and supported (AFAICT) formats
         return arg.icon
     else
@@ -96,7 +97,7 @@ function lookup_icon(arg)
             end
             -- TODO also look in parent icon themes, as in freedesktop.org specification
         end
-        table.insert(icon_theme_paths, '/usr/share/icons/Faenza/') -- fallback theme cf spec
+        table.insert(icon_theme_paths, '/usr/share/icons/gnome/') -- fallback theme cf spec
 
         local isizes = icon_sizes
         for i, sz in ipairs(all_icon_sizes) do
@@ -112,16 +113,18 @@ function lookup_icon(arg)
         end
         -- lowest priority fallbacks
         table.insert(icon_path,  '/usr/share/pixmaps/')
-        table.insert(icon_path,  '/usr/share/icons/gnome/')
+        table.insert(icon_path,  '/usr/share/icons/')
         table.insert(icon_path,  '/usr/share/app-install/icons/')
 
         for i, directory in ipairs(icon_path) do
-            if (arg.icon:find('.+%.png') or arg.icon:find('.+%.svg')) and file_exists(directory .. arg.icon) then
+            if (arg.icon:find('.+%.png') or arg.icon:find('.+%.xpm') or arg.icon:find('.+%.svg')) and file_exists(directory .. arg.icon) then
                 return directory .. arg.icon
             elseif file_exists(directory .. arg.icon .. '.png') then
                 return directory .. arg.icon .. '.png'
+            elseif file_exists(directory .. arg.icon .. '.xpm') then
+                return directory .. arg.icon .. '.xpm'
             elseif file_exists(directory .. arg.icon .. '.svg') then
-                return directory .. arg.icon .. '.svg'
+                return directory .. arg.icon .. '.svg' 
             end
         end
     end
@@ -179,12 +182,40 @@ end
 -- @param requested_icon_sizes A list of icon sizes (optional). If this list is given, it will be used as a priority list for icon sizes when looking up for icons. If you want large icons, for example, you can put '128x128' as the first item in the list.
 -- @return A table with file entries.
 function parse_desktop_file(arg)
-    local program = { show = true, file = arg.file }
-    for line in io.lines(arg.file) do
-        for key, value in line:gmatch("(%w+)=(.+)") do
-            program[key] = value
-        end
+
+    local function check_nil(f, v) 
+        -- Almost the same as 
+        -- return f and f or v
+        -- but it will return false if f = false
+        if f == nil then return v else return f end
     end
+
+    --- Parses .desktop file considering groups.
+    -- @param file Path to file
+    -- @return A table with group enries. Each group entry is table with file entries.
+    local function parse_file(file)
+        local result = {}
+        local group = nil
+
+        for line in io.lines(file) do
+            group = line:match("^%[([^%[%]%c]+)%]") or group
+            if group then
+                result[group] = check_nil(result[group], {})
+
+                for key, value in line:gmatch("(%w+)=(.+)") do
+                    result[group][key] = value
+                end
+            end 
+        end
+        
+        return result
+    end
+    
+    -- Using only 'Desktop Entry' group.
+    local program = parse_file(arg.file)['Desktop Entry']
+    program.show = check_nil(program.show, true)
+    program.file = arg.file
+ 
 
     -- Don't show the program if NoDisplay is true
     -- Only show the program if there is not OnlyShowIn attribute

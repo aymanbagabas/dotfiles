@@ -45,8 +45,13 @@ SAVEHIST=10000
 
 export PATH=$PATH:$HOME/bin
 export EDITOR=vim
-export LC_ALL=en_US.UTF-8
+export PAGER=vimpager
+#export LC_ALL=en_US.UTF-8
 bindkey -v
+
+# Aliases
+alias less=$PAGER
+alias zless=$PAGER 
 
 # create a zkbd compatible hash;
 # to add other keys to this hash, see: man 5 terminfo
@@ -65,16 +70,21 @@ key[PageUp]=${terminfo[kpp]}
 key[PageDown]=${terminfo[knp]}
 
 # setup key accordingly
-[[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    beginning-of-line
-[[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     end-of-line
+[[ -n "${key[Home]}"    ]]  && bindkey  "${key[Home]}"    vi-beginning-of-line
+[[ -n "${key[End]}"     ]]  && bindkey  "${key[End]}"     vi-end-of-line
 [[ -n "${key[Insert]}"  ]]  && bindkey  "${key[Insert]}"  overwrite-mode
 [[ -n "${key[Delete]}"  ]]  && bindkey  "${key[Delete]}"  delete-char
 [[ -n "${key[Up]}"      ]]  && bindkey  "${key[Up]}"      up-line-or-history
 [[ -n "${key[Down]}"    ]]  && bindkey  "${key[Down]}"    down-line-or-history
 [[ -n "${key[Left]}"    ]]  && bindkey  "${key[Left]}"    backward-char
 [[ -n "${key[Right]}"   ]]  && bindkey  "${key[Right]}"   forward-char
-[[ -n "${key[PageUp]}"   ]]  && bindkey  "${key[PageUp]}"    history-beginning-search-backward
-[[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}"  history-beginning-search-forward
+[[ -n "${key[PageUp]}"   ]]  && bindkey  "${key[PageUp]}"    vi-up-line-or-history
+[[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}"  vi-down-line-or-history
+
+bindkey "^P" vi-backward-blank-word 
+bindkey "^W" vi-forward-blank-word 
+
+. solarized-console.sh
 
 [ ! "$UID" = "0" ] && fortune | cowsay -f eyes
 [ -r /etc/profile.d/cnf.sh ] && . /etc/profile.d/cnf.sh # command-not-found hook https://aur.archlinux.org/packages.php?ID=52305
@@ -114,18 +124,17 @@ PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}:${PWD}\007"'
 case $TERM in
        *xterm*|*rxvt*|(dt|k|E|a)term)
     preexec () {
-    print -Pn "\e]2;$1\a"
+    print -Pn "\e]2;%n@%m  $1  %l\a"
     }
     ;;
     screen*)
         preexec () {
-        print -Pn "\e\"$1\e\134"             
+        print -Pn "\e\"%n@%m  $1  %l\e\134"             
     }
   ;; 
 esac
 function precmd() {
-	print -Pn "\e]2;%~\a"
+	print -Pn "\e]2;%n@%m  %~  %l\a"
 }
-. solarized-console.sh
 # Misc
 w3mimg () { w3m -o imgdisplay=/usr/lib/w3m/w3mimgdisplay $1 }

@@ -119,6 +119,7 @@ style -name minitabs chrome://* <<EOM
   }
   .tabbrowser-tab {
     -moz-appearance: none !important;
+    -moz-border-image: none !important;
     -moz-border-radius: 0 !important;
     border-radius: 0px !important;
     background: #073642 !important;
@@ -128,7 +129,8 @@ style -name minitabs chrome://* <<EOM
     font-size: 10pt !important;
     height: 18px !important;
     margin: 0 !important;
-    min-height: 18px !important;
+    min-height: 0px !important;
+    text-align: left !important;
   }
   .tabbrowser-tab:not([pinned]) {
     max-width: 168px !important;

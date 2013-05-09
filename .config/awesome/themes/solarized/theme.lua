@@ -61,13 +61,23 @@ theme.taglist_bg_color = theme.colors.base3
 theme.taglist_fg_color = theme.colors.base01
 theme.taglist_bg_focus = theme.colors.base3
 theme.taglist_fg_focus = theme.colors.base03
+
 theme.tasklist_fg_focus = theme.colors.base03
 theme.tasklist_bg_focus = theme.bg_normal
+
 theme.titlebar_fg_normal = theme.colors.base03
 theme.titlebar_bg_normal = theme.colors.base1
+
 theme.tooltip_bg_color = theme.colors.base1
 theme.tooltip_fg_color = theme.colors.base03
 theme.tooltip_border_width = theme.menu_border_width
+
+-- Tasklist properties
+theme.tasklist_sticky = " [S]"
+theme.tasklist_ontop = " [T]"
+theme.tasklist_floating = " [F]"
+theme.tasklist_maximized_horizontal = " [M]"
+theme.tasklist_maximized_vertical = ""
 
 -- Display the taglist squares
 theme.taglist_squares_sel   = "/home/mony/.config/awesome/themes/arch/taglist/squaref_b.png"

@@ -40,6 +40,9 @@ URxvt*perl-ext-common:  default,matcher,fullscreen,vtwheel,clipboard
 URxvt*keysym.F11: perl:fullscreen:switch
 URxvt*keysym.Home: \e[7~
 URxvt*keysym.End: \e[8~
+URxvt*keysym.Shift-Control-C: perl:clipboard:copy
+URxvt*keysym.Shift-Control-V: perl:clipboard:paste
+URxvt*iso14755: False
 URxvt*url-launcher:      /usr/bin/firefox
 URxvt*matcher.button:   1
 URxvt*colorUL: #4682B4
