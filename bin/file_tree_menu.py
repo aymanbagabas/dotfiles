@@ -14,21 +14,13 @@ ficon = "" + iconspath + "/places/48/"
 def test_file_type(file_end):
         if file_end == 'iso':
                return 'brasero -i'
-        elif file_end == 'txt':
-               return 'pluma'
-        elif file_end == 'bak':
-               return 'pluma'
-        elif file_end == "backup":
-               return 'pluma'
         elif file_end == "gz" or file_end == "xz" or file_end == "zip" or file_end == "z":
                return 'engrampa'
-        elif file_end == "mp3" or file_end == "flac" or file_end == "wav" or file_end == "wma":
-               return 'vlc'
-        elif file_end == 'mp4' or file_end == 'mpeg' or file_end == 'webm' or file_end == 'avi' or file_end == 'ogg' or file_end == 'ogv' or file_end == 'mkv':
+        elif file_end == "mp3" or file_end == "flac" or file_end == "wav" or file_end == "wma" or file_end == 'mp4' or file_end == 'mpeg' or file_end == 'webm' or file_end == 'avi' or file_end == 'ogg' or file_end == 'ogv' or file_end == 'mkv' or file_end == "3gp":
                return 'vlc'
         elif file_end == 'xml' or file_end == 'html' or file_end == 'htm' or file_end == 'xhtml':
                return 'firefox'
-        elif file_end == 'py' or file_end == 'cpp' or file_end == 'c' or file_end == 'sh':
+        elif file_end == 'py' or file_end == 'cpp' or file_end == 'c' or file_end == 'sh' or file_end == 'lua':
                return 'geany'
         elif file_end == 'out' or file_end == 'class' or file_end == 'pyo':
                return 'urxvt -c'
@@ -57,7 +49,7 @@ def file_icon(file_end):
                return 'icons .. "application-x-rar.png"'
         elif file_end == "mp3" or file_end == "flac" or file_end == "wav" or file_end == "wma":
                return 'icons .. "media-audio.png"'
-        elif file_end == "mp4" or file_end == "mpeg" or file_end == "webm" or file_end == "avi" or file_end == "ogg" or file_end == "ogv" or file_end == "mkv":
+        elif file_end == "mp4" or file_end == "mpeg" or file_end == "webm" or file_end == "avi" or file_end == "ogg" or file_end == "ogv" or file_end == "mkv" or file_end == "3gp":
                return 'icons .. "video.png"'
         elif file_end == "xml" or file_end == "html" or file_end == "htm" or file_end == "xhtml":
                return 'icons .. "html.png"'

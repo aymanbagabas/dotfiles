@@ -74,7 +74,7 @@ end
         if stDay + mthDays < 29 then
                 lines = lines .. "\n"
         end
-        local header = os.date(" %B %Y\n",os.time{year=year,month=month,day=2})
+        local header = os.date(" %B %Y\n",os.time{year=year,month=month,day=1})
 
 return header .. "\n" .. lines
 end

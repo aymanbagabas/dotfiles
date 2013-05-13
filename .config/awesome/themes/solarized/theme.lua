@@ -70,7 +70,8 @@ theme.titlebar_bg_normal = theme.colors.base1
 
 theme.tooltip_bg_color = theme.colors.base1
 theme.tooltip_fg_color = theme.colors.base03
-theme.tooltip_border_width = theme.menu_border_width
+theme.tooltip_border_width = 4
+theme.tooltip_border_color = theme.colors.base1
 
 -- Tasklist properties
 theme.tasklist_sticky = " [S]"
@@ -94,6 +95,10 @@ theme.menu_width  = 120
 theme.menu_border_color = theme.fg_focus
 theme.menu_border_width = 0
 theme.menu_icon = micons .. "/menu.png"
+
+-- widgets menu
+theme.widgets_menu_bg_normal = theme.colors.base1
+theme.widgets_menu_bg_focus = theme.colors.base0
 
 -- You can add as many variables as
 -- you wish and access them by using

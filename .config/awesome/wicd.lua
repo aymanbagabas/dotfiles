@@ -5,6 +5,7 @@ local table = require "table"
 local string = require "string"
 local naughty = require "naughty"
 local ipairs = ipairs
+local beautiful = require("beautiful")
 
 module("wicd")
 
@@ -48,7 +49,7 @@ show = function()
         table.insert(networks, {"  (none)", nil})
     end
 
-    menu = awful.menu({items = networks})
+    menu = awful.menu({items = networks, theme = {bg_normal = beautiful.widgets_menu_bg_normal, bg_focus = beautiful.widgets_menu_bg_focus}})
     menu:show()
 end
 

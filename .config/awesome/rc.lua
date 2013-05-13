@@ -395,6 +395,39 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- {{{ Wibox
 
+-- {{{ Helpers
+function closeLastNoti()
+    screen = mouse.screen
+    for p,pos in pairs(naughty.notifications[screen]) do
+        for i,n in pairs(naughty.notifications[screen][p]) do
+			if (n.width == 258) then -- to close only previous bright/vol notifications
+            naughty.destroy(n)
+            break
+            end
+        end
+    end
+end
+
+--volnoti
+volnotiicon = nil
+vol_n = true
+function volnoti()
+    if (vol_n == false) then
+			        closeLastNoti()
+                                naughty.notify{
+				icon = volnotiicon,
+                                position = "top_right",
+				bg="#00000000",
+				timeout=0.9,
+				width = 256,
+				gap = 0,
+			}
+        vol_n = true
+    end
+    vol_n = false
+end
+-- }}}
+
 -- {{{ Clock
 -- Create a textclock widget
 mytextclock = awful.widget.textclock("<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƕ %I:%M %p </span></span>")
@@ -427,7 +460,7 @@ vicious.register(syswidget, vicious.widgets.pkg, function (widget, args)
                                                    u_pkgs = 0
                                                    return ""
                                                  end 
-end, 60, "Arch")
+end, 180, "Arch")
 sys_t:add_to_object(syswidget)
 syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -name Updates -e yaourt -Syua --noconfirm") end)))
  -- }}}
@@ -461,10 +494,15 @@ vicious.register(net, vicious.widgets.wifi,
 function (widget, args)
 ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 gateway = (string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
-ext_ip = (awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1")) or ''
+ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
+tor = ''
+tor_ip = (string.match(awful.util.pread("curl --silent -S -x socks4a://localhost:9050 http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
+if tor_ip ~= '' then
+    tor = "\nTor IP: " .. tor_ip
+end
 if args["{ssid}"] ~= "N/A" then
     netwidget:set_interface(wlan)
-	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip)
+	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
 	if args["{linp}"] >= 75 then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
     elseif args["{linp}"] >= 40 then
@@ -481,7 +519,7 @@ else
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɨ </span></span>"
     else
     netwidget:set_interface(eth)
-    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip)
+    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
     end
 end
@@ -545,6 +583,74 @@ vol_t:add_to_object(volume_master)
 vicious.register( volwidget, vicious.widgets.volume, function(widget, args)
 vol_t:set_text(args[1] .. "%")
 vol_t:add_to_object(volwidget)
+-- volnoti
+if (args[1] ~= vol_a) then
+if (args[1] == 0 or args[2] == "♩") then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_00.png'
+volnoti()
+elseif (args[1] <= 5 and args[1] > 0) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_05.png'
+volnoti()
+elseif (args[1] <= 10 and args[1] > 5) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_10.png'
+volnoti()
+elseif (args[1] <= 15 and args[1] > 10) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_15.png'
+volnoti()
+elseif (args[1] <= 20 and args[1] > 15) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_20.png'
+volnoti()
+elseif (args[1] <= 25 and args[1] > 20) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_25.png'
+volnoti()
+elseif (args[1] <= 30 and args[1] > 25) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_30.png'
+volnoti()
+elseif (args[1] <= 35 and args[1] > 30) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_35.png'
+volnoti()
+elseif (args[1] <= 40 and args[1] > 35) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_40.png'
+volnoti()
+elseif (args[1] <= 45 and args[1] > 40) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_45.png'
+volnoti()
+elseif (args[1] <= 50 and args[1] > 45) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_50.png'
+volnoti()
+elseif (args[1] <= 55 and args[1] > 50) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_55.png'
+volnoti()
+elseif (args[1] <= 60 and args[1] > 55) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_60.png'
+volnoti()
+elseif (args[1] <= 65 and args[1] > 60) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_65.png'
+volnoti()
+elseif (args[1] <= 70 and args[1] > 65) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_70.png'
+volnoti()
+elseif (args[1] <= 75 and args[1] > 70) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_75.png'
+volnoti()
+elseif (args[1] <= 80 and args[1] > 75) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_80.png'
+volnoti()
+elseif (args[1] <= 85 and args[1] > 80) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_85.png'
+volnoti()
+elseif (args[1] <= 90 and args[1] > 85) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_90.png'
+volnoti()
+elseif (args[1] <= 95 and args[1] > 90) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_95.png'
+volnoti()
+elseif (args[1] > 95) then
+volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_100.png'
+volnoti()
+end
+vol_a = args[1]
+end
 --local label = { ["♫"] = " ", ["♩"] = "M" }
     if (args[2] == "♩") then
     vol_t:set_text("Muted")
@@ -560,7 +666,7 @@ vol_t:add_to_object(volwidget)
     end
 end, 1, "Master")
 
-volmenu = awful.menu({ items = volume })
+volmenu = awful.menu({ items = volume, theme = {bg_normal = beautiful.widgets_menu_bg_normal, bg_focus = beautiful.widgets_menu_bg_focus} })
 
 volwidget:buttons(volume_master:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn(toggle_volume, false) end),
@@ -643,6 +749,67 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
 xkbw = wibox.widget.textbox()
 bashets.register("xkb.sh", {widget = xkbw, update_time = 1, format = "<span color='" .. beautiful.fg_focus .. "'>$1</span>"})
 xkbw:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("xkb-switch -n", false) end)))
+-- LED
+function led()
+   ledt = {
+   timer = capi.timer({ timeout = 1 })
+   }
+   ledtm = ledt.timer
+   cap_n = true
+   num_n = true
+   scr_n = true
+   ledtm:connect_signal('timeout', function ()
+                                   cap = string.match(awful.util.pread("xset -q | grep Caps | awk '{print $4}'"), '%w+')
+                                   num = string.match(awful.util.pread("xset -q | grep Caps | awk '{print $8}'"), '%w+')
+                                   scr = string.match(awful.util.pread("xset -q | grep Caps | awk '{print $12}'"), '%w+')
+                                   if (cap ~= cap_s) then
+                                       ntitle = "Caps Lock"
+                                       ntext = cap
+                                       cap_s = cap
+                                       if (cap_n ~= true) then
+                                       closeLastNoti(title == "Caps Lock")
+                                           naughty.notify({title = ntitle,
+                                                           text = ntext,
+                                                           timeout = 1})
+                                           cap_n = true
+                                       end
+                                   else
+                                       cap_n = false
+                                   end
+                                   if (num ~= num_s) then
+                                       ntitle = "Num Lock"
+                                       ntext = num
+                                       num_s = num
+                                       if (num_n ~= true) then
+                                       closeLastNoti(title == "Num Lock")
+                                           naughty.notify({title = ntitle,
+                                                           text = ntext,
+                                                           timeout = 1})
+                                           num_n = true
+                                       end
+                                   else
+                                       num_n = false
+                                   end
+                                   if (scr ~= scr_s) then
+                                       ntitle = "Scroll Lock"
+                                       ntext = scr
+                                       scr_s = scr
+                                       if (scr_n ~= true) then
+                                       closeLastNoti(title == "Scroll Lock")
+                                           naughty.notify({title = ntitle,
+                                                           text = ntext,
+                                                           timeout = 1})
+                                           scr_n = true
+                                       end
+                                   else
+                                       scr_n = false
+                                   end
+                                   end)
+   ledtm:start()
+   ledtm:emit_signal('timeout')
+end
+led()
+
 -- }}}
 
 -- {{{ Spacers & Arrows
@@ -703,7 +870,6 @@ bashets.start() -- start bashets
 
 -- Create a wibox for each screen and add it
 mywibox = {}
-mybottomwibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -779,6 +945,7 @@ for s = 1, screen.count() do
     left_layout:add(space)
     left_layout:add(mylayoutbox[s])
     left_layout:add(arr16)
+    left_layout:add(space)
     left_layout:add(mypromptbox[s]) 
 
     -- Widgets that are aligned to the right
