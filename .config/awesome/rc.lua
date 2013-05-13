@@ -410,21 +410,16 @@ end
 
 --volnoti
 volnotiicon = nil
-vol_n = true
 function volnoti()
-    if (vol_n == false) then
 			        closeLastNoti()
                                 naughty.notify{
 				icon = volnotiicon,
                                 position = "top_right",
 				bg="#00000000",
-				timeout=0.9,
+				timeout=1,
 				width = 256,
 				gap = 0,
 			}
-        vol_n = true
-    end
-    vol_n = false
 end
 -- }}}
 
@@ -580,11 +575,13 @@ volume_master:update_master()
 volume_master:set_master_control()
 vol_t:add_to_object(volume_master)
 
+vol_n = true
 vicious.register( volwidget, vicious.widgets.volume, function(widget, args)
 vol_t:set_text(args[1] .. "%")
 vol_t:add_to_object(volwidget)
 -- volnoti
 if (args[1] ~= vol_a) then
+if (vol_n == false) then
 if (args[1] == 0 or args[2] == "♩") then
 volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_00.png'
 volnoti()
@@ -649,7 +646,9 @@ elseif (args[1] > 95) then
 volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_100.png'
 volnoti()
 end
+end
 vol_a = args[1]
+vol_n = false
 end
 --local label = { ["♫"] = " ", ["♩"] = "M" }
     if (args[2] == "♩") then
