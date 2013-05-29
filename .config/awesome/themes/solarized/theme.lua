@@ -1,10 +1,11 @@
----------------------------
--- arch awesome theme -- 
----------------------------
+-----------------------------
+-- solarized awesome theme -- 
+-----------------------------
 
 home = os.getenv("HOME")
 confdir = home .. "/.config/awesome"
 themes = confdir .. "/themes"
+_theme = themes .. "/solarized"
 micons = confdir .. "/icons"
 
 theme = {}
@@ -34,19 +35,19 @@ theme.dfont          = "Termsyn-8"
 
 theme.bg_normal = theme.colors.base3
 theme.bg_focus = theme.colors.base1
-theme.bg_urgent = theme.colors.red
+theme.bg_urgent = theme.bg_normal
 theme.bg_minimize   = theme.colors.base3
 theme.bg_systray = theme.bg_normal
 
 theme.fg_normal = theme.colors.base01
 theme.fg_focus = theme.colors.base03
-theme.fg_urgent = theme.colors.base3
+theme.fg_urgent = theme.colors.red
 theme.fg_minimize   = theme.colors.base1
 
 theme.border_width  = 1
 theme.border_normal = theme.bg_normal
 theme.border_focus  = theme.bg_focus
-theme.border_marked = theme.bg_urgent
+theme.border_marked = theme.colors.red
 
 -- There are other variable sets
 -- overriding the arch one when
@@ -81,24 +82,25 @@ theme.tasklist_maximized_horizontal = " [M]"
 theme.tasklist_maximized_vertical = ""
 
 -- Display the taglist squares
-theme.taglist_squares_sel   = "/home/mony/.config/awesome/themes/arch/taglist/squaref_b.png"
-theme.taglist_squares_unsel = "/home/mony/.config/awesome/themes/arch/taglist/square_b.png"
+theme.taglist_squares_sel   = _theme .. "/taglist/squaref_b.png"
+theme.taglist_squares_unsel = _theme .. "/taglist/square_b.png"
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_fg_normal = theme.colors.base03
 theme.menu_bg_normal = theme.colors.base3
-theme.menu_submenu_icon = "/home/mony/.config/awesome/themes/arch/submenu.png"
+theme.menu_submenu_icon = _theme .. "/submenu.png"
 theme.menu_height = 15
 theme.menu_width  = 120
 theme.menu_border_color = theme.fg_focus
 theme.menu_border_width = 0
+theme.menu_border_color = nil
 theme.menu_icon = micons .. "/menu.png"
 
 -- widgets menu
 theme.widgets_menu_bg_normal = theme.colors.base1
-theme.widgets_menu_bg_focus = theme.colors.base0
+theme.widgets_menu_bg_focus = theme.colors.base00
 
 -- You can add as many variables as
 -- you wish and access them by using
@@ -106,46 +108,46 @@ theme.widgets_menu_bg_focus = theme.colors.base0
 --theme.bg_widget = "#cc0000"
 
 -- Define the image to load
-theme.titlebar_close_button_normal = "/home/mony/.config/awesome/themes/arch/titlebar/close_normal.png"
-theme.titlebar_close_button_focus  = "/home/mony/.config/awesome/themes/arch/titlebar/close_focus.png"
+theme.titlebar_close_button_normal = _theme .. "/titlebar/close_normal.png"
+theme.titlebar_close_button_focus  = _theme .. "/titlebar/close_focus.png"
 
-theme.titlebar_ontop_button_normal_inactive = "/home/mony/.config/awesome/themes/arch/titlebar/ontop_normal_inactive.png"
-theme.titlebar_ontop_button_focus_inactive  = "/home/mony/.config/awesome/themes/arch/titlebar/ontop_focus_inactive.png"
-theme.titlebar_ontop_button_normal_active = "/home/mony/.config/awesome/themes/arch/titlebar/ontop_normal_active.png"
-theme.titlebar_ontop_button_focus_active  = "/home/mony/.config/awesome/themes/arch/titlebar/ontop_focus_active.png"
+theme.titlebar_ontop_button_normal_inactive = _theme .. "/titlebar/ontop_normal_inactive.png"
+theme.titlebar_ontop_button_focus_inactive  = _theme .. "/titlebar/ontop_focus_inactive.png"
+theme.titlebar_ontop_button_normal_active = _theme .. "/titlebar/ontop_normal_active.png"
+theme.titlebar_ontop_button_focus_active  = _theme .. "/titlebar/ontop_focus_active.png"
 
-theme.titlebar_sticky_button_normal_inactive = "/home/mony/.config/awesome/themes/arch/titlebar/sticky_normal_inactive.png"
-theme.titlebar_sticky_button_focus_inactive  = "/home/mony/.config/awesome/themes/arch/titlebar/sticky_focus_inactive.png"
-theme.titlebar_sticky_button_normal_active = "/home/mony/.config/awesome/themes/arch/titlebar/sticky_normal_active.png"
-theme.titlebar_sticky_button_focus_active  = "/home/mony/.config/awesome/themes/arch/titlebar/sticky_focus_active.png"
+theme.titlebar_sticky_button_normal_inactive = _theme .. "/titlebar/sticky_normal_inactive.png"
+theme.titlebar_sticky_button_focus_inactive  = _theme .. "/titlebar/sticky_focus_inactive.png"
+theme.titlebar_sticky_button_normal_active = _theme .. "/titlebar/sticky_normal_active.png"
+theme.titlebar_sticky_button_focus_active  = _theme .. "/titlebar/sticky_focus_active.png"
 
-theme.titlebar_floating_button_normal_inactive = "/home/mony/.config/awesome/themes/arch/titlebar/floating_normal_inactive.png"
-theme.titlebar_floating_button_focus_inactive  = "/home/mony/.config/awesome/themes/arch/titlebar/floating_focus_inactive.png"
-theme.titlebar_floating_button_normal_active = "/home/mony/.config/awesome/themes/arch/titlebar/floating_normal_active.png"
-theme.titlebar_floating_button_focus_active  = "/home/mony/.config/awesome/themes/arch/titlebar/floating_focus_active.png"
+theme.titlebar_floating_button_normal_inactive = _theme .. "/titlebar/floating_normal_inactive.png"
+theme.titlebar_floating_button_focus_inactive  = _theme .. "/titlebar/floating_focus_inactive.png"
+theme.titlebar_floating_button_normal_active = _theme .. "/titlebar/floating_normal_active.png"
+theme.titlebar_floating_button_focus_active  = _theme .. "/titlebar/floating_focus_active.png"
 
-theme.titlebar_maximized_button_normal_inactive = "/home/mony/.config/awesome/themes/arch/titlebar/maximized_normal_inactive.png"
-theme.titlebar_maximized_button_focus_inactive  = "/home/mony/.config/awesome/themes/arch/titlebar/maximized_focus_inactive.png"
-theme.titlebar_maximized_button_normal_active = "/home/mony/.config/awesome/themes/arch/titlebar/maximized_normal_active.png"
-theme.titlebar_maximized_button_focus_active  = "/home/mony/.config/awesome/themes/arch/titlebar/maximized_focus_active.png"
+theme.titlebar_maximized_button_normal_inactive = _theme .. "/titlebar/maximized_normal_inactive.png"
+theme.titlebar_maximized_button_focus_inactive  = _theme .. "/titlebar/maximized_focus_inactive.png"
+theme.titlebar_maximized_button_normal_active = _theme .. "/titlebar/maximized_normal_active.png"
+theme.titlebar_maximized_button_focus_active  = _theme .. "/titlebar/maximized_focus_active.png"
 
 --theme.wallpaper = "/home/mony/Images/figure8.png" using nitrogen
 
 -- You can use your own layout icons like this:
-theme.layout_fairh = "/home/mony/.config/awesome/themes/solarized/layouts-small/fairh.png"
-theme.layout_fairv = "/home/mony/.config/awesome/themes/solarized/layouts-small/fairv.png"
-theme.layout_floating  = "/home/mony/.config/awesome/themes/solarized/layouts-small/floating.png"
-theme.layout_magnifier = "/home/mony/.config/awesome/themes/solarized/layouts-small/magnifier.png"
-theme.layout_max = "/home/mony/.config/awesome/themes/solarized/layouts-small/max.png"
-theme.layout_fullscreen = "/home/mony/.config/awesome/themes/solarized/layouts-small/fullscreen.png"
-theme.layout_tilebottom = "/home/mony/.config/awesome/themes/solarized/layouts-small/tilebottom.png"
-theme.layout_tileleft   = "/home/mony/.config/awesome/themes/solarized/layouts-small/tileleft.png"
-theme.layout_tile = "/home/mony/.config/awesome/themes/solarized/layouts-small/tile.png"
-theme.layout_tiletop = "/home/mony/.config/awesome/themes/solarized/layouts-small/tiletop.png"
-theme.layout_spiral  = "/home/mony/.config/awesome/themes/solarized/layouts-small/spiral.png"
-theme.layout_dwindle = "/home/mony/.config/awesome/themes/solarized/layouts-small/dwindle.png"
+theme.layout_fairh = _theme .. "/layouts-small/fairh.png"
+theme.layout_fairv = _theme .. "/layouts-small/fairv.png"
+theme.layout_floating  = _theme .. "/layouts-small/floating.png"
+theme.layout_magnifier = _theme .. "/layouts-small/magnifier.png"
+theme.layout_max = _theme .. "/layouts-small/max.png"
+theme.layout_fullscreen = _theme .. "/layouts-small/fullscreen.png"
+theme.layout_tilebottom = _theme .. "/layouts-small/tilebottom.png"
+theme.layout_tileleft   = _theme .. "/layouts-small/tileleft.png"
+theme.layout_tile = _theme .. "/layouts-small/tile.png"
+theme.layout_tiletop = _theme .. "/layouts-small/tiletop.png"
+theme.layout_spiral  = _theme .. "/layouts-small/spiral.png"
+theme.layout_dwindle = _theme .. "/layouts-small/dwindle.png"
 
-theme.awesome_icon = "/home/mony/.config/awesome/icons/awesome16.png"
+theme.awesome_icon = micons .. "/awesome16.png"
 
 -- Define the icon theme for application icons. If not set then the icons 
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.

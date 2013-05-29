@@ -69,7 +69,9 @@ vmap <C-C> "+y
 vmap <C-V> p
 
 map <C-n> :NERDTreeToggle<CR>
-map <C-t> :TMiniBufExplorer<CR>  
+map <C-t> :TMiniBufExplorer<CR> 
+
+call togglebg#map("<F5>")
 
 " => Interface
 

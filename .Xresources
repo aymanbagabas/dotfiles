@@ -1,10 +1,11 @@
 ! Xft settings ---------------------------------------------------------------
 
-Xft*dpi:        96
-Xft*antialias:  true
-Xft*rgba:       rgb
-Xft*hinting:    true
-Xft*hintstyle:  hintslight
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintslight
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
 
 !URxvt*depth: 32
 !URxvt*background: rgba:2627/2627/2627/df29
@@ -24,8 +25,8 @@ URxvt*scrollWithBuffer: true
 ! scroll back to the bottom on keypress
 URxvt*scrollTtyKeypress: true
 
-URxvt*font: -*-Termsyn-Medium-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:pixelsize=16:antialias=false:hinting=false:autohint=false
-URxvt*BoldFont: -*-Termsyn-Bold-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:bold:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:bold:pixelsize=16:antialias=false:hinting=false:autohint=false
+URxvt*font: xft:Envy Code R for Powerline:pixelsize=13:antialias=false:hinting=false:autohint=false, -*-Termsyn-Medium-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:pixelsize=16:antialias=false:hinting=false:autohint=false
+URxvt*BoldFont: xft:Envy Code R for Powerline:bold:pixelsize=13:antialias=false:hinting=false:autohint=false,-*-Termsyn-Bold-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:bold:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:bold:pixelsize=16:antialias=false:hinting=false:autohint=false
 
 URxvt*iconFile:    /usr/share/icons/elementary/apps/48/Terminal.svg
 ncmpcpp*iconFile:    /usr/share/icons/elementary/apps/48/audio-player.svg

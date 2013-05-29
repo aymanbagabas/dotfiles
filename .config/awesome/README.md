@@ -1,7 +1,7 @@
 Awesome WM
 ==========
 
-![screenshot](http://img837.imageshack.us/img837/5161/201304112253173600x1080.png)
+![screenshot](https://dl.dropboxusercontent.com/u/7248454/screenshots/2013-05-29-012834_3600x1080_scrot.png)
 
 Libraries
 ---------
@@ -10,6 +10,7 @@ Libraries
 * [scratch](http://git.sysphere.org/awesome-configs/tree/scratch)
 * [blingbling](https://github.com/cedlemo/blingbling)
 * [freedesktop](https://github.com/terceiro/awesome-freedesktop)
+* [revelation](https://github.com/bioe007/awesome-revelation.git)
 
 Widgets
 -------
@@ -22,7 +23,7 @@ Widgets
 * gmail widget with notifier and tooltip
 * volumeicon with mute, low, medium, high icon + blingbling volumebar + volume notifier
 * awesompd
-* keyboard layout widget + caps, num, scroll lock notifier
+* keyboard layout widget + caps, num, scroll lock notifier + tooltip
 
 Menus
 -----
@@ -30,6 +31,8 @@ Menus
 * freedesktop menu
 * filetree menu **require [file_tree_menu.py](https://github.com/melanogaster42/File_tree_menu/raw/master/file_tree_menu.py)**
 * tasklist menu can close, move, toggle, etc .. focused client + running clients menu
+* wicd menu
+* layouts menu
 
 Keybinding
 ----------

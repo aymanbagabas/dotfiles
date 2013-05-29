@@ -58,9 +58,11 @@ end
 home = os.getenv("HOME")
 confdir = home .. "/.config/awesome"
 themes = confdir .. "/themes"
-icons = themes .. "/solarized/icons"
+icons = confdir .. "/icons"
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/home/mony/.config/awesome/themes/solarized/theme.lua")
+_theme = themes .. "/solarized"
+beautiful.init(_theme .. "/theme.lua")
+thmicons = _theme .. "/icons"
 
 -- {{{ Autorun
 
@@ -156,14 +158,14 @@ tags = {
     settings = {
     { 
     names = { "Ƃ", "ƈ", "ƃ", "Ƈ", "ƒ", "Ɓ" },
-    icons = { icons .. "/white/arch.png", icons .. "/white/dish.png", icons .. "/white/info_03.png", icons .. "/white/bug_01.png", icons .. "/white/mail.png", icons .. "/white/pacman.png" }, 
-    sep = { nil, icons .. "/arrow.png", icons .. "/arrow.png", icons .. "/arrow.png", icons .. "/arrow.png", icons .. "/arrow.png" },
+    icons = { thmicons .. "/white/arch.png", thmicons .. "/white/dish.png", thmicons .. "/white/info_03.png", thmicons .. "/white/bug_01.png", thmicons .. "/white/mail.png", thmicons .. "/white/pacman.png" }, 
+    sep = { nil, thmicons .. "/arrow.png", thmicons .. "/arrow.png", thmicons .. "/arrow.png", thmicons .. "/arrow.png", thmicons .. "/arrow.png" },
     layouts = { layouts[2], layouts[4], layouts[10], layouts[9], layouts[1], layouts[1] } 
     },
     {
     names = { "ƀ", "Ơ" },
-    icons = { icons .. "/white/fox.png", icons .. "/white/empty.png" },
-    sep = { nil, icons .. "/arrow.png"},
+    icons = { thmicons .. "/white/fox.png", thmicons .. "/white/empty.png" },
+    sep = { nil, thmicons .. "/arrow.png"},
     layouts = { layouts[11], layouts[1] }
     }}}
 for s = 1, screen.count() do
@@ -177,6 +179,7 @@ for s = 1, screen.count() do
             --awful.tag.setproperty(t, "icon_only", 1)
         end
 end
+
 -- }}}
 
 -- {{{ Menu
@@ -203,19 +206,19 @@ function mvscr()
      return scrn
 end
 
-function mvtag()
+function tag(func)
      local tags_n = {}
-     for t = 1, tag.instances() do --FIXME replace "tag.instances()" with the numbers of tags on mouse.screen
+     for t = 1, #tags.settings[client.focus.screen].names do
      tagm = 'Tag ' .. t
-     tags_n[t] = { tagm, function() awful.client.movetotag(tags[client.focus.screen][t]) end }
+     tags_n[t] = { tagm, function() func(tags[client.focus.screen][t]) end }
      tags_np = awful.util.table.join( tags_n, {
         {"Next tag",
             function (c)
                 local curidx = awful.tag.getidx()
                 if curidx == 9 then
-                   awful.client.movetotag(tags[client.focus.screen][1])
+                   func(tags[client.focus.screen][1])
                 else
-                   awful.client.movetotag(tags[client.focus.screen][curidx + 1])
+                   func(tags[client.focus.screen][curidx + 1])
                 end
             end
         },
@@ -223,9 +226,9 @@ function mvtag()
             function (c)
                 local curidx = awful.tag.getidx()
                 if curidx == 1 then
-                   awful.client.movetotag(tags[client.focus.screen][9])
+                   func(tags[client.focus.screen][9])
                 else
-                   awful.client.movetotag(tags[client.focus.screen][curidx - 1])
+                   func(tags[client.focus.screen][curidx - 1])
                 end
             end
         }
@@ -235,16 +238,7 @@ function mvtag()
      return tags_np
 end
 
-function ttag()
-     local tags_n = {}
-     for t = 1, tag.instances() do --FIXME replace "tag.instances()" with the numbers of tags on mouse.screen
-     tagm = 'Toggle Tag ' .. t
-     tags_n[t] = { tagm, function() awful.client.toggletag(tags[client.focus.screen][t]) end }
-     end
-     return tags_n
-end
-
-function clsmenu(args)
+function clsmenu()
     _menu = self or {}
     local cls = capi.client.get()
     local cls_t = {}
@@ -263,14 +257,23 @@ function clsmenu(args)
     return cls_t
 end
 
+function getlay()
+         local lay_m = {}
+         for s = 1, #layouts do
+         lay_m[s] = { awful.layout.getname(layouts[s]), function () awful.layout.set(layouts[s]) end, _theme .. "/layouts-small/" .. awful.layout.getname(layouts[s]) .. ".png" }
+         end
+         return lay_m
+end
+
 function showNavMenu(menu, args)
-local cls_t = clsmenu(cls)
-local tag_n = mvtag()
-local tag_t = ttag()
+local cls_t = clsmenu()
+local tag_n = tag(awful.client.movetotag)
+local tag_t = tag(awful.client.toggletag)
 local scr_n = mvscr()
+local lay_n = getlay()
 
 if not menu then
-menu = {}
+menu = {theme = {width = 200}}
 end
 c = capi.client.focus
 
@@ -288,6 +291,10 @@ fclient = {
             function () c.maximized_horizontal = not c.maximized_horizontal c.maximized_vertical = not c.maximized_vertical end
         },
         {
+            "[F] Fullscreen",
+            function () c.fullscreen = not c.fullscreen  end
+        },
+        {
             (c.sticky and "Un-Stick") or "[S] Stick", --⚫ ⚪ 
             function() c.sticky = not c.sticky end
         },
@@ -299,7 +306,7 @@ fclient = {
             end
         },
         {
-            ((awful.client.floating.get(c) and "Tile") or "[F] Float"), --▦ ☁ 
+            ((awful.client.floating.get(c) and "Tile") or "[f] Float"), --▦ ☁ 
             function() awful.client.floating.toggle(c) end
         },
         {"Master",
@@ -310,7 +317,7 @@ fclient = {
         }
         }
 local mynav = {
-        {awful.util.escape(c.class),
+        { "<b>" .. awful.util.escape(c.class) .. "</b>",
             fclient, c.icon
         },
         {"Move to Tag",
@@ -321,6 +328,9 @@ local mynav = {
         },
         {"Move to Screen",
             scr_n
+        },
+        {"layouts",
+            lay_n
         },
         {"Clients",
             cls_t
@@ -368,9 +378,9 @@ musicmenu = {
 }
 
 mymenu = awful.util.table.join({
-                                    { "File Manager", fileman, freedesktop.utils.lookup_icon({ icon='file-manager' }) },
-                                    { "Browser", browser, freedesktop.utils.lookup_icon({ icon='browser' }) },
-                                    { "Terminal", terminal, freedesktop.utils.lookup_icon({ icon='terminal' }) },
+                                    { "&File Manager", fileman, freedesktop.utils.lookup_icon({ icon='file-manager' }) },
+                                    { "&Browser", browser, freedesktop.utils.lookup_icon({ icon='browser' }) },
+                                    { "&Terminal", terminal, freedesktop.utils.lookup_icon({ icon='terminal' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
                                     { "Files", myplacesmenu.myplacesmenu(), freedesktop.utils.lookup_icon({ icon='folder-home' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil}
@@ -421,12 +431,50 @@ function volnoti()
 				gap = 0,
 			}
 end
+
+-- Blinking text -- TODO get this function to work
+blinkers = {}
+function blinking(tb,iv)
+    if (tb==nil) then 
+        return
+    end
+    local fiv = iv or 1
+    if blinkers[tb] then
+        if blinkers[tb].timer.started then
+            blinkers[tb].timer:stop()
+        else
+            blinkers[tb].timer:start()
+        end
+    else
+        if (tb == nil) then
+            return
+        end
+        blinkers[tb]= {}
+        blinkers[tb].timer = timer({timeout=fiv})
+        blinkers[tb].text = tb._layout.text -- FIXME return text from widget with markup
+        blinkers[tb].empty = 0
+
+        blinkers[tb].timer:connect_signal("timeout", function ()
+            if (blinkers[tb].empty==1) then
+                tb:set_markup(blinkers[tb].text)
+                blinkers[tb].empty=0
+            else
+                blinkers[tb].empty=1
+                tb:set_markup("<span color='" .. beautiful.colors.red .. "'>" .. blinkers[tb].text .. "</span>")
+            end
+        end)
+
+        blinkers[tb].timer:start()
+
+    end
+end
+
 -- }}}
 
 -- {{{ Clock
 -- Create a textclock widget
-mytextclock = awful.widget.textclock("<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƕ %I:%M %p </span></span>")
-cal.register(mytextclock, "<b><u>%s</u></b>", 1)
+mytextclock = awful.widget.textclock("<span background='" .. beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƕ %I:%M %p </span></span>")
+cal.register(mytextclock, "<b><u>%s</u></b>", 1) -- TODO trying to get Orglendar work with cal.lua
 
 -- }}}
 
@@ -439,7 +487,7 @@ vicious.register(syswidget, vicious.widgets.pkg, function (widget, args)
                                                  u = io.popen("pacman -Qu")
                                                  info = u:read("*all")
                                                  u:close()
-                                                 sys_t:set_text("<b>Updates:</b>\n\n" .. info)
+                                                 sys_t:set_text("<b>Updates:</b>\n" .. info)
                                                  if (args[1] > 0) then
                                                    if (u_pkgs ~= args[1]) then
                                                      naughty.notify({
@@ -458,6 +506,7 @@ vicious.register(syswidget, vicious.widgets.pkg, function (widget, args)
 end, 180, "Arch")
 sys_t:add_to_object(syswidget)
 syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -name Updates -e yaourt -Syua --noconfirm") end)))
+--blinking(syswidget, 2)
  -- }}}
 
 -- {{{ CPU
@@ -477,14 +526,14 @@ memwidget = wibox.widget.textbox()
 vicious.register(memwidget, vicious.widgets.mem, "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƞ $1%</span></span>", 3)
 blingbling.popups.htop(memwidget, { title_color = beautiful.colors.blue , user_color = beautiful.colors.green , root_color = beautiful.colors.red , terminal =  terminal })
 -- }}}
+
 -- {{{ Net Widget
 local wicd = require("wicd")
 
 net = wibox.widget.textbox()
 netwidget = blingbling.net({interface = nil, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11"})
-
-
 net_t = awful.tooltip({ objects = { net, netwidget }})
+
 vicious.register(net, vicious.widgets.wifi,
 function (widget, args)
 ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
@@ -497,7 +546,7 @@ if tor_ip ~= '' then
 end
 if args["{ssid}"] ~= "N/A" then
     netwidget:set_interface(wlan)
-	net_t:set_text(args["{ssid}"] .. " " .. args["{linp}"] .. "%\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
+	net_t:set_text("<b>" .. args["{ssid}"] .. " " .. args["{linp}"] .. "%</b>\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
 	if args["{linp}"] >= 75 then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
     elseif args["{linp}"] >= 40 then
@@ -514,7 +563,7 @@ else
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɨ </span></span>"
     else
     netwidget:set_interface(eth)
-    net_t:set_text("Wired\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
+    net_t:set_text("<b>Wired</b>\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
     end
 end
@@ -564,6 +613,7 @@ vicious.register(mygmail, vicious.widgets.gmail,
   end
 end, 60)
 mygmail:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail, false) end)))
+--blinking(mygmail, 2)
 -- }}}
 
 -- {{{ Volume
@@ -583,67 +633,67 @@ vol_t:add_to_object(volwidget)
 if (args[1] ~= vol_a) then
 if (vol_n == false) then
 if (args[1] == 0 or args[2] == "♩") then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_00.png'
+volnotiicon = icons .. '/noti/volbar/bar_00.png'
 volnoti()
 elseif (args[1] <= 5 and args[1] > 0) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_05.png'
+volnotiicon = icons .. '/noti/volbar/bar_05.png'
 volnoti()
 elseif (args[1] <= 10 and args[1] > 5) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_10.png'
+volnotiicon = icons .. '/noti/volbar/bar_10.png'
 volnoti()
 elseif (args[1] <= 15 and args[1] > 10) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_15.png'
+volnotiicon = icons .. '/noti/volbar/bar_15.png'
 volnoti()
 elseif (args[1] <= 20 and args[1] > 15) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_20.png'
+volnotiicon = icons .. '/noti/volbar/bar_20.png'
 volnoti()
 elseif (args[1] <= 25 and args[1] > 20) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_25.png'
+volnotiicon = icons .. '/noti/volbar/bar_25.png'
 volnoti()
 elseif (args[1] <= 30 and args[1] > 25) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_30.png'
+volnotiicon = icons .. '/noti/volbar/bar_30.png'
 volnoti()
 elseif (args[1] <= 35 and args[1] > 30) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_35.png'
+volnotiicon = icons .. '/noti/volbar/bar_35.png'
 volnoti()
 elseif (args[1] <= 40 and args[1] > 35) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_40.png'
+volnotiicon = icons .. '/noti/volbar/bar_40.png'
 volnoti()
 elseif (args[1] <= 45 and args[1] > 40) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_45.png'
+volnotiicon = icons .. '/noti/volbar/bar_45.png'
 volnoti()
 elseif (args[1] <= 50 and args[1] > 45) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_50.png'
+volnotiicon = icons .. '/noti/volbar/bar_50.png'
 volnoti()
 elseif (args[1] <= 55 and args[1] > 50) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_55.png'
+volnotiicon = icons .. '/noti/volbar/bar_55.png'
 volnoti()
 elseif (args[1] <= 60 and args[1] > 55) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_60.png'
+volnotiicon = icons .. '/noti/volbar/bar_60.png'
 volnoti()
 elseif (args[1] <= 65 and args[1] > 60) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_65.png'
+volnotiicon = icons .. '/noti/volbar/bar_65.png'
 volnoti()
 elseif (args[1] <= 70 and args[1] > 65) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_70.png'
+volnotiicon = icons .. '/noti/volbar/bar_70.png'
 volnoti()
 elseif (args[1] <= 75 and args[1] > 70) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_75.png'
+volnotiicon = icons .. '/noti/volbar/bar_75.png'
 volnoti()
 elseif (args[1] <= 80 and args[1] > 75) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_80.png'
+volnotiicon = icons .. '/noti/volbar/bar_80.png'
 volnoti()
 elseif (args[1] <= 85 and args[1] > 80) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_85.png'
+volnotiicon = icons .. '/noti/volbar/bar_85.png'
 volnoti()
 elseif (args[1] <= 90 and args[1] > 85) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_90.png'
+volnotiicon = icons .. '/noti/volbar/bar_90.png'
 volnoti()
 elseif (args[1] <= 95 and args[1] > 90) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_95.png'
+volnotiicon = icons .. '/noti/volbar/bar_95.png'
 volnoti()
 elseif (args[1] > 95) then
-volnotiicon = '/home/mony/.config/awesome/icons/noti/volbar/bar_100.png'
+volnotiicon = icons .. '/noti/volbar/bar_100.png'
 volnoti()
 end
 end
@@ -665,12 +715,9 @@ end
     end
 end, 1, "Master")
 
-volmenu = awful.menu({ items = volume, theme = {bg_normal = beautiful.widgets_menu_bg_normal, bg_focus = beautiful.widgets_menu_bg_focus} })
-
 volwidget:buttons(volume_master:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn(toggle_volume, false) end),
     awful.button({ }, 2, function () awful.util.spawn(volmixer, false) end),
-    awful.button({ }, 3, function () volmenu:toggle() end),
     awful.button({ }, 4, function () awful.util.spawn(raise_volume, false) end),
     awful.button({ }, 5, function () awful.util.spawn(lower_volume, false) end)
 )))
@@ -690,7 +737,7 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
   musicwidget.update_interval = 1 -- Set the update interval in seconds
 
   -- Set the folder where icons are located (change mony to your login name)
-  musicwidget.path_to_icons = "/home/mony/.config/awesome/awesompd/icons" 
+  musicwidget.path_to_icons = confdir .. "/awesompd/icons" 
 
   -- Set the default music format for Jamendo streams. You can change
   -- this option on the fly in awesompd itself.
@@ -711,7 +758,7 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
   
   -- This option is necessary if you want the album covers to be shown
   -- for your local tracks.
-  musicwidget.mpd_config = "/home/mony/.mpdconf"
+  musicwidget.mpd_config = home .. "/.mpdconf"
   
   -- Specify decorators on the left and the right side of the
   -- widget. Or just leave empty strings if you decorate the widget
@@ -735,6 +782,10 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
   			       { "", awesompd.MOUSE_SCROLL_UP, musicwidget:command_volume_up() },
   			       { "", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_volume_down() },
   			       { "", awesompd.MOUSE_RIGHT, musicwidget:command_show_menu() },
+  			       { altkey, awesompd.MOUSE_SCROLL_DOWN, function () awful.util.spawn("mpc seek +2") end },
+  			       { altkey, awesompd.MOUSE_SCROLL_UP, function () awful.util.spawn("mpc seek -2") end },
+  			       { altkey, awesompd.MOUSE_LEFT, function () awful.util.spawn(mpdplr) end },
+  			       { altkey, awesompd.MOUSE_RIGHT, function () awful.util.spawn(mpdgui) end },
                                --{ "", "XF86_AudioLowerVolume", musicwidget:command_volume_down() },
                                --{ "", "XF86_AudioRaiseVolume", musicwidget:command_volume_up() },
                                { modkey, "Pause", musicwidget:command_playpause() } })
@@ -746,6 +797,9 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
 
 -- {{{ Keyboard layout
 xkbw = wibox.widget.textbox()
+xkb_t = awful.tooltip({ objects = xkbw })
+xkb_t.wibox:set_bg(beautiful.bg_normal)
+xkb_t.wibox.border_color = beautiful.bg_normal
 bashets.register("xkb.sh", {widget = xkbw, update_time = 1, format = "<span color='" .. beautiful.fg_focus .. "'>$1</span>"})
 xkbw:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("xkb-switch -n", false) end)))
 -- LED
@@ -766,7 +820,6 @@ function led()
                                        ntext = cap
                                        cap_s = cap
                                        if (cap_n ~= true) then
-                                       closeLastNoti(title == "Caps Lock")
                                            naughty.notify({title = ntitle,
                                                            text = ntext,
                                                            timeout = 1})
@@ -780,7 +833,6 @@ function led()
                                        ntext = num
                                        num_s = num
                                        if (num_n ~= true) then
-                                       closeLastNoti(title == "Num Lock")
                                            naughty.notify({title = ntitle,
                                                            text = ntext,
                                                            timeout = 1})
@@ -794,7 +846,6 @@ function led()
                                        ntext = scr
                                        scr_s = scr
                                        if (scr_n ~= true) then
-                                       closeLastNoti(title == "Scroll Lock")
                                            naughty.notify({title = ntitle,
                                                            text = ntext,
                                                            timeout = 1})
@@ -803,12 +854,14 @@ function led()
                                    else
                                        scr_n = false
                                    end
+                                   xkb_t:set_text("Layout: " .. awful.util.pread("xkblayout-state print %n") .. "\nCaps Lock: " .. cap .. "\nNum Lock: " .. num .. "\nScroll Lock: " .. scr)
                                    end)
    ledtm:start()
    ledtm:emit_signal('timeout')
 end
 led()
 
+xkb_t:add_to_object(xkbw)
 -- }}}
 
 -- {{{ Spacers & Arrows
@@ -821,6 +874,7 @@ line = wibox.widget.textbox()
 line:set_text("|")
 space = wibox.widget.textbox()
 space:set_text(" ")
+space:connect_signal("mouse::enter", function () vicious.force({syswidget, mygmail}) end)
 ----------------------
 rtar = wibox.widget.textbox()
 rtar:set_markup("<span color='" .. beautiful.fg_focus .. "'>ƛ</span>")
@@ -828,47 +882,56 @@ rtar:buttons(awful.util.table.join(awful.button({ }, 1, function () mymainmenu:t
 ltar = wibox.widget.textbox()
 ltar:set_markup("<span color='" .. beautiful.fg_focus .. "'> Ɲ</span>")
 arrr = wibox.widget.imagebox()
-arrr:set_image(icons .. "/arrows/arrr.png")
+arrr:set_image(thmicons .. "/arrows/arrr.png")
 arrl = wibox.widget.imagebox()
-arrl:set_image(icons .. "/arrows/arrl.png")
+arrl:set_image(thmicons .. "/arrows/arrl.png")
 arr1 = wibox.widget.imagebox()
-arr1:set_image(icons .. "/arrows/arr1.png")
+arr1:set_image(thmicons .. "/arrows/arr1.png")
 arr2 = wibox.widget.imagebox()
-arr2:set_image(icons .. "/arrows/arr2.png")
+arr2:set_image(thmicons .. "/arrows/arr2.png")
 arr3 = wibox.widget.imagebox()
-arr3:set_image(icons .. "/arrows/arr3.png")
+arr3:set_image(thmicons .. "/arrows/arr3.png")
 arr4 = wibox.widget.imagebox()
-arr4:set_image(icons .. "/arrows/arr4.png")
+arr4:set_image(thmicons .. "/arrows/arr4.png")
 arr5 = wibox.widget.imagebox()
-arr5:set_image(icons .. "/arrows/arr5.png")
+arr5:set_image(thmicons .. "/arrows/arr5.png")
 arr6 = wibox.widget.imagebox()
-arr6:set_image(icons .. "/arrows/arr6.png")
+arr6:set_image(thmicons .. "/arrows/arr6.png")
 arr7 = wibox.widget.imagebox()
-arr7:set_image(icons .. "/arrows/arr7.png")
+arr7:set_image(thmicons .. "/arrows/arr7.png")
 arr8 = wibox.widget.imagebox()
-arr8:set_image(icons .. "/arrows/arr8.png")
+arr8:set_image(thmicons .. "/arrows/arr8.png")
 arr9 = wibox.widget.imagebox()
-arr9:set_image(icons .. "/arrows/arr9.png")
+arr9:set_image(thmicons .. "/arrows/arr9.png")
 arr10 = wibox.widget.imagebox()
-arr10:set_image(icons .. "/arrows/arr10.png")
+arr10:set_image(thmicons .. "/arrows/arr10.png")
 arr11 = wibox.widget.imagebox()
-arr11:set_image(icons .. "/arrows/arr11.png")
+arr11:set_image(thmicons .. "/arrows/arr11.png")
 arr12 = wibox.widget.imagebox()
-arr12:set_image(icons .. "/arrows/arr12.png")
+arr12:set_image(thmicons .. "/arrows/arr12.png")
 arr13 = wibox.widget.imagebox()
-arr13:set_image(icons .. "/arrows/arr13.png")
+arr13:set_image(thmicons .. "/arrows/arr13.png")
 arr14 = wibox.widget.imagebox()
-arr14:set_image(icons .. "/arrows/arr14.png")
+arr14:set_image(thmicons .. "/arrows/arr14.png")
 arr15 = wibox.widget.imagebox()
-arr15:set_image(icons .. "/arrows/arr15.png")
+arr15:set_image(thmicons .. "/arrows/arr15.png")
 arr16 = wibox.widget.imagebox()
-arr16:set_image(icons .. "/arrows/arr16.png")
+arr16:set_image(thmicons .. "/arrows/arr16.png")
+arr17 = wibox.widget.imagebox()
+arr17:set_image(thmicons .. "/arrows/arr17.png")
+arr18 = wibox.widget.imagebox()
+arr18:set_image(thmicons .. "/arrows/arr18.png")
+arr19 = wibox.widget.imagebox()
+arr19:set_image(thmicons .. "/arrows/arr19.png")
+arr20 = wibox.widget.imagebox()
+arr20:set_image(thmicons .. "/arrows/arr20.png")
 -- }}}
 
 bashets.start() -- start bashets
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+mybottomwibox = {}
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -925,7 +988,13 @@ for s = 1, screen.count() do
     mylayoutbox[s] = awful.widget.layoutbox(s)
     mylayoutbox[s]:buttons(awful.util.table.join(
                            awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end),
+                           awful.button({ }, 3, function () if lmenu then
+                                                                lmenu:hide()
+                                                                lmenu = nil
+                                                            else
+                                                                lmenu = awful.menu({items = getlay()})
+                                                                lmenu:show()
+                                                            end  end),
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
@@ -949,8 +1018,10 @@ for s = 1, screen.count() do
 
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
+    right_layout:add(space)
+    if s == 1 then 
     right_layout:add(arr15)
-    if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(wibox.widget.systray())
     right_layout:add(space)
     right_layout:add(xkbw)
     right_layout:add(arr14)
@@ -968,6 +1039,10 @@ for s = 1, screen.count() do
     right_layout:add(cpuwidget)
     right_layout:add(arr7)
     right_layout:add(syswidget)
+    end
+    if s ==2 then
+    right_layout:add(arr20)
+    end
     right_layout:add(mytextclock)
 
     -- Now bring it all together (with the tasklist in the middle)
@@ -975,8 +1050,32 @@ for s = 1, screen.count() do
     layout:set_left(left_layout)
     layout:set_middle(mytasklist[s])
     layout:set_right(right_layout)
-
+    
     mywibox[s]:set_widget(layout)
+    
+    -- Bottom wibox
+    --[[mybottomwibox[s] = awful.wibox({ position = "bottom", screen = 2, height = 18, fg = theme.fg_normal })
+    
+    local b_left_layout = wibox.layout.fixed.horizontal()
+    b_left_layout:add(mytaglist[s])
+    b_left_layout:add(arr16)
+    b_left_layout:add(space)
+    b_left_layout:add(mylayoutbox[s])
+    b_left_layout:add(arr16)
+    b_left_layout:add(space)
+    b_left_layout:add(mypromptbox[s]) 
+    
+    local b_right_layout = wibox.layout.fixed.horizontal()
+    b_right_layout:add(space)
+    b_right_layout:add(arr20)
+    b_right_layout:add(mytextclock)
+    
+    local b_layout = wibox.layout.align.horizontal()
+    b_layout:set_left(b_left_layout)
+    b_layout:set_middle(mytasklist[2])
+    b_layout:set_right(b_right_layout)
+
+    mybottomwibox[s]:set_widget(b_layout)--]]
 end
 -- }}}
 
@@ -1068,7 +1167,11 @@ globalkeys = awful.util.table.join(
     
         -- Menus
     awful.key({ modkey,           }, "space", function () mymainmenu:show() end),
-    awful.key({ altkey }, "Tab", function () awful.menu.clients() end),
+    awful.key({ altkey }, "Tab", function (menu, args) 
+                                 menu = {theme = {width = 300}}
+                                 menu.items = clsmenu()
+                                 local m = awful.menu.new(menu)
+                                 m:show() end),
        
     -- Toggle mouse screen wibox
     awful.key({ modkey }, "b", function ()
@@ -1120,7 +1223,7 @@ globalkeys = awful.util.table.join(
     -- Run or raise applications with dmenu
     awful.key({ altkey }, "F2",
     function ()
-        local f_reader = io.popen( dmenu)
+        local f_reader = io.popen(dmenu)
         local command = assert(f_reader:read('*a'))
         f_reader:close()
         if command == "" then return end
@@ -1179,7 +1282,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "w", function() menubar.show() end),
     
     -- Print Screen
-    awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/Pictures/ 2>/dev/null'") end),
+    awful.key({ }, "Print", function () awful.util.spawn("scrot -q 100 -e 'mv $f ~/Pictures/ 2>/dev/null'") end),
 
     -- Escape from keyboard focus trap (eg Flash plugin in Firefox)
     awful.key({ modkey, "Control" }, "Escape", function ()

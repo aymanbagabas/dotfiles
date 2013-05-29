@@ -15,9 +15,8 @@ setxkbmap -layout "us, ara" -option "grp:alt_shift_toggle"
 lightsOn.sh 120 &
 xautolock -locker slimlock -time 15 &
 wicd-client -o &
-transmission-daemon &
 system-config-printer-applet &
-(sleep 5 && devmon) &
+#(sleep 5 && devmon) &
 #(sleep 10 && conky -c ~/.conky/.conkyrc) &
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
