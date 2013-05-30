@@ -434,7 +434,10 @@ end
 
 -- Blinking text -- TODO get this function to work
 blinkers = {}
-function blinking(tb,iv)
+function blinking(tb,iv,color)
+    if (color == nil) then
+        color = "#ff0000"
+    end
     if (tb==nil) then 
         return
     end
@@ -460,7 +463,7 @@ function blinking(tb,iv)
                 blinkers[tb].empty=0
             else
                 blinkers[tb].empty=1
-                tb:set_markup("<span color='" .. beautiful.colors.red .. "'>" .. blinkers[tb].text .. "</span>")
+                tb:set_markup("<span color='" .. color .. "'>" .. blinkers[tb].text .. "</span>")
             end
         end)
 
@@ -536,13 +539,19 @@ net_t = awful.tooltip({ objects = { net, netwidget }})
 
 vicious.register(net, vicious.widgets.wifi,
 function (widget, args)
-ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
-gateway = (string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
-ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 tor = ''
-tor_ip = (string.match(awful.util.pread("curl --silent -S -x socks4a://localhost:9050 http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
+if (awful.util.pread("ip route show") ~= '') then -- FIXME do it with another way :/
+ip_addr = string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")
+gateway = string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")
+ext_ip = string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")
+tor_ip = string.match(awful.util.pread("curl --silent -S -x socks4a://localhost:9050 http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+") -- FIXME awesome hang when tor is running
 if tor_ip ~= '' then
     tor = "\nTor IP: " .. tor_ip
+end
+else
+ip_addr = 'N/A'
+gateway = 'N/A'
+ext_ip = 'N/A'
 end
 if args["{ssid}"] ~= "N/A" then
     netwidget:set_interface(wlan)
@@ -557,9 +566,9 @@ if args["{ssid}"] ~= "N/A" then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƨ </span></span>"
     end
 else
-    if gateway == '' then
+    if ip_addr == 'N/A' then
     netwidget:set_interface(nil)
-    net_t:set_text("no internet connection")
+    net_t:set_text("no connection")
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɨ </span></span>"
     else
     netwidget:set_interface(eth)
