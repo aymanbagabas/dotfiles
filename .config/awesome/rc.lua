@@ -111,7 +111,7 @@ wlan = "wlan0"
 naughty.config.defaults.timeout = 7
 naughty.config.defaults.margin = "5"
 naughty.config.defaults.ontop = true
-naughty.config.defaults.screen = capi.mouse.screen
+naughty.config.defaults.screen = 1
 naughty.config.defaults.position = "top_right"
 naughty.config.defaults.border_width = beautiful.menu_border_width
 naughty.config.defaults.bg = beautiful.bg_focus or '#535d6c'
@@ -251,6 +251,7 @@ function clsmenu()
                 end
                 capi.client.focus = c
                 c:raise()
+                awful.screen.focus(client.focus.screen)
             end,
             c.icon }
     end
@@ -265,12 +266,7 @@ function getlay()
          return lay_m
 end
 
-function showNavMenu(menu, args)
-local cls_t = clsmenu()
-local tag_n = tag(awful.client.movetotag)
-local tag_t = tag(awful.client.toggletag)
-local scr_n = mvscr()
-local lay_n = getlay()
+function showNavMenu(menu, args) -- FIXME show menu from tasklist without rais client
 
 if not menu then
 menu = {theme = {width = 200}}
@@ -321,19 +317,19 @@ local mynav = {
             fclient, c.icon
         },
         {"Move to Tag",
-            tag_n
+            tag(awful.client.movetotag)
         },
         {"Toggle Tag",
-            tag_t
+            tag(awful.client.toggletag)
         },
         {"Move to Screen",
-            scr_n
+            mvscr()
         },
         {"layouts",
-            lay_n
+            getlay()
         },
         {"Clients",
-            cls_t
+            clsmenu()
         },
 }
 menu.items = mynav
@@ -421,12 +417,12 @@ end
 --volnoti
 volnotiicon = nil
 function volnoti()
-			        closeLastNoti()
-                                naughty.notify{
+			    closeLastNoti()
+            naughty.notify{
 				icon = volnotiicon,
-                                position = "top_right",
+                position = "top_right",
 				bg="#00000000",
-				timeout=1,
+				timeout=0.5,
 				width = 256,
 				gap = 0,
 			}
@@ -472,12 +468,31 @@ function blinking(tb,iv,color)
     end
 end
 
+function sysinf() -- TODO add more info
+            user = awful.util.pread("whoami | tr -d '\n'")
+            host = awful.util.pread("hostname | tr -d '\n'")
+            function mem(m) local mem = math.floor(awful.util.pread("cat /proc/meminfo | grep '" .. m .. "' | awk '{print $2}'")/1024) return mem end -- MemTotal, MemFree, SwapTotal, SwapFree, etc ... cat /proc/meminfo
+            function hdd(p, s) local hdd = awful.util.pread("df -h " .. p .. " | sed -n 2p | awk '{print $" .. s .. "}' | tr -d '\n'") return hdd end -- p = path, s = 1 device 2 total size 3 used space 4 free space 5 used space in percentage 6 mount point 
+            kernel = awful.util.pread("uname -r | tr -d '\n'")
+            uptime = awful.util.pread("uptime | awk '{print $3}' | tr -d ',\n'") -- FIXME add '0:' when the output in minutes
+            naughty.notify{
+                text = "User: " .. user .. "\nHost: " .. host .. "\nKernel: " .. kernel .. "\nUptime: " .. uptime .. " h\nMemory: " .. mem("MemFree") .. "Mb free of " .. mem("MemTotal") .. "Mb\nSwap: " .. mem("SwapTotal") - mem("SwapFree") .. "Mb used of " .. mem("SwapTotal") .. "Mb\nHDD: " .. hdd("/", 4) .. "b free of " .. hdd("/",2) .. "b",
+                title = "System Info",
+                position = "top_right",
+				timeout=0
+			}
+end
+
 -- }}}
 
 -- {{{ Clock
 -- Create a textclock widget
+smenu = awful.menu({items = {{"Check for Updates", function () awful.util.spawn(terminal .. " -e sudo pacman -Sy") vicious.force({syswidget}) end, nil},
+                             {"Check Email", function () vicious.force({mygmail}) end, nil},
+                             {"System Info", function () sysinf() end, nil},
+}, theme = {bg_normal = beautiful.widgets_menu_bg_normal, bg_focus = beautiful.widgets_menu_bg_focus}})
 mytextclock = awful.widget.textclock("<span background='" .. beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƕ %I:%M %p </span></span>")
-cal.register(mytextclock, "<b><u>%s</u></b>", 1) -- TODO trying to get Orglendar work with cal.lua
+cal.register(mytextclock, "<b><u>%s</u></b>", 1, function () smenu:toggle()  end) -- cal.register(widget, day_format, weekstart, customkey1_middle_mouse, customkey2_shift_middle_mouse) -- TODO trying to get Orglendar work with cal.lua
 
 -- }}}
 
@@ -509,8 +524,9 @@ vicious.register(syswidget, vicious.widgets.pkg, function (widget, args)
 end, 180, "Arch")
 sys_t:add_to_object(syswidget)
 syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -name Updates -e yaourt -Syua --noconfirm") end)))
+syswidget:connect_signal("mouse::enter", function () vicious.force({syswidget}) end)
 --blinking(syswidget, 2)
- -- }}}
+-- }}}
 
 -- {{{ CPU
 cpuwidget = wibox.widget.textbox()
@@ -538,9 +554,9 @@ netwidget = blingbling.net({interface = nil, show_text = true, background_color 
 net_t = awful.tooltip({ objects = { net, netwidget }})
 
 vicious.register(net, vicious.widgets.wifi,
-function (widget, args)
+function (widget, args) -- FIXME do it with another way :/
 tor = ''
-if (awful.util.pread("ip route show") ~= '') then -- FIXME do it with another way :/
+if (awful.util.pread("ip route show") ~= '') then
 ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 gateway = (string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
@@ -622,6 +638,7 @@ vicious.register(mygmail, vicious.widgets.gmail,
   end
 end, 60)
 mygmail:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail, false) end)))
+mygmail:connect_signal("mouse::enter", function () vicious.force({mygmail}) end)
 --blinking(mygmail, 2)
 -- }}}
 
@@ -722,13 +739,13 @@ end
     elseif (args[1] >= 61) then
     return "<span background='" ..beautiful.colors.base1 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƪ</span></span>"
     end
-end, 1, "Master")
+end, 3, "Master")
 
 volwidget:buttons(volume_master:buttons(awful.util.table.join(
-    awful.button({ }, 1, function () awful.util.spawn(toggle_volume, false) end),
+    awful.button({ }, 1, function () awful.util.spawn(toggle_volume, false) vicious.force({volwidget}) end),
     awful.button({ }, 2, function () awful.util.spawn(volmixer, false) end),
-    awful.button({ }, 4, function () awful.util.spawn(raise_volume, false) end),
-    awful.button({ }, 5, function () awful.util.spawn(lower_volume, false) end)
+    awful.button({ }, 4, function () awful.util.spawn(raise_volume , false) vicious.force({volwidget}) end),
+    awful.button({ }, 5, function () awful.util.spawn(lower_volume, false) vicious.force({volwidget}) end)
 )))
 
 -- }}}
@@ -772,8 +789,8 @@ volwidget:buttons(volume_master:buttons(awful.util.table.join(
   -- Specify decorators on the left and the right side of the
   -- widget. Or just leave empty strings if you decorate the widget
   -- from outside.
-  musicwidget.ldecorator = "Ǝ "
-  musicwidget.rdecorator = " "
+  musicwidget.ldecorator = "<span font='Tamsyn 15'><span font='".. beautiful.font .."'>Ǝ "
+  musicwidget.rdecorator = "</span> </span>"
 
   -- Set all the servers to work with (here can be any servers you use)
   musicwidget.servers = {
@@ -883,7 +900,6 @@ line = wibox.widget.textbox()
 line:set_text("|")
 space = wibox.widget.textbox()
 space:set_text(" ")
-space:connect_signal("mouse::enter", function () vicious.force({syswidget, mygmail}) end)
 ----------------------
 rtar = wibox.widget.textbox()
 rtar:set_markup("<span color='" .. beautiful.fg_focus .. "'>ƛ</span>")
@@ -1119,6 +1135,9 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
     awful.key({ modkey }, "e", revelation), -- Revelation
     
+    -- Update widgets
+    awful.key({ modkey,           }, "u", function () vicious.force({syswidget, mygmail}) end), 
+    
             -- unminimize windows
     awful.key({ modkey, "Shift"   }, "n",
         function ()
@@ -1160,8 +1179,8 @@ globalkeys = awful.util.table.join(
     awful.key({ altkey }, "Right", function () awful.client.moveresize( 20,   0,   0,   0) end),
     
         -- Media keys
-    awful.key({ }, "XF86_AudioLowerVolume", function() awful.util.spawn(lower_volume) end ),
-    awful.key({ }, "XF86_AudioRaiseVolume", function() awful.util.spawn(raise_volume) end ),
+    awful.key({ }, "XF86_AudioLowerVolume", function() awful.util.spawn(lower_volume) vicious.force({volwidget}) end ),
+    awful.key({ }, "XF86_AudioRaiseVolume", function() awful.util.spawn(raise_volume) vicious.force({volwidget}) end ),
     awful.key({ }, "XF86_AudioMute", function() awful.util.spawn(toggle_volume) end ),
     awful.key({ }, "XF86_AudioPrev", function() awful.util.spawn(prev_music) end ),
     awful.key({ }, "XF86_AudioNext", function() awful.util.spawn(next_music) end ),
@@ -1269,20 +1288,21 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
-        awful.key({ modkey }, "s", function ()
+        awful.key({ modkey }, "s", function () -- TODO save history
         awful.prompt.run({ prompt = "Web search: " }, mypromptbox[mouse.screen].widget,
             function (command)
                 awful.util.spawn("firefox 'http://yubnub.org/parser/parse?command="..command.."'", false)
-                -- Switch to the web tag, where Firefox is, in this case tag 3
+                -- Switch to the web tag, where Firefox is, in this case tag 1 screen 2
                 if tags[2][1] then awful.tag.viewonly(tags[2][1]) end
             end)
     end),
     
-    awful.key({ }, "XF86Calculator", function ()
+    awful.key({ }, "XF86Calculator", function () -- TODO save history
         awful.prompt.run({ prompt = "Calculate: " }, mypromptbox[mouse.screen].widget,
             function (expr)
                 local result = awful.util.eval("return (" .. expr .. ")")
-                naughty.notify({ text = expr .. " = " .. result, timeout = 10 })
+                naughty.notify({ text = expr .. " = " .. result, timeout = 15 })
+                awful.prompt.history_save()
             end
         )
     end),

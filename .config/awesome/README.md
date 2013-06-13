@@ -33,6 +33,7 @@ Menus
 * tasklist menu can close, move, toggle, etc .. focused client + running clients menu
 * wicd menu
 * layouts menu
+* system menu in the clock widget (middle mouse button)
 
 Keybinding
 ----------

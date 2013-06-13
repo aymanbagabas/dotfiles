@@ -40,7 +40,7 @@ show = function()
 
     local i = 0
     for line in out:lines() do
-        table.insert(networks, {"  " .. line, "wicd-cli -yc --network " .. i })
+        table.insert(networks, {"  " .. line, connect(i) })
         i = i + 1
     end
     out:close()

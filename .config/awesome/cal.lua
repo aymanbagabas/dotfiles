@@ -80,7 +80,7 @@ return header .. "\n" .. lines
 end
 
 
-function cal.register(mywidget, custom_current_day_format, c_weekStart)
+function cal.register(mywidget, custom_current_day_format, c_weekStart, key1, key2)
 if custom_current_day_format then 
 current_day_format = custom_current_day_format 
 end
@@ -105,6 +105,7 @@ mywidget:buttons(awful.util.table.join(
 awful.button({ }, 1, function()
 switchMonth(-1)
 end),
+awful.button({ }, 2, key1),
 awful.button({ }, 3, function()
 switchMonth(1)
 end),
@@ -117,6 +118,7 @@ end),
 awful.button({ 'Shift' }, 1, function()
 switchMonth(-12)
 end),
+awful.button({ 'Shift' }, 2, key2),
 awful.button({ 'Shift' }, 3, function()
 switchMonth(12)
 end),
@@ -130,7 +132,7 @@ end
 
 function switchMonth(delta)
 state[1] = state[1] + (delta or 1)
-local text = string.format('%s', displayMonth(state[1], state[2], weekStart)) -- font_desc="monospace"
+local text = string.format('%s', displayMonth(state[1], state[2], weekStart, key1, key2))
 tooltip:set_text(text)
 end
 
