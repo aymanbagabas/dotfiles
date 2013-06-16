@@ -249,6 +249,9 @@ function clsmenu()
                 if not c:isvisible() then
                     awful.tag.viewmore(c:tags(), c.screen)
                 end
+                if c.minimized then
+                    c.minimized = not c.minimized
+                end
                 capi.client.focus = c
                 c:raise()
                 awful.screen.focus(client.focus.screen)
@@ -287,7 +290,7 @@ fclient = {
             function () c.maximized_horizontal = not c.maximized_horizontal c.maximized_vertical = not c.maximized_vertical end
         },
         {
-            "[F] Fullscreen",
+            "Fullscreen",
             function () c.fullscreen = not c.fullscreen  end
         },
         {
@@ -373,6 +376,7 @@ musicmenu = {
 
 }
 
+function mymenu()
 mymenu = awful.util.table.join({
                                     { "&File Manager", fileman, freedesktop.utils.lookup_icon({ icon='file-manager' }) },
                                     { "&Browser", browser, freedesktop.utils.lookup_icon({ icon='browser' }) },
@@ -386,10 +390,13 @@ mymenu = awful.util.table.join({
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
                                     { "Music", musicmenu, freedesktop.utils.lookup_icon({ icon='multimedia-volume-control' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
+                                    {"Clients", clsmenu(), nil},
                                     { "Exit", exitmenu, freedesktop.utils.lookup_icon({ icon='exit' }) }
 })
+return mymenu
+end
 
-mymainmenu = awful.menu({ items = mymenu 
+mymainmenu = awful.menu({ items = mymenu() 
                         })
 
 mylauncher = awful.widget.launcher({ image = beautiful.menu_icon,
@@ -406,7 +413,7 @@ function closeLastNoti()
     screen = mouse.screen
     for p,pos in pairs(naughty.notifications[screen]) do
         for i,n in pairs(naughty.notifications[screen][p]) do
-			if (n.width == 258) then -- to close only previous bright/vol notifications
+			if (n.width == 256) then -- to close only previous bright/vol notifications
             naughty.destroy(n)
             break
             end
@@ -422,7 +429,7 @@ function volnoti()
 				icon = volnotiicon,
                 position = "top_right",
 				bg="#00000000",
-				timeout=0.5,
+				timeout=1,
 				width = 256,
 				gap = 0,
 			}
@@ -553,13 +560,11 @@ net = wibox.widget.textbox()
 netwidget = blingbling.net({interface = nil, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11"})
 net_t = awful.tooltip({ objects = { net, netwidget }})
 
-vicious.register(net, vicious.widgets.wifi,
-function (widget, args) -- FIXME do it with another way :/
+function get_net_info(x)
 tor = ''
 if (awful.util.pread("ip route show") ~= '') then
 ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 gateway = (string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
-ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 tor_ip = (string.match(awful.util.pread("curl --silent -S -x socks4a://localhost:9050 http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or '' -- FIXME awesome hang when tor is running
 if tor_ip ~= '' then
     tor = "\nTor IP: " .. tor_ip
@@ -567,11 +572,17 @@ end
 else
 ip_addr = 'N/A'
 gateway = 'N/A'
-ext_ip = 'N/A'
 end
+return x
+end
+ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or '' -- FIXME temp fix
+
+vicious.register(net, vicious.widgets.wifi,
+function (widget, args)
+
 if args["{ssid}"] ~= "N/A" then
     netwidget:set_interface(wlan)
-	net_t:set_text("<b>" .. args["{ssid}"] .. " " .. args["{linp}"] .. "%</b>\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
+	net_t:set_text("<b>" .. args["{ssid}"] .. " " .. args["{linp}"] .. "%</b>\nLAN IP: " .. get_net_info(ip_addr) .. "\nGateway: " .. get_net_info(gateway) .. "\nWAN IP: " .. ext_ip .. get_net_info(tor))
 	if args["{linp}"] >= 75 then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
     elseif args["{linp}"] >= 40 then
@@ -582,13 +593,13 @@ if args["{ssid}"] ~= "N/A" then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƨ </span></span>"
     end
 else
-    if ip_addr == 'N/A' then
+    if get_net_info(ip_addr) == 'N/A' then
     netwidget:set_interface(nil)
     net_t:set_text("no connection")
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɨ </span></span>"
     else
     netwidget:set_interface(eth)
-    net_t:set_text("<b>Wired</b>\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
+    net_t:set_text("<b>Wired</b>\nLAN IP: " .. get_net_info(ip_addr) .. "\nGateway: " .. get_net_info(gateway) .. "\nWAN IP: " .. ext_ip .. get_net_info(tor))
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
     end
 end

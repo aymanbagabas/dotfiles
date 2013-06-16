@@ -39,3 +39,4 @@ Keybinding
 ----------
 
 * see `rc.lua`
+* Parcellite default hotkeys
