@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2008-2009 Julien Danjou
--- @release v3.5
+-- @release v3.5.1-6-g14722aa
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
@@ -39,10 +39,16 @@ local function tasklist_label(c, args)
     local bg_urgent = args.bg_urgent or theme.tasklist_bg_urgent or theme.bg_urgent
     local fg_minimize = args.fg_minimize or theme.tasklist_fg_minimize or theme.fg_minimize
     local bg_minimize = args.bg_minimize or theme.tasklist_bg_minimize or theme.bg_minimize
+    local bg_image_normal = args.bg_image_normal or theme.bg_image_normal
+    local bg_image_focus = args.bg_image_focus or theme.bg_image_focus
+    local bg_image_urgent = args.bg_image_urgent or theme.bg_image_urgent
+    local bg_image_minimize = args.bg_image_minimize or theme.bg_image_minimize
+    local tasklist_disable_icon = args.tasklist_disable_icon or theme.tasklist_disable_icon or false
     local font = args.font or theme.tasklist_font or theme.font or ""
     local bg = nil
     local text = "<span font_desc='"..font.."'>"
     local name = ""
+    local bg_image = nil
 
     -- symbol to use to indicate certain client properties
     local sticky = args.sticky or theme.tasklist_sticky or '▪'
@@ -51,11 +57,13 @@ local function tasklist_label(c, args)
     local maximized_horizontal = args.maximized_horizontal or theme.tasklist_maximized_horizontal or '⬌'
     local maximized_vertical = args.maximized_vertical or theme.tasklist_maximized_vertical or '⬍'
 
-    if c.sticky then name = name .. sticky end
-    if c.ontop then name = name .. ontop end
-    if client.floating.get(c) then name = name .. floating end
-    if c.maximized_horizontal then name = name .. maximized_horizontal end
-    if c.maximized_vertical then name = name .. maximized_vertical end
+    if not theme.tasklist_plain_task_name then
+        if c.sticky then name = name .. sticky end
+        if c.ontop then name = name .. ontop end
+        if client.floating.get(c) then name = name .. floating end
+        if c.maximized_horizontal then name = name .. maximized_horizontal end
+        if c.maximized_vertical then name = name .. maximized_vertical end
+    end
     if c.minimized then
         name = (util.escape(c.name) or util.escape(c.icon_name) or util.escape("<untitled>")) .. name
     else
@@ -68,28 +76,31 @@ local function tasklist_label(c, args)
     
     if capi.client.focus == c then
         bg = bg_focus
+        bg_image = bg_image_focus
         if fg_focus then
-            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>" .. name .. "</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>‾ " .. name .. " ‾</span>"
         else
-            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>" .. name .. "</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>− " .. name .. " −</span>"
         end
     elseif c.urgent and fg_urgent then
         bg = bg_urgent
         text = text .. "<span color='"..util.color_strip_alpha(fg_urgent).."'>" .. name .. "</span>"
+        bg_image = bg_image_urgent
     elseif c.minimized and fg_minimize and bg_minimize then
         bg = bg_minimize
-        text = text .. "<span color='"..util.color_strip_alpha(fg_minimize).."'>" .. name .. "</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_minimize).."'>_ " .. name .. " _</span>"
+        bg_image = bg_image_minimize
     else
         bg = bg_normal
-        text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>" .. name .. "</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>− " .. name .. " −</span>"
+        bg_image = bg_image_normal
     end
     text = text .. "</span>"
     
-    --return text, bg, nil, c.icon
-    return text, bg, nil, nil
+    return text, bg, bg_image, not tasklist_disable_icon and c.icon or nil
 end
 
-local function tasklist_update(s, w, buttons, filter, data, style)
+local function tasklist_update(s, w, buttons, filter, data, style, update_function)
     local clients = {}
     for k, c in ipairs(capi.client.get()) do
         if not (c.skip_taskbar or c.hidden
@@ -101,14 +112,23 @@ local function tasklist_update(s, w, buttons, filter, data, style)
 
     local function label(c) return tasklist_label(c, style) end
 
-    common.list_update(w, buttons, label, data, clients)
+    update_function(w, buttons, label, data, clients)
 end
 
---- Create a new tasklist widget.
+--- Create a new tasklist widget. The last two arguments (update_function
+-- and base_widget) serve to customize the layout of the tasklist (eg. to
+-- make it vertical). For that, you will need to copy the
+-- awful.widget.common.list_update function, make your changes to it
+-- and pass it as update_function here. Also change the base_widget if the
+-- default is not what you want.
 -- @param screen The screen to draw tasklist for.
 -- @param filter Filter function to define what clients will be listed.
 -- @param buttons A table with buttons binding to set.
 -- @param style The style overrides default theme.
+-- @param update_function Optional function to create a tag widget on each
+--        update. @see awful.widget.common.
+-- @param base_widget Optional container widget for tag widgets. Default
+--        is wibox.layout.flex.horizontal().
 -- bg_normal The background color for unfocused client.
 -- fg_normal The foreground color for unfocused client.
 -- bg_focus The background color for focused client.
@@ -122,11 +142,12 @@ end
 -- maximized_horizontal Symbol to use for clients that have been horizontally maximized.
 -- maximized_vertical Symbol to use for clients that have been vertically maximized.
 -- font The font.
-function tasklist.new(screen, filter, buttons, style)
-    local w = flex.horizontal()
+function tasklist.new(screen, filter, buttons, style, update_function, base_widget)
+    local uf = update_function or common.list_update
+    local w = base_widget or flex.horizontal()
 
     local data = setmetatable({}, { __mode = 'k' })
-    local u = function () tasklist_update(screen, w, buttons, filter, data, style) end
+    local u = function () tasklist_update(screen, w, buttons, filter, data, style, uf) end
     tag.attached_connect_signal(screen, "property::selected", u)
     tag.attached_connect_signal(screen, "property::activated", u)
     capi.client.connect_signal("property::urgent", u)

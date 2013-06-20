@@ -264,7 +264,7 @@ end
 function getlay()
          local lay_m = {}
          for s = 1, #layouts do
-         lay_m[s] = { awful.layout.getname(layouts[s]), function () awful.layout.set(layouts[s]) end, _theme .. "/layouts-small/" .. awful.layout.getname(layouts[s]) .. ".png" }
+         lay_m[s] = { awful.layout.getname(layouts[s]), function () awful.layout.set(layouts[s]) end, beautiful["layout_" .. awful.layout.getname(layouts[s])] }
          end
          return lay_m
 end
@@ -286,12 +286,12 @@ fclient = {
             function() c.minimized = not c.minimized end
         },	
         {
-            (c.maximized_horizontal and "Restore") or "[M] Maximize",
-            function () c.maximized_horizontal = not c.maximized_horizontal c.maximized_vertical = not c.maximized_vertical end
+            (c.fullscreen and "Restore") or "Fullscreen",
+            function () c.fullscreen = not c.fullscreen  end
         },
         {
-            "Fullscreen",
-            function () c.fullscreen = not c.fullscreen  end
+            (c.maximized_horizontal and "Restore") or "[M] Maximize",
+            function () c.maximized_horizontal = not c.maximized_horizontal c.maximized_vertical = not c.maximized_vertical end
         },
         {
             (c.sticky and "Un-Stick") or "[S] Stick", --⚫ ⚪ 
@@ -313,6 +313,15 @@ fclient = {
         },
         {"Slave",
             function() awful.client.setslave(c) end
+        },
+        {(awful.client.property.get(c, "titlebar") and "Remove titlebar") or "Add titlebar",
+            function() 
+            if awful.client.property.get(c, "titlebar") then
+                awful.titlebar(c, {size = 0})
+                awful.client.property.set(c, "titlebar", false)
+            else
+                add_titlebar(c)
+            end end
         }
         }
 local mynav = {
@@ -390,7 +399,6 @@ mymenu = awful.util.table.join({
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
                                     { "Music", musicmenu, freedesktop.utils.lookup_icon({ icon='multimedia-volume-control' }) },
                                     { " ", function () awful.menu.hide(mymainmenu) end, nil},
-                                    {"Clients", clsmenu(), nil},
                                     { "Exit", exitmenu, freedesktop.utils.lookup_icon({ icon='exit' }) }
 })
 return mymenu
@@ -432,6 +440,7 @@ function volnoti()
 				timeout=1,
 				width = 256,
 				gap = 0,
+				screen = mouse.screen,
 			}
 end
 
@@ -1375,8 +1384,18 @@ clientkeys = awful.util.table.join(
    awful.key({ modkey, "Shift"   }, "F1", function (c) awful.client.movetoscreen(c, 1) end),
    awful.key({ modkey, "Shift"   }, "F2", function (c) awful.client.movetoscreen(c, 2) end),
    
+   -- titlebar
+   awful.key({ modkey, "Shift" }, "t", function (c)
+       if awful.client.property.get(c, "titlebar") then
+           awful.titlebar(c, {size = 0})
+           awful.client.property.set(c, "titlebar", false)
+       else
+           add_titlebar(c)
+       end
+   end),
+   
    -- alt space
-   awful.key({ altkey,           }, "space", function () showNavMenu() end)
+   awful.key({ altkey,           }, "space", function (c) geometry = c:geometry() instance = showNavMenu(menu, {coords={x=geometry.x+1,y=geometry.y+1}}) end)
         
 )
 
@@ -1487,39 +1506,21 @@ awful.rules.rules = {
 }
 -- }}}
 
--- {{{ Signals
--- Signal function to execute when a new client appears.
-client.connect_signal("manage", function (c, startup)
-    -- Enable sloppy focus
-    c:connect_signal("mouse::enter", function(c)
-        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-            and awful.client.focus.filter(c) then
-            client.focus = c
-        end
-    end)
-
-    if not startup then
-        -- Set the windows at the slave,
-        -- i.e. put it at the end of others instead of setting it master.
-        -- awful.client.setslave(c)
-
-        -- Put windows in a smart way, only if they does not set an initial position.
-        if not c.size_hints.user_position and not c.size_hints.program_position then
-            awful.placement.no_overlap(c)
-            awful.placement.no_offscreen(c)
-            awful.placement.centered(c)
-            --awful.placement.under_mouse(c)
-        end
-    end
-
-    local titlebars_enabled = false
-    if titlebars_enabled and (c.type == "normal" or c.type == "dialog") then
+function add_titlebar(c, args)
         -- Widgets that are aligned to the left
         local left_layout = wibox.layout.fixed.horizontal()
-        left_layout:add(awful.titlebar.widget.iconwidget(c))
+        left_layout:add(awful.titlebar.widget.iconwidget(c, function () 
+                                              geometry = c:geometry()
+                                              if instance then
+                                                   instance:hide()
+                                                   instance = nil
+                                              else
+                                                   instance = showNavMenu(menu, {coords={x=geometry.x+1,y=geometry.y+1}})
+                                              end end))
 
         -- Widgets that are aligned to the right
         local right_layout = wibox.layout.fixed.horizontal()
+        right_layout:add(awful.titlebar.widget.button(c, "minimize", function () return c.minimized end, function() c.minimized = not c.minimized end))
         right_layout:add(awful.titlebar.widget.floatingbutton(c))
         right_layout:add(awful.titlebar.widget.maximizedbutton(c))
         right_layout:add(awful.titlebar.widget.stickybutton(c))
@@ -1547,7 +1548,38 @@ client.connect_signal("manage", function (c, startup)
         layout:set_right(right_layout)
         layout:set_middle(title)
 
-        awful.titlebar(c):set_widget(layout)
+        awful.titlebar(c, args):set_widget(layout)
+        awful.client.property.set(c, "titlebar", true)
+end
+
+-- {{{ Signals
+-- Signal function to execute when a new client appears.
+client.connect_signal("manage", function (c, startup)
+    -- Enable sloppy focus
+    c:connect_signal("mouse::enter", function(c)
+        if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+            and awful.client.focus.filter(c) then
+            client.focus = c
+        end
+    end)
+
+    if not startup then
+        -- Set the windows at the slave,
+        -- i.e. put it at the end of others instead of setting it master.
+        -- awful.client.setslave(c)
+
+        -- Put windows in a smart way, only if they does not set an initial position.
+        if not c.size_hints.user_position and not c.size_hints.program_position then
+            awful.placement.no_overlap(c)
+            awful.placement.no_offscreen(c)
+            awful.placement.centered(c)
+            --awful.placement.under_mouse(c)
+        end
+    end
+
+    local titlebars_enabled = false
+    if titlebars_enabled and (c.type == "normal" or c.type == "dialog") then
+       add_titlebar(c)
     end
 end)
 

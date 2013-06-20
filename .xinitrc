@@ -36,6 +36,9 @@ dwm)
 mate)
 	mate-session
 	;;
+subtle)
+	subtle
+	;;
 awesome)
 	exec /usr/bin/awesome >> ~/.cache/awesome/stdout 2>> ~/.cache/awesome/stderr
 	;;

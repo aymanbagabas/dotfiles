@@ -80,6 +80,7 @@ theme.tasklist_ontop = " [T]"
 theme.tasklist_floating = " [F]"
 theme.tasklist_maximized_horizontal = " [M]"
 theme.tasklist_maximized_vertical = ""
+theme.tasklist_disable_icon = true
 
 -- Display the taglist squares
 theme.taglist_squares_sel   = _theme .. "/taglist/squaref_b.png"
@@ -90,7 +91,8 @@ theme.taglist_squares_unsel = _theme .. "/taglist/square_b.png"
 -- menu_[border_color|border_width]
 theme.menu_fg_normal = theme.colors.base03
 theme.menu_bg_normal = theme.colors.base3
-theme.menu_submenu_icon = _theme .. "/submenu.png"
+theme.menu_submenu_icon = _theme .. "/submenu.png" -- image submenu
+--theme.menu_submenu = "› " -- text submenu -- > › »
 theme.menu_height = 15
 theme.menu_width  = 120
 theme.menu_border_color = theme.fg_focus
@@ -115,6 +117,11 @@ theme.titlebar_ontop_button_normal_inactive = _theme .. "/titlebar/ontop_normal_
 theme.titlebar_ontop_button_focus_inactive  = _theme .. "/titlebar/ontop_focus_inactive.png"
 theme.titlebar_ontop_button_normal_active = _theme .. "/titlebar/ontop_normal_active.png"
 theme.titlebar_ontop_button_focus_active  = _theme .. "/titlebar/ontop_focus_active.png"
+
+theme.titlebar_minimize_button_normal_inactive = _theme .. "/titlebar/minimize_normal_inactive.png"
+theme.titlebar_minimize_button_focus_inactive  = _theme .. "/titlebar/minimize_focus_inactive.png"
+theme.titlebar_minimize_button_normal_active = _theme .. "/titlebar/minimize_normal_active.png"
+theme.titlebar_minimize_button_focus_active  = _theme .. "/titlebar/minimize_focus_active.png"
 
 theme.titlebar_sticky_button_normal_inactive = _theme .. "/titlebar/sticky_normal_inactive.png"
 theme.titlebar_sticky_button_focus_inactive  = _theme .. "/titlebar/sticky_focus_inactive.png"
