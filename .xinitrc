@@ -11,7 +11,6 @@ dropboxd &
 mpd &
 mpdscribble &
 urxvtd -q -o -f &
-setxkbmap -layout "us, ara" -option "grp:alt_shift_toggle"
 lightsOn.sh 120 &
 xautolock -locker slimlock -time 15 &
 wicd-client -o &

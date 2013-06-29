@@ -39,4 +39,6 @@ Keybinding
 ----------
 
 * see `rc.lua`
+* titlebar toggle `win+shift+t`
 * Parcellite default hotkeys
+

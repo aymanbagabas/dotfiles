@@ -95,7 +95,7 @@ def recursion(path, count):
         depth_into_string = 0
         for directories in likels:
                 if os.path.isdir(path + directories) and not (directories[0] == '.'):
-                        newstuff = newstuff + '{[====[' + directories[:12] + ']====], myplacesmenu[%d], ficon .. "folder.png" },\n' % (count)
+                        newstuff = newstuff + '{[====[' + directories + ']====], myplacesmenu[%d], ficon .. "folder.png" },\n' % (count)
                         count = count + 1
                 elif not (directories[0] == '.'):
                         depth_into_string = 0
@@ -107,7 +107,7 @@ def recursion(path, count):
                                elif depth_into_string >= 6:
                                      break
                                depth_into_string = depth_into_string + 1
-                        newstuff = newstuff + '{[====[' + directories[:12] + ']====], [====[' + test_file_type(type_of_file) + " '" + path + directories + "']====], " + file_icon(type_of_file) + " },\n"
+                        newstuff = newstuff + '{[====[' + directories + ']====], [====[' + test_file_type(type_of_file) + " '" + path + directories + "']====], " + file_icon(type_of_file) + " },\n"
         newstuff = newstuff + "{'open here', " "'caja --no-desktop ' .. [====['" + path  + "']====]}\n }\n\n"
         
 

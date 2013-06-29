@@ -41,7 +41,7 @@ local dropdown = {}
 
 -- Create a new window for the drop-down application when it doesn't
 -- exist, or toggle between hidden and visible states when it does
-function toggle(prog, vert, horiz, width, height, sticky, screen)
+function toggle(prog, vert, horiz, width, cw, height, ch, sticky, screen)
     vert   = vert   or "top"
     horiz  = horiz  or "center"
     width  = width  or 1
@@ -88,12 +88,12 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
             else   y =  screengeom.y - screengeom.y end
 
             -- Client properties
-            c:geometry({ x = x, y = y, width = width, height = height })
+            c:geometry({ x = x+cw, y = y+ch, width = width, height = height })
             c.ontop = true
             c.above = true
             c.skip_taskbar = true
             if sticky then c.sticky = true end
-            if c.titlebar then awful.titlebar.remove(c) end
+            if awful.client.property.get(c, "titlebar") then awful.titlebar(c, {size = 0}) end
 
             c:raise()
             capi.client.focus = c
@@ -128,6 +128,7 @@ function toggle(prog, vert, horiz, width, height, sticky, screen)
             end
             c:tags(ctags)
         end
+        if awful.client.property.get(c, "titlebar") then awful.titlebar(c, {size = 0}) end
     end
 end
 

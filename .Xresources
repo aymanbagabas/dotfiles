@@ -28,10 +28,10 @@ URxvt*scrollTtyKeypress: true
 URxvt*font: xft:Envy Code R for Powerline:pixelsize=13:antialias=false:hinting=false:autohint=false, -*-Termsyn-Medium-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:pixelsize=16:antialias=false:hinting=false:autohint=false
 URxvt*BoldFont: xft:Envy Code R for Powerline:bold:pixelsize=13:antialias=false:hinting=false:autohint=false,-*-Termsyn-Bold-R-Normal--14-*-*-*-*-*-*-1, xft:DejaVu Sans Mono for Powerline:bold:pixelsize=14:antialias=false:hinting=false:autohint=false, xft:Terminus (TTF) for Powerline:bold:pixelsize=16:antialias=false:hinting=false:autohint=false
 
-URxvt*iconFile:    /usr/share/icons/elementary/apps/48/Terminal.svg
-ncmpcpp*iconFile:    /usr/share/icons/elementary/apps/48/audio-player.svg
-htop*iconFile:    /usr/share/icons/elementary/apps/48//htop.svg
-alsamixer*iconFile:    /usr/share/icons/elementary/apps/48/gnome-audio.svg
+URxvt*iconFile:    /usr/share/icons/Faenza/apps/48/Terminal.png
+ncmpcpp*iconFile:    /usr/share/icons/Faenza/apps/48/gnome-audio.png
+htop*iconFile:    /usr/share/icons/Faenza/apps/48//htop.png
+alsamixer*iconFile:    /usr/share/icons/Faenza/apps/48/gnome-audio.png
 
 URxvt*loginShell: true
 

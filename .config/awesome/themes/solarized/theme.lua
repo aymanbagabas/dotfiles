@@ -1,12 +1,13 @@
 -----------------------------
--- solarized awesome theme -- 
+-- solarized awesome theme --
+--         mony960         -- 
 -----------------------------
 
 home = os.getenv("HOME")
 confdir = home .. "/.config/awesome"
 themes = confdir .. "/themes"
 _theme = themes .. "/solarized"
-micons = confdir .. "/icons"
+icons = confdir .. "/icons"
 
 theme = {}
 
@@ -94,11 +95,11 @@ theme.menu_bg_normal = theme.colors.base3
 theme.menu_submenu_icon = _theme .. "/submenu.png" -- image submenu
 --theme.menu_submenu = "› " -- text submenu -- > › »
 theme.menu_height = 15
-theme.menu_width  = 120
+theme.menu_width  = 125
 theme.menu_border_color = theme.fg_focus
 theme.menu_border_width = 0
 theme.menu_border_color = nil
-theme.menu_icon = micons .. "/menu.png"
+theme.menu_icon = icons .. "/menu.png"
 
 -- widgets menu
 theme.widgets_menu_bg_normal = theme.colors.base1
@@ -154,7 +155,7 @@ theme.layout_tiletop = _theme .. "/layouts-small/tiletop.png"
 theme.layout_spiral  = _theme .. "/layouts-small/spiral.png"
 theme.layout_dwindle = _theme .. "/layouts-small/dwindle.png"
 
-theme.awesome_icon = micons .. "/awesome16.png"
+theme.awesome_icon = icons .. "/awesome16.png"
 
 -- Define the icon theme for application icons. If not set then the icons 
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.

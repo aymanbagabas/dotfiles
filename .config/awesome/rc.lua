@@ -1,3 +1,7 @@
+-----------------------------
+--         mony960         --
+----------------------------- 
+
 -- Standard awesome library 
 local gears = require("gears")
 local awful = require("awful")
@@ -59,7 +63,6 @@ home = os.getenv("HOME")
 confdir = home .. "/.config/awesome"
 themes = confdir .. "/themes"
 icons = confdir .. "/icons"
--- Themes define colours, icons, and wallpapers
 _theme = themes .. "/solarized"
 beautiful.init(_theme .. "/theme.lua")
 thmicons = _theme .. "/icons"
@@ -80,6 +83,7 @@ run_once("wmname LG3D")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvtq -name Terminal"
+smlterm = terminal .. " -depth 32 -bg rgba:0000/2b00/3600/deff -geometry 50x11 -name smlterm"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 dmenu = "dmenu_path_c | dmenu -i -p 'Run command:' -fn '" .. beautiful.dfont .. "' -h '18' -nb '" .. beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. "' -sb '" .. beautiful.bg_focus .. "' -sf '" .. beautiful.fg_focus .. "'"
@@ -97,8 +101,8 @@ lock = "slimlock"
 volmixer = terminal .. " -name alsamixer -e alsamixer"
 mpdplr = terminal .. " -name ncmpcpp -e ncmpcpp"
 mpdgui = "sonata"
-lower_volume = "amixer -q set Master 2%-"
-raise_volume = "amixer -q set Master 2%+"
+lower_volume = "amixer -q set Master 2%- unmute"
+raise_volume = "amixer -q set Master 2%+ unmute"
 toggle_volume = "amixer set Master toggle"
 prev_music = "mpc prev"
 next_music = "mpc next"
@@ -269,7 +273,7 @@ function getlay()
          return lay_m
 end
 
-function showNavMenu(menu, args) -- FIXME show menu from tasklist without rais client
+function showNavMenu(menu, args) -- FIXME show menu from tasklist without raise client
 
 if not menu then
 menu = {theme = {width = 200}}
@@ -503,7 +507,7 @@ end
 
 -- {{{ Clock
 -- Create a textclock widget
-smenu = awful.menu({items = {{"Check for Updates", function () awful.util.spawn(terminal .. " -e sudo pacman -Sy") vicious.force({syswidget}) end, nil},
+smenu = awful.menu({items = {{"Check for Updates", function (c) awful.util.spawn("gksudo '" .. smlterm .. " -e pacman -Sy'") vicious.force({syswidget}) end, nil}, -- TODO add more options
                              {"Check Email", function () vicious.force({mygmail}) end, nil},
                              {"System Info", function () sysinf() end, nil},
 }, theme = {bg_normal = beautiful.widgets_menu_bg_normal, bg_focus = beautiful.widgets_menu_bg_focus}})
@@ -539,7 +543,7 @@ vicious.register(syswidget, vicious.widgets.pkg, function (widget, args)
                                                  end 
 end, 180, "Arch")
 sys_t:add_to_object(syswidget)
-syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(terminal .. " -name Updates -e yaourt -Syua --noconfirm") end)))
+syswidget:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn("gksudo '" .. terminal .. " -name Updates -e yaourt -Syua --noconfirm'") end)))
 syswidget:connect_signal("mouse::enter", function () vicious.force({syswidget}) end)
 --blinking(syswidget, 2)
 -- }}}
@@ -569,29 +573,33 @@ net = wibox.widget.textbox()
 netwidget = blingbling.net({interface = nil, show_text = true, background_color = beautiful.colors.base0, text_color = beautiful.colors.base03, graph_color = beautiful.colors.base03, graph_line_color = "#00000000", background_graph_color = beautiful.colors.base2, background_text_color = "#00000000", font = "termsyn", font_size = "11"})
 net_t = awful.tooltip({ objects = { net, netwidget }})
 
-function get_net_info(x)
+ip_addr = 'N/A'
+gateway = 'N/A'
 tor = ''
+tor_ip = ''
+ext_ip = 'N/A'
+
+function update_net_info()
 if (awful.util.pread("ip route show") ~= '') then
 ip_addr = (string.match(string.match(awful.util.pread("ip route show"),"%ssrc%s[%d]+%.[d%]+%.[%d]+%.[%d]+"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 gateway = (string.match(awful.util.pread("ip r | awk '/^def/{print $3}'"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
-tor_ip = (string.match(awful.util.pread("curl --silent -S -x socks4a://localhost:9050 http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or '' -- FIXME awesome hang when tor is running
+ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
+tor = ''
+tor_ip = (string.match(awful.util.pread("curl --silent -S -x socks4a://localhost:9050 http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or ''
 if tor_ip ~= '' then
     tor = "\nTor IP: " .. tor_ip
 end
-else
-ip_addr = 'N/A'
-gateway = 'N/A'
 end
-return x
 end
-ext_ip = (string.match(awful.util.pread("curl --silent --connect-timeout 3 -S http://ipecho.net/plain 2>&1"), "[%d]+%.[d%]+%.[%d]+%.[%d]+")) or '' -- FIXME temp fix
+
+update_net_info() -- FIXME update it automatically
 
 vicious.register(net, vicious.widgets.wifi,
 function (widget, args)
 
 if args["{ssid}"] ~= "N/A" then
     netwidget:set_interface(wlan)
-	net_t:set_text("<b>" .. args["{ssid}"] .. " " .. args["{linp}"] .. "%</b>\nLAN IP: " .. get_net_info(ip_addr) .. "\nGateway: " .. get_net_info(gateway) .. "\nWAN IP: " .. ext_ip .. get_net_info(tor))
+	net_t:set_text("<b>" .. args["{ssid}"] .. " " .. args["{linp}"] .. "%</b>\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
 	if args["{linp}"] >= 75 then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƥ </span></span>"
     elseif args["{linp}"] >= 40 then
@@ -602,13 +610,13 @@ if args["{ssid}"] ~= "N/A" then
          return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>ƨ </span></span>"
     end
 else
-    if get_net_info(ip_addr) == 'N/A' then
+    if ip_addr == 'N/A' then
     netwidget:set_interface(nil)
     net_t:set_text("no connection")
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɨ </span></span>"
     else
     netwidget:set_interface(eth)
-    net_t:set_text("<b>Wired</b>\nLAN IP: " .. get_net_info(ip_addr) .. "\nGateway: " .. get_net_info(gateway) .. "\nWAN IP: " .. ext_ip .. get_net_info(tor))
+    net_t:set_text("<b>Wired</b>\nLAN IP: " .. ip_addr .. "\nGateway: " .. gateway .. "\nWAN IP: " .. ext_ip .. tor)
     return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ƥ </span></span>"
     end
 end
@@ -618,6 +626,7 @@ net_t:add_to_object(netwidget)
 
 netwidget:buttons(net:buttons(awful.util.table.join(awful.button({ }, 1, function () wicd.launch() end),
                                                     awful.button({ altkey }, 1, function () awful.util.spawn("wicd-client -n") end),
+                                                    awful.button({ }, 2, function () update_net_info() end),
                                                     awful.button({ }, 3, function () wicd.toggle() end) )))
 
 -- }}}
@@ -651,11 +660,12 @@ vicious.register(mygmail, vicious.widgets.gmail,
       })
       g_notify = true
     end
-    return "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɠ " .. args["{count}"] .. "</span></span>"
+    g_text = "<span background='" ..beautiful.colors.base0 .. "' color='" .. beautiful.colors.base03 .. "' font='Tamsyn 15'> <span font='" .. beautiful.font .. "'>Ɠ " .. args["{count}"] .. "</span></span>"
   else
     g_notify = false
-    return ''
+    g_text = ''
   end
+  return g_text
 end, 60)
 mygmail:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail, false) end)))
 mygmail:connect_signal("mouse::enter", function () vicious.force({mygmail}) end)
@@ -1208,7 +1218,7 @@ globalkeys = awful.util.table.join(
 
         -- Apps
     awful.key({ modkey }, "XF86Calculator", function() awful.util.spawn(calc) end ),
-    awful.key({ }, "F12", function () scratch.drop(terminal .. " -depth 32 -bg rgba:0000/2b00/3600/deff", "top", "center", 0.80, 0.40, true) end),
+    awful.key({ }, "F12", function () scratch.drop(terminal .. " -depth 32 -bg rgba:0000/2b00/3600/deff", "top", "center", 0.80, 0, 0.40, 18, true) end),
     awful.key({ altkey,           }, "F4", function() awful.util.spawn("xkill") end), -- xkill
     awful.key({ }, "XF86HomePage", function() awful.util.spawn(browser) end ),
     awful.key({ }, "XF86Mail", function() awful.util.spawn(mail) end ),
@@ -1482,27 +1492,32 @@ awful.rules.rules = {
                      maximized_vertical   = false,
                      maximized_horizontal = false,
                      buttons = clientbuttons } },
-    { rule_any = { class = { "MPlayer", "Umplayer", "Smplayer", "Vlc" } },
-      properties = { tag = tags[2][2], floating = true } },
-    { rule = { class = "pinentry" },
-      properties = { floating = true } },
-    { rule = { class = "Gimp-2.8" },
-      properties = { tag = tags[1][6], maximized = true } },
-    { rule = { class = "URxvt" },
-      properties = { size_hints_honor = false } },
+    -- Screen 1
+    { rule = { instance = "Updates" },
+      properties = { tag = tags[1][1] } },
+    { rule_any = { class = { "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-base", "libreoffice-draw", "libreoffice-math" } },
+      properties = { tag = tags[1][3], switchtotag = true } },
     { rule_any = { class = { "Eclipse", "Geany" } },
       properties = { tag = tags[1][4] } },
-    { rule_any = { class = { "libreoffice-startcenter", "libreoffice-writer", "libreoffice-calc", "libreoffice-impress", "libreoffice-base", "libreoffice-draw", "libreoffice-math" } },
-      properties = { tag = tags[1][3] } },
-    { rule = { class = "Galculator" },
-      properties = { floating = true } },
-    { rule = { instance = "plugin-container" },
-     properties = { floating = true } },
-    { rule = { instance = "exe" },
-     properties = { floating = true } },
-    -- Set Firefox to always map on tags number 2 of screen 1.
+    { rule = { class = "Skype" }, callback = function(c) add_titlebar(c) end,
+      properties = { tag = tags[1][5], floating = true } },
+    { rule = { class = "Gimp-2.8" },
+      properties = { tag = tags[1][6], maximized = true, switchtotag = true } },
+    -- Screen 2
+    -- Set Firefox to always map on tags number 1 of screen 2.
     { rule = { class = "Firefox" }, except_any = { instance = { "Dialog", "Browser" } },
      properties = { tag = tags[2][1], floating = false, border_width = 0 } },
+    { rule_any = { class = { "MPlayer", "Umplayer", "Smplayer", "Vlc" } }, callback = function(c) add_titlebar(c) end,
+      properties = { tag = tags[2][2], floating = true } },
+    -- Others
+    { rule = { class = "URxvt" },
+      properties = { size_hints_honor = false } },
+    { rule = { instance = "smlterm" }, callback = function(c) c:geometry({ x = 100, y = -100 }) end, -- FIXME set geometry
+      properties = { floating = true, ontop = true, focus = true } },
+    { rule_any = { class = {"Galculator", "pinentry", "Nitrogen"}, instance = {"plugin-container", "exe"} },
+      properties = { floating = true } },
+    { rule_any = { class = { "Gnome-mplayer", "Gcolor2", "Mate-calc" } }, callback = function(c) add_titlebar(c) end,
+      properties = { floating = true } },
 }
 -- }}}
 
