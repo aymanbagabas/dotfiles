@@ -1,6 +1,6 @@
 #!/bin/bash
 export BROWSER=firefox
-export DE=awesome
+export DE=xfce ## for xdg-open
 
 # Dbus fix
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then

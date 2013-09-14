@@ -7,11 +7,15 @@ local type = type
 local ipairs = ipairs
 local pairs = pairs
 
-module("freedesktop.utils")
+local lgi = require('lgi')
+local Gtk = lgi.require('Gtk')
+
+local module = {}
 
 terminal = 'xterm'
 
-icon_theme = nil
+module.icon_theme = nil
+local gtk_icon_theme = Gtk.IconTheme.get_default()
 
 all_icon_sizes = {
     'apps',
@@ -21,7 +25,7 @@ all_icon_sizes = {
     'categories',
     'status',
     'mimetypes',
-    --[['128x128',
+    '128x128',
     '96x96',
     '72x72',
     '64x64',
@@ -31,7 +35,7 @@ all_icon_sizes = {
     '24x24',
     '22x22',
     '16x16',
-    '8x8',--]]
+    '8x8',
     'scalable'
 }
 all_icon_types = {
@@ -46,13 +50,13 @@ all_icon_types = {
     '22',
     '16',
     'mimetypes',
-    --[['apps',
+    'apps',
     'actions',
     'devices',
     'places',
     'categories',
     'status',
-    'mimetypes']]--
+    'mimetypes'
 }
 all_icon_paths = { os.getenv("HOME") .. '/.icons/', '/usr/share/icons/' }
 
@@ -60,7 +64,7 @@ icon_sizes = {}
 
 local mime_types = {}
 
-function get_lines(...)
+function module.get_lines(...)
     local f = io.popen(...)
     return function () -- iterator
         local data = f:read()
@@ -69,7 +73,7 @@ function get_lines(...)
     end
 end
 
-function file_exists(filename)
+function module.file_exists(filename)
     local file = io.open(filename, 'r')
     local result = (file ~= nil)
     if result then
@@ -78,11 +82,19 @@ function file_exists(filename)
     return result
 end
 
-function lookup_icon(arg)
+function module.lookup_icon(arg)
     if arg.icon:sub(1, 1) == '/' and (arg.icon:find('.+%.png') or arg.icon:find('.+%.xpm') or arg.icon:find('.+%.svg')) then
         -- icons with absolute path and supported (AFAICT) formats
         return arg.icon
     else
+        local gtk_icon_info = Gtk.IconTheme.lookup_icon(gtk_icon_theme, arg.icon, 48, 0)
+        if gtk_icon_info then
+            filename = Gtk.IconInfo.get_filename(gtk_icon_info)
+            if filename then
+                return filename
+            end
+        end
+
         local icon_path = {}
         local icon_themes = {}
         local icon_theme_paths = {}
@@ -117,21 +129,21 @@ function lookup_icon(arg)
         table.insert(icon_path,  '/usr/share/app-install/icons/')
 
         for i, directory in ipairs(icon_path) do
-            if (arg.icon:find('.+%.png') or arg.icon:find('.+%.xpm') or arg.icon:find('.+%.svg')) and file_exists(directory .. arg.icon) then
+            if (arg.icon:find('.+%.png') or arg.icon:find('.+%.xpm') or arg.icon:find('.+%.svg')) and module.file_exists(directory .. arg.icon) then
                 return directory .. arg.icon
-            elseif file_exists(directory .. arg.icon .. '.png') then
+            elseif module.file_exists(directory .. arg.icon .. '.png') then
                 return directory .. arg.icon .. '.png'
-            elseif file_exists(directory .. arg.icon .. '.xpm') then
+            elseif module.file_exists(directory .. arg.icon .. '.xpm') then
                 return directory .. arg.icon .. '.xpm'
-            elseif file_exists(directory .. arg.icon .. '.svg') then
+            elseif module.file_exists(directory .. arg.icon .. '.svg') then
                 return directory .. arg.icon .. '.svg' 
             end
         end
     end
 end
 
-function lookup_file_icon(arg)
-    load_mime_types()
+function module.lookup_file_icon(arg)
+    module.load_mime_types()
 
     local extension = arg.filename:match('%a+$')
     local mime = mime_types[extension] or ''
@@ -147,19 +159,19 @@ function lookup_file_icon(arg)
     }
 
     for i, filename in ipairs(possible_filenames) do
-        local icon = lookup_icon({icon = filename, icon_sizes = (arg.icon_sizes or all_icon_sizes)})
+        local icon = module.lookup_icon({icon = filename, icon_sizes = (arg.icon_sizes or all_icon_sizes)})
         if icon then
             return icon
         end
     end
 
     -- If we don't find ad icon, then pretend is a plain text file
-    return lookup_icon({ icon = 'txt', icon_sizes = arg.icon_sizes or all_icon_sizes })
+    return module.lookup_icon({ icon = 'txt', icon_sizes = arg.icon_sizes or all_icon_sizes })
 end
 
 --- Load system MIME types
 -- @return A table with file extension <--> MIME type mapping
-function load_mime_types()
+function module.load_mime_types()
     if #mime_types == 0 then
         for line in io.lines('/etc/mime.types') do
             if not line:find('^#') then
@@ -181,10 +193,10 @@ end
 -- @param file The .desktop file
 -- @param requested_icon_sizes A list of icon sizes (optional). If this list is given, it will be used as a priority list for icon sizes when looking up for icons. If you want large icons, for example, you can put '128x128' as the first item in the list.
 -- @return A table with file entries.
-function parse_desktop_file(arg)
+function module.parse_desktop_file(arg)
 
-    local function check_nil(f, v) 
-        -- Almost the same as 
+    local function check_nil(f, v)
+        -- Almost the same as
         -- return f and f or v
         -- but it will return false if f = false
         if f == nil then return v else return f end
@@ -205,7 +217,7 @@ function parse_desktop_file(arg)
                 for key, value in line:gmatch("(%w+)=(.+)") do
                     result[group][key] = value
                 end
-            end 
+            end
         end
         
         return result
@@ -226,8 +238,8 @@ function parse_desktop_file(arg)
 
     -- Look up for a icon.
     if program.Icon then
-        program.icon_path = lookup_icon({ icon = program.Icon, icon_sizes = (arg.icon_sizes or all_icon_sizes) })
-        if program.icon_path ~= nil and not file_exists(program.icon_path) then
+        program.icon_path = module.lookup_icon({ icon = program.Icon, icon_sizes = (arg.icon_sizes or all_icon_sizes) })
+        if program.icon_path ~= nil and not module.file_exists(program.icon_path) then
            program.icon_path = nil
         end
     end
@@ -262,12 +274,12 @@ end
 -- @param dir The directory.
 -- @param icons_size, The icons sizes, optional.
 -- @return A table with all .desktop entries.
-function parse_desktop_files(arg)
+function module.parse_desktop_files(arg)
     local programs = {}
-    local files = get_lines('find '.. arg.dir ..' -name "*.desktop" 2>/dev/null')
+    local files = module.get_lines('find '.. arg.dir ..' -name "*.desktop" 2>/dev/null')
     for file in files do
         arg.file = file
-        table.insert(programs, parse_desktop_file(arg))
+        table.insert(programs, module.parse_desktop_file(arg))
     end
     return programs
 end
@@ -276,30 +288,31 @@ end
 -- @param dir The directory.
 -- @param icons_size, The icons sizes, optional.
 -- @return A table with all .desktop entries.
-function parse_dirs_and_files(arg)
+function module.parse_dirs_and_files(arg)
     local files = {}
-    local paths = get_lines('find '..arg.dir..' -maxdepth 1 -type d')
+    local paths = module.get_lines('find '..arg.dir..' -maxdepth 1 -type d')
     for path in paths do
         if path:match("[^/]+$") then
             local file = {}
             file.filename = path:match("[^/]+$")
             file.path = path
             file.show = true
-            file.icon = lookup_icon({ icon = "folder", icon_sizes = (arg.icon_sizes or all_icon_sizes) })
+            file.icon = module.lookup_icon({ icon = "folder", icon_sizes = (arg.icon_sizes or all_icon_sizes) })
             table.insert(files, file)
         end
     end
-    local paths = get_lines('find '..arg.dir..' -maxdepth 1 -type f')
+    local paths = module.get_lines('find '..arg.dir..' -maxdepth 1 -type f')
     for path in paths do
         if not path:find("%.desktop$") then
             local file = {}
             file.filename = path:match("[^/]+$")
             file.path = path
             file.show = true
-            file.icon = lookup_file_icon({ filename = file.filename, icon_sizes = (arg.icon_sizes or all_icon_sizes) })
+            file.icon = module.lookup_file_icon({ filename = file.filename, icon_sizes = (arg.icon_sizes or all_icon_sizes) })
             table.insert(files, file)
         end
     end
     return files
 end
 
+return module

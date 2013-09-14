@@ -7,7 +7,7 @@ local os = os
 local ipairs = ipairs
 local pairs = pairs
 
-module("freedesktop.menu")
+local module = {}
 
 all_menu_dirs = {
     '/usr/share/applications/',
@@ -20,7 +20,7 @@ show_generic_name = false
 --- Create menus for applications
 -- @param menu_dirs A list of application directories (optional).
 -- @return A prepared menu w/ categories
-function new(arg)
+function module.new(arg)
     -- the categories and their synonyms where shamelessly copied from lxpanel
     -- source code.
     local programs = {}
@@ -37,6 +37,7 @@ function new(arg)
     programs['System'] = {}
     programs['Utility'] = {}
     programs['Other'] = {}
+    programs['All'] = {}
 
     for i, dir in ipairs(config.menu_dirs or all_menu_dirs) do
         local entries = utils.parse_desktop_files({dir = dir})
@@ -61,6 +62,7 @@ function new(arg)
                 if target_category then
                     table.insert(programs[target_category], { program.Name, program.cmdline, program.icon_path })
                 end
+                table.insert(programs['All'], { program.Name, program.cmdline, program.icon_path })
             end
         end
     end
@@ -82,6 +84,7 @@ function new(arg)
         { "Other", programs["Other"], utils.lookup_icon({ icon = 'applications-other' }) },
         { "Settings", programs["Settings"], utils.lookup_icon({ icon = 'preferences-desktop' }) },
         { "System Tools", programs["System"], utils.lookup_icon({ icon = 'applications-system' }) },
+        --{ "All", programs["All"] },
     }
 
     -- Removing empty entries from menu
@@ -93,5 +96,7 @@ function new(arg)
         end
     end
 
-    return cleanedMenu
+    return programs[config.category] or cleanedMenu
 end
+
+return module

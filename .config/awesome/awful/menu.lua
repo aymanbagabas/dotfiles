@@ -3,7 +3,7 @@
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @author dodo
 -- @copyright 2008, 2011 Damien Leone, Julien Danjou, dodo
--- @release v3.5.1-2-g14daf85
+-- @release v3.5.1-7-ga0e45e8
 --------------------------------------------------------------------------------
 
 local wibox = require("wibox")

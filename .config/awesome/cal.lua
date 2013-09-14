@@ -41,10 +41,10 @@ local mthDays,stDay=d.day,(d.wday-d.day-wkSt+1)%7
 local lines = "    "
 
 for x=0,6 do
-lines = lines .. os.date("<b>%a</b> ",os.time{year=2006,month=1,day=x+wkSt})
+lines = lines .. os.date("<span color='"..beautiful.fg_focus.."'><b>%a</b></span> ",os.time{year=2006,month=1,day=x+wkSt})
 end
 
-lines = lines .. "\n" .. os.date(" <b>%U</b>",os.time{year=year,month=month,day=1})
+lines = lines .. "\n" .. os.date(" <span color='"..beautiful.fg_focus.."'><b>%U</b></span>",os.time{year=year,month=month,day=1})
 
 local writeLine = 1
 while writeLine < (stDay + 1) do
@@ -57,7 +57,7 @@ end
                 local t = os.time{year=year,month=month,day=d}
                 if writeLine == 8 then
                         writeLine = 1
-                        lines = lines .. "\n" .. os.date(" <b>%U</b>",t)
+                        lines = lines .. "\n" .. os.date(" <span color='"..beautiful.fg_focus.."'><b>%U</b></span>",t)
                 end
                 if os.date("%Y-%m-%d") == os.date("%Y-%m-%d", t) then
                         x = string.format(current_day_format, d)

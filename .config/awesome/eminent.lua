@@ -7,7 +7,7 @@ local capi = {
 }
 
 -- Eminent: Effortless wmii-style dynamic tagging
-module("eminent")
+local module = {}
 
 -- Grab the original functions we're replacing
 local deflayout = nil
@@ -22,7 +22,7 @@ function gettags(screen)
     local tags = {}
 
     for k, t in ipairs(capi.screen[screen]:tags()) do
-        if t.selected or #t:clients() > 0 then
+        if t.selected --[[or #t:clients() > 0]] then
             awful.tag.setproperty(t, "hide", false)
             table.insert(tags, t)
         else
@@ -41,7 +41,7 @@ end
 
 -- Taglist label functions
 awful.widget.taglist.filter.all = function (t, args)
-    if t.selected or #t:clients() > 0 then
+    if t.selected --[[or #t:clients() > 0]] then
         return orig.filter(t, args)
     end
 end

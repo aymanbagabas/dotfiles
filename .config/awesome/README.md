@@ -5,7 +5,7 @@ Awesome WM
 
 Libraries
 ---------
-* [vicious](http://git.sysphere.org/vicious/) -- of course
+* [vicious](http://git.sysphere.org/vicious/)
 * [bashets](http://gitorious.org/bashets)
 * [scratch](http://git.sysphere.org/awesome-configs/tree/scratch)
 * [blingbling](https://github.com/cedlemo/blingbling)
@@ -38,7 +38,20 @@ Menus
 Keybinding
 ----------
 
-* see `rc.lua`
-* titlebar toggle `win+shift+t`
+* `win+left/right` switch tag
+* `win+up/down` change layout
+* `win+e` Revelation
+* `alt+up/down/left/right` move floating window
+* `F12` drop down terminal
+* `alt+F4` xkill
+* `win+space` show main menu
+* `alt+tab` running windows menu
+* `win+b` wibox toggle
+* `win+enter` terminal
+* `ctrl+alt+l` lock screen
+* `alt+F2` dmenu
+* `alt+space` show client menu on up left corner of the client window
+* `win+shift+t` titlebar toggle 
+* see `rc.lua` for more
 * Parcellite default hotkeys
 

@@ -23,13 +23,13 @@ call vundle#rc()
  " original repos on github
  Bundle 'tpope/vim-fugitive'
  Bundle 'Lokaltog/vim-easymotion'
- Bundle 'Lokaltog/vim-powerline'
+ "Bundle 'Lokaltog/vim-powerline'
  Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
  Bundle 'tpope/vim-rails.git'
  Bundle 'tpope/vim-pathogen'
  Bundle 'scrooloose/syntastic'
  Bundle 'scrooloose/nerdtree'
- Bundle 'altercation/vim-colors-solarized'
+ "Bundle 'altercation/vim-colors-solarized'
  "Bundle 'jistr/vim-nerdtree-tabs'
  Bundle 'techlivezheng/vim-plugin-minibufexpl'
  Bundle 'sollidsnake/vterm'
@@ -71,7 +71,7 @@ vmap <C-V> p
 map <C-n> :NERDTreeToggle<CR>
 map <C-t> :TMiniBufExplorer<CR> 
 
-call togglebg#map("<F5>")
+"call togglebg#map("<F5>")
 
 " => Interface
 
@@ -84,18 +84,54 @@ set background=dark
 if has("gui_running")
     set background=light
 endif
-colorscheme solarized
+"colorscheme tango
+
+function! InsertStatuslineColor(mode)
+  if a:mode == 'i'
+    hi statusline guibg=Cyan ctermfg=Green guifg=Black ctermbg=NONE cterm=NONE
+  elseif a:mode == 'r'
+    hi statusline guibg=Purple ctermfg=Cyan guifg=Black ctermbg=NONE cterm=NONE
+  else
+    hi statusline guibg=DarkRed ctermfg=White guifg=Black ctermbg=NONE cterm=NONE
+  endif
+endfunction
+
+au InsertEnter * call InsertStatuslineColor(v:insertmode)
+au InsertLeave * hi statusline guibg=DarkGrey ctermfg=White guifg=White ctermbg=NONE cterm=NONE
+
+" default the statusline to green when entering Vim
+hi statusline guibg=DarkGrey ctermfg=White guifg=White ctermbg=NONE cterm=NONE
+" Formats the statusline
+set statusline=%f                           " file name
+set statusline+=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
+set statusline+=%{&ff}] "file format
+set statusline+=%y      "filetype
+set statusline+=%h      "help file flag
+set statusline+=%m      "modified flag
+set statusline+=%r      "read only flag
+
+" Puts in the current git status
+set statusline+=%{fugitive#statusline()}
+
+" Puts in syntastic warnings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+set statusline+=\ %=                        " align left
+set statusline+=Line:%l/%L[%p%%]            " line X of Y [percent of file]
+set statusline+=\ Col:%c                    " current column
+set statusline+=\ Buf:%n                    " Buffer number
+set statusline+=\ [%b][0x%B]\               " ASCII and byte code under cursor
 
 set colorcolumn=80
 set number
 set splitright
 
 " line hightlight
-augroup CursorLine
-  au!
-  au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-  au WinLeave * setlocal nocursorline
-augroup END
+set cursorline " highlight current line
+hi cursorline guibg=\#333333 ctermbg=DarkGrey " highlight bg color of current
+
 " Tabs
 set autoindent " copy indent from previous line
 set expandtab " replace tabs with spaces
@@ -173,8 +209,8 @@ autocmd BufWinLeave *.* mkview
 autocmd BufWinEnter *.* silent loadview 
 
 " => Plugins settings
-let g:Powerline_symbols = 'fancy'
-let g:Powerline_colorscheme = 'solarized256'
+" let g:Powerline_symbols = 'fancy'
+" let g:Powerline_colorscheme = 'default'
 call pathogen#infect()
 let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1

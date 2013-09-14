@@ -1,12 +1,11 @@
 ---------------------------------------------------------------------------
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2008-2009 Julien Danjou
--- @release v3.5.1-6-g14722aa
+-- @release v3.5.1-7-ga0e45e8
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
 local capi = { screen = screen,
-               image = image,
                client = client }
 local ipairs = ipairs
 local setmetatable = setmetatable
@@ -19,8 +18,6 @@ local tag = require("awful.tag")
 local flex = require("wibox.layout.flex")
 
 --- Tasklist widget module for awful
-module("awful.widget.tasklist")
-
 -- awful.widget.tasklist
 local tasklist = { mt = {} }
 
@@ -28,7 +25,6 @@ local tasklist = { mt = {} }
 tasklist.filter = {}
 
 local function tasklist_label(c, args)
-
     if not args then args = {} end
     local theme = beautiful.get()
     local fg_normal = args.fg_normal or theme.tasklist_fg_normal or theme.fg_normal
@@ -51,7 +47,7 @@ local function tasklist_label(c, args)
     local bg_image = nil
 
     -- symbol to use to indicate certain client properties
-    local sticky = args.sticky or theme.tasklist_sticky or '▪'
+    local sticky = args.sticky or theme.tasklist_sticky or "▪"
     local ontop = args.ontop or theme.tasklist_ontop or '⌃'
     local floating = args.floating or theme.tasklist_floating or '✈'
     local maximized_horizontal = args.maximized_horizontal or theme.tasklist_maximized_horizontal or '⬌'
@@ -64,39 +60,34 @@ local function tasklist_label(c, args)
         if c.maximized_horizontal then name = name .. maximized_horizontal end
         if c.maximized_vertical then name = name .. maximized_vertical end
     end
+
     if c.minimized then
         name = (util.escape(c.name) or util.escape(c.icon_name) or util.escape("<untitled>")) .. name
     else
         name = (util.escape(c.name) or util.escape("<untitled>")) .. name
     end
-    
-    if (c.class == "Caja") then
-    name = name .. " - " .. c.instance
-    end
-    
     if capi.client.focus == c then
         bg = bg_focus
         bg_image = bg_image_focus
         if fg_focus then
-            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>‾ " .. name .. " ‾</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_focus).."'>"..name.."</span>"
         else
-            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>− " .. name .. " −</span>"
+            text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..name.."</span>"
         end
     elseif c.urgent and fg_urgent then
         bg = bg_urgent
-        text = text .. "<span color='"..util.color_strip_alpha(fg_urgent).."'>" .. name .. "</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_urgent).."'>"..name.."</span>"
         bg_image = bg_image_urgent
     elseif c.minimized and fg_minimize and bg_minimize then
         bg = bg_minimize
-        text = text .. "<span color='"..util.color_strip_alpha(fg_minimize).."'>_ " .. name .. " _</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_minimize).."'>"..name.."</span>"
         bg_image = bg_image_minimize
     else
         bg = bg_normal
-        text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>− " .. name .. " −</span>"
+        text = text .. "<span color='"..util.color_strip_alpha(fg_normal).."'>"..name.."</span>"
         bg_image = bg_image_normal
     end
     text = text .. "</span>"
-    
     return text, bg, bg_image, not tasklist_disable_icon and c.icon or nil
 end
 

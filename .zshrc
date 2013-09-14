@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="agnoster-mod"
+#ZSH_THEME="intheloop"
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -47,6 +47,7 @@ export PATH=$PATH:$HOME/bin
 export EDITOR=vim
 export PAGER=vimpager
 #export LC_ALL=en_US.UTF-8
+[[ -n "$SSH_CLIENT" ]] || export DEFAULT_USER="mony"
 bindkey -v
 
 # Aliases
@@ -86,55 +87,46 @@ bindkey "^W" vi-forward-blank-word
 
 . solarized-console.sh
 
-[ ! "$UID" = "0" ] && fortune | cowsay -f eyes
+[ ! "$UID" = "0" ] && fortune -s | toilet -f term --metal
 [ -r /etc/profile.d/cnf.sh ] && . /etc/profile.d/cnf.sh # command-not-found hook https://aur.archlinux.org/packages.php?ID=52305
 
 # dir colors
-eval `dircolors ~/.dir_colors`
+#eval `dircolors ~/.dir_colors`
 
 # Prompt
-local return_code="%(?..%{$fg[red]%}%{$fg[white]$bg[red]%}%?)"
-vim_ins_mode="%{$fg[green]%}%{$fg[black]$bg[green]%} INSERT %{$reset_color%}"
-vim_cmd_mode="%{$fg[white]%}%{$fg[black]$bg[white]%} NORMAL %{$reset_color%}"
-vim_mode=$vim_ins_mode
+PROMPT='%{$fg[white]%}╭%{$fg_bold[cyan]%}(%{$fg[cyan]%}%~%{$fg_bold[cyan]%})%{$reset_color%} $(git_prompt_info)
+%{$fg[white]%}╰%{$fg[magenta]%}≻%{$reset_color%} '
 
-function zle-keymap-select {
-  vim_mode="${${KEYMAP/vicmd/${vim_cmd_mode}}/(main|viins)/${vim_ins_mode}}"
-  zle reset-prompt
-}
-zle -N zle-keymap-select
-bindkey -a u undo
-bindkey -a '^R' redo
-bindkey '^?' backward-delete-char
-bindkey '^H' backward-delete-char
+ZSH_THEME_GIT_PROMPT_PREFIX="- %{$fg[yellow]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-function zle-line-finish {
-  vim_mode=$vim_ins_mode
-}
-zle -N zle-line-finish
-
-# PROMPT='' agnoster theme
-RPROMPT='${return_code}${vim_mode}'
-
-#. /usr/share/zsh/site-contrib/powerline.zsh
+# Less Colors for Man Pages
+export LESS_TERMCAP_mb=$'\E[01;31m'       # begin blinking
+export LESS_TERMCAP_md=$'\E[01;38;5;74m'  # begin bold
+export LESS_TERMCAP_me=$'\E[0m'           # end mode
+export LESS_TERMCAP_se=$'\E[0m'           # end standout-mode
+export LESS_TERMCAP_so=$'\E[38;5;246m'    # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\E[0m'           # end underline
+export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 # title
-PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}:${PWD}\007"'
 [[ -t 1 ]] || return
 case $TERM in
        *xterm*|*rxvt*|(dt|k|E|a)term)
     preexec () {
-    print -Pn "\e]2;%n@%m  $1  %l\a"
+    print -Pn "\e]2;%n@%m - $1 - %l\a"
     }
     ;;
     screen*)
         preexec () {
-        print -Pn "\e\"%n@%m  $1  %l\e\134"             
+        print -Pn "\e\"%n@%m - $1 - %l\e\134"             
     }
   ;; 
 esac
 function precmd() {
-	print -Pn "\e]2;%n@%m  %~  %l\a"
+	print -Pn "\e]2;%n@%m - %~ - %l\a"
 }
 # Misc
 w3mimg () { w3m -o imgdisplay=/usr/lib/w3m/w3mimgdisplay $1 }

@@ -1,0 +1,76 @@
+#!/bin/bash
+
+#  if you are using awesome
+#  -----
+#  function noti(args)
+#      naughty.notify(args)
+#  end
+#  -----
+#  add it to your rc.lua
+
+# create variables
+while read L; do
+	k="`echo "$L" | cut -d '=' -f 1`"
+	v="`echo "$L" | cut -d '=' -f 2`"
+	export "$k=$v"
+done < <(grep -e '^\(title\|artist\|album\|stationName\|songStationName\|pRet\|pRetStr\|wRet\|wRetStr\|songDuration\|songPlayed\|rating\|coverArt\|stationCount\|station[0-9]*\)=' /dev/stdin) # don't overwrite $1...
+
+case "$1" in
+	songstart)
+		# comment this 2 lines if you doesn't use awesome
+		glyrc cover --artist $artist --album $album --write "/tmp/$artist-$album.png" -v 0
+		echo "noti({title = \"pianobar\", text = \"Now playing: '$title' by '$artist'\", timeout = 10, icon = \"/tmp/$artist-$album.png\", icon_size = 100})" | awesome-client -
+
+		echo "$artist\\$title\\$album" > $HOME/.config/pianobar/nowplaying
+
+		if [ "$rating" -eq 1 ]
+		then
+			notify-send -t 10000 "pianobar" "'$title' by '$artist' on '$album' - LOVED"
+		else
+			notify-send -t 10000 "pianobar" "'$title' by '$artist' on '$album'"
+		fi
+		# or whatever you like...
+		;;
+
+	songfinish)
+		# scrobble if 75% of song have been played, but only if the song hasn't
+		# been banned
+		if [ -n "$songDuration" ] && [ "$songDuration" -ne 0 ] &&
+				[ $(echo "scale=4; ($songPlayed/$songDuration*100)>50" | bc) -eq 1 ] &&
+				[ "$rating" -ne 2 ]; then
+			# scrobbler-helper is part of the Audio::Scrobble package at cpan
+			# "pia" is the last.fm client identifier of "pianobar", don't use
+			# it for anything else, please
+			scrobbler-helper -P pia -V 1.0 "$title" "$artist" "$album" "" "" "" "$((songDuration/1000))" &
+		fi
+		;;
+
+	songlove)
+		notify-send -t 10000 "pianobar" "LOVING '$title' by '$artist' on '$album' on station '$stationName'"
+		;;
+
+	songshelf)
+		notify-send -t 10000 "pianobar" "SHELVING '$title' by '$artist' on '$album' on station '$stationName'"
+		;;
+
+	songban)
+		notify-send -t 10000 "pianobar" "BANNING '$title' by '$artist' on '$album' on station '$stationName'"
+		;;
+
+	songbookmark)
+		notify-send -t 10000 "pianobar" "BOOKMARKING '$title' by '$artist' on '$album'"
+		;;
+
+	artistbookmark)
+		notify-send -t 10000 "pianobar" "BOOKMARKING '$artist'"
+		;;
+
+	*)
+		if [ "$pRet" -ne 1 ]; then
+			notify-send -t 10000 "pianobar" "$1 failed: $pRetStr"
+		elif [ "$wRet" -ne 1 ]; then
+			notify-send -t 10000 "pianobar" "$1 failed: Network error: $wRetStr"
+		fi
+		;;
+esac
+
