@@ -1,7 +1,11 @@
 Awesome WM
 ==========
 
-![screenshot](https://dl.dropboxusercontent.com/u/7248454/screenshots/2013-05-29-012834_3600x1080_scrot.png)
+![screenshot](https://dl.dropboxusercontent.com/u/7248454/_.gif)
+
+
+README UPDATE SOON!! SORRY
+========================
 
 Libraries
 ---------
