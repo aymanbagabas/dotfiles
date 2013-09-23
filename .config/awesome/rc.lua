@@ -74,7 +74,7 @@ end
 
 run_once("parcellite -n")
 run_once("compton --config ~/.compton.conf -b")
-run_once("nitrogen --restore")
+--run_once("nitrogen --restore")
 run_once("wmname LG3D")
 
 awful.util.spawn_with_shell("unagi &")
@@ -98,6 +98,11 @@ screens = xrandr_screens()
 
 function noti(args)
 	naughty.notify(args)
+end
+
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
 end
 
 -- This is used later as the default terminal and editor to run.
@@ -451,53 +456,19 @@ for s = 1, screen.count() do
 	clockwidget = wibox.layout.margin(mytextclock)
 	
 	syswid = wibox.widget.textbox()
-	vicious.register(syswid, vicious.widgets.os, "<span background='#919AA1' font='Tamsyn 10' > <span font='"..beautiful.font.."' color='#E7E4C4'>System: <span color='#605678'>$2 </span></span></span>", 20)
+	vicious.register(syswid, vicious.widgets.os, "<span background='#919AA1' font='Tamsyn 10' > <span font='"..beautiful.font.."' color='#E7E4C4'>System: <span color='#605678'>$2 </span></span></span>", 30)
 	sys_t = awful.tooltip({ objects = {syswid}, timeout = 1, timer_function = function () local cpu = vicious.widgets.cpu() local mem = vicious.widgets.mem()
 				return " <span color='#605678'>CPU: </span>"..cpu[1].."% "..cpu[2].."% "..cpu[3].."% "..cpu[4]..
-				"% \n <span color='#605678'>Memory: </span>"..mem[2].." Mb / "..mem[3].." Mb \n\n"..
+				"% \n <span color='#605678'>Memory: </span>"..mem[2].." Mb / "..mem[3].." Mb \n\n <span color='#605678'>Packages: </span>"..
+				awful.util.pread("pacman -Q | wc -l").."\n"..
 				string.gsub(awful.util.pread("ps --sort -c,-s -eo pid,user,s,%cpu,%mem,bsdtime,etime,comm | head -n 8"), "^(.-)\n", "<span color='#605678'>%1</span>\n").." \n"..
-				string.gsub(awful.util.pread("df -h"), "^(.-)\n", "<span color='#605678'>%1</span>\n")
+				string.gsub(string.gsub(awful.util.pread("df -h"), "^(.-)\n", "<span color='#605678'>%1</span>\n"), "(.-)\n", " %1 \n")
 	end})
 	
 	sys_lay = wibox.layout.fixed.horizontal()
 	sys_lay:add(syswid)
 	sys_lay:add(spr)
 	syswidget[s] = wibox.layout.margin()
-	
-	pkgwid = wibox.widget.textbox()
-	pkg_lay = wibox.layout.fixed.horizontal()
-	pkg_lay:add(pkgwid)
-	pkg_lay:add(spr)
-	pkgwidget[s] = wibox.layout.margin(pkg_lay)
-	pkg_t = awful.tooltip({ objects = { pkgwid }})
-	noti_shown = false
-	hidepkgs = true
-	pkgs = 0
-	vicious.register(pkgwid, vicious.widgets.pkg, function (widget, args)
-		 local updates = awful.util.pread("pacman -Qu")
-		 if (args[1] > 0) then
-			pkgwidget[s]:set_widget(pkg_lay)
-			pkg_t:set_text("<b>Updates: </b>\n"..updates.."\n<b>Click to Update</b>")
-			if not noti_shown then
-			 naughty.notify({
-			 text = updates,
-			 title = "Updates:",
-			 position = "top_right",
-			 timeout = 10
-			 })
-			noti_shown = true
-			end
-		 else
-			 noti_shown = false
-			 if hidepkgs then
-				pkgwidget[s]:set_widget(nil)
-			 end
-			 pkg_t:set_text(" No Updates ")
-		 end 
-		 pkgs = args[1]
-		 return "<span background='#919AA1' font='Tamsyn 10' > <span font='"..beautiful.font.."' color='#E7E4C4'>Updates: <span color='#605678'>".. args[1] .. " </span></span></span>"
-	end, 180, "Arch")
-	pkgwid:buttons(awful.button({ }, 1, function () awful.util.spawn("gksudo '" .. terminal .. " -name Updates -e yaourt -Syua --noconfirm'") end))
 	
 	netwid = wibox.widget.textbox()
 	net_t = awful.tooltip({ objects = {netwid}})
@@ -506,8 +477,12 @@ for s = 1, screen.count() do
 	net_lay:add(spr)
 	netwidget[s] = wibox.layout.margin()
 	vicious.register(netwid, vicious.widgets.net, function(widget, args)
+		iw = ''
+		wifi = ''
 		if args["{"..wlan.." carrier}"] == 1 then
 			int = wlan
+			iw = vicious.widgets.wifi(format, wlan)
+			wifi = " <span color='#605678'>"..iw["{ssid}"].." </span>"..iw["{linp}"].."% \n\n"
 		elseif args["{"..eth.." carrier}"] == 1 then
 			int = eth
 		else
@@ -524,9 +499,15 @@ for s = 1, screen.count() do
 			else
 				down = "<span color='#737A80'><b>↓</b></span>"
 			end
-			net_t:set_text(" <span color='#605678'>Interface: </span>"..int..
+			if awful.util.pread("ip route") then addr = awful.util.pread("ip route")
+				lanip = string.match(addr, "src[%s](%d+.%d+.%d+.%d+)") or 'Not Available'
+				gateway = string.match(addr, "default[%s]via[%s](%d+.%d+.%d+.%d+)") or 'Not Available'
+			end
+			net_t:set_text(wifi.." <span color='#605678'>Interface: </span>"..int..
 			" \n <span color='#605678'>Up: </span>"..args["{"..int.." up_kb}"]..
-			" Kb \n <span color='#605678'>Down: </span>"..args["{"..int.." down_kb}"].." Kb ")
+			" Kb \n <span color='#605678'>Down: </span>"..args["{"..int.." down_kb}"]..
+			" Kb \n\n <span color='#605678'>LAN IP: </span>"..lanip..
+			" \n <span color='#605678'>Gateway: </span>"..gateway.." ")
 		else
 			up = "<span color='#737A80'>↑</span>"
 			down = "<span color='#737A80'>↓</span>"
@@ -536,60 +517,98 @@ for s = 1, screen.count() do
 			
 	end, 1)
 	
-	-- GMail widget
-	-- you need a .netrc file in your home directory filled with this:
-	-- machine mail.google.com login YOUR_MAIL password YOUR_PASS
-	mygmail = wibox.widget.textbox()
+	local account_format = "<b>%s</b>"
+	local dir_format = "<span color='#605678'><b>%s</b></span>"
+	local newmail_format = "%s"
+	local oldmail_format = "%s"
+	function format_mail(template,mailpath)
+	    mailfile = io.open(mailpath,"r")
+	    for line in mailfile:lines() do
+	       if line:find("^Subject:") then subject = string.match(line, "^Subject: (.*)%s?") end
+	       if line:find("^From:") then 
+	           from = string.match(line, "^From: (.*)") 
+	           from = string.gsub(from, "<.*>","")
+	       end
+	    end
+	    mailfile:close()
+	    return string.format(" %-30s %s\n", from, subject)
+	end
+	mailfolders = {
+			home.."/.mail/Gmail/INBOX",
+			home.."/.mail/Yahoo/Inbox",
+					}
+	mymail = wibox.widget.textbox()
+	count_mails = 0
+	hidemail = true
+	mail_t = awful.tooltip({ objects = {mymail} })
 	mail_lay = wibox.layout.fixed.horizontal()
-	mail_lay:add(mygmail)
+	mail_lay:add(mymail)
 	mail_lay:add(spr)
 	mailwidget[s] = wibox.layout.margin()
-	gmail_t = awful.tooltip({ objects = { mygmail }})
-	g_notify = false
-	hidemail = true
-	mails = 0
-	vicious.register(mygmail, vicious.widgets.gmail,
-	 function (widget, args)
-	  notify_title = ""
-	  notify_text = ""
-	  if (args["{count}"] > 0 ) then
-		mailwidget[s]:set_widget(mail_lay)
-	    gmail_t:set_text(" "..args["{subject}"].." ")
-	    if (g_notify == false) then
-	      if (args["{count}"] == 1) then
-	          notify_title = "You got a new mail"
-	          notify_text = '"' .. args["{subject}"] .. '"'
-	      else
-	          notify_title = "You got " .. args["{count}"] .. " new mails"
-	          notify_text = 'Last one: "' .. args["{subject}"] .. '"'
-	      end
-	      naughty.notify({
-	          title = notify_title,
-	          text = notify_text,
-	          timeout = 7,
-	          position = "top_left",
-	      })
-	      g_notify = true
-	    end
-	  else
-	    gmail_t:set_text(" No new mails ")
-		if hidemail then
-			mailwidget[s]:set_widget(nil)
-		end
-	    g_notify = false
-	  end
-	  mails = args["{count}"]
-	  return "<span background='#919AA1' font='Tamsyn 10' > <span font='"..beautiful.font.."' color='#E7E4C4'>Mail: <span color='#605678'>" .. args["{count}"] .. " </span></span></span>"
-	end, 61)
-	mygmail:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail) end)))
+	vicious.register(mymail, vicious.widgets.mdir, function(widget, args)
+			mails = {}
+			info = ""
+			if (args[1] + args[2]) > 0 then
+				mailwidget[s]:set_widget(mail_lay)
+				for i=1, #mailfolders do
+					mdir = mailfolders[i]
+					mails[i] = {}
+					if args[1] > 0 then 
+				        local f = io.popen("find "..mdir.." -type f -wholename '*/new/*' | sort")
+				        for line in f:lines() do 
+				            table.insert(mails[i],format_mail(newmail_format,line))
+				        end
+				        f:close()
+				    end
+					if args[2] > 0 then 
+				        local f = io.popen("find "..mdir.." -type f -regex '.*/cur/.*2,[^S]*$' | sort")
+				        for line in f:lines() do 
+				            table.insert(mails[i],format_mail(oldmail_format,line))
+				        end
+				        f:close()
+				    end
+					if #mails[i] > 0 then info = info .. string.format(dir_format,mdir) .. ':\n' end
+			        for m=1, #mails[i] do
+			            info = info .. mails[i][m]
+			        end
+			    end
+			    if (args[1] + args[2]) ~= count_mails then 
+					naughty.notify({ title = "You got a new mail",
+									 text = "<span color='#605678'>Subject: </span>"..subject.."\n<span color='#605678'>From: </span>"..from, 
+									 position = "top_left", timeout = 10 })
+				end
+			    mail_t:set_text(info)
+		    else
+				if hidemail then
+					mailwidget[s]:set_widget(nil)
+				end
+			    mail_t:set_text(" No unread mails ")
+		    end
+			count_mails = args[1] + args[2]
+			return "<span background='#919AA1' font='Tamsyn 10' > <span font='"..beautiful.font.."' color='#E7E4C4'>Mail: <span color='#605678'>"..count_mails.." </span></span></span>"
+	end, 30, mailfolders)
+	mymail:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn(mail) end)))
 	
 	mpdstatus = wibox.widget.textbox()
 	mpdwidget = wibox.widget.textbox()
 	musicwidget = wibox.layout.margin(mpdwidget)
 	mpdstate[s] = wibox.layout.margin()
+	music_cover = wibox.widget.imagebox()
+	music_bar = awful.widget.progressbar()
+	music_bar:set_width(100)
+	music_bar:set_height(3)
+	music_bar:set_color('#605678')
+	music_bar:set_background_color('#919AA1')
+	music_t_lay = wibox.layout.fixed.vertical()
+	music_t_lay:add(music_cover)
+	music_t_lay:add(music_bar)
+	music_t = awful.tooltip({ objects = {mpdwidget} })
+	music_t.wibox:set_widget(music_t_lay)
+	music_t.wibox:geometry({ width = 100, height = 103 })
 	curr_track = nil
-	vicious.register(mpdwidget, vicious.widgets.mpd,
-	    function (widget, args)
+	music_timer = capi.timer({ timeout = 1 })
+	music_timer:connect_signal("timeout", function (args)
+	    cover = nil
 	    if string.match(awful.util.pread('pgrep -x pianobar'), '(%d+)\n') then -- pianobar
 				mpdstatus:set_markup("<span color='#E7E4C4'>pianobar</span>")
 				stop_music = nil
@@ -599,8 +618,12 @@ for s = 1, screen.count() do
 				artist = awful.util.escape(awful.util.pread("cat ~/.config/pianobar/nowplaying | awk -F '\\' '{print $1}' | tr -d '\n'"))
 				title = awful.util.escape(awful.util.pread("cat ~/.config/pianobar/nowplaying | awk -F '\\' '{print $2}' | tr -d '\n'"))
 				album = awful.util.escape(awful.util.pread("cat ~/.config/pianobar/nowplaying | awk -F '\\' '{print $3}' | tr -d '\n'"))
-				return "<span color='#919AA1'> " .. artist .. "</span> <span color='#76728B'>" .. title .. "</span>"
+			    if file_exists("/tmp/pianobar/"..artist.."-"..album..".png") then
+					cover = "/tmp/pianobar/"..artist.."-"..album..".png"
+				end
+				music = "<span color='#919AA1'> " .. artist .. "</span> <span color='#76728B'>" .. title .. "</span>"
 	    else
+			args = vicious.widgets.mpd()
 			prev_music = "mpc prev"
 			next_music = "mpc next"
 			toggle_play = "mpc toggle"
@@ -615,25 +638,33 @@ for s = 1, screen.count() do
 	            curr_track = args["{Title}"]
 	            run_once("mpdinfo")
 	            end
-	            return "<span color='#919AA1'> " .. args["{Artist}"] .. "</span> <span color='#76728B'>" .. args["{Title}"] .. "</span>"
+				if file_exists("/tmp/mpdnotify_cover.png") then
+					cover = "/tmp/mpdnotify_cover.png"
+				end
+				if string.find(awful.util.pread('mpc'), '(%d+)%%') then
+					music_bar:set_value(string.match(awful.util.pread('mpc'), '(%d+)%%') /100)
+				end
+	            music = "<span color='#919AA1'> " .. args["{Artist}"] .. "</span> <span color='#76728B'>" .. args["{Title}"] .. "</span>"
 	        elseif args["{state}"] == "Pause" then
 				mpdstatus:set_markup("<span color='#E7E4C4'>Paused</span>")
 				play:set_image(beautiful.mpd_play)
-	            return ""
+	            music = ""
 	        elseif args["{state}"] == "Stop" then
 				mpdstatus:set_markup("<span color='#E7E4C4'>Stopped</span>")
 				play:set_image(beautiful.mpd_play)
-	            return ""
+	            music = ""
 	        else
 				mpdstatus:set_markup("<span color='#E7E4C4'>"..args['{state}'].."</span>")
 				play:set_image(beautiful.mpd_play)
-	            return ""
+	            music = ""
 	        end
 	    end
-	    end, 1)
+	    music_cover:set_image(cover or beautiful.mpd_cover)
+	    mpdwidget:set_markup(music)
+	end)
+	music_timer:emit_signal("timeout")
+	music_timer:start()
 	mpdwidget:buttons(awful.button({ }, 1, function () awful.util.spawn(mpdplr) end))
-				
-	mpdwidget:connect_signal("mouse::enter", function () mpdbuttons[mouse.screen]:set_widget(mpd_lay) end)
 	mpdstatus:connect_signal("mouse::enter", function () mpdbuttons[mouse.screen]:set_widget(mpd_lay) end)
 	
 	volwidget = wibox.widget.textbox()
@@ -642,26 +673,22 @@ for s = 1, screen.count() do
 	vol_lay:add(spr)
 	volumewidget = wibox.layout.margin(vol_lay)
 	vol_t = awful.tooltip({ objects = {volwidget}})
+	vol_t_r = wibox.layout.rotate()
+	vol_t_r:set_widget(vol_t.widget)
+	vol_t_r:set_direction("south")
+	vol_t.wibox:set_widget(vol_t_r)
 	vicious.register(volwidget, vicious.widgets.volume, function (widget, args)
 			volume = args[1]
 			if (args[2] == "♩") then vol = volume .. '% M' else vol = volume .. '%' end
 			for i = 1, math.floor(volume / 10) do
-				if i == 1 then text = "<span background='#605678'>-</span>" end
-				if i == 4 and args[2] == "♩" then text = text.."<span background='#605678'>M</span>" end
-				if i == 5 and args[2] == "♩" then text = text.."<span background='#605678'>u</span>" end
-				if i == 6 and args[2] == "♩" then text = text.."<span background='#605678'>t</span>" end
-				if i == 7 and args[2] == "♩" then text = text.."<span background='#605678'>e</span>" end
-				text = text .. "<span background='#605678'> </span>"
-				if i == 10 then text = text .. "<span background='#605678'>+</span>" end
+				if i == 1 then text = "<span background='#605678'> - </span>" end
+				text = text .. "<span background='#605678'>\n   </span>"
+				if i == 10 then text = text .. "<span background='#605678'>\n + </span>" end
 			end
 			for i = math.floor(volume / 10) + 1, 10 do
-				if i == 1 then text = "-" end
-				if i == 4 and args[2] == "♩" then text = text.."M" end
-				if i == 5 and args[2] == "♩" then text = text.."u" end
-				if i == 6 and args[2] == "♩" then text = text.."t" end
-				if i == 7 and args[2] == "♩" then text = text.."e" end
-				text = text .. " "
-				if i == 10 then text = text .. "+" end
+				if i == 1 then text = " - " end
+				text = text .. "\n   "
+				if i == 10 then text = text .. "\n + " end
 			end
 			vol_t:set_text(text)
 			return "<span background='#919AA1' font='Tamsyn 10' > <span font='"..beautiful.font.."' color='#E7E4C4'>Volume: <span color='#605678'>" .. vol .. " </span></span></span>"
@@ -768,8 +795,7 @@ for s = 1, screen.count() do
 		  mpdstate[s]:set_widget(nil)
 		  syswidget[s]:set_widget(nil) 
 		  netwidget[s]:set_widget(nil)
-		  if pkgs == 0 then pkgwidget[s]:set_widget(nil) end 
-		  if mails == 0 then mailwidget[s]:set_widget(nil) end  
+		  if count_mails == 0 then mailwidget[s]:set_widget(nil) end  
 		  hidemail = true
 		  hidepkgs = true
     end)
@@ -777,14 +803,13 @@ for s = 1, screen.count() do
 	widgets_layout = wibox.layout.fixed.horizontal()
 	widgets_layout:add(bg_left)
 	widgets_layout:add(mailwidget[s])
-	widgets_layout:add(pkgwidget[s])
 	widgets_layout:add(syswidget[s])
 	widgets_layout:add(netwidget[s])
 	widgets_layout:add(volumewidget)
 	widgets_layout:add(clockwidget)
 	widgets_layout:add(bg_right)
 	widgets = wibox.layout.margin(widgets_layout)
-	widgets:connect_signal("mouse::enter", function () netwidget[mouse.screen]:set_widget(net_lay) syswidget[mouse.screen]:set_widget(sys_lay) pkgwidget[mouse.screen]:set_widget(pkg_lay) mailwidget[mouse.screen]:set_widget(mail_lay) end)
+	widgets:connect_signal("mouse::enter", function () netwidget[mouse.screen]:set_widget(net_lay) syswidget[mouse.screen]:set_widget(sys_lay) mailwidget[mouse.screen]:set_widget(mail_lay) end)
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()

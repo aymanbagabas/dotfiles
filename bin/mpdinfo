@@ -19,7 +19,7 @@
 MUSIC_DIR="$HOME/Music"
 
 # The default cover to use (optional)
-DEFAULT_ART=""
+DEFAULT_ART="$HOME/.config/awesome/themes/p/icons/cover.png"
 
 # The following track metadata delimiters can be changed.
 # You can find all possible delimiters in the 'mpc' manpage.

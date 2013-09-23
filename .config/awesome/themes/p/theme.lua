@@ -117,7 +117,7 @@ theme.titlebar_maximized_button_active  = theme.titlebar_maximized_button_inacti
 theme.titlebar_minimize_button_inactive  = _theme .. "/titlebar/minimize.png"
 theme.titlebar_minimize_button_active = _theme .. theme.titlebar_minimize_button_inactive
 
--- theme.wallpaper = ''
+theme.wallpaper = _theme .. '/background.jpg'
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = _theme .. "/layouts/fairh.png"
@@ -146,6 +146,7 @@ theme.mpd_next = _icons .. "/next.png"
 theme.mpd_play = _icons .. "/play.png"
 theme.mpd_pause = _icons .. "/pause.png"
 theme.mpd_stop = _icons .. "/stop.png"
+theme.mpd_cover = _icons .. "/cover.png"
 theme.titlebar_left = _icons .. "/tb_bg_left.png"
 theme.titlebar_right = _icons .. "/tb_bg_right.png"
 theme.tag_end = _icons .. "/tag_bg_end.png"

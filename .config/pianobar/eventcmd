@@ -17,11 +17,19 @@ done < <(grep -e '^\(title\|artist\|album\|stationName\|songStationName\|pRet\|p
 
 case "$1" in
 	songstart)
-		# comment this 2 lines if you doesn't use awesome
-		glyrc cover --artist $artist --album $album --write "/tmp/$artist-$album.png" -v 0
-		echo "noti({title = \"pianobar\", text = \"Now playing: '$title' by '$artist'\", timeout = 10, icon = \"/tmp/$artist-$album.png\", icon_size = 100})" | awesome-client -
-
+		mkdir -p /tmp/pianobar
 		echo "$artist\\$title\\$album" > $HOME/.config/pianobar/nowplaying
+		wget --output-document="/tmp/pianobar/$artist-$album.png" "$coverArt" -q
+		
+		# comment this line if you doesn't use awesome
+		echo "noti({title = \"pianobar\", text = \"Now playing: '$title' by '$artist'\", timeout = 10, icon = \"/tmp/pianobar/$artist-$album.png\", icon_size = 100})" | awesome-client -
+		
+		echo -n "" > /tmp/pianobar/station_list
+	    for (( c=0; c<$stationCount; c++ ))
+	    do
+	      stationName=$(eval "echo \${$(echo station${c})"-''})
+	      echo "$c ## $stationName" >> /tmp/pianobar/station_list
+	    done
 
 		if [ "$rating" -eq 1 ]
 		then
@@ -31,20 +39,28 @@ case "$1" in
 		fi
 		# or whatever you like...
 		;;
-
-	songfinish)
-		# scrobble if 75% of song have been played, but only if the song hasn't
-		# been banned
-		if [ -n "$songDuration" ] && [ "$songDuration" -ne 0 ] &&
-				[ $(echo "scale=4; ($songPlayed/$songDuration*100)>50" | bc) -eq 1 ] &&
-				[ "$rating" -ne 2 ]; then
-			# scrobbler-helper is part of the Audio::Scrobble package at cpan
-			# "pia" is the last.fm client identifier of "pianobar", don't use
-			# it for anything else, please
-			scrobbler-helper -P pia -V 1.0 "$title" "$artist" "$album" "" "" "" "$((songDuration/1000))" &
-		fi
+		
+	songmove)
+		echo "$songPlayed-$songDuration-$rating" > $HOME/.config/pianobar/song
 		;;
 
+	songfinish)
+	    # scrobble if 75% of song have been played, but only if the song hasn't
+	    # been banned
+	   if [ -n "$songDuration" ] && [ "$songDuration" -ne 0 ] &&
+	      [ $(echo "scale=4; ($songPlayed/$songDuration*100)>98" | bc) -eq 1 ] &&
+	      [ "$rating" -eq 1 ]; then
+	      # scrobbler-helper is part of the Audio::Scrobble package at cpan
+	      # "pia" is the last.fm client identifier of "pianobar", don't use
+	      # it for anything else, please
+	      
+	      scrobbler-helper -P pia -V 1.0 "$title" "$artist" "$album" "" "" "" "$((songDuration/1000))" &
+	      `rm "/tmp/pianobar/$artist-$album.png"`
+		echo "$songPlayed-$songDuration-$rating" > $HOME/.config/pianobar/song
+	   fi
+	
+	   ;;
+	
 	songlove)
 		notify-send -t 10000 "pianobar" "LOVING '$title' by '$artist' on '$album' on station '$stationName'"
 		;;

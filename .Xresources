@@ -49,6 +49,8 @@ URxvt*iso14755: False
 URxvt*url-launcher:      /usr/bin/firefox
 URxvt*matcher.button:   1
 URxvt*colorUL: #4682B4
+URxvt*cursorBlink: 1
+URxvt*cursorUnderline: 1
 
 URxvt*selection*pattern-0: ([^"&'()*,;<=>?@[\\\\]^`{|})]+)
 
@@ -56,6 +58,13 @@ URxvt*selection*pattern-0: ([^"&'()*,;<=>?@[\\\\]^`{|})]+)
 
 Xcursor*theme: Vanilla-DMZ-AA
 Xcursor*size:  22
+
+! xclock ---------------------------------------------------------------------
+
+xclock*update:            1
+xclock*analog:            true
+xclock*Foreground:        #605678
+xclock*background:        #919AA1
 
 ! terminal colors ------------------------------------------------------------
 
