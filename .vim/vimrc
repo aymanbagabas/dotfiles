@@ -1,0 +1,74 @@
+call plug#begin('~/.vim/plugged')
+
+Plug 'chriskempson/base16-vim'
+Plug 'davidhalter/jedi-vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-syntastic/syntastic'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'majutsushi/tagbar'
+
+call plug#end()
+
+set nocompatible
+
+set t_Co=256
+set number
+syntax on
+set mouse=a
+set cursorline
+set spell
+set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+set autoindent
+set smartindent
+set cindent
+
+" Base16
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+
+" Shortcuts
+nmap <C-a> ggVG
+vmap <C-c> "+y
+nmap <C-c> "+y
+vmap <C-S-v> "+p
+nmap <C-S-v> "+p
+imap <C-S-v> <Esc> "+p
+
+""""" Plugins configurations """""
+
+" airline
+let g:airline#extensions#tabline#enabled = 1
+
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" ctrlp
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+
+" tagbar
+nmap <F8> :TagbarToggle<CR>
