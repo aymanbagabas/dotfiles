@@ -1,0 +1,12 @@
+#!/bin/bash
+# This uses playerctl
+#
+
+TITLE=`playerctl metadata title`
+if [ -z "$TITLE" ]; then
+    FILE=`playerctl metadata xesam:url`
+    # Get the file name from its location
+    TITLE=`echo -n ${FILE##*/}`
+fi
+
+echo $TITLE

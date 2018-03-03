@@ -1,0 +1,234 @@
+[options]
+scroll_on_output = false
+scroll_on_keystroke = true
+audible_bell = false
+mouse_autohide = false
+allow_bold = true
+dynamic_title = true
+urgent_on_bell = false
+clickable_url = true
+;font = TerminessTTF Nerd Font 14
+font = Terminus (TTF) 12
+scrollback_lines = 10000
+search_wrap = true
+icon_name = terminal
+#geometry = 640x480
+
+# "system", "on" or "off"
+cursor_blink = system
+
+# "block", "underline" or "ibeam"
+cursor_shape = block
+
+# $BROWSER is used by default if set, with xdg-open as a fallback
+#browser = xdg-open
+
+# set size hints for the window
+#size_hints = false
+
+# Hide links that are no longer valid in url select overlay mode
+filter_unmatched_urls = true
+
+# emit escape sequences for extra modified keys
+#modify_other_keys = false
+
+#[colors]
+## Base16 Ocean
+## Author: Chris Kempson (http://chriskempson.com)
+#
+#foreground      = #c0c5ce
+#foreground_bold = #dfe1e8
+#cursor          = #dfe1e8
+#background      = #2b303b
+#
+## 16 color space
+#
+## Black, Gray, Silver, White
+#color0  = #2b303b
+#color8  = #65737e
+#color7  = #c0c5ce
+#color15 = #eff1f5
+#
+## Red
+#color1  = #bf616a
+#color9  = #bf616a
+#
+## Green
+#color2  = #a3be8c
+#color10 = #a3be8c
+#
+## Yellow
+#color3  = #ebcb8b
+#color11 = #ebcb8b
+#
+## Blue
+#color4  = #8fa1b3
+#color12 = #8fa1b3
+#
+## Purple
+#color5  = #b48ead
+#color13 = #b48ead
+#
+## Teal
+#color6  = #96b5b4
+#color14 = #96b5b4
+#
+## Extra colors
+#color16 = #d08770
+#color17 = #ab7967
+#color18 = #343d46
+#color19 = #4f5b66
+#color20 = #a7adba
+#color21 = #dfe1e8
+
+[colors]
+# Base16 OceanicNext
+# Author: https://github.com/voronianski/oceanic-next-color-scheme
+
+foreground      = #C0C5CE
+foreground_bold = #CDD3DE
+cursor          = #CDD3DE
+background      = rgba(27, 43, 52, 1)
+
+# 16 color space
+
+# Black, Gray, Silver, White
+color0  = #1B2B34
+color8  = #65737E
+color7  = #C0C5CE
+color15 = #D8DEE9
+
+# Red
+color1  = #EC5f67
+color9  = #EC5f67
+
+# Green
+color2  = #99C794
+color10 = #99C794
+
+# Yellow
+color3  = #FAC863
+color11 = #FAC863
+
+# Blue
+color4  = #6699CC
+color12 = #6699CC
+
+# Purple
+color5  = #C594C5
+color13 = #C594C5
+
+# Teal
+color6  = #5FB3B3
+color14 = #5FB3B3
+
+# Extra colors
+color16 = #F99157
+color17 = #AB7967
+color18 = #343D46
+color19 = #4F5B66
+color20 = #A7ADBA
+color21 = #CDD3DE
+
+#[colors]
+## Base16 Bright
+## Author: Chris Kempson (http://chriskempson.com)
+#
+#foreground      = #e0e0e0
+#foreground_bold = #f5f5f5
+#cursor          = #f5f5f5
+#background      = rgba(43, 46, 55, 0.9)
+#
+## 16 color space
+#
+## Black, Gray, Silver, White
+#color0  = #000000
+#color8  = #b0b0b0
+#color7  = #e0e0e0
+#color15 = #ffffff
+#
+## Red
+#color1  = #fb0120
+#color9  = #fb0120
+#
+## Green
+#color2  = #a1c659
+#color10 = #a1c659
+#
+## Yellow
+#color3  = #fda331
+#color11 = #fda331
+#
+## Blue
+#color4  = #6fb3d2
+#color12 = #6fb3d2
+#
+## Purple
+#color5  = #d381c3
+#color13 = #d381c3
+#
+## Teal
+#color6  = #76c7b7
+#color14 = #76c7b7
+#
+## Extra colors
+#color16 = #fc6d24
+#color17 = #be643c
+#color18 = #303030
+#color19 = #505050
+#color20 = #d0d0d0
+#color21 = #f5f5f5
+
+## one dark
+#[colors]
+#
+## special
+#foreground      = #abb2bf
+#foreground_bold = #abb2bf
+#cursor          =
+#background      = #282c34
+#
+## black
+#color0  = #282c34
+#color8  = #5c6370
+#
+## red
+#color1  = #e06c75
+#color9  = #be5046
+#
+## green
+#color2  = #98c379
+#color10 = #7a9f60
+#
+## yellow
+#color3  = #e5c07b
+#color11 = #d19a66
+#
+## blue
+#color4  = #61afef
+#color12 = #3b84c0
+#
+## magenta
+#color5  = #c678dd
+#color13 = #9a52af
+#
+## cyan
+#color6  = #56b6c2
+#color14 = #3c909b
+#
+## white
+#color7  = #abb2bf
+#color15 = #828997
+
+[hints]
+#font = Monaco 12
+#foreground = #dcdccc
+#background = #3f3f3f
+#active_foreground = #e68080
+#active_background = #3f3f3f
+padding = 2
+#border = #3f3f3f
+#border_width = 0.5
+#roundness = 2.0
+
+# vim: ft=dosini cms=#%s
