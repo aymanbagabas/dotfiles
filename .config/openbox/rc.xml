@@ -42,7 +42,7 @@
                   'Active' - where the active window is -->
   </placement>
   <theme>
-    <name>Deep</name>
+    <name>DeepArc</name>
     <titleLayout>IMC</titleLayout>
     <!--NLIMC
       available characters are NDSLIMC, each can occur at most once.
@@ -53,25 +53,25 @@
       C: close
       S: shade (roll up/down)
       D: omnipresent (on all desktops).
-  -->
+    -->
     <keepBorder>yes</keepBorder>
     <animateIconify>yes</animateIconify>
     <font place="ActiveWindow">
-      <name>sans</name>
-      <size>8</size>
+      <name>Sans</name>
+      <size>10</size>
       <!-- font size in points -->
-      <weight>bold</weight>
+      <weight>Bold</weight>
       <!-- 'bold' or 'normal' -->
-      <slant>normal</slant>
+      <slant>Normal</slant>
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
-      <name>sans</name>
-      <size>8</size>
+      <name>Sans</name>
+      <size>10</size>
       <!-- font size in points -->
-      <weight>bold</weight>
+      <weight>Bold</weight>
       <!-- 'bold' or 'normal' -->
-      <slant>normal</slant>
+      <slant>Normal</slant>
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="MenuHeader">
@@ -287,6 +287,26 @@
         <menu>root-menu</menu>
       </action>
     </keybind>
+    <keybind key="W-Left">
+      <action name="UnmaximizeFull"/>
+      <action name="MaximizeVert"/>
+      <action name="MoveResizeTo">
+        <width>50%</width>
+      </action>
+      <action name="MoveToEdge">
+        <direction>west</direction>
+      </action>
+    </keybind>
+    <keybind key="W-Right">
+      <action name="UnmaximizeFull"/>
+      <action name="MaximizeVert"/>
+      <action name="MoveResizeTo">
+        <width>50%</width>
+      </action>
+      <action name="MoveToEdge">
+        <direction>east</direction>
+      </action>
+    </keybind>
     <!-- Keybindings for windows -->
     <keybind key="W-S-c">
       <action name="Close"/>
@@ -297,8 +317,11 @@
     <keybind key="W-m">
       <action name="ToggleMaximize"/>
     </keybind>
+    <keybind key="W-f">
+      <action name="ToggleFullscreen"/>
+    </keybind>
     <keybind key="W-t">
-      <action name="RaiseLower"/>
+      <action name="ToggleAlwaysOnTop"/>
     </keybind>
     <keybind key="A-space">
       <action name="ShowMenu">
@@ -356,6 +379,17 @@
         <direction>down</direction>
       </action>
     </keybind>
+    <!-- Keybindings for moving window with multi monitor -->
+    <keybind key="C-S-W-Left">
+      <action name="MoveResizeTo">
+        <monitor>next</monitor>
+      </action>
+    </keybind>
+    <keybind key="C-S-W-Right">
+      <action name="MoveResizeTo">
+        <monitor>prev</monitor>
+      </action>
+    </keybind>
     <!-- Keybindings for running applications -->
     <keybind key="W-r">
       <action name="Execute">
@@ -365,6 +399,21 @@
     <keybind key="W-p">
       <action name="Execute">
         <command>rofi -modi run -theme Arc -show</command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioPrev">
+      <action name="Execute">
+        <command>playerctl previous</command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioPlay">
+      <action name="Execute">
+        <command>playerctl play-pause</command>
+      </action>
+    </keybind>
+    <keybind key="XF86AudioNext">
+      <action name="Execute">
+        <command>playerctl next</command>
       </action>
     </keybind>
     <keybind key="Print">
@@ -389,7 +438,12 @@
     </keybind>
     <keybind key="W-Return">
       <action name="Execute">
-        <command>termit</command>
+        <command>termite</command>
+      </action>
+    </keybind>
+    <keybind key="C-A-Delete">
+      <action name="Execute">
+        <command>oblogout</command>
       </action>
     </keybind>
   </keyboard>
@@ -881,5 +935,20 @@
 
   # end of the example
 -->
+    <application class="*">
+      <decor>yes</decor>
+    </application>
+    <application class="gmrun">
+      <decor>no</decor>
+    </application>
+    <application class="oblogout">
+      <position force="yes">
+        <x>center</x>
+        <y>center</y>
+        <!-- place oblogout in screen 2 -->
+        <monitor>2</monitor>
+      </position>
+      <fullscreen>yes</fullscreen>
+    </application>
   </applications>
 </openbox_config>
