@@ -1,6 +1,12 @@
-alias diff 'diff --color=auto'
+alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 alias ssh='TERM=xterm ssh'
 alias sage='SAGE_CUDA=/opt/cuda sage'
 alias mpd='mpd; mpDris2 2> /tmp/mpDris2.log &'
+alias kali='docker run -t -i --rm --mount src=kali-root,dst=/root --mount src=kali-postgres,dst=/var/lib/postgresql -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix kali /bin/bash'
+alias vim=nvim
+alias git=hub
+alias yaupgs='yaourt -Syua --noconfirm'
+alias t=todo.sh
+alias please='sudo $(!!)'

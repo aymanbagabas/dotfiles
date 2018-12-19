@@ -1,7 +1,8 @@
 # env variables
-export PATH=$HOME/bin:/usr/local/bin:$PATH
 export BROWSER="/usr/bin/google-chrome-stable"
-export TERMINAL="/usr/bin/termite"
-export EDITOR=vim
+export TERMINAL="/usr/bin/gnome-terminal"
+export EDITOR=nvim
+export VISUAL=nvim
 export PAGER=less
-export NO_AT_BRIDGE=1
+export GEM_HOME=$HOME/.gem
+

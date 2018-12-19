@@ -1,11 +1,9 @@
 # Run bicon at the beginning
-if [[ -z "$BICON" && -e `which bicon.bin` ]]; then
-    if [[ "$TERM" == xterm* ]]; then
-        export BICON=true
-        bicon.bin
-        exit
-    fi
-fi
+#if [[ ( -z "$BICON" ) && ( -e "`which bicon.bin`" ) && ( "$TERM" == xterm* ) ]]; then
+#    export BICON=true
+#    bicon.bin
+#    exit
+#fi
 
 # Tmux
 # If not running interactively, do not do anything
@@ -13,10 +11,13 @@ fi
 #[[ -z "$TMUX" ]] && exec tmux
 
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$(cope_path):$PATH
+export PY_USER_BIN=$(python -c 'import site; print(site.USER_BASE + "/bin")')
+export PATH=$PY_USER_BIN:$PATH
+export PATH=$PATH:$HOME/.local/bin:$HOME/bin:/usr/local/bin:$(ruby -e 'print Gem.dir')/bin:/usr/local/lib/cw
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/usr/local/lib64
 
 # Path to your oh-my-zsh installation.
-ZSH=/usr/share/oh-my-zsh/
+ZSH=$HOME/.oh-my-zsh/
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -31,7 +32,7 @@ ZSH_THEME="mytheme"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
+# DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -46,7 +47,7 @@ DISABLE_AUTO_UPDATE="true"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -59,13 +60,13 @@ DISABLE_AUTO_UPDATE="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$HOME/.oh-my-zsh/
+# ZSH_CUSTOM=$HOME/.oh-my-zsh/
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo archlinux compleat systemd zsh-completions)
+plugins=(git sudo compleat systemd zsh-completions docker python dnf)
 
 # Auto rehash
 zstyle ':completion:*' rehash true
@@ -74,7 +75,8 @@ autoload -U compinit && compinit
 
 # User configuration
 
-export VISUAL="vim"
+export VISUAL="nvim"
+#export MANPAGER="nvim -c 'set ft=man' -"
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
@@ -85,10 +87,19 @@ source $ZSH/oh-my-zsh.sh        # oh-my-zsh
 source $HOME/.aliases           # aliases
 source $HOME/.zshkeys           # keybindings
 
+# reclaim Ctrl-S
+stty stop undef
+# reclaim Ctrl-Q
+stty start undef
 # Disable Software Flow Control (XON/XOFF flow control)
 stty -ixon
 
 # Base16 shell
+# Install from https://github.com/chriskempson/base16-shell
+# Gnome-terminal
+# Install from https://github.com/aaron-williamson/base16-gnome-terminal
+# Tilix
+# Install from https://github.com/karlding/base16-tilix
 BASE16_SHELL=$HOME/.config/base16-shell/
 [ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
 
@@ -103,20 +114,12 @@ export LESS_TERMCAP_us=$'\E[1;32m'     # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'        # reset underline
 
 # Termite current dir
-if [[ $TERM == xterm-termite ]]; then
-    . /etc/profile.d/vte.sh
-    __vte_osc7
+if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+    source /etc/profile.d/vte.sh
+    __vte_osc7 2> /dev/null
 fi
 
 # Display fortune
-if [ -e `which fortune` ]; then
+if [ -e "`which fortune`" ]; then
     echo "" && fortune -s && echo ""
-fi
-
-# Gnome-keyring
-if [ -n "$DESKTOP_SESSION" ]; then
-    eval $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-    export SSH_AUTH_SOCK
-    # Fix '/keyring/control no such file or directory'
-    dbus-update-activation-environment --systemd DISPLAY
 fi
