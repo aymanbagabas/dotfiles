@@ -1,0 +1,12 @@
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias ssh='TERM=xterm ssh'
+alias mpd='mpd; mpDris2 2> /tmp/mpDris2.log &'
+alias vim=nvim
+alias vims='nvim -S'
+alias vimdiff='nvim -d'
+alias git=hub
+alias config='git --git-dir=$HOME/Projects/dotfiles/ --work-tree=$HOME'
+alias t=tasky.py
+alias mux=tmuxinator

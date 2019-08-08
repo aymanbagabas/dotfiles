@@ -1,0 +1,64 @@
+{
+	"python.linting.enabled": false,
+	//"python.jediEnabled": false,
+	"python.analysis.diagnosticEnabled": false,
+	"suggest.autoTrigger": "always",
+	//"suggest.enablePreview": true,
+	"diagnostic.displayByAle": true,
+	//"coc.preferences.previewAutoClose": true,
+	"suggest.floatEnable": true,
+	"signature.enable": true,
+	"signature.target": "float",
+	//"diagnostic.messageTarget": "float",
+	"coc.preferences.hoverTarget": "float",
+	"coc.source.buffer.ignoreGitignore": false,
+	//"suggest.snippetIndicator": "►",
+	"tsserver.enable": true,
+	"tsserver.enableJavascript": true,
+	"python.autoComplete.extraPaths": [
+		"/home/ayman/.cache/fakegir/"
+	],
+	"languageserver": {
+		"clangd": {
+			"command": "clangd",
+			"rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+			"filetypes": ["c", "cpp", "objc", "objcpp"]
+		},
+		"bash": {
+			"command": "bash-language-server",
+			"args": [
+				"start"
+			],
+			"filetypes": [
+				"sh"
+			],
+			"ignoredRootPaths": [
+				"~"
+			]
+		},
+		"efm": {
+			"command": "efm-langserver",
+			"args": [],
+			// custom config path
+			// "args": ["-c", "/path/to/your/config.yaml"],
+			"filetypes": [
+				"vim",
+				"eruby",
+				"markdown"
+			]
+		},
+		"vala" : {
+			"command" : "vala-language-server",
+			"filetypes" : [ "vala" ]
+		},
+		//"flow": {
+		//	"command": "flow",
+		//	"args": ["lsp"],
+		//	"filetypes": ["javascript", "javascriptreact"],
+		//	"initializationOptions": {},
+		//	"requireRootPattern": true,
+		//	"settings": {},
+		//	"rootPatterns": [".flowconfig"]
+		//}
+	}
+}
