@@ -48,7 +48,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'Yggdroot/indentLine'
 Plug 'mhinz/vim-startify'
 Plug 'vimwiki/vimwiki'
-Plug 'suan/vim-instant-markdown', { 'for': 'markdown' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 Plug 'easymotion/vim-easymotion'
 Plug 'junegunn/vim-easy-align'
 
