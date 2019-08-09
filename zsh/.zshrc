@@ -1,15 +1,3 @@
-# Run bicon at the beginning
-#if [[ ( -z "$BICON" ) && ( -e "`which bicon.bin`" ) && ( "$TERM" == xterm* ) ]]; then
-#    export BICON=true
-#    bicon.bin
-#    exit
-#fi
-
-# Tmux
-# If not running interactively, do not do anything
-#[[ $- != *i* ]] && return
-#[[ -z "$TMUX" ]] && exec tmux
-
 # If you come from bash you might have to change your $PATH.
 #PATH="$HOME/.perl5/bin${PATH:+:${PATH}}"; export PATH;
 #PERL5LIB="$HOME/.perl5/lib/.perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
@@ -30,7 +18,6 @@ export MANPATH="$NPM_PACKAGES/share/man:$MANPATH"
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 export GOPATH="$HOME/.go"
 export PATH="$PATH:$GOPATH/bin"
-export VALA_LSP="$HOME/Workstation/vala-language-server/build"
 export PATH="$VALA_LSP:$PATH"
 
 # Path to your oh-my-zsh installation.
@@ -138,11 +125,13 @@ fi
 #fi
 [ -z "$SSH_AUTH_SOCK" ] && eval "$(ssh-agent -s)"
 
-export DISABLE_AUTO_TITLE=true
+# export DISABLE_AUTO_TITLE=true
 
 # use ctags as a back-end for GNU global gtags
 export GTAGSLABEL=new-ctags
 
-# Vi-mode sudo
+# Vi-mode
+# sudo
 bindkey -M vicmd "\e" sudo-command-line
+# open in vim
 bindkey -M vicmd '^V' edit-command-line
