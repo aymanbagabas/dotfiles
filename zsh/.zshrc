@@ -20,13 +20,17 @@ export GOPATH="$HOME/.go"
 export PATH="$PATH:$GOPATH/bin"
 export PATH="$VALA_LSP:$PATH"
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Path to your oh-my-zsh installation.
 ZSH=$HOME/.oh-my-zsh/
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="mytheme"
+ZSH_THEME=""
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -70,7 +74,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo compleat systemd zsh-completions zsh-syntax-highlighting docker python dnf tmuxinator vi-mode)
+plugins=(git sudo compleat systemd zsh-completions zsh-syntax-highlighting docker python dnf tmuxinator vi-mode wd fzf git-flow tig)
 
 # Auto rehash
 zstyle ':completion:*' rehash true
@@ -89,7 +93,6 @@ if [[ ! -d $ZSH_CACHE_DIR ]]; then
 fi
 
 source $ZSH/oh-my-zsh.sh        # oh-my-zsh
-source $HOME/.aliases           # aliases
 source $HOME/.zshkeys           # keybindings
 
 # reclaim Ctrl-S
@@ -105,8 +108,10 @@ stty -ixon
 # Install from https://github.com/aaron-williamson/base16-gnome-terminal
 # Tilix
 # Install from https://github.com/karlding/base16-tilix
-BASE16_SHELL=$HOME/.config/base16-shell/
-[ -n "$PS1" ] && [ -s $BASE16_SHELL/profile_helper.sh ] && eval "$($BASE16_SHELL/profile_helper.sh)"
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # Color less
 export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
@@ -127,11 +132,63 @@ fi
 
 # export DISABLE_AUTO_TITLE=true
 
-# use ctags as a back-end for GNU global gtags
-export GTAGSLABEL=new-ctags
-
 # Vi-mode
-# sudo
+# fix sudo plugin
 bindkey -M vicmd "\e" sudo-command-line
 # open in vim
 bindkey -M vicmd '^V' edit-command-line
+# ctrl-p & ctrl-n to behave like arrow keys
+bindkey '^P' up-line-or-beginning-search
+bindkey '^N' down-line-or-beginning-search
+# empty mode indicator
+MODE_INDICATOR=
+
+# pure prompt
+PURE_PROMPT_SYMBOL="›"
+PURE_PROMPT_VICMD_SYMBOL="‹"
+fpath+=("$HOME/.oh-my-zsh/custom/themes/pure")
+autoload -U promptinit; promptinit
+prompt pure
+
+# fzf
+[ -f /usr/share/zsh/site-functions/fzf ] && source /usr/share/zsh/site-functions/fzf # when using Fedora fzf package
+# base16
+_gen_fzf_default_opts() {
+  local color00='#282c34'
+  local color01='#353b45'
+  local color02='#3e4451'
+  local color03='#545862'
+  local color04='#565c64'
+  local color05='#abb2bf'
+  local color06='#b6bdca'
+  local color07='#c8ccd4'
+  local color08='#e06c75'
+  local color09='#d19a66'
+  local color0A='#e5c07b'
+  local color0B='#98c379'
+  local color0C='#56b6c2'
+  local color0D='#61afef'
+  local color0E='#c678dd'
+  local color0F='#be5046'
+
+  # export FZF_DEFAULT_COMMAND="rg --files --no-ignore-vcs --hidden"
+  export FZF_DEFAULT_OPTS="
+  --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D
+  --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
+  --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
+  "
+}
+
+_gen_fzf_default_opts
+# export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS"--preview '(if [[ -f {} && '\$(file --dereference --mime {})' =~ binary ]]; then echo -n \"{} is a binary file\"; else (highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null; fi) | head -200'"
+
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+}
+
+eval $(thefuck --alias)
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)

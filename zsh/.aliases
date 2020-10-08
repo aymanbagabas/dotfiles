@@ -8,5 +8,8 @@ alias vims='nvim -S'
 alias vimdiff='nvim -d'
 alias git=hub
 alias config='git --git-dir=$HOME/Projects/dotfiles/ --work-tree=$HOME'
-alias t=tasky.py
 alias mux=tmuxinator
+alias open=xdg-open
+alias kitty='kitty --listen-on unix:@kitty'
+alias dropboxignore="attr -s com.dropbox.ignored -V 1"
+alias tiga='tig --all'

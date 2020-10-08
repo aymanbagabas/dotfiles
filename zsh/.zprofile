@@ -5,3 +5,5 @@ export EDITOR=nvim
 export VISUAL=nvim
 export PAGER=less
 export GEM_HOME=$HOME/.gem
+export VIMS=$HOME/.local/share/nvim/session/
+export PGPASSWORD=mony960
