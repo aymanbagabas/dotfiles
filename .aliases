@@ -1,0 +1,7 @@
+alias grep='grep --color=auto'
+alias vim=nvim
+alias vims='nvim -S'
+alias git=hub
+alias mux=tmuxinator
+alias dropboxignore="attr -s com.dropbox.ignored -V 1"
+alias tiga='tig --all'
