@@ -1,0 +1,39 @@
+[user]
+	email = ayman.bagabas@gmail.com
+	name = Ayman Bagabas
+	signingkey = 283970F2E85CDC5E0CB10F30758FD42981CE1778
+[sendemail]
+	smtpEncryption = tls
+	smtpServer = smtp.gmail.com
+	smtpUser = ayman.bagabas@gmail.com
+	smtpServerPort = 587
+[credential]
+	helper = manager
+	useHttpPath = true
+[alias]
+	graph = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen(%ad)%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=local
+	lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+	fixes = log --pretty=format:'Fixes: %h (\"%s\")'
+	authors = log --pretty=format:'%ad %an <%ae>' --date=format:'%Y'
+	pt = !git tag -l | xargs git tag -d && git fetch -t
+[core]
+	abbrev = 12
+	pager = diff-so-fancy | less --tabs=4 -RFX
+	excludesfile = $HOME/.gitignore
+	quotepath = off
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[commit]
+	gpgsign = true
