@@ -89,42 +89,42 @@ let g:ale_fix_on_save = 0
 " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 " autocmd! InsertLeave * if pumvisible() == 0 | pclose | endif
 " Show signature help while editing
-autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-augroup cocnvim
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
+" augroup cocnvim
+"   autocmd!
+"   " Setup formatexpr specified filetype(s).
+"   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+"   " Update signature help on jump placeholder
+"   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" augroup end
 
 " Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
+" command! -nargs=0 Format :call CocAction('format')
 
 " Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+" command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+" command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 			" \ 'coc-ultisnips',
 			" \ 'coc-tabnine',
 			" \ 'coc-omnisharp',
-let g:coc_global_extensions = [
-			\ 'coc-explorer',
-			\ 'coc-tsserver',
-			\ 'coc-json',
-			\ 'coc-css',
-			\ 'coc-html',
-			\ 'coc-java',
-			\ 'coc-yaml',
-			\ 'coc-python',
-			\ 'coc-tag',
-			\ 'coc-emoji',
-			\ 'coc-snippets',
-			\ 'https://github.com/xabikos/vscode-react',
-			\ ]
+" let g:coc_global_extensions = [
+" 			\ 'coc-explorer',
+" 			\ 'coc-tsserver',
+" 			\ 'coc-json',
+" 			\ 'coc-css',
+" 			\ 'coc-html',
+" 			\ 'coc-java',
+" 			\ 'coc-yaml',
+" 			\ 'coc-python',
+" 			\ 'coc-tag',
+" 			\ 'coc-emoji',
+" 			\ 'coc-snippets',
+" 			\ 'https://github.com/xabikos/vscode-react',
+" 			\ ]
 
 "{{{ YCM
 "let g:ycm_seed_identifiers_with_syntax=1
@@ -181,8 +181,8 @@ let g:coc_global_extensions = [
 " let g:NERDTreeLimitedSyntax = 1
 
 " devicons
-let g:webdevicons_enable_nerdtree = 1
-let g:webdevicons_conceal_nerdtree_brackets = 1
+" let g:webdevicons_enable_nerdtree = 1
+" let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsUnicodeGlyphDoubleWidth = 1
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
 let g:DevIconsEnableFoldersOpenClose = 1
@@ -206,7 +206,7 @@ let g:AutoPairsShortcutToggle = ''
 " endfunc
 
 " vim-highlight-cursor-words
-let g:HiCursorWords_style='term=bold cterm=bold'
+" let g:HiCursorWords_style='term=bold cterm=bold'
 
 " vim-polyglot
 " let g:polyglot_disabled = ['python']
@@ -224,15 +224,15 @@ let g:gitgutter_grep_command = 'grep -e'
 let g:gitgutter_preview_win_floating = 1
 
 " Tmuxline
-let g:tmuxline_separators = {
-			\	'left' : "\ue0b8", 'right' : "\ue0be",
-			\	'left_alt' : "\ue0b9", 'right_alt' : "\ue0bf",
-			\	'space' : ' '}
+" let g:tmuxline_separators = {
+" 			\	'left' : "\ue0b8", 'right' : "\ue0be",
+" 			\	'left_alt' : "\ue0b9", 'right_alt' : "\ue0bf",
+" 			\	'space' : ' '}
 
 " gutentags
-let g:gutentags_modules = [ 'ctags' ]
-let g:gutentags_project_root = ['.root', '.git']
-let g:gutentags_cache_dir = expand('~/.cache/tags')
+" let g:gutentags_modules = [ 'ctags' ]
+" let g:gutentags_project_root = ['.root', '.git']
+" let g:gutentags_cache_dir = expand('~/.cache/tags')
 
 " indentLine
 let g:indentLine_enabled = 1
@@ -243,14 +243,14 @@ let g:indentLine_fileTypeExclude = ['vimwiki', 'markdown']
 let g:indentLine_concealcursor = ""
 
 " undotree
-let g:undotree_HelpLine = 0
+" let g:undotree_HelpLine = 0
 
 " vimwiki
-let g:vimwiki_global_ext = 0
-let g:vimwiki_list = [{'path': '~/vimwiki/',
-			\ 'syntax': 'markdown', 'ext': '.md'}]
-let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
-let g:vimwiki_option_list_margin = 0
+" let g:vimwiki_global_ext = 0
+" let g:vimwiki_list = [{'path': '~/vimwiki/',
+" 			\ 'syntax': 'markdown', 'ext': '.md'}]
+" let g:vimwiki_ext2syntax = {'.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
+" let g:vimwiki_option_list_margin = 0
 
 " vim-test
 let g:test#strategy = 'dispatch'
@@ -281,17 +281,17 @@ let g:closetag_shortcut = '>'
 "let g:instant_markdown_autoscroll = 0
 
 " vim-translate
-let g:translator_source_lang = 'auto'
-let g:translator_target_lang = 'ar'
-let g:translator_debug_mode = v:true
-let g:translator_default_engines = ['trans', 'google']
-let g:translator_translate_shell_options = ['-no-ansi', '-no-theme', '-no-bidi', '-show-original y', '-show-original-phonetics y', '-show-translation y', '-show-translation-phonetics y', '-show-prompt-message y', '-show-languages y', '-show-original-dictionary y', '-show-dictionary y', '-show-alternatives y']
+" let g:translator_source_lang = 'auto'
+" let g:translator_target_lang = 'ar'
+" let g:translator_debug_mode = v:true
+" let g:translator_default_engines = ['trans', 'google']
+" let g:translator_translate_shell_options = ['-no-ansi', '-no-theme', '-no-bidi', '-show-original y', '-show-original-phonetics y', '-show-translation y', '-show-translation-phonetics y', '-show-prompt-message y', '-show-languages y', '-show-original-dictionary y', '-show-dictionary y', '-show-alternatives y']
 
 " Vista.vim better tagbar.vim replacement
-let g:vista_executive_for = {
-	\ 'javascript': 'coc',
-	\ 'markdown': 'toc'
-\ }
+" let g:vista_executive_for = {
+" 	\ 'javascript': 'coc',
+" 	\ 'markdown': 'toc'
+" \ }
 
 " fzf
 autocmd! FileType fzf
@@ -338,34 +338,34 @@ command! -bang -nargs=? -complete=dir GFiles
     \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview(), <bang>0) |
 
 " vim-hexokinase
-let g:Hexokinase_optInPatterns = [
-\     'full_hex',
-\     'triple_hex',
-\     'rgb',
-\     'rgba',
-\     'hsl',
-\     'hsla',
-\     'colour_names'
-\ ]
-let g:Hexokinase_alpha_bg = '#ffffff'
-let g:Hexokinase_highlighters = ['virtual']
+" let g:Hexokinase_optInPatterns = [
+" \     'full_hex',
+" \     'triple_hex',
+" \     'rgb',
+" \     'rgba',
+" \     'hsl',
+" \     'hsla',
+" \     'colour_names'
+" \ ]
+" let g:Hexokinase_alpha_bg = '#ffffff'
+" let g:Hexokinase_highlighters = ['virtual']
 
 " vim-startify
 let g:startify_change_to_dir = 0
 
 " vim-dispatch
-let g:dispatch_terminal_exec = 'gnome-terminal'
+" let g:dispatch_terminal_exec = 'gnome-terminal'
 
 " vim-prettier
-let g:prettier#autoformat = 0
-let g:prettier#exec_cmd_async = 1
-let g:prettier#quickfix_enabled = 1
-let g:prettier#quickfix_auto_focus = 0
-let g:prettier#config#tab_width = 2
-let g:prettier#config#use_tabs = 'false'
-let g:prettier#config#semi = 'true'
-let g:prettier#config#single_quote = 'false'
-let g:prettier#config#trailing_comma = 'es5'
+" let g:prettier#autoformat = 0
+" let g:prettier#exec_cmd_async = 1
+" let g:prettier#quickfix_enabled = 1
+" let g:prettier#quickfix_auto_focus = 0
+" let g:prettier#config#tab_width = 2
+" let g:prettier#config#use_tabs = 'false'
+" let g:prettier#config#semi = 'true'
+" let g:prettier#config#single_quote = 'false'
+" let g:prettier#config#trailing_comma = 'es5'
 
 " vim-betterwhitespaces
 let g:better_whitespace_enabled = 1
@@ -375,7 +375,7 @@ let g:strip_whitespace_confirm = 0
 let g:better_whitespace_filetypes_blacklist = ['diff', 'unite', 'qf', 'help']
 
 " investigate.vim
-let g:investigate_command_for_all = '/usr/bin/devhelp -s ^s'
+" let g:investigate_command_for_all = '/usr/bin/devhelp -s ^s'
 
 " markdown-preview.nvim
 " let g:mkdp_markdown_css = '/tmp/styles.css'
@@ -402,15 +402,15 @@ let g:investigate_command_for_all = '/usr/bin/devhelp -s ^s'
 "             \ 'min_pattern_length',
 "             \ 2)
 
-let g:vimspector_enable_mappings = 'HUMAN'
+" let g:vimspector_enable_mappings = 'HUMAN'
 " packadd! vimspector
 
 " vim-tmux-navigator
-let g:tmux_navigator_no_mappings = 1
+" let g:tmux_navigator_no_mappings = 1
 
 " vim-kitty-navigator
-let g:kitty_navigator_no_mappings = 1
-let g:kitty_navigator_listening_on_address = '\@kitty'
+" let g:kitty_navigator_no_mappings = 1
+" let g:kitty_navigator_listening_on_address = '\@kitty'
 
 " vim-tagalong
 let g:tagalong_additional_filetypes = ['javascript']
