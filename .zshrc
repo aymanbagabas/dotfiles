@@ -114,7 +114,7 @@ MODE_INDICATOR=
 # pure prompt
 PURE_PROMPT_SYMBOL="›"
 PURE_PROMPT_VICMD_SYMBOL="‹"
-fpath+=("$HOME/.oh-my-zsh/custom/themes/pure")
+fpath+=("$HOME/.oh-my-zsh.custom/themes/pure")
 autoload -U promptinit; promptinit
 prompt pure
 
