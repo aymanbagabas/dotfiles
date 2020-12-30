@@ -74,55 +74,55 @@ nnoremap [d :ALEPreviousWrap<CR> " move to the previous ALE warning / error
 
 " coc.nvim
 " Make autocompletion behave sanely
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackSpace() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ CheckBackSpace() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+" inoremap <silent><expr> <c-space> coc#refresh()
 
 " Remap keys for gotos
-nmap <silent><leader>d <Plug>(coc-definition)
-nmap <silent><leader>td <Plug>(coc-type-definition)
-nmap <silent><leader>D <Plug>(coc-declaration)
-nmap <silent><leader>i <Plug>(coc-implementation)
-nmap <silent><leader>r <Plug>(coc-references)
+" nmap <silent><leader>d <Plug>(coc-definition)
+" nmap <silent><leader>td <Plug>(coc-type-definition)
+" nmap <silent><leader>D <Plug>(coc-declaration)
+" nmap <silent><leader>i <Plug>(coc-implementation)
+" nmap <silent><leader>r <Plug>(coc-references)
 " Use K to show documentation in preview window
-nnoremap <silent> K :call ShowDocumentation()<CR>
-nnoremap <silent><leader>h :call ShowDocumentation()<CR>
+" nnoremap <silent> K :call ShowDocumentation()<CR>
+" nnoremap <silent><leader>h :call ShowDocumentation()<CR>
 " Remap for rename current word
-nmap <silent><leader>n <Plug>(coc-rename)
-xmap <silent><leader>A  <Plug>(coc-codeaction-selected)
-nmap <silent><leader>A  <Plug>(coc-codeaction-selected)
-nmap <silent><leader>a <Plug>(coc-codeaction)
-nmap <silent><leader>l <Plug>(coc-codelens-action)
-nmap <silent><leader>q  <Plug>(coc-fix-current)
-nmap <silent><leader>F <Plug>(coc-format-selected)
-xmap <silent><leader>F <Plug>(coc-format-selected)
+" nmap <silent><leader>n <Plug>(coc-rename)
+" xmap <silent><leader>A  <Plug>(coc-codeaction-selected)
+" nmap <silent><leader>A  <Plug>(coc-codeaction-selected)
+" nmap <silent><leader>a <Plug>(coc-codeaction)
+" nmap <silent><leader>l <Plug>(coc-codelens-action)
+" nmap <silent><leader>q  <Plug>(coc-fix-current)
+" nmap <silent><leader>F <Plug>(coc-format-selected)
+" xmap <silent><leader>F <Plug>(coc-format-selected)
 
 " Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
+" xmap if <Plug>(coc-funcobj-i)
+" xmap af <Plug>(coc-funcobj-a)
+" omap if <Plug>(coc-funcobj-i)
+" omap af <Plug>(coc-funcobj-a)
 " Show all diagnostics
 " nnoremap <silent> <localleader>d  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent> <leader>ce  :<C-u>CocFzfListExtensions<cr>
+" nnoremap <silent> <leader>ce  :<C-u>CocFzfListExtensions<cr>
 " Show commands
-nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
+" nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent> <leader>/s  :<C-u>CocFzfListOutline<cr>
+" nnoremap <silent> <leader>/s  :<C-u>CocFzfListOutline<cr>
 " Search workspace symbols
-nnoremap <silent> <leader>/S  :<C-u>CocFzfListSymbols<cr>
+" nnoremap <silent> <leader>/S  :<C-u>CocFzfListSymbols<cr>
 " Do default action for next item.
-nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
+" nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
+" nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
 " Resume latest coc list
 " nnoremap <silent> <leader>p  :<C-u>CocListResume<CR>
-nnoremap <silent><localleader>f :Explorer<CR>
+" nnoremap <silent><localleader>f :Explorer<CR>
 
 " vim kitty nav
 if $TERM =~# '.*kitty.*'

@@ -47,6 +47,7 @@ Plug 'tpope/vim-unimpaired'
 "     \ 'do': 'bash install.sh',
 "     \ }
 Plug 'sheerun/vim-polyglot'
+Plug 'martinlroth/vim-acpi-asl'
 Plug 'w0rp/ale'
 Plug 'neovim/nvim-lspconfig'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
