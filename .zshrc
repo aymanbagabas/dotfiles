@@ -1,71 +1,56 @@
-export GEM_HOME=$(ruby -e 'print Gem.user_dir')
-export GEM_PATH=$GEM_HOME
-export PATH=$PATH:$GEM_PATH/bin
+if [ -e "$HOME/.zplug" ]; then
+    source ~/.zplug/init.zsh
+else
+    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+fi
 
-# Path to your oh-my-zsh installation.
-ZSH=$HOME/.oh-my-zsh/
+# Manage zplug
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME=""
+# Sane defaults from OMZ
+zplug "lib/clipboard", from:oh-my-zsh
+zplug "lib/key-bindings", from:oh-my-zsh
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+### Plugins
+zplug "plugins/git", from:oh-my-zsh
+zplug "plugins/sudo", from:oh-my-zsh
+zplug "plugins/compleat", from:oh-my-zsh
+zplug "plugins/systemd", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
+zplug "plugins/docker", from:oh-my-zsh
+zplug "plugins/python", from:oh-my-zsh
+zplug "plugins/dnf", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
+zplug "plugins/tmuxinator", from:oh-my-zsh
+zplug "plugins/wd", from:oh-my-zsh
+zplug "plugins/fzf", from:oh-my-zsh
+zplug "plugins/git-flow", from:oh-my-zsh
+zplug "plugins/tig", from:oh-my-zsh
+zplug "plugins/iterm2", from:oh-my-zsh
+zplug "~/.zsh/plugins/yadm-plugin", from:local
+zplug "~/.zsh/plugins/vi-mode", from:local
+# Defer after compinit
+zplug "zsh-users/zsh-completions", defer:2
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+### Theme
+zplug "chriskempson/base16-shell", use:scripts/profile_helper.sh
+zplug "mafredri/zsh-async", from:github
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Install plugins if there are plugins that have not been installed
+if ! zplug check; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$HOME/.oh-my-zsh.custom/
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git sudo compleat systemd zsh-completions zsh-syntax-highlighting docker python dnf tmuxinator vi-mode wd fzf git-flow tig iterm2)
-
-# Auto rehash
-zstyle ':completion:*' rehash true
-
-autoload -U compinit && compinit
+# Then, source plugins and add commands to $PATH
+zplug load # --verbose
 
 # User configuration
 
 export KEYTIMEOUT=1				# fix vi-mode timeout
-export VISUAL="nvim"
-export PAGER="less"
-
-source $ZSH/oh-my-zsh.sh        # oh-my-zsh
+# source $ZSH/oh-my-zsh.sh        # oh-my-zsh
 #source $HOME/.zshkeys           # keybindings
 source $HOME/.aliases
 
@@ -82,15 +67,10 @@ stty -ixon
 # Install from https://github.com/aaron-williamson/base16-gnome-terminal
 # Tilix
 # Install from https://github.com/karlding/base16-tilix
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        eval "$("$BASE16_SHELL/profile_helper.sh")"
-
-# Color less
-export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
-export LESS=' -R '
-export GROFF_NO_SGR=1		# for konsole and gnome-terminal
+# BASE16_SHELL="$HOME/.config/base16-shell/"
+# [ -n "$PS1" ] && \
+#     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#         eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # Display fortune
 if [ -e "$( which fortune )" ]; then
@@ -114,12 +94,12 @@ MODE_INDICATOR=
 # pure prompt
 PURE_PROMPT_SYMBOL="›"
 PURE_PROMPT_VICMD_SYMBOL="‹"
-fpath+=("$HOME/.oh-my-zsh.custom/themes/pure")
-autoload -U promptinit; promptinit
-prompt pure
+# fpath+=("$HOME/.oh-my-zsh.custom/themes/pure")
+# autoload -U promptinit; promptinit
+# prompt pure
 
 # fzf
-[ -f /usr/share/zsh/site-functions/fzf ] && source /usr/share/zsh/site-functions/fzf # when using Fedora fzf package
+# [ -f /usr/share/zsh/site-functions/fzf ] && source /usr/share/zsh/site-functions/fzf # when using Fedora fzf package
 # base16
 _gen_fzf_default_opts() {
   local color00='#282c34'
@@ -155,14 +135,6 @@ fif() {
   rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
 }
 
-eval $(thefuck --alias)
-
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-
-# >>>> Vagrant command completion (start)
-fpath=(/opt/vagrant/embedded/gems/2.2.10/gems/vagrant-2.2.10/contrib/zsh $fpath)
-compinit
-# <<<<  Vagrant command completion (end)
