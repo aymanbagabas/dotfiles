@@ -24,9 +24,9 @@ zplug "plugins/wd", from:oh-my-zsh
 zplug "plugins/fzf", from:oh-my-zsh
 zplug "plugins/git-flow", from:oh-my-zsh
 zplug "plugins/tig", from:oh-my-zsh
-zplug "plugins/iterm2", from:oh-my-zsh
+zplug "plugins/iterm2", from:oh-my-zsh, if:"[[ $OSTYPE == darwin* ]]"
+zplug "plugins/vi-mode", from:oh-my-zsh
 zplug "~/.zsh/plugins/yadm-plugin", from:local
-zplug "~/.zsh/plugins/vi-mode", from:local
 # Defer after compinit
 zplug "zsh-users/zsh-completions", defer:2
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
