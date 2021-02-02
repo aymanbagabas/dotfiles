@@ -1,8 +1,7 @@
-if [ -e "$HOME/.zplug" ]; then
-    source ~/.zplug/init.zsh
-else
+if [ ! -e "$HOME/.zplug" ]; then
     curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 fi
+source ~/.zplug/init.zsh
 
 # Manage zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
@@ -12,6 +11,7 @@ zplug "lib/clipboard", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
 
 ### Plugins
+zplug "lukechilds/zsh-nvm"
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
 zplug "plugins/compleat", from:oh-my-zsh
