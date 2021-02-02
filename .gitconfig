@@ -37,3 +37,7 @@
 	whitespace = red reverse
 [commit]
 	gpgsign = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = master
