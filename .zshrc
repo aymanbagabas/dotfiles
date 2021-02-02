@@ -11,6 +11,7 @@ zplug "lib/clipboard", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
 
 ### Plugins
+zplug "smac89/linuxbrew", if:"[[ $OSTYPE == linux* ]]"
 zplug "lukechilds/zsh-nvm"
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
