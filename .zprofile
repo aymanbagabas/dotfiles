@@ -1,5 +1,8 @@
 (ssh-add -A 2>/dev/null &)
 
+# Add local sbin to path
+export PATH=/usr/local/sbin:$PATH
+
 if [ -e "$(which ruby)" ]; then
     export GEM_HOME=$(ruby -e 'print Gem.user_dir')
     export GEM_PATH=$GEM_HOME
