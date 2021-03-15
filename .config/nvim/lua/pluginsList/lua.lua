@@ -29,5 +29,6 @@ return require("packer").startup(
         use {"tpope/vim-surround"}
         use {"tpope/vim-repeat"}
         use {"tpope/vim-commentary"}
+        use {"rhysd/git-messenger.vim"}
     end
 )
