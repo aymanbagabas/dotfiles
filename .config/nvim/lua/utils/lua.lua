@@ -21,7 +21,6 @@ opt("w", "signcolumn", "yes")
 opt("o", "cmdheight", 1)
 
 opt("o", "updatetime", 250) -- update interval for gitsigns 
-opt("o", "clipboard", "unnamedplus")
 
 -- for indenline
 opt("b", "expandtab", true )
