@@ -40,6 +40,7 @@ cmd("hi VertSplit guibg=NONE")
 cmd("highlight DiffAdd guifg=#81A1C1 guibg = none")
 cmd("highlight DiffChange guifg =#3A3E44 guibg = none")
 cmd("highlight DiffModified guifg = #81A1C1 guibg = none")
+cmd("highlight DiffDelete guibg = none")
 cmd("hi EndOfBuffer guifg=#282c34")
 
 cmd("highlight TelescopeBorder   guifg=#3e4451")
