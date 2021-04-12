@@ -4,8 +4,7 @@ TEMP=`mktemp -d`
 
 echo "Temp at " $TEMP
 cd $TEMP
-git clone ~/.local/share/yadm/repo.git newcopy
-cd newcopy
-git filter-repo `cat ~/.config/yadm/encrypt | sed 's/.*/--path &/'` --path .local/share/yadm/archive --path .config/yadm/files.gpg --invert-paths --force
+git clone --bare ~/.local/share/yadm/repo.git newcopy
+git filter-repo `cat ~/.config/yadm/encrypt | sed 's/.*/--path &/'` --path .local/share/yadm/archive --path .config/yadm/files.gpg --invert-paths --source ~/.local/share/yadm/repo.git --target newcopy --prune-empty always
 git remote add origin git@github.com:aymanbagabas/dotfiles.git
-git push origin master -f
+git push origin master -f --dry-run
