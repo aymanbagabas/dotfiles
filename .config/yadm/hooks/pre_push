@@ -1,0 +1,11 @@
+#!/bin/sh
+
+TEMP=`mktemp -d`
+
+echo "Temp at " $TEMP
+cd $TEMP
+git clone ~/.local/share/yadm/repo.git newcopy
+cd newcopy
+git filter-repo `cat ~/.config/yadm/encrypt | sed 's/.*/--path &/'` --path .local/share/yadm/archive --path .config/yadm/files.gpg --invert-paths --force
+git remote add origin git@github.com:aymanbagabas/dotfiles.git
+git push origin master -f

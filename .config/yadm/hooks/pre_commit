@@ -1,0 +1,3 @@
+#!/bin/sh
+
+yadm encrypt && yadm add .local/share/yadm/archive || exit 1
