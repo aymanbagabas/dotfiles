@@ -25,11 +25,10 @@ if [ ! -d "$HOME/.nvm" ]; then
     mkdir $HOME/.nvm
 fi
 
-export HISTSIZE=10000
-export SAVEHIST=10000
-export EDITOR="nvim"
-export VISUAL="nvim"
-export PAGER="less"
+if [ -e "$(which python)" ]; then
+  export PATH="$PATH:$(python3 -m site --user-base)/bin"
+fi
+
 export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
 export LESS=' -R '
 export GROFF_NO_SGR=1		# for konsole and gnome-terminal

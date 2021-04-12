@@ -50,6 +50,11 @@ zplug load # --verbose
 
 # User configuration
 
+export HISTSIZE=10000
+export SAVEHIST=10000
+export EDITOR="nvim"
+export VISUAL="nvim"
+export PAGER="less"
 export KEYTIMEOUT=1				# fix vi-mode timeout
 # source $ZSH/oh-my-zsh.sh        # oh-my-zsh
 #source $HOME/.zshkeys           # keybindings
