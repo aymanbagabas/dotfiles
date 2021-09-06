@@ -33,6 +33,8 @@ zplug "~/.zsh/plugins/yadm-plugin", from:local
 # Defer after compinit
 zplug "zsh-users/zsh-completions", defer:2
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
+# Commands
+zplug "zdharma/zsh-diff-so-fancy", as:command, use:"bin/"
 
 ### Theme
 zplug "chriskempson/base16-shell", use:"scripts/base16-onedark.sh", defer:0
