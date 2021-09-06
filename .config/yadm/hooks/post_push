@@ -1,25 +1,25 @@
 #!/bin/sh
 
-TEMP=`mktemp -d`
+#TEMP=`mktemp -d`
 
-echo "Temp at " $TEMP
-cd $TEMP
-echo
-echo "Cloning bare no-local repo to newcopy..."
-git clone --bare --no-local ~/.local/share/yadm/repo.git newcopy
-cd newcopy
-echo "newcopy remotes:"
-git remote -v
-echo
-echo $PWD
-echo 
-git status
-echo "Filtering repo..."
-git filter-repo `cat ~/.config/yadm/encrypt | sed 's/.*/--path &/'` --path .local/share/yadm/archive --path .config/yadm/files.gpg --invert-paths --source ~/.local/share/yadm/repo.git --target . --prune-empty always
-echo
-echo "newcopy remotes:"
-git remote -v
-echo
-echo "Pushing to origin master..."
-#git remote add origin git@github.com:aymanbagabas/dotfiles.git
-git push origin master -f
+#echo "Temp at " $TEMP
+#cd $TEMP
+#echo
+#echo "Cloning bare no-local repo to newcopy..."
+#git clone --bare --no-local ~/.local/share/yadm/repo.git newcopy
+#cd newcopy
+#echo "newcopy remotes:"
+#git remote -v
+#echo
+#echo $PWD
+#echo 
+#git status
+#echo "Filtering repo..."
+#git filter-repo `cat ~/.config/yadm/encrypt | sed 's/.*/--path &/'` --path .local/share/yadm/archive --path .config/yadm/files.gpg --invert-paths --source ~/.local/share/yadm/repo.git --target . --prune-empty always
+#echo
+#echo "newcopy remotes:"
+#git remote -v
+#echo
+#echo "Pushing to origin master..."
+##git remote add origin git@github.com:aymanbagabas/dotfiles.git
+#git push origin master -f
