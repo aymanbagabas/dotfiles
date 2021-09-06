@@ -86,6 +86,7 @@ return require("packer").startup(function(use, _)
             require("cfg.bufferline").setup()
         end
     }
+    use 'chriskempson/base16-vim'
     use {
         "christianchiarulli/nvcode-color-schemes.vim",
     }

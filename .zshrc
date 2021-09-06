@@ -35,7 +35,7 @@ zplug "zsh-users/zsh-completions", defer:2
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 ### Theme
-zplug "chriskempson/base16-shell", use:scripts/profile_helper.sh
+zplug "chriskempson/base16-shell", use:"scripts/base16-onedark.sh", defer:0
 zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 
@@ -102,6 +102,8 @@ bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
 # empty mode indicator
 MODE_INDICATOR=
+VI_MODE_SET_CURSOR=true
+VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 
 # pure prompt
 PURE_PROMPT_SYMBOL="›"
