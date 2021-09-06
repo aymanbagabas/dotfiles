@@ -49,6 +49,8 @@ fi
 zplug load # --verbose
 
 # User configuration
+fpath+=("$HOME/.zsh/completions")
+autoload -U compinit; compinit
 
 export HISTSIZE=10000
 export SAVEHIST=10000
@@ -88,7 +90,9 @@ fi
 
 # Vi-mode
 # fix sudo plugin
-bindkey -M vicmd "\e" sudo-command-line
+if [ -z "$VIM" ]; then
+  bindkey -M vicmd "\e" sudo-command-line
+fi
 # open in vim
 bindkey -M vicmd '^V' edit-command-line
 # ctrl-p & ctrl-n to behave like arrow keys

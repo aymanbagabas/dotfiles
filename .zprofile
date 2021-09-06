@@ -11,6 +11,7 @@ fi
 
 if [ -e "$(which go)" ]; then
     export GOPATH=$HOME/.go
+    export PATH=$PATH:$GOPATH/bin
 fi
 
 if [ -d "$HOME/.dotnet" ]; then
