@@ -9,6 +9,9 @@ if [ $(command -v ruby) ]; then
     export PATH=$PATH:$GEM_PATH/bin
 fi
 
+if [ -d "/usr/local/go" ]; then
+  export PATH=$PATH:/usr/local/go/bin
+fi
 if [ $(command -v go) ]; then
     export GOPATH=$HOME/.go
     export PATH=$PATH:$GOPATH/bin
