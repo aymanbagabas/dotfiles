@@ -3,13 +3,13 @@
 # Add local sbin to path
 export PATH=/usr/local/sbin:$PATH
 
-if [ -e "$(which ruby)" ]; then
+if [ $(command -v ruby) ]; then
     export GEM_HOME=$(ruby -e 'print Gem.user_dir')
     export GEM_PATH=$GEM_HOME
     export PATH=$PATH:$GEM_PATH/bin
 fi
 
-if [ -e "$(which go)" ]; then
+if [ $(command -v go) ]; then
     export GOPATH=$HOME/.go
     export PATH=$PATH:$GOPATH/bin
 fi

@@ -9,9 +9,11 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 # Sane defaults from OMZ
 zplug "lib/clipboard", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
+zplug "lib/completion.zsh", from:oh-my-zsh
+zplug "lib/compfix.zsh", from:oh-my-zsh
+zplug "lib/theme-and-appearance.zsh", from:oh-my-zsh
 
 ### Plugins
-zplug "smac89/linuxbrew", if:"[[ $OSTYPE == linux* ]]"
 zplug "lukechilds/zsh-nvm"
 zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/sudo", from:oh-my-zsh
@@ -148,3 +150,7 @@ fif() {
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]] && [[ $(command -v tmux) ]]; then
+  (tmux attach-session -t ssh || tmux new-session -s ssh) && exit
+fi
