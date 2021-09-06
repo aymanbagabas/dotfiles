@@ -8,3 +8,5 @@ alias tiga='tig --all'
 # Fix gopass ssh 'path too long for unix domain socket' on macOS
 alias gopass='GIT_SSH_COMMAND="ssh -oControlMaster=auto -oControlPersist=600 -oControlPath=/tmp/.ssh-%C" gopass'
 alias kitty='kitty -o allow_remote_control=yes --single-instance --listen-on unix:/tmp/mykitty'
+# Fix sudo + aliases https://askubuntu.com/a/22043
+alias sudo='sudo '
