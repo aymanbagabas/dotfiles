@@ -1,0 +1,42 @@
+#!/bin/sh
+
+system_type=$(uname -s)
+software="tmux hub neovim htop zsh"
+
+### Submodules
+# Because Git submodule commands cannot operate without a work tree, they must
+# be run from within $HOME (assuming this is the root of your dotfiles)
+cd "$HOME"
+
+echo "Init submodules"
+yadm submodule update --recursive --init
+
+case "$system_type" in
+  ## MacOS
+  "Darwing")
+  # install homebrew if it's missing
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  if [ -f "$HOME/.Brewfile" ]; then
+    echo "Updating homebrew bundle"
+    brew bundle --global
+  fi
+  ;;
+  ## Linux
+  "Linux")
+  distro=$(cat /etc/os-release | grep '^ID=' | cut -d= -f2)
+  case "$distro" in
+    "ubuntu")
+      sudo apt update
+      sudo apt install $software -y
+      ;;
+    "fedora")
+      sudo dnf update
+      sudo dnf install $software -y
+      ;;
+  esac
+  ;;
+esac
