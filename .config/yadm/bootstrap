@@ -37,6 +37,14 @@ case "$system_type" in
       sudo dnf update
       sudo dnf install $software -y
       ;;
+    *)
+      echo "No config for distro '$distro', ignoring"
+      ;;
   esac
-  ;;
+  case "$distro" in
+    "ubuntu" | "fedora")
+      ### Set default shell
+      sudo chsh -s /bin/zsh
+      ;;
+  esac
 esac
