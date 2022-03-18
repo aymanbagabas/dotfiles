@@ -2,6 +2,7 @@
 
 system_type=$(uname -s)
 software="tmux hub neovim htop zsh"
+rhel_software="util-linux-user"
 
 ### Submodules
 # Because Git submodule commands cannot operate without a work tree, they must
@@ -35,7 +36,7 @@ case "$system_type" in
       ;;
     "fedora")
       sudo dnf update
-      sudo dnf install $software -y
+      sudo dnf install $software $rhel_software -y
       ;;
     *)
       echo "No config for distro '$distro', ignoring"
