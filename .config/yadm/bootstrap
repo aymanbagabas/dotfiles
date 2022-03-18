@@ -1,7 +1,7 @@
 #!/bin/sh
 
 system_type=$(uname -s)
-software="tmux hub neovim htop zsh"
+software="tmux hub neovim htop zsh fortune"
 rhel_software="util-linux-user"
 
 ### Submodules
