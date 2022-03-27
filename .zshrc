@@ -25,7 +25,6 @@ zplug "plugins/dnf", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
 zplug "plugins/tmuxinator", from:oh-my-zsh
 zplug "plugins/wd", from:oh-my-zsh
 zplug "plugins/fzf", from:oh-my-zsh
-zplug "plugins/git-flow", from:oh-my-zsh
 zplug "plugins/tig", from:oh-my-zsh
 zplug "plugins/iterm2", from:oh-my-zsh, if:"[[ $OSTYPE == darwin* ]]"
 zplug "plugins/vi-mode", from:oh-my-zsh
@@ -34,7 +33,7 @@ zplug "~/.zsh/plugins/yadm-plugin", from:local
 zplug "zsh-users/zsh-completions", defer:2
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 # Commands
-zplug "zdharma/zsh-diff-so-fancy", as:command, use:"bin/"
+zplug "zdharma-continuum/zsh-diff-so-fancy", as:command, use:"bin/"
 
 ### Theme
 zplug "chriskempson/base16-shell", use:"scripts/base16-onedark.sh", defer:0
