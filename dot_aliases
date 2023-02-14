@@ -1,0 +1,19 @@
+alias grep='grep --color=auto'
+alias vim=nvim
+alias git=hub
+alias mux=tmuxinator
+alias dropboxignore="attr -s com.dropbox.ignored -V 1"
+alias tiga='tig --all'
+# Fix gopass ssh 'path too long for unix domain socket' on macOS
+alias gopass='GIT_SSH_COMMAND="ssh -oControlMaster=auto -oControlPersist=600 -oControlPath=/tmp/.ssh-%C" gopass'
+alias kitty='kitty -o allow_remote_control=yes --single-instance --listen-on unix:/tmp/mykitty'
+# Fix sudo + aliases https://askubuntu.com/a/22043
+alias sudo='sudo '
+alias ungron='gron --ungron'
+# golang list outdated deps
+alias gmo='go list -u -m -json all | go-mod-outdated -style markdown -direct -update | glow --width 120 -'
+alias tf=terraform
+alias wrk='cd ~/Work/charm'
+alias ws='cd ~/Workspace'
+alias pg='cd  ~/Playground'
+alias cz='chezmoi'
