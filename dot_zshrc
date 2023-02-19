@@ -7,34 +7,23 @@ source ~/.zplug/init.zsh
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # Sane defaults from OMZ
-zplug "lib/clipboard", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
 zplug "lib/completion", from:oh-my-zsh
-zplug "lib/compfix", from:oh-my-zsh
 zplug "lib/theme-and-appearance", from:oh-my-zsh
-zplug "lib/directories", from:oh-my-zsh
 
 ### Plugins
 zplug "lukechilds/zsh-nvm"
 zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/sudo", from:oh-my-zsh
-zplug "plugins/compleat", from:oh-my-zsh
 zplug "plugins/systemd", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
-zplug "plugins/docker", from:oh-my-zsh
-zplug "plugins/python", from:oh-my-zsh
 zplug "plugins/dnf", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
 zplug "plugins/fzf", from:oh-my-zsh
-zplug "plugins/tig", from:oh-my-zsh
-zplug "plugins/iterm2", from:oh-my-zsh, if:"[[ $OSTYPE == darwin* ]]"
-zplug "plugins/vi-mode", from:oh-my-zsh
 # Defer after compinit
 zplug "zsh-users/zsh-completions", defer:2
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 ### Theme
-zplug "chriskempson/base16-shell", use:"scripts/base16-onedark.sh", defer:0
+zplug "chriskempson/base16-shell", hook-load:"base16_onedark", from:github
 zplug "mafredri/zsh-async", from:github
-# TODO: use a faster pure-based prompt
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 
 # Install plugins if there are plugins that have not been installed
@@ -49,9 +38,11 @@ fi
 zplug load # --verbose
 
 # User configuration
-fpath+=("$HOME/.zsh/completions")
-autoload -U compinit; compinit
-source $HOME/.aliases
+source "$HOME/.aliases"
+# Pass arguments to command if pattern matching fails
+# This fixes using carrot (^) in git for example
+# https://stackoverflow.com/a/16864766/10913628
+setopt NO_NOMATCH
 
 # reclaim Ctrl-S
 stty stop undef
@@ -66,19 +57,12 @@ if [ -e "$( which fortune )" ]; then
 fi
 
 # Vi-mode
-# fix sudo plugin
-if [ -z "$VIM" ]; then
-  bindkey -M vicmd "\e" sudo-command-line
-fi
-# open in vim
+bindkey -v
+# open command in vim (ctrl-v)
 bindkey -M vicmd '^V' edit-command-line
 # ctrl-p & ctrl-n to behave like arrow keys
 bindkey '^P' up-line-or-beginning-search
 bindkey '^N' down-line-or-beginning-search
-# empty mode indicator
-MODE_INDICATOR=
-VI_MODE_SET_CURSOR=true
-VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 
 # pure prompt
 PURE_PROMPT_SYMBOL="›"
@@ -89,7 +73,9 @@ case "$OSTYPE" in
   *darwin*)
     export LSCOLORS="exfxcxdxbxegedabagacad"
     export CLICOLOR=1
-    test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+    # source iTerm2 shell integration
+    [ -e "${HOME}/.iterm2_shell_integration.zsh" ] && \
+      source "${HOME}/.iterm2_shell_integration.zsh"
     ;;
   *linux*)
     eval "$(dircolors -b)"
@@ -98,6 +84,20 @@ case "$OSTYPE" in
     ;;
 esac
 
-if [[ -n "$PS1" ]] && [[ -z "$TMUX" ]] && [[ -n "$SSH_CONNECTION" ]] && [[ $(command -v tmux) ]]; then
-  (tmux attach-session -t ssh || tmux new-session -s ssh) && exit
+# direnv
+if command -v direnv > /dev/null 2>&1; then
+  eval "$(direnv hook zsh)"
 fi
+
+# exa (ls replacement)
+if command -v exa > /dev/null 2>&1; then
+  alias ls="exa"
+fi
+
+# GPG
+# use gpg-agent for ssh
+if command -v gpgconf > /dev/null 2>&1; then
+  export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+  gpgconf --launch gpg-agent
+fi
+export GPG_TTY=$(tty)

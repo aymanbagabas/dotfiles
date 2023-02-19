@@ -1,5 +1,3 @@
-(ssh-add -A 2>/dev/null &)
-
 # Add local sbin to path
 export PATH=/usr/local/sbin:$PATH
 
@@ -9,7 +7,7 @@ export PATH=$HOME/.local/bin:$PATH
 if [ -d "/usr/local/go" ]; then
   export PATH=$PATH:/usr/local/go/bin
 fi
-if [ $(command -v go) ]; then
+if command -v go > /dev/null 2>&1; then
     export GOPATH=$HOME/.go
     export PATH=$PATH:$GOPATH/bin
 fi
@@ -26,18 +24,32 @@ if [ ! -d "$HOME/.nvm" ]; then
     mkdir $HOME/.nvm
 fi
 
-if [ -e "$(which python)" ]; then
-  export PATH="$PATH:$(python3 -m site --user-base)/bin"
-fi
-
-export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
-export LESS='-R --mouse --use-color -Dd+r$Du+b'
-export NVM_DIR="$HOME/.nvm"
-export NVM_LAZY_LOAD=true
-export NVM_COMPLETION=true
 export HISTSIZE=10000
 export SAVEHIST=10000
 export EDITOR="nvim"
 export VISUAL="nvim"
 export PAGER="less"
-export KEYTIMEOUT=1				# fix vi-mode timeout
+export KEYTIMEOUT=1 # fix vi-mode timeout
+
+# Enable mouse support in less
+export LESS='-R --mouse'
+# Set less colors
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;32m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;33m'
+# Enable syntax highlighting in less using src-hilite-lesspipe.sh
+if command -v src-hilite-lesspipe.sh > /dev/null 2>&1; then
+  export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
+fi
+
+# Default fzf command
+export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!.git/*"'
+
+# zsh-nvm config
+export NVM_DIR="$HOME/.nvm"
+export NVM_LAZY_LOAD=true
+export NVM_COMPLETION=true
