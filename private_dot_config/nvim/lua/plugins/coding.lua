@@ -63,6 +63,7 @@ return {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "hrsh7th/cmp-emoji",
+      -- "hrsh7th/cmp-nvim-lsp-signature-help",
     },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
@@ -75,6 +76,7 @@ return {
       local luasnip = require("luasnip")
       local cmp = require("cmp")
 
+      ---@diagnostic disable-next-line: missing-parameter
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
         {
           name = "copilot",
@@ -106,17 +108,40 @@ return {
             },
           },
         },
+        -- { name = "nvim_lsp_signature_help" },
         { name = "emoji" },
       }))
 
+      local copilot_ok, copilot = pcall(require, "copilot.suggestion")
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ["<CR>"] = cmp.mapping.confirm({ select = false }),
+        ["<C-L>"] = cmp.mapping(function(fallback)
+          if copilot_ok and copilot.is_visible() then
+            copilot.next()
+          else
+            fallback()
+          end
+        end, { "i" }),
+        ["<C-H>"] = cmp.mapping(function(fallback)
+          if copilot_ok and copilot.is_visible() then
+            copilot.prev()
+          else
+            fallback()
+          end
+        end, { "i" }),
+        ["<C-y>"] = cmp.mapping(function(fallback)
+          if copilot_ok and copilot.is_visible() then
+            copilot.dismiss()
+          else
+            fallback()
+          end
+        end, { "i" }),
         ["<Tab>"] = cmp.mapping(function(fallback)
           -- use tab to accept copilot suggestions
           -- https://github.com/zbirenbaum/copilot.lua/issues/91#issuecomment-1345190310
-          if require("copilot.suggestion").is_visible() then
-            require("copilot.suggestion").accept()
-          -- if cmp.visible() and has_words_before() then
-          --   cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+          if copilot_ok and copilot.is_visible() then
+            copilot.accept()
           elseif cmp.visible() then
             cmp.select_next_item()
             -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
@@ -162,10 +187,11 @@ return {
           auto_trigger = true,
           debounce = 75,
           keymap = {
-            accept = "<M-l>",
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-]>",
+            -- Used inconjuction with cmp
+            accept = "<Tab>", -- "<M-l>"
+            next = "<C-L>",
+            prev = "<C-H>",
+            dismiss = "<C-y>",
           },
         },
         filetypes = {
@@ -200,8 +226,25 @@ return {
       }
     end,
     config = true,
-    -- config = function(_, opts)
-    --   require("copilot_cmp").setup(opts)
-    -- end,
+  },
+
+  {
+    "nathom/filetype.nvim",
+    config = function()
+      require("filetype").setup({
+        overrides = {
+          extensions = {
+            tf = "terraform",
+            tfvars = "terraform",
+            tfstate = "json",
+          },
+        },
+      })
+    end,
+  },
+
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = { "qf" },
   },
 }

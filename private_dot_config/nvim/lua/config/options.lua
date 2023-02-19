@@ -3,6 +3,7 @@
 -- Add any additional options here
 local opt = vim.opt
 
+-- separate vim registers from clipboard
 opt.clipboard = ""
 opt.tabstop = 4
 opt.wrap = true
@@ -10,3 +11,7 @@ opt.wrap = true
 -- when cursor reaches end/beginning of line
 opt.whichwrap:append("<>[]hl")
 opt.title = true
+-- enable undofil
+opt.undofile = true
+-- set scroll offset to 8
+opt.scrolloff = 8

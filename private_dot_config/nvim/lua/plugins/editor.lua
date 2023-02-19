@@ -41,6 +41,11 @@ return {
   },
 
   {
+    "ggandor/flit.nvim",
+    enabled = false,
+  },
+
+  {
     "ggandor/leap.nvim",
     -- TODO: enable but disable key maps
     enabled = false,
@@ -148,6 +153,7 @@ return {
   {
     "alexghergh/nvim-tmux-navigation",
     branch = "main",
+    event = { "VimEnter" },
     keys = function()
       local ok, nav = pcall(require, "nvim-tmux-navigation")
       if not ok then
@@ -214,6 +220,14 @@ return {
       },
       -- all the sub-options of filetypes apply to buftypes
       buftypes = {},
+    },
+  },
+
+  {
+    "mbbill/undotree",
+    cmd = "UndotreeToggle",
+    keys = {
+      { "<leader>uu", ":UndotreeToggle<cr>", desc = "Toggle Undo Tree" },
     },
   },
 }
