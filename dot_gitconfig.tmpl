@@ -1,0 +1,43 @@
+[user]
+	email = {{ .email }}
+	name = {{ .name }}
+	signingkey = {{ .gpg }}
+[credential]
+	helper = manager
+	useHttpPath = true
+[alias]
+	fixes = log --pretty=format:'Fixes: %h (\"%s\")'
+	authors = log --pretty=format:'%ad %an <%ae>' --date=format:'%Y'
+	purge-tags = !git tag -l | xargs git tag -d && git fetch -t
+[core]
+	abbrev = 12
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
+	quotepath = off
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[commit]
+	gpgsign = true
+[pull]
+	rebase = false
+[init]
+	defaultBranch = master
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[gpg]
+	program = gpg
+[format]
+	signOff = true
+
+# vim: syn=gitconfig
