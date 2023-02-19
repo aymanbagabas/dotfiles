@@ -1,3 +1,5 @@
+local Util = require("lazyvim.util")
+
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
@@ -29,3 +31,11 @@ map("n", "]q", "<cmd>cnext<cr>", { desc = "Next quickfix" })
 map("n", "[q", "<cmd>cprev<cr>", { desc = "Prev quickfix" })
 map("n", "]l", "<cmd>lnext<cr>", { desc = "Next location" })
 map("n", "[l", "<cmd>lprev<cr>", { desc = "Prev location" })
+
+-- tig
+map("n", "<leader>gt", function()
+  Util.float_term({ "tig" }, { cwd = Util.get_root() })
+end, { desc = "Tig (root dir)" })
+map("n", "<leader>gT", function()
+  Util.float_term({ "tig" })
+end, { desc = "Tig (cwd)" })

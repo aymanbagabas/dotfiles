@@ -55,6 +55,8 @@ return {
   {
     "akinsho/bufferline.nvim",
     keys = {
+      { "<leader>bh", "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" },
+      { "<leader>bl", "<cmd>BufferLineCloseRight<cr>", "Close all to the right" },
       {
         "<BSlash>",
         "<cmd>BufferLinePick<CR>",
@@ -267,7 +269,7 @@ return {
             },
           },
           lualine_z = {
-            { "progress", separator = "", padding = { left = 1, right = 0 } },
+            { "progress", separator = " ", padding = { left = 1, right = 0 } },
             { "location", padding = { left = 0, right = 1 } },
           },
         },
@@ -383,13 +385,5 @@ return {
         options = { try_as_border = true },
       }
     end,
-  },
-
-  {
-    "akinsho/bufferline.nvim",
-    keys = {
-      { "<leader>bh", "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" },
-      { "<leader>bl", "<cmd>BufferLineCloseRight<cr>", "Close all to the right" },
-    },
   },
 }
