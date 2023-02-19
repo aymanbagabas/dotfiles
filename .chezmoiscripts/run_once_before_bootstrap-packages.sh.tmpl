@@ -1,0 +1,16 @@
+{{- if eq .chezmoi.os "darwin" -}}
+
+# Install xcode command line tools
+xcode-select --install
+
+# Install Homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+brew install \
+	mas \
+	git \
+	zsh
+
+{{- end -}}
+
+# vim: syn=sh
