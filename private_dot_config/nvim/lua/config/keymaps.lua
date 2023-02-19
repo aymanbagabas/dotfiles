@@ -39,3 +39,13 @@ end, { desc = "Tig (root dir)" })
 map("n", "<leader>gT", function()
   Util.float_term({ "tig" })
 end, { desc = "Tig (cwd)" })
+
+-- buffers
+map("n", "<leader>bo", [[<Cmd>%bd|e#|bd#<Cr>|'"<Cr>]], { desc = "Close other buffers" })
+if Util.has("bufferline.nvim") then
+  map("n", "<Tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next Buffer" })
+  map("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev Buffer" })
+else
+  map("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+  map("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+end

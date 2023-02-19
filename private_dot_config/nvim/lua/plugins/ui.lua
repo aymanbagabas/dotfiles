@@ -52,30 +52,23 @@ return {
     opts = {},
   },
 
+  -- {
+  --   "j-hui/fidget.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     text = { spinner = "dots_pulse" },
+  --   },
+  -- },
+
   {
     "akinsho/bufferline.nvim",
     keys = {
-      { "<leader>bh", "<cmd>BufferLineCloseLeft<cr>", "Close all to the left" },
-      { "<leader>bl", "<cmd>BufferLineCloseRight<cr>", "Close all to the right" },
+      { "<leader>bh", "<cmd>BufferLineCloseLeft<cr>", desc = "Close all to the left" },
+      { "<leader>bl", "<cmd>BufferLineCloseRight<cr>", desc = "Close all to the right" },
       {
         "<BSlash>",
         "<cmd>BufferLinePick<CR>",
-        "Pick Buffer",
-      },
-      {
-        "<Tab>",
-        "<cmd>BufferLineCycleNext<CR>",
-        "Next Buffer",
-      },
-      {
-        "<S-Tab>",
-        "<cmd>BufferLineCyclePrev<CR>",
-        "Previous Buffer",
-      },
-      {
-        "<leader>bo",
-        [[<Cmd>%bd|e#|bd#<Cr>|'"<Cr>]],
-        "Close other buffers",
+        desc = "Pick Buffer",
       },
     },
     opts = function(_, opts)
@@ -177,7 +170,7 @@ return {
 
   {
     "nvim-lualine/lualine.nvim",
-    opts = function(plugin)
+    opts = function()
       local icons = require("lazyvim.config").icons
 
       local function fg(name)
@@ -291,7 +284,7 @@ return {
       "SmiteshP/nvim-navic",
       "nvim-tree/nvim-web-devicons", -- optional dependency
     },
-    opts = function(plugin)
+    opts = function()
       return {
         ---whether to attach navic to language servers automatically
         ---@type boolean
@@ -346,6 +339,7 @@ return {
       }
       -- WinResized event was added in nvim-0.9
       if vim.fn.has("nvim-0.9") == 1 then
+        ---@diagnostic disable-next-line: missing-parameter
         events = vim.list_extend(events, {
           "WinResized",
         })

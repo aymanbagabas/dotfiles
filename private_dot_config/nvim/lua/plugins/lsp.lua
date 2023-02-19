@@ -199,7 +199,9 @@ return {
         -- YAML
         yamlls = {},
         -- Bash/Shell
-        bashls = {},
+        bashls = {
+          filetypes = { "sh", "zsh", "bash" },
+        },
         -- Terraform
         terraformls = {},
         -- Python
