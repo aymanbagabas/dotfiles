@@ -26,7 +26,9 @@ if ! tmux ls &>/dev/null; then
 fi
 
 if [ "$TMUX" != "" ]; then
-    tmux switch-client -t "$(filter "switch session")"
+    session="$(filter "switch session")"
+    [ -n "$session" ] && tmux switch-client -t "$session"
 else
-    tmux attach-session -t "$(filter "attach session" 12)"
+    session="$(filter "attach session" 12)"
+    [ -n "$session" ] && tmux attach-session -t "$session"
 fi
