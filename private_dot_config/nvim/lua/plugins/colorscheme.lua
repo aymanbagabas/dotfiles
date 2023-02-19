@@ -16,40 +16,19 @@ return {
     end,
   },
 
-  -- {
-  --   "olimorris/onedarkpro.nvim",
-  --   priority = 1000, -- Ensure it loads first
-  --   opts = {
-  --     colors = {},
-  --     options = {
-  --       transparency = false,
-  --       cursorline = true,
-  --     },
-  --   },
-  -- },
-
   {
     "RRethy/nvim-base16",
     -- lazy = true,
   },
 
   {
-    "NvChad/base46",
-    config = function()
-      local ok, base46 = pcall(require, "base46")
-
-      if ok then
-        base46.load_theme()
-      end
-    end,
-    -- lazy = true,
+    "folke/tokyonight.nvim",
+    enabled = false,
   },
 
   {
     "catppuccin/nvim",
-    lazy = false,
-    name = "catppuccin",
-    config = true,
+    enabled = false,
   },
 
   -- Configure LazyVim to load onedark
