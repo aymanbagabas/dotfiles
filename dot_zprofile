@@ -32,13 +32,12 @@ fi
 
 export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
 export LESS='-R --mouse --use-color -Dd+r$Du+b'
-export GROFF_NO_SGR=1		# for konsole and gnome-terminal
 export NVM_DIR="$HOME/.nvm"
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true
 export HISTSIZE=10000
 export SAVEHIST=10000
-export EDITOR="vim"
-export VISUAL="vim"
+export EDITOR="nvim"
+export VISUAL="nvim"
 export PAGER="less"
 export KEYTIMEOUT=1				# fix vi-mode timeout
