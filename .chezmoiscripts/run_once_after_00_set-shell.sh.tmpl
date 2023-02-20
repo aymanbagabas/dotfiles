@@ -1,8 +1,8 @@
 #!/bin/sh
-{{- if eq .chezmoi.os "linux" -}}
+{{ if eq .chezmoi.os "linux" -}}
 
 sudo chsh -s /bin/zsh
 
-{{- end -}}
+{{ end -}}
 
 # vim: syn=sh
