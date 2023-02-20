@@ -25,6 +25,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "chriskempson/base16-shell", hook-load:"base16_onedark", from:github
 zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+zplug "tinted-theming/base16-fzf", use:"bash/base16-onedark.config", from:github, as:theme
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check; then
