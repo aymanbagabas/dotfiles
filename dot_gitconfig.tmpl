@@ -2,9 +2,6 @@
 	email = {{ .email }}
 	name = {{ .name }}
 	signingkey = {{ .gpg }}
-[credential]
-	helper = manager
-	useHttpPath = true
 [alias]
 	fixes = log --pretty=format:'Fixes: %h (\"%s\")'
 	authors = log --pretty=format:'%ad %an <%ae>' --date=format:'%Y'

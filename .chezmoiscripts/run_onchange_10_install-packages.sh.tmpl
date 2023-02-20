@@ -47,9 +47,6 @@ sudo dnf install -y ${PACKAGES[@]}
 
 {{   end }}
 
-# Install git-credential-manager
-curl -L https://aka.ms/gcm/linux-install-source.sh | sh
-
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
@@ -72,7 +69,6 @@ brew "fortune"
 brew "fzf"
 brew "gh"
 brew "git"
-brew "git-credential-manager"
 brew "gnupg"
 brew "gum"
 brew "htop"
