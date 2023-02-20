@@ -1,12 +1,16 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
 
 data:
-  name: Ayman Bagabas
+  name: "Ayman Bagabas"
   email: {{ $email | quote }}
-  gpg: 593D6EEE7871708E329619322EBA00DFFCC63351
+  gpg: "593D6EEE7871708E329619322EBA00DFFCC63351"
+
+encryption: gpg
+gpg:
+  recipient: {{ .gpg | quote }}
 
 diff:
   exclude:
-    - scripts
+    - "scripts"
 
 # vim: syn=yaml
