@@ -15,9 +15,7 @@ PACKAGES=(
   zsh
   ripgrep
   source-highlight
-  chezmoi
-  fortune
-  git-credential-store
+  fortune-mod
 )
 
 {{   if eq .chezmoi.osRelease.id "ubuntu" }}
@@ -48,6 +46,10 @@ sudo dnf install \
 sudo dnf install -y ${PACKAGES[@]}
 
 {{   end }}
+
+# Install git-credential-manager
+curl -L https://aka.ms/gcm/linux-install-source.sh | sh
+
 {{ else if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
