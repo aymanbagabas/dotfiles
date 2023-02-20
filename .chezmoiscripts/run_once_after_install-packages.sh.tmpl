@@ -1,0 +1,8 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+
+sudo chsh -s /bin/zsh
+
+{{- end -}}
+
+# vim: syn=sh
