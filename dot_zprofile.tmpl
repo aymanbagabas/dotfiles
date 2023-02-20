@@ -24,6 +24,7 @@ if [ ! -d "$HOME/.nvm" ]; then
     mkdir $HOME/.nvm
 fi
 
+export KEYID={{ .gpg }}
 export HISTSIZE=10000
 export SAVEHIST=10000
 export EDITOR="nvim"
