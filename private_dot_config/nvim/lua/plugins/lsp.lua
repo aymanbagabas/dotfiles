@@ -139,6 +139,8 @@ return {
     dependencies = {
       {
         "simrat39/inlay-hints.nvim",
+        -- disabled for now
+        enabled = false,
         config = function()
           require("inlay-hints").setup({
             renderer = "inlay-hints/render/eol",
@@ -167,7 +169,7 @@ return {
     },
     opts = {
       diagnostics = {
-        virtual_text = {},
+        virtual_text = false,
         float = {
           header = "",
           prefix = "",

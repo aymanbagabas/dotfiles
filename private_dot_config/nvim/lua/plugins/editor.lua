@@ -60,6 +60,20 @@ return {
   },
 
   {
+    "lewis6991/gitsigns.nvim",
+    opts = function(_, opts)
+      return vim.tbl_extend("force", opts, {
+        current_line_blame = false,
+        current_line_blame_opts = {
+          virt_text = true,
+          virt_text_pos = "eol",
+        },
+        current_line_blame_formatter = "    <author>, <author_time:%R> - <summary> ",
+      })
+    end,
+  },
+
+  {
     "tpope/vim-fugitive",
     keys = {
       {

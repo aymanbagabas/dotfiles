@@ -15,3 +15,7 @@ opt.title = true
 opt.undofile = true
 -- set scroll offset to 8
 opt.scrolloff = 8
+
+-- Global options
+local g = vim.g
+g.blameline = false

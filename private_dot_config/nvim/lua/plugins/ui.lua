@@ -34,9 +34,9 @@ return {
     opts = {
       icons = {
         git = {
-          added = "+ ",
-          modified = "~ ",
-          removed = "- ",
+          added = "+",
+          modified = "~",
+          removed = "-",
         },
       },
     },
@@ -200,11 +200,29 @@ return {
             { "branch", separator = "" },
             {
               "diff",
+              colored = true,
+              diff_color = {
+                added = fg("LineNr"),
+                modified = fg("LineNr"),
+                removed = fg("LineNr"),
+              },
               symbols = {
                 added = icons.git.added,
                 modified = icons.git.modified,
                 removed = icons.git.removed,
               },
+              padding = { left = 0, right = 0 },
+            },
+            -- git line blame
+            {
+              function()
+                local c = vim.b.gitsigns_blame_line_dict
+                return require("gitsigns.util").expand_format("<author>, <author_time:%R>", c, false)
+              end,
+              cond = function()
+                return package.loaded["gitsigns"] and vim.b.gitsigns_blame_line ~= nil
+              end,
+              color = fg("LineNr"),
             },
           },
           lualine_x = {
@@ -212,13 +230,13 @@ return {
             {
               function() return require("noice").api.status.command.get() end,
               cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-              color = fg("Statement"),
+              color = fg("LineNr"),
             },
             -- stylua: ignore
             {
               function() return require("noice").api.status.mode.get() end,
               cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-              color = fg("Constant"),
+              color = fg("Normal"),
             },
             { require("lazy.status").updates, cond = require("lazy.status").has_updates, color = fg("Special") },
             {
