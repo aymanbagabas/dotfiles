@@ -244,4 +244,33 @@ return {
       { "<leader>uu", ":UndotreeToggle<cr>", desc = "Toggle Undo Tree" },
     },
   },
+
+  {
+    "ojroques/nvim-osc52",
+    -- Only load this plugin when we're in a remote session
+    cond = function()
+      return vim.env.SSH_CONNECTION ~= nil and vim.env.SSH_CONNECTION ~= ""
+    end,
+    opts = {
+      silent = true,
+    },
+    config = function(_, opts)
+      local osc52 = require("osc52")
+      osc52.setup(opts)
+
+      local function copy(lines, _)
+        osc52.copy(table.concat(lines, "\n"))
+      end
+
+      local function paste()
+        return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+      end
+
+      vim.g.clipboard = {
+        name = "osc52",
+        copy = { ["+"] = copy, ["*"] = copy },
+        paste = { ["+"] = paste, ["*"] = paste },
+      }
+    end,
+  },
 }

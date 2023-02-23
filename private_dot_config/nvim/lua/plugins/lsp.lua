@@ -213,6 +213,7 @@ return {
         -- Rust
         rust_analyzer = {},
         -- Go
+        golangci_lint_ls = {},
         gopls = {
           settings = {
             gopls = {
@@ -304,7 +305,6 @@ return {
       vim.list_extend(opts.sources, {
         -- Go
         nls.builtins.code_actions.gomodifytags,
-        nls.builtins.diagnostics.golangci_lint,
         -- Shell
         nls.builtins.code_actions.shellcheck,
         -- GitHub Action

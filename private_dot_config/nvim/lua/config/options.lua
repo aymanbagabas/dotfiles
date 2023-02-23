@@ -15,6 +15,8 @@ opt.title = true
 opt.undofile = true
 -- set scroll offset to 8
 opt.scrolloff = 8
+-- Hide default tab symbol (handled by indent-blankline)
+opt.listchars:append({ tab = "  " })
 
 -- Global options
 local g = vim.g
