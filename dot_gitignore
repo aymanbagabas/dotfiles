@@ -1,4 +1,5 @@
 # Node
+.node_modules
 npm-debug.log
 
 # Mac
@@ -15,3 +16,6 @@ Thumbs.db
 
 # General
 *.log
+
+# VSCode
+.vscode
