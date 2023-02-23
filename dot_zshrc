@@ -78,7 +78,8 @@ case "$OSTYPE" in
     export LSCOLORS="exfxcxdxbxegedabagacad"
     export CLICOLOR=1
     # source iTerm2 shell integration
-    [ -e "${HOME}/.iterm2_shell_integration.zsh" ] && \
+    [ "$TERM_PROGRAM" = "iTerm.app" ] && \
+      [ -e "${HOME}/.iterm2_shell_integration.zsh" ] && \
       source "${HOME}/.iterm2_shell_integration.zsh"
     ;;
   *linux*)
@@ -96,6 +97,13 @@ fi
 # exa (ls replacement)
 if command -v exa > /dev/null 2>&1; then
   alias ls="exa"
+fi
+
+# zoxide (smarter cd)
+if command -v zoxide > /dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+  alias cd="z"
+  alias cdi="zi"
 fi
 
 # GPG
