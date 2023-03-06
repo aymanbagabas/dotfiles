@@ -78,10 +78,8 @@ require("lazyvim.util").on_attach(function(client, buffer)
     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
       buffer = bufnr,
       callback = function()
-        if client.supports_method("textDocument/codeLens") then
-          if is_alive(client) then
-            vim.lsp.codelens.refresh()
-          end
+        if is_alive(client) then
+          vim.lsp.codelens.refresh()
         end
       end,
       group = codelens_group,
@@ -90,12 +88,10 @@ require("lazyvim.util").on_attach(function(client, buffer)
     vim.api.nvim_create_autocmd("LspDetach", {
       buffer = bufnr,
       callback = function()
-        if client.supports_method("textDocument/codeLens") then
-          if is_alive(client) then
-            -- This function was only added in nvim-0.9
-            -- vim.lsp.codelens.clear()
-            pcall(vim.lsp.codelens.clear)
-          end
+        if is_alive(client) then
+          -- This function was only added in nvim-0.9
+          -- vim.lsp.codelens.clear()
+          pcall(vim.lsp.codelens.clear)
         end
       end,
       group = codelens_group,
