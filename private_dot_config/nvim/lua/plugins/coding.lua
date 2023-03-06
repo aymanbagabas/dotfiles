@@ -2,6 +2,7 @@ return {
   {
     -- use setup similar to 'tpope/vim-surround'~
     "echasnovski/mini.surround",
+    enabled = false,
     keys = function(_, keys)
       -- Populate the keys based on the user's options
       local plugin = require("lazy.core.config").spec.plugins["mini.surround"]
@@ -36,6 +37,15 @@ return {
         suffix_next = "",
       },
     },
+  },
+
+  {
+    "kylechui/nvim-surround",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end,
   },
 
   {
@@ -169,47 +179,45 @@ return {
 
   {
     "zbirenbaum/copilot.lua",
-    config = function()
-      require("copilot").setup({
-        panel = {
-          enabled = true,
-          auto_refresh = true,
-          keymap = {
-            jump_prev = "[[",
-            jump_next = "]]",
-            accept = "<CR>",
-            refresh = "gr",
-            open = "<M-CR>",
-          },
+    opts = {
+      panel = {
+        enabled = true,
+        auto_refresh = true,
+        keymap = {
+          jump_prev = "[[",
+          jump_next = "]]",
+          accept = "<CR>",
+          refresh = "gr",
+          open = "<M-CR>",
         },
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          debounce = 75,
-          keymap = {
-            -- Used inconjuction with cmp
-            accept = "<Tab>", -- "<M-l>"
-            next = "<C-L>",
-            prev = "<C-H>",
-            dismiss = "<C-y>",
-          },
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        debounce = 75,
+        keymap = {
+          -- Used inconjuction with cmp
+          accept = "<Tab>", -- "<M-l>"
+          next = "<C-L>",
+          prev = "<C-H>",
+          dismiss = "<C-y>",
         },
-        filetypes = {
-          yaml = false,
-          markdown = false,
-          help = false,
-          gitcommit = false,
-          gitrebase = false,
-          hgcommit = false,
-          svn = false,
-          cvs = false,
-          ["."] = false,
-        },
-        copilot_node_command = "node", -- Node version must be < 18
-        plugin_manager_path = vim.fn.stdpath("data") .. "/lazy",
-        server_opts_overrides = {},
-      })
-    end,
+      },
+      filetypes = {
+        yaml = false,
+        markdown = false,
+        help = false,
+        gitcommit = false,
+        gitrebase = false,
+        hgcommit = false,
+        svn = false,
+        cvs = false,
+        ["."] = false,
+      },
+      copilot_node_command = "node", -- Node version must be < 18
+      plugin_manager_path = vim.fn.stdpath("data") .. "/lazy",
+      server_opts_overrides = {},
+    },
   },
 
   {
@@ -224,22 +232,6 @@ return {
           preview = require("copilot_cmp.format").deindent,
         },
       }
-    end,
-    config = true,
-  },
-
-  {
-    "nathom/filetype.nvim",
-    config = function()
-      require("filetype").setup({
-        overrides = {
-          extensions = {
-            tf = "terraform",
-            tfvars = "terraform",
-            tfstate = "json",
-          },
-        },
-      })
     end,
   },
 

@@ -49,6 +49,9 @@ else
   map("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
   map("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 end
+-- unmap H & L
+unmap("n", "<S-h>")
+unmap("n", "<S-l>")
 
 -- Git
 if Util.has("gitsigns.nvim") then
@@ -57,5 +60,5 @@ if Util.has("gitsigns.nvim") then
     -- vim.g.blameline is defined in options
     vim.g.blameline = not vim.g.blameline
     require("gitsigns").toggle_current_line_blame(blameline)
-  end)
+  end, { desc = "Toggle Git Line Blame" })
 end

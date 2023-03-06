@@ -78,8 +78,10 @@ require("lazyvim.util").on_attach(function(client, buffer)
     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
       buffer = bufnr,
       callback = function()
-        if is_alive(client) then
-          vim.lsp.codelens.refresh()
+        if client.supports_method("textDocument/codeLens") then
+          if is_alive(client) then
+            vim.lsp.codelens.refresh()
+          end
         end
       end,
       group = codelens_group,
@@ -88,10 +90,12 @@ require("lazyvim.util").on_attach(function(client, buffer)
     vim.api.nvim_create_autocmd("LspDetach", {
       buffer = bufnr,
       callback = function()
-        if is_alive(client) then
-          -- This function was only added in nvim-0.9
-          -- vim.lsp.codelens.clear()
-          pcall(vim.lsp.codelens.clear)
+        if client.supports_method("textDocument/codeLens") then
+          if is_alive(client) then
+            -- This function was only added in nvim-0.9
+            -- vim.lsp.codelens.clear()
+            pcall(vim.lsp.codelens.clear)
+          end
         end
       end,
       group = codelens_group,
@@ -196,6 +200,7 @@ return {
         html = {},
         cssls = {},
         jsonls = {},
+        eslint = {},
         -- Docker
         dockerls = {},
         -- YAML
@@ -212,6 +217,8 @@ return {
         jdtls = {},
         -- Rust
         rust_analyzer = {},
+        -- C/C++
+        clangd = {},
         -- Go
         golangci_lint_ls = {},
         gopls = {
@@ -252,6 +259,15 @@ return {
         },
       },
       setup = {
+        eslint = function()
+          require("lazyvim.util").on_attach(function(client)
+            if client.name == "eslint" then
+              client.server_capabilities.documentFormattingProvider = true
+            elseif client.name == "tsserver" then
+              client.server_capabilities.documentFormattingProvider = false
+            end
+          end)
+        end,
         clangd = function(_, opts)
           opts.capabilities.offsetEncoding = { "utf-16" }
         end,
@@ -273,6 +289,7 @@ return {
         "css-lsp",
         "html-lsp",
         "typescript-language-server",
+        "prettier",
         -- yaml
         "yaml-language-server",
         -- golang
@@ -303,6 +320,8 @@ return {
       local nls = require("null-ls")
       ---@diagnostic disable-next-line: missing-parameter
       vim.list_extend(opts.sources, {
+        -- General
+        nls.builtins.formatting.prettier,
         -- Go
         nls.builtins.code_actions.gomodifytags,
         -- Shell

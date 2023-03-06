@@ -247,9 +247,9 @@ return {
 
   {
     "ojroques/nvim-osc52",
-    -- Only load this plugin when we're in a remote session
+    -- Only load this plugin when we're in a remote session and not in a tmux session
     cond = function()
-      return vim.env.SSH_CONNECTION ~= nil and vim.env.SSH_CONNECTION ~= ""
+      return vim.env.SSH_CONNECTION ~= nil and vim.env.SSH_CONNECTION ~= "" and vim.env.TMUX == nil
     end,
     opts = {
       silent = true,
