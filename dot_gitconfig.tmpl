@@ -6,6 +6,7 @@
 	fixes = log --pretty=format:'Fixes: %h (\"%s\")'
 	authors = log --pretty=format:'%ad %an <%ae>' --date=format:'%Y'
 	purge-tags = !git tag -l | xargs git tag -d && git fetch -t
+	graph = log --graph --all --decorate --oneline
 [core]
 	abbrev = 12
 	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
