@@ -260,28 +260,27 @@ return {
             "fileformat",
             {
               function()
-                return vim.fn.SleuthIndicator()
-                -- -- copied from https://github.com/tpope/vim-sleuth/blob/master/plugin/sleuth.vim#L640
-                -- local opt = function(name)
-                --   return vim.opt[name]:get()
-                -- end
-                -- local sw = opt("shiftwidth") ~= 0 and opt("shiftwidth") or opt("tabstop")
-                -- local ind
-                -- if opt("expandtab") then
-                --   ind = "s:" .. sw
-                -- elseif opt("tabstop") == sw then
-                --   ind = "tabs:" .. opt("tabstop")
-                -- else
-                --   ind = "s:" .. sw .. " t:" .. vim.opt.tabstop
-                -- end
-                -- if opt("textwidth") ~= 0 then
-                --   ind = ind .. " w:" .. opt("textwidth")
-                -- end
-                -- local feol = opt("fixendofline")
-                -- if feol and feol ~= 0 and opt("endofline") ~= 0 then
-                --   ind = ind .. " noeol"
-                -- end
-                -- return ind
+                -- return vim.fn.SleuthIndicator()
+                -- copied from https://github.com/tpope/vim-sleuth/blob/master/plugin/sleuth.vim#L640
+                local opt = function(name)
+                  return vim.opt[name]:get()
+                end
+                local sw = opt("shiftwidth") ~= 0 and opt("shiftwidth") or opt("tabstop")
+                local ind
+                if opt("expandtab") then
+                  ind = "_ " .. sw
+                elseif opt("tabstop") == sw then
+                  ind = "⇥ " .. opt("tabstop")
+                else
+                  ind = "_ " .. sw .. " │ ⇥ " .. vim.opt.tabstop
+                end
+                if opt("textwidth") ~= 0 then
+                  ind = ind .. " │ = " .. opt("textwidth")
+                end
+                if vim.fn.exists("&fixendofline") == 1 and opt("fixendofline") ~= 0 and opt("endofline") ~= 0 then
+                  ind = ind .. " │ ↵"
+                end
+                return ind
               end,
             },
           },

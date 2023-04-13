@@ -146,6 +146,11 @@ return {
     end,
   },
 
+  -- complementary pairs of mappings
+  {
+    "tpope/vim-unimpaired",
+  },
+
   {
     -- use CTRL-A/CTRL-X to increment dates, times, and more
     "tpope/vim-speeddating",

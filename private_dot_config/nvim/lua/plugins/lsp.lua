@@ -110,6 +110,7 @@ return {
       keys[#keys + 1] = { "<leader>cl", vim.lsp.codelens.run, desc = "CodeLens" }
       keys[#keys + 1] = { "<leader>xl", vim.diagnostic.setloclist, desc = "Location List" }
       keys[#keys + 1] = { "<leader>xq", vim.diagnostic.setqflist, desc = "Quickfix List" }
+      keys[#keys + 1] = { "<leader>cR", "<cmd>echo 'Restarting LSP...'<cr><cmd>LspRestart<cr>", desc = "Restart LSP" }
       -- Populate diagnostics before opening trouble
       keys[#keys + 1] = {
         "<leader>xL",
@@ -176,7 +177,10 @@ return {
           format = function(diagnostic)
             local msg = diagnostic.message
             if diagnostic.code then
-              msg = string.format("%s (%s)", msg, diagnostic.code)
+              -- NVim 0.9 adds the code to the end of the message
+              if not vim.fn.has("nvim-0.9") then
+                msg = string.format("%s (%s)", msg, diagnostic.code)
+              end
             end
             return msg
           end,

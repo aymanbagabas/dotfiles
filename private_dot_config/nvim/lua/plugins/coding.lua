@@ -77,6 +77,11 @@ return {
     },
     ---@param opts cmp.ConfigSchema
     opts = function(_, opts)
+      -- local log = require("plenary.log").new({
+      --   plugin = "nvim-cmp",
+      --   level = "debug",
+      -- })
+
       local has_words_before = function()
         unpack = unpack or table.unpack
         local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -86,60 +91,98 @@ return {
       local luasnip = require("luasnip")
       local cmp = require("cmp")
 
+      opts.completion = {
+        completeopt = "menu,menuone,noselect,noinsert",
+      }
+
       ---@diagnostic disable-next-line: missing-parameter
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
-        {
-          name = "copilot",
-          -- keyword_length = 0,
-          max_item_count = 3,
-          trigger_characters = {
-            {
-              ".",
-              ":",
-              "(",
-              "'",
-              '"',
-              "[",
-              ",",
-              "#",
-              "*",
-              "@",
-              "|",
-              "=",
-              "-",
-              "{",
-              "/",
-              "\\",
-              "+",
-              "?",
-              -- " ",
-              -- "\t",
-              -- "\n",
-            },
-          },
-        },
+        -- {
+        --   name = "copilot",
+        --   -- keyword_length = 0,
+        --   max_item_count = 3,
+        --   trigger_characters = {
+        --     {
+        --       ".",
+        --       ":",
+        --       "(",
+        --       "'",
+        --       '"',
+        --       "[",
+        --       ",",
+        --       "#",
+        --       "*",
+        --       "@",
+        --       "|",
+        --       "=",
+        --       "-",
+        --       "{",
+        --       "/",
+        --       "\\",
+        --       "+",
+        --       "?",
+        --       -- " ",
+        --       -- "\t",
+        --       -- "\n",
+        --     },
+        --   },
+        -- },
         -- { name = "nvim_lsp_signature_help" },
         { name = "emoji" },
       }))
 
       local copilot_ok, copilot = pcall(require, "copilot.suggestion")
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
-        -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        ["<CR>"] = cmp.mapping.confirm({ select = false }),
-        ["<C-L>"] = cmp.mapping(function(fallback)
+        -- Don't insert on <C-n> & <C-p>
+        ["<C-n>"] = cmp.mapping({
+          c = function()
+            if cmp.visible() then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              vim.api.nvim_feedkeys(t("<Down>"), "n", true)
+            end
+          end,
+          i = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              fallback()
+            end
+          end,
+        }),
+        ["<C-p>"] = cmp.mapping({
+          c = function()
+            if cmp.visible() then
+              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              vim.api.nvim_feedkeys(t("<Up>"), "n", true)
+            end
+          end,
+          i = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              fallback()
+            end
+          end,
+        }),
+        -- Show next Copilot suggestion
+        ["<C-l>"] = cmp.mapping(function(fallback)
           if copilot_ok and copilot.is_visible() then
             copilot.next()
           else
             fallback()
           end
         end, { "i" }),
-        ["<C-H>"] = cmp.mapping(function(fallback)
+        -- Show prev Copilot suggestion
+        ["<C-h>"] = cmp.mapping(function(fallback)
           if copilot_ok and copilot.is_visible() then
             copilot.prev()
           else
             fallback()
           end
         end, { "i" }),
+        -- Dismiss Copilot
         ["<C-y>"] = cmp.mapping(function(fallback)
           if copilot_ok and copilot.is_visible() then
             copilot.dismiss()
@@ -147,6 +190,7 @@ return {
             fallback()
           end
         end, { "i" }),
+        -- Supartab
         ["<Tab>"] = cmp.mapping(function(fallback)
           -- use tab to accept copilot suggestions
           -- https://github.com/zbirenbaum/copilot.lua/issues/91#issuecomment-1345190310
@@ -163,7 +207,7 @@ return {
           else
             fallback()
           end
-        end, { "i", "s" }),
+        end, { "i", "s", "c" }),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
@@ -172,7 +216,7 @@ return {
           else
             fallback()
           end
-        end, { "i", "s" }),
+        end, { "i", "s", "c" }),
       })
     end,
   },
@@ -196,11 +240,11 @@ return {
         auto_trigger = true,
         debounce = 75,
         keymap = {
-          -- Used inconjuction with cmp
-          accept = "<Tab>", -- "<M-l>"
-          next = "<C-L>",
-          prev = "<C-H>",
-          dismiss = "<C-y>",
+          -- Use nvim-cmp
+          accept = false,
+          next = false,
+          prev = false,
+          dismiss = false,
         },
       },
       filetypes = {
@@ -223,16 +267,16 @@ return {
   {
     "zbirenbaum/copilot-cmp",
     dependencies = { "zbirenbaum/copilot.lua" },
-    opts = function()
-      return {
-        method = "getCompletionsCycling",
-        formatters = {
-          label = require("copilot_cmp.format").format_label_text,
-          insert_text = require("copilot_cmp.format").format_insert_text,
-          preview = require("copilot_cmp.format").deindent,
-        },
-      }
-    end,
+    -- opts = function()
+    --   return {
+    --     method = "getCompletionsCycling",
+    --     formatters = {
+    --       label = require("copilot_cmp.format").format_label_text,
+    --       insert_text = require("copilot_cmp.format").format_insert_text,
+    --       preview = require("copilot_cmp.format").deindent,
+    --     },
+    --   }
+    -- end,
   },
 
   {

@@ -62,3 +62,7 @@ if Util.has("gitsigns.nvim") then
     require("gitsigns").toggle_current_line_blame(blameline)
   end, { desc = "Toggle Git Line Blame" })
 end
+
+-- diff
+map("n", "gh", "<cmd>diffget //2<cr>", { desc = "Get from left" })
+map("n", "gl", "<cmd>diffget //3<cr>", { desc = "Get from right" })

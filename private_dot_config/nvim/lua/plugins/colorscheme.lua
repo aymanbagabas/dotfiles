@@ -1,6 +1,7 @@
 return {
   -- add onedark
   {
+    -- "navarasu/onedark.nvim",
     "aymanbagabas/onedark.nvim",
     -- dir = "~/Workspace/onedark.nvim",
     priority = 1000, -- Ensure it loads first

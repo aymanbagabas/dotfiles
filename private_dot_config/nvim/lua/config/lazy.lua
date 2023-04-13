@@ -8,16 +8,11 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 require("lazy").setup({
   spec = {
-    -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    -- import any extras modules here
     { import = "lazyvim.plugins.extras.coding.copilot" },
-    -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
-    -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
     { import = "lazyvim.plugins.extras.lang.typescript" },
-    -- add jsonls and schemastore ans setup treesitter for json, json5 and jsonc
     { import = "lazyvim.plugins.extras.lang.json" },
-    -- import/override with your plugins
+    { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "plugins" },
   },
   defaults = {

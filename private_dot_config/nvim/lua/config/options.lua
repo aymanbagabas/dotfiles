@@ -15,8 +15,11 @@ opt.title = true
 opt.undofile = true
 -- set scroll offset to 8
 opt.scrolloff = 8
--- Hide default tab symbol (handled by indent-blankline)
+-- Hide default tab symbol (handled by indent-Blankline)
 opt.listchars:append({ tab = "  " })
+-- Enable spell checking
+opt.spell = true
+opt.completeopt = "menu,menuone,noselect,noinsert"
 
 -- Global options
 local g = vim.g
