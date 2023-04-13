@@ -99,24 +99,44 @@ autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_autocmd("VimEnter", {
+-- Simple session management on directory open
+autocmd("VimEnter", {
   callback = function(data)
     -- buffer is a directory
-    local directory = vim.fn.isdirectory(data.file) == 1
-    if not directory then
+    local isdirectory = vim.fn.isdirectory(data.file) == 1
+    if not isdirectory then
       return
     end
-    -- create a new, empty buffer
-    vim.cmd.enew()
+
+    -- source session.vim if it exists
+    local sessionfile = vim.fn.resolve(data.file .. "/.nvim/session.vim")
+    if vim.fn.filereadable(sessionfile) == 1 then
+      vim.cmd("source " .. sessionfile)
+    end
+
     -- wipe the directory buffer
-    vim.cmd.bw(data.buf)
-    -- change to the directory
-    vim.cmd.cd(data.file)
-    -- open the tree
-    -- vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(":NvimTreeFocus<CR>", true, false, true), "n", true)
-    -- require("nvim-tree.api").tree.open()
-    -- load session
-    -- require("persistence").load()
-    require("persisted").load()
+    vim.cmd("bw " .. data.buf)
+  end,
+  nested = true,
+})
+
+autocmd("VimLeave", {
+  callback = function()
+    local isproject = false
+    for _, root in ipairs({ ".git", ".hg", ".bzr", ".svn", "Makefile", "package.json", "go.mod" }) do
+      if vim.fn.isdirectory(root) == 1 then
+        isproject = true
+        break
+      end
+    end
+
+    -- only save session if we are in a project root
+    if not isproject then
+      return
+    end
+
+    local sessionfile = ".nvim/session.vim"
+    vim.fn.mkdir(".nvim", "p")
+    vim.cmd("mksession! " .. sessionfile)
   end,
 })

@@ -19,7 +19,10 @@ opt.scrolloff = 8
 opt.listchars:append({ tab = "  " })
 -- Enable spell checking
 opt.spell = true
+-- Set completeopt
 opt.completeopt = "menu,menuone,noselect,noinsert"
+-- Set sessionoptions
+opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- Global options
 local g = vim.g

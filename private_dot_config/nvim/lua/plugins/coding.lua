@@ -95,6 +95,13 @@ return {
         completeopt = "menu,menuone,noselect,noinsert",
       }
 
+      cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "cmdline" },
+        },
+      })
+
       ---@diagnostic disable-next-line: missing-parameter
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
         -- {

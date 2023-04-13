@@ -49,6 +49,11 @@ return {
   },
 
   {
+    "nvim-tree/nvim-web-devicons",
+    enabled = false,
+  },
+
+  {
     "folke/noice.nvim",
     opts = {},
   },
