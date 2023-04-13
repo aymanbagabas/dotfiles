@@ -17,13 +17,21 @@ zplug "plugins/git", from:oh-my-zsh
 zplug "plugins/systemd", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
 zplug "plugins/dnf", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
 zplug "plugins/fzf", from:oh-my-zsh
+zplug "jimeh/tmuxifier", \
+  from:"github", \
+  use:"completion/tmuxifier.zsh"
+zplug "jimeh/tmuxifier", \
+  on:"jimeh/tmuxifier", \
+  as:"command", \
+  use:"bin/tmuxifier"
+
 # Defer after compinit
 zplug "zsh-users/zsh-completions", defer:2
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 ### Theme
 zplug "chriskempson/base16-shell", hook-load:"base16_onedark", from:github
-zplug "mafredri/zsh-async", from:github
+zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 zplug "tinted-theming/base16-fzf", use:"bash/base16-onedark.config", from:github, as:theme
 
@@ -97,6 +105,7 @@ fi
 # exa (ls replacement)
 if command -v exa > /dev/null 2>&1; then
   alias ls="exa"
+  alias tree="exa --tree"
 fi
 
 # zoxide (smarter cd)

@@ -2,8 +2,8 @@ alias grep='grep --color=auto'
 alias vim=nvim
 
 # Alias git to hub
-if command -v hub > /dev/null 2>&1; then
-  alias git=hub
+if command -v hub >/dev/null 2>&1; then
+	alias git=hub
 fi
 
 # Fix sudo + aliases https://askubuntu.com/a/22043
@@ -14,5 +14,8 @@ alias cz='chezmoi'
 # list directories
 alias ll='ls -lh'
 alias la='ls -lah'
+
+# tmux
+alias tmx='tmuxifier'
 
 # vim: ft=sh

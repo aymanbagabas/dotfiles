@@ -24,7 +24,7 @@ if [ ! -d "$HOME/.nvm" ]; then
     mkdir $HOME/.nvm
 fi
 
-export KEYID={{ .gpg }}
+export KEYID=593D6EEE7871708E329619322EBA00DFFCC63351
 export HISTSIZE=10000
 export SAVEHIST=10000
 export EDITOR="nvim"
@@ -54,3 +54,6 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!.git/*"
 export NVM_DIR="$HOME/.nvm"
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true
+
+# golang config
+export GOPRIVATE=github.com/charmbracelet/
