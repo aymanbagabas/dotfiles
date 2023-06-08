@@ -50,7 +50,6 @@ return {
 
   {
     "nvim-tree/nvim-web-devicons",
-    enabled = false,
   },
 
   {
@@ -205,7 +204,7 @@ return {
           lualine_a = { "mode" },
           lualine_b = {
             { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-            { "filename", path = 0, symbols = { modified = "  ", readonly = "", unnamed = "" } },
+            { "filename", path = 0, symbols = { modified = " ± ", readonly = "", unnamed = "" } },
           },
           lualine_c = {
             { "branch", separator = "" },
@@ -262,32 +261,35 @@ return {
           },
           lualine_y = {
             "encoding",
-            "fileformat",
-            {
-              function()
-                -- return vim.fn.SleuthIndicator()
-                -- copied from https://github.com/tpope/vim-sleuth/blob/master/plugin/sleuth.vim#L640
-                local opt = function(name)
-                  return vim.opt[name]:get()
-                end
-                local sw = opt("shiftwidth") ~= 0 and opt("shiftwidth") or opt("tabstop")
-                local ind
-                if opt("expandtab") then
-                  ind = "_ " .. sw
-                elseif opt("tabstop") == sw then
-                  ind = "⇥ " .. opt("tabstop")
-                else
-                  ind = "_ " .. sw .. " │ ⇥ " .. vim.opt.tabstop
-                end
-                if opt("textwidth") ~= 0 then
-                  ind = ind .. " │ = " .. opt("textwidth")
-                end
-                if vim.fn.exists("&fixendofline") == 1 and opt("fixendofline") ~= 0 and opt("endofline") ~= 0 then
-                  ind = ind .. " │ ↵"
-                end
-                return ind
-              end,
-            },
+            { "fileformat", icons_enabled = false },
+            function()
+              -- return vim.fn.SleuthIndicator()
+              -- copied from https://github.com/tpope/vim-sleuth/blob/master/plugin/sleuth.vim#L640
+              local opt = function(name)
+                return vim.opt[name]:get()
+              end
+              local ts = opt("tabstop")
+              local sw = opt("shiftwidth")
+              if sw == 0 then
+                sw = ts
+              end
+              local ind
+              if opt("expandtab") then
+                ind = "spaces " .. sw
+              elseif ts == sw then
+                ind = "tabs " .. ts
+              else
+                ind = "spaces " .. sw .. " │ tabs " .. ts
+              end
+              local tw = opt("textwidth")
+              if tw ~= 0 then
+                ind = ind .. " │ textwidth " .. tw
+              end
+              if vim.fn.exists("&fixendofline") == 1 and not opt("fixendofline") and not opt("endofline") then
+                ind = ind .. " │ noeol"
+              end
+              return ind
+            end,
           },
           lualine_z = {
             { "progress", separator = " ", padding = { left = 1, right = 0 } },
@@ -322,33 +324,7 @@ return {
         -- use autocmd below
         create_autocmd = false,
         kinds = require("lazyvim.config").icons.kinds,
-        exclude_filetypes = {
-          "help",
-          "startify",
-          "dashboard",
-          "lazy",
-          "neo-tree",
-          "neogitstatus",
-          "NvimTree",
-          "Trouble",
-          "alpha",
-          "lir",
-          "Outline",
-          "spectre_panel",
-          "toggleterm",
-          "DressingSelect",
-          "Jaq",
-          "harpoon",
-          "dap-repl",
-          "dap-terminal",
-          "dapui_console",
-          "dapui_hover",
-          "lab",
-          "notify",
-          "noice",
-          "gitcommit",
-          "",
-        },
+        exclude_filetypes = vim.g.exclude_filetypes,
       }
     end,
     config = function(_, opts)
@@ -407,5 +383,34 @@ return {
         options = { try_as_border = true },
       }
     end,
+  },
+
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      plugins = {
+        gitsigns = { enabled = true },
+      },
+    },
+    keys = {
+      {
+        "<leader>uZ",
+        "<cmd>ZenMode<cr>",
+        desc = "Toggle Zen Mode",
+        mode = { "n" },
+      },
+    },
+  },
+
+  {
+    "folke/twilight.nvim",
+    keys = {
+      {
+        "<leader>uD",
+        "<cmd>Twilight<cr>",
+        desc = "Toggle Dimming",
+        mode = { "n" },
+      },
+    },
   },
 }

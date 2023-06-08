@@ -42,6 +42,12 @@ end, { desc = "Tig (cwd)" })
 
 -- buffers
 map("n", "<leader>bo", [[<Cmd>%bd|e#|bd#<Cr>|'"<Cr>]], { desc = "Close other buffers" })
+map("n", "<leader>bO", [[<Cmd>%bd|e#|bw#<Cr>|'"<Cr>]], { desc = "Wipe other buffers" })
+unmap("n", "<leader>wd")
+unmap("n", "<leader>ww")
+map("n", "<leader>ww", "<cmd>bd<cr>", { desc = "Close current buffer" })
+map("n", "<leader>wo", "<C-W>p", { desc = "Other window" })
+map("n", "<leader>wq", "<cmd>q<cr>", { desc = "Quit window" })
 if Util.has("bufferline.nvim") then
   map("n", "<Tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next Buffer" })
   map("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev Buffer" })

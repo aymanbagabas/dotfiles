@@ -99,6 +99,11 @@ autocmd("FileType", {
   end,
 })
 
+local log = require("plenary.log").new({
+  plugin = "autocmd",
+  level = "debug",
+})
+
 -- Simple session management on directory open
 autocmd("VimEnter", {
   callback = function(data)
@@ -108,10 +113,23 @@ autocmd("VimEnter", {
       return
     end
 
-    -- source session.vim if it exists
-    local sessionfile = vim.fn.resolve(data.file .. "/.nvim/session.vim")
-    if vim.fn.filereadable(sessionfile) == 1 then
-      vim.cmd("source " .. sessionfile)
+    -- save session before exit
+    vim.g.save_session = false
+
+    -- check if directory is a project directory
+    for _, root in ipairs({ ".git", ".hg", ".bzr", ".svn" }) do
+      if vim.fn.isdirectory(data.file .. "/" .. root) == 1 then
+        vim.g.save_session = true
+        break
+      end
+    end
+
+    if vim.g.save_session then
+      -- source session.vim if it exists
+      local sessionfile = vim.fn.resolve(data.file .. "/.nvim/session.vim")
+      if vim.fn.filereadable(sessionfile) == 1 then
+        vim.cmd("source " .. sessionfile)
+      end
     end
 
     -- wipe the directory buffer
@@ -121,21 +139,17 @@ autocmd("VimEnter", {
 })
 
 autocmd("VimLeave", {
-  callback = function()
-    local isproject = false
-    for _, root in ipairs({ ".git", ".hg", ".bzr", ".svn", "Makefile", "package.json", "go.mod" }) do
-      if vim.fn.isdirectory(root) == 1 then
-        isproject = true
-        break
-      end
-    end
-
-    -- only save session if we are in a project root
-    if not isproject then
+  callback = function(data)
+    -- only save session if vim started on a directory
+    if not vim.g.save_session then
       return
     end
 
     local sessionfile = ".nvim/session.vim"
+    if vim.v.this_session ~= "" then
+      sessionfile = vim.v.this_session
+    end
+
     vim.fn.mkdir(".nvim", "p")
     vim.cmd("mksession! " .. sessionfile)
   end,

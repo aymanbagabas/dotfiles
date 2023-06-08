@@ -53,19 +53,60 @@ return {
     opts = { use_diagnostic_signs = true },
   },
 
+  -- {
+  --   "simrat39/symbols-outline.nvim",
+  --   cmd = "SymbolsOutline",
+  --   keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+  --   config = true,
+  -- },
+
   {
-    "simrat39/symbols-outline.nvim",
-    cmd = "SymbolsOutline",
-    keys = { { "<leader>cs", "<cmd>SymbolsOutline<cr>", desc = "Symbols Outline" } },
+    "stevearc/aerial.nvim",
     config = true,
+    opts = {
+      layout = {
+        width = 50,
+      },
+      -- Show box drawing characters for the tree hierarchy
+      show_guides = true,
+
+      -- Customize the characters used when show_guides = true
+      guides = {
+        -- When the child item has a sibling below it
+        mid_item = "├─",
+        -- When the child item is the last in the list
+        last_item = "└─",
+        -- When there are nested child guides to the right
+        nested_top = "│ ",
+        -- Raw indentation
+        whitespace = "  ",
+      },
+    },
+    keys = {
+      { "<leader>cs", "<cmd>AerialToggle right<cr>", desc = "Symbols Outline" },
+    },
   },
 
   -- Use <tab> for completion and snippets (supertab)
   -- first: disable default <tab> and <s-tab> behavior in LuaSnip
   {
     "L3MON4D3/LuaSnip",
-    keys = function()
-      return {}
+    build = "make install_jsregexp",
+    opts = function(_, opts)
+      -- Hide Copilot suggestions when in a snippet
+      -- https://github.com/zbirenbaum/copilot.lua#suggestion
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LuasnipPreExpand",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = true
+        end,
+      })
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "LuasnipCleanup",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = false
+        end,
+      })
     end,
   },
   -- then: setup supertab in cmp
@@ -91,19 +132,21 @@ return {
       local luasnip = require("luasnip")
       local cmp = require("cmp")
 
-      opts.completion = {
-        completeopt = "menu,menuone,noselect,noinsert",
-      }
+      -- Don't select anything by default
+      opts.preselect = cmp.PreselectMode.None
 
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "cmdline" },
-        },
-      })
+      opts.completion = {
+        completeopt = "menu,menuone,noinsert",
+      }
 
       ---@diagnostic disable-next-line: missing-parameter
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
+        {
+          name = "path",
+          keyword_length = 0,
+          keyword_pattern = ".*?",
+          trigger_characters = {},
+        },
         -- {
         --   name = "copilot",
         --   -- keyword_length = 0,
@@ -139,7 +182,22 @@ return {
       }))
 
       local copilot_ok, copilot = pcall(require, "copilot.suggestion")
+
+      -- Hide Copilot suggestions when menu is opened
+      -- https://github.com/zbirenbaum/copilot.lua#suggestion
+      cmp.event:on("menu_opened", function()
+        vim.b.copilot_suggestion_hidden = true
+      end)
+
+      cmp.event:on("menu_closed", function()
+        vim.b.copilot_suggestion_hidden = false
+      end)
+
       opts.mapping = vim.tbl_extend("force", opts.mapping, {
+        ["<CR>"] = cmp.mapping.confirm({
+          behavior = cmp.ConfirmBehavior.Insert,
+          select = false,
+        }),
         -- Don't insert on <C-n> & <C-p>
         ["<C-n>"] = cmp.mapping({
           c = function()
@@ -214,7 +272,7 @@ return {
           else
             fallback()
           end
-        end, { "i", "s", "c" }),
+        end, { "i", "s" }),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
@@ -223,7 +281,7 @@ return {
           else
             fallback()
           end
-        end, { "i", "s", "c" }),
+        end, { "i", "s" }),
       })
     end,
   },

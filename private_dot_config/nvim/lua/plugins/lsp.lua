@@ -2,6 +2,11 @@
 -- set log level
 vim.lsp.set_log_level("error")
 
+local logger = require("plenary.log").new({
+  plugin = "lsp",
+  level = "error",
+})
+
 -- Diagnostic Format
 --
 -- show diagnostic message, source and code
@@ -58,11 +63,16 @@ end
 local organize_group = vim.api.nvim_create_augroup("LspOrganize", { clear = true })
 local codelens_group = vim.api.nvim_create_augroup("LspCodeLens", { clear = true })
 require("lazyvim.util").on_attach(function(client, buffer)
+  -- Ignore null-ls
+  if client.name == "null-ls" then
+    return
+  end
+
   -- Attach organize imports to lsp
   -- If the organizeImports codeAction runs for lua files, depending on
   -- where the cursor is, it'll reorder the args and break stuff.
   -- This took me way too long to figure out.
-  if client.server_capabilities.codeActionProvider and vim.bo.filetype ~= "lua" and client.name ~= "null-ls" then
+  if client.supports_method("textDocument/codeAction") and vim.bo.filetype ~= "lua" then
     vim.api.nvim_create_autocmd({ "BufWritePre" }, {
       buffer = buffer,
       callback = function()
@@ -74,9 +84,9 @@ require("lazyvim.util").on_attach(function(client, buffer)
 
   -- Attach codelens to lsp
   -- Refresh & clear autocmds
-  if client.server_capabilities.codeLensProvider then
+  if client.supports_method("textDocument/codeLens") then
     vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-      buffer = bufnr,
+      buffer = buffer,
       callback = function()
         if is_alive(client) then
           vim.lsp.codelens.refresh()
@@ -86,17 +96,29 @@ require("lazyvim.util").on_attach(function(client, buffer)
     })
 
     vim.api.nvim_create_autocmd("LspDetach", {
-      buffer = bufnr,
+      buffer = buffer,
       callback = function()
         if is_alive(client) then
           -- This function was only added in nvim-0.9
-          -- vim.lsp.codelens.clear()
-          pcall(vim.lsp.codelens.clear)
+          vim.lsp.codelens.clear()
+          -- pcall(vim.lsp.codelens.clear)
         end
       end,
       group = codelens_group,
     })
   end
+
+  -- Add workspace/didChangeWatchedFiles notification capability
+  -- if vim.fn.has("nvim-0.9") then
+  --   if not client.server_capabilities.workspace then
+  --     client.server_capabilities.workspace = {}
+  --   end
+  --   if not client.server_capabilities.workspace.didChangeWatchedFiles then
+  --     client.server_capabilities.workspace.didChangeWatchedFiles = {
+  --       dynamicRegistration = true,
+  --     }
+  --   end
+  -- end
 end)
 
 return {
@@ -220,7 +242,9 @@ return {
         -- C/C++
         clangd = {},
         -- Go
-        golangci_lint_ls = {},
+        golangci_lint_ls = {
+          filetypes = { "go", "gomod" },
+        },
         gopls = {
           settings = {
             gopls = {
@@ -258,6 +282,9 @@ return {
           },
         },
       },
+      -- you can do any additional lsp server setup here
+      -- return true if you don't want this server to be setup with lspconfig
+      ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
         eslint = function()
           require("lazyvim.util").on_attach(function(client)
@@ -298,7 +325,8 @@ return {
         "gomodifytags",
         "goimports",
         "staticcheck",
-        "golangci-lint",
+        -- "golangci-lint",
+        "golangci-lint-langserver",
         "revive",
         "gotests",
         -- shell
@@ -310,6 +338,8 @@ return {
         "dockerfile-language-server",
         -- Terraform
         "terraform-ls",
+        -- SQL
+        "sqlls",
       })
     end,
   },
@@ -318,10 +348,27 @@ return {
     "jose-elias-alvarez/null-ls.nvim",
     opts = function(_, opts)
       local nls = require("null-ls")
+      -- opts.debug = true
       ---@diagnostic disable-next-line: missing-parameter
       vim.list_extend(opts.sources, {
-        -- General
         nls.builtins.formatting.prettier,
+        -- nls.builtins.formatting.prettierd.with({
+        --   generator_opts = {
+        --     command = "prettierd",
+        --     args = function(params)
+        --       if params.method == methods.FORMATTING then
+        --         return { "$FILENAME" }
+        --       end
+        --       --
+        --       -- local row, end_row = params.range.row - 1, params.range.end_row - 1
+        --       -- local col, end_col = params.range.col - 1, params.range.end_col - 1
+        --       -- local start_offset = vim.api.nvim_buf_get_offset(params.bufnr, row) + col
+        --       -- local end_offset = vim.api.nvim_buf_get_offset(params.bufnr, end_row) + end_col
+        --       --
+        --       -- return { "$FILENAME", "--range-start=" .. -1, "--range-end=" .. -1 }
+        --     end,
+        --   },
+        -- }),
         -- Go
         nls.builtins.code_actions.gomodifytags,
         -- Shell

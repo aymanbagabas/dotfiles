@@ -3,6 +3,7 @@ return {
   {
     -- "navarasu/onedark.nvim",
     "aymanbagabas/onedark.nvim",
+    branch = "spell",
     -- dir = "~/Workspace/onedark.nvim",
     priority = 1000, -- Ensure it loads first
     lazy = true,

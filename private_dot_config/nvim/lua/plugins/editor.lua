@@ -5,7 +5,6 @@ return {
       filesystem = {
         -- hijack_netrw_behavior = "open_default",
         hijack_netrw_behavior = "disabled",
-        bind_to_cwd = false,
         follow_current_file = true,
       },
     },
@@ -19,24 +18,7 @@ return {
   {
     "RRethy/vim-illuminate",
     opts = {
-      filetypes_denylist = {
-        "neo-tree",
-        "symbols-outline",
-        "quickfix",
-        "dirvish",
-        "fugitive",
-        "alpha",
-        "NvimTree",
-        "lazy",
-        "neogitstatus",
-        "Trouble",
-        "lir",
-        "Outline",
-        "spectre_panel",
-        "toggleterm",
-        "DressingSelect",
-        "TelescopePrompt",
-      },
+      filetypes_denylist = vim.g.exclude_filetypes,
     },
   },
 
@@ -47,16 +29,7 @@ return {
 
   {
     "ggandor/leap.nvim",
-    -- TODO: enable but disable key maps
     enabled = false,
-    -- config = function(_, opts)
-    --   local leap = require("leap")
-    --   for k, v in pairs(opts) do
-    --     leap.opts[k] = v
-    --   end
-    --   -- disable leap default mappings
-    --   leap.add_default_mappings(false)
-    -- end,
   },
 
   {
@@ -77,16 +50,35 @@ return {
     "tpope/vim-fugitive",
     keys = {
       {
-        "<leader>gy",
-        ":.GBrowse!<cr>",
+        "<leader>go",
+        "<cmd>GBrowse!<cr>",
+        desc = "Copy Project URL",
+        mode = { "n" },
+      },
+      {
+        "<leader>gO",
+        "<cmd>GBrowse<cr>",
+        desc = "Open Project URL",
+        mode = { "n" },
+      },
+
+      {
+        "<leader>gb",
+        "<cmd>.GBrowse!<cr>",
         desc = "Copy Line URL",
+        mode = { "n", "x" },
+      },
+      {
+        "<leader>gB",
+        "<cmd>.GBrowse<cr>",
+        desc = "Open Line URL",
         mode = { "n", "x" },
       },
 
       {
-        "<leader>gY",
-        ":.GBrowse<cr>",
-        desc = "Open Line URL",
+        "<leader>gS",
+        "<cmd>G<cr>",
+        desc = "Git Status",
         mode = { "n", "x" },
       },
     },
@@ -164,6 +156,7 @@ return {
   { "tpope/vim-abolish", event = "BufEnter" },
 
   -- Heuristically set buffer options
+  -- disabled in favor of `nmac427/guess-indent.nvim`
   {
     "tpope/vim-sleuth",
     name = "sleuth",
