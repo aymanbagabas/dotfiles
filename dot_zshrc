@@ -1,3 +1,5 @@
+# TODO: igrate to zinit
+# https://zdharma-continuum.github.io/zinit/wiki/
 if [ ! -e "$HOME/.zplug" ]; then
     curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 fi
@@ -80,6 +82,7 @@ bindkey '^e' end-of-line
 PURE_PROMPT_SYMBOL="›"
 PURE_PROMPT_VICMD_SYMBOL="‹"
 
+# cli colors
 # dircolors
 case "$OSTYPE" in
   *darwin*)
@@ -89,6 +92,7 @@ case "$OSTYPE" in
     [ "$TERM_PROGRAM" = "iTerm.app" ] && \
       [ -e "${HOME}/.iterm2_shell_integration.zsh" ] && \
       source "${HOME}/.iterm2_shell_integration.zsh"
+
     ;;
   *linux*)
     eval "$(dircolors -b)"

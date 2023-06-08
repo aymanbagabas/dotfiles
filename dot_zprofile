@@ -4,6 +4,10 @@ export PATH=/usr/local/sbin:$PATH
 # Add local bin to path
 export PATH=$HOME/.local/bin:$PATH
 
+if command -v python3 > /dev/null 2>&1; then
+    export PATH="$PATH:$(python3 -m site --user-base)/bin"
+fi
+
 if [ -d "/usr/local/go" ]; then
   export PATH=$PATH:/usr/local/go/bin
 fi
@@ -23,6 +27,7 @@ fi
 if [ ! -d "$HOME/.nvm" ]; then
     mkdir $HOME/.nvm
 fi
+
 
 export KEYID=593D6EEE7871708E329619322EBA00DFFCC63351
 export HISTSIZE=10000
@@ -54,6 +59,9 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs --glob "!.git/*"
 export NVM_DIR="$HOME/.nvm"
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true
+
+# pass
+export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 
 # golang config
 export GOPRIVATE=github.com/charmbracelet/

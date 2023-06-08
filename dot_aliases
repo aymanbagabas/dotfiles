@@ -18,4 +18,11 @@ alias la='ls -lah'
 # tmux
 alias tmx='tmuxifier'
 
+# gpg
+alias gpg-reload-agent='gpg-connect-agent reloadagent /bye'
+alias gpg-other-card='gpg-connect-agent "scd serialno" "learn --force" /bye'
+
+# watch
+alias watch='watch --color '
+
 # vim: ft=sh
