@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Create gnupg config directory
+if ! $DRY_RUN; then
+	mkdir -p ~/.gnupg
+fi
+
 ##### gpg.conf
 
 insert_line "default-key" "default-key $KEYID" ~/.gnupg/gpg.conf
