@@ -8,5 +8,5 @@ if [ ! -d ~/.local/bin ]; then
 fi
 
 if ! $DRY_RUN; then
-	cp -r "$ROOT/bin" ~/.local/bin/
+	cp -r "$DOTFILES/bin" ~/.local/bin/
 fi

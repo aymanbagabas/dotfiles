@@ -6,7 +6,7 @@ set -e
 # Source global variables
 . ./.vars
 
-ROOT=$(realpath $(dirname -- "${BASH_SOURCE[0]}"))
+DOTFILES=$(realpath $(dirname -- "${BASH_SOURCE[0]}"))
 DRY_RUN=false
 
 function link_file() {
@@ -52,7 +52,7 @@ function _install() {
 	fi
 	echo
 
-	for src in $ROOT/*/; do
+	for src in $DOTFILES/*/; do
 		local src=${src%*/}
 		local install="$src/install.sh"
 		if [ -f "$install" ]; then
@@ -124,10 +124,10 @@ function _main() {
 		_install
 		;;
 	packages)
-		. "$ROOT/scripts/packages.sh"
+		. "$DOTFILES/scripts/packages.sh"
 		;;
 	bin)
-		. "$ROOT/scripts/bin.sh"
+		. "$DOTFILES/scripts/bin.sh"
 		;;
 	help)
 		_usage
