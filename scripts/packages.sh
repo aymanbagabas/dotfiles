@@ -54,6 +54,7 @@ darwin*)
 			cask "textmate"
 			cask "the-unarchiver"
 			cask "karabiner-elements"
+			cask "multitouch"
 
 			mas "Magnet", id: 441258766
 			mas "Microsoft Remote Desktop", id: 1295203466
