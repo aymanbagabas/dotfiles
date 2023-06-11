@@ -9,14 +9,10 @@ fi
 # Fix sudo + aliases https://askubuntu.com/a/22043
 alias sudo='sudo '
 alias tf=terraform
-alias cz='chezmoi'
 
 # list directories
 alias ll='ls -lh'
 alias la='ls -lah'
-
-# tmux
-alias tmx='tmuxifier'
 
 # gpg
 alias gpg-reload-agent='gpg-connect-agent reloadagent /bye'
@@ -24,5 +20,12 @@ alias gpg-other-card='gpg-connect-agent "scd serialno" "learn --force" /bye'
 
 # watch
 alias watch='watch --color '
+
+# sed
+case "$OSTYPE" in
+darwin*)
+	alias sed='gsed'
+	;;
+esac
 
 # vim: ft=sh

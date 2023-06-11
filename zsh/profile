@@ -28,8 +28,7 @@ if [ ! -d "$HOME/.nvm" ]; then
     mkdir $HOME/.nvm
 fi
 
-
-export KEYID=593D6EEE7871708E329619322EBA00DFFCC63351
+export KEYID=$(grep 'default-key' $HOME/.gnupg/gpg.conf | cut -d' ' -f2)
 export HISTSIZE=10000
 export SAVEHIST=10000
 export EDITOR="nvim"
@@ -38,7 +37,7 @@ export PAGER="less"
 export KEYTIMEOUT=1 # fix vi-mode timeout
 
 # Enable mouse support in less
-export LESS='-R --mouse'
+export LESS='-R'
 # Set less colors
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
@@ -60,8 +59,6 @@ export NVM_DIR="$HOME/.nvm"
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true
 
-# pass
-export PASSWORD_STORE_ENABLE_EXTENSIONS=true
-
-# golang config
-export GOPRIVATE=github.com/charmbracelet/
+if [ -f "$HOME/.zprofile.local" ]; then
+    source $HOME/.zprofile.local
+fi

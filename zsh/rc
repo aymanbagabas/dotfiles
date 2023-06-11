@@ -1,4 +1,4 @@
-# TODO: igrate to zinit
+# TODO: migrate to zinit
 # https://zdharma-continuum.github.io/zinit/wiki/
 if [ ! -e "$HOME/.zplug" ]; then
     curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
