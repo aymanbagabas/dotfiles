@@ -23,6 +23,8 @@ cd ~/.dotfiles
 ./bootstrap.sh bin # install local binaries
 ```
 
+Use `-d` to `dry-run` the script without modifying your environment
+
 ## Recommended Software
 
 - `difftastic`
