@@ -69,7 +69,10 @@ linux*)
 	id=$ID
 
 	# count the number of items in $ID_LIKE
-	IFS=' ' read -r -a id_like <<<"$ID_LIKE"
+	id_like=($id)
+	if [ -n "$ID_LIKE" ]; then
+		IFS=' ' read -r -a id_like <<<"$ID_LIKE"
+	fi
 
 	# for i in {1..2}; do
 	for i in $(seq ${#id_like[@]}); do
