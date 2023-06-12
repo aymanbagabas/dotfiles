@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Create gnupg config directory
 if ! $DRY_RUN; then

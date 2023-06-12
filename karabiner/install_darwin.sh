@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Create karabiner config directory
 if ! $DRY_RUN; then

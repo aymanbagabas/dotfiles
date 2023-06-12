@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/sh
 
 link_file conf ~/.tmux.conf

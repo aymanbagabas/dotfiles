@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -d "/Applications/iTerm.app" ]; then
 	echo "Setting up iTerm2 preferences..."
