@@ -102,7 +102,6 @@ linux*)
 					htop \
 					jq \
 					source-highlight
-				# TODO: dd difftastic
 			fi
 			break
 			;;
@@ -126,8 +125,7 @@ linux*)
 					fortune-mod \
 					htop \
 					jq \
-					source-highlight \
-					difftastic
+					source-highlight
 			fi
 			break
 			;;
