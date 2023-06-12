@@ -99,6 +99,7 @@ linux*)
 					source-highlight
 				# TODO: dd difftastic
 			fi
+			break
 			;;
 		fedora | rhel)
 			# Install packages
@@ -122,6 +123,7 @@ linux*)
 					source-highlight \
 					difftastic
 			fi
+			break
 			;;
 		*)
 			if [ "$i" -ne ${#id_like[@]} ]; then
