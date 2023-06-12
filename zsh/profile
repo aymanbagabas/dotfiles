@@ -47,8 +47,12 @@ export LESS_TERMCAP_so=$'\E[01;44;32m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;33m'
 # Enable syntax highlighting in less using src-hilite-lesspipe.sh
-if command -v src-hilite-lesspipe.sh > /dev/null 2>&1; then
-  export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
+if [ -f "$(which src-hilite-lesspipe.sh)" ]; then
+    export LESSOPEN="| $(which src-hilite-lesspipe.sh) %s"
+elif [ -f "/usr/share/source-highlight/src-hilite-lesspipe.sh" ]; then
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+elif [ -f "/usr/local/share/source-highlight/src-hilite-lesspipe.sh" ]; then
+    export LESSOPEN="| /usr/local/share/source-highlight/src-hilite-lesspipe.sh %s"
 fi
 
 # Default fzf command
