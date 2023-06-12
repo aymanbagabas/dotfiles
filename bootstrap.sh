@@ -82,6 +82,10 @@ function _install() {
 	done
 
 	echo "Done installing/updating dotfiles"
+	echo
+
+	# Set shell
+	. "$DOTFILES/scripts/set-shell.sh"
 }
 
 function _usage() {

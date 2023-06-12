@@ -6,6 +6,7 @@ Ayman's (~) dotfiles
 
 - `git` to clone the repository
 - `bash` to run the bootstrap script
+- `sudo` to run commands as root
 
 ## Installation
 
