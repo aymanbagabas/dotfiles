@@ -62,3 +62,5 @@ export NVM_COMPLETION=true
 if [ -f "$HOME/.zprofile.local" ]; then
     source $HOME/.zprofile.local
 fi
+
+# vim: ft=sh
