@@ -1,6 +1,6 @@
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+[ ! -d $ZINIT_HOME/.git ] && git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
 zinit snippet OMZL::key-bindings.zsh
@@ -9,33 +9,33 @@ zinit snippet OMZL::completion.zsh
 
 zinit snippet OMZL::theme-and-appearance.zsh
 
-zinit ice wait lucid
+zinit ice wait lucid depth"1"
 zinit light "lukechilds/zsh-nvm"
 
 zinit snippet OMZP::git
 
-zinit ice if"[[ $OSTYPE == linux* ]]"
+zinit ice if"[[ $OSTYPE == linux* ]]" depth"1"
 zinit snippet OMZP::systemd
 
-zinit ice if"[[ $OSTYPE == linux* ]]"
+zinit ice if"[[ $OSTYPE == linux* ]]" depth"1"
 zinit snippet OMZP::dnf
 
 zinit snippet OMZP::fzf
 
-zinit ice atload"base16_onedark"
+zinit ice atload"base16_onedark" depth"1"
 zinit load "chriskempson/base16-shell"
 
-zinit ice pick"bash/base16-onedark.config"
+zinit ice pick"bash/base16-onedark.config" depth"1"
 zinit light "tinted-theming/base16-fzf"
 
-zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
+zinit ice pick"async.zsh" src"pure.zsh" depth"1" # with zsh-async library that's bundled with it.
 zinit light "sindresorhus/pure"
 
-zinit ice wait lucid
+zinit ice wait lucid depth"1"
 zinit light "zsh-users/zsh-syntax-highlighting"
 
 # This should be last
-zinit ice wait lucid
+zinit ice wait lucid depth"1"
 zinit light "zsh-users/zsh-completions"
 
 autoload -Uz compinit && compinit
