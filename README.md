@@ -6,6 +6,7 @@ Ayman's (~) dotfiles
 Colorscheme: Onedark
 Shell:       zsh
 Terminal:    iTerm2/Wezterm
+Font:        Inconsolata + NF
 ```
 
 ## Dependencies

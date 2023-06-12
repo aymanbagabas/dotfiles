@@ -55,6 +55,8 @@ darwin*)
 			cask "the-unarchiver"
 			cask "karabiner-elements"
 			cask "multitouch"
+			cask "font-inconsolata"
+			cask "font-symbols-only-nerd-font"
 
 			mas "Magnet", id: 441258766
 			mas "Microsoft Remote Desktop", id: 1295203466
