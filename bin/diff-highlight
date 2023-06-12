@@ -1,0 +1,33 @@
+#!/bin/bash
+# diff-highlight locates the diff-highlight script in the git source tree and
+# runs it.
+# https://github.com/git/git/blob/master/contrib/diff-highlight
+
+_dh=
+
+for prefix in /usr/share /usr/local/share; do
+	# First try git-core directory
+	if [ -f "$prefix/git-core/contrib/diff-highlight" ]; then
+		_dh="/usr/share/git-core/contrib/diff-highlight"
+	elif [ -d "$prefix/git-core/contrib/diff-highlight" ]; then
+		_dh="$prefix/git-core/contrib/diff-highlight/diff-highlight"
+	# Then try doc directory
+	elif [ -f "$prefix/doc/git/contrib/diff-highlight" ]; then
+		_dh="$prefix/doc/git/contrib/diff-highlight"
+	elif [ -d "$prefix/doc/git/contrib/diff-highlight" ]; then
+		_dh="$prefix/doc/git/contrib/diff-highlight/diff-highlight"
+	fi
+	if [ -n "$_dh" ]; then
+		break
+	fi
+done
+
+if [ -n "$_dh" ]; then
+	if [ -x "$_dh" ]; then
+		exec "$_dh" "$@"
+	elif command -v perl >/dev/null 2>&1; then
+		perl "$_dh" "$@"
+	fi
+else
+	cat
+fi
