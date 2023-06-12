@@ -25,23 +25,24 @@ zinit snippet OMZP::fzf
 zinit ice atload"base16_onedark"
 zinit load "chriskempson/base16-shell"
 
-zinit ice src"bash/base16-onedark.config"
-zinit load "tinted-theming/base16-fzf"
+zinit ice pick"bash/base16-onedark.config"
+zinit light "tinted-theming/base16-fzf"
 
 zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
-zinit light sindresorhus/pure
-
-zinit ice wait lucid
-zinit light "zsh-users/zsh-completions"
-
-# Load zsh compinit
-autoload -U compinit && compinit
+zinit light "sindresorhus/pure"
 
 zinit ice wait lucid
 zinit light "zsh-users/zsh-syntax-highlighting"
 
+# This should be last
+# https://github.com/zdharma-continuum/zinit/blob/main/README.md#calling-compinit-with-turbo-mode
+zinit ice wait lucid
+zinit light "zsh-users/zsh-completions"
+
+autoload -Uz compinit && compinit
+
 # User configuration
-source "$HOME/.aliases"
+. "$HOME/.aliases"
 
 # Pass arguments to command if pattern matching fails
 # This fixes using carrot (^) in git for example
@@ -56,8 +57,8 @@ stty start undef
 stty -ixon
 
 # Display fortune
-if [ -e "$( which fortune )" ]; then
-    echo "" && fortune -s && echo ""
+if [ -e "$(which fortune)" ]; then
+	echo "" && fortune -s && echo ""
 fi
 
 # Vi-mode
@@ -78,38 +79,36 @@ PURE_PROMPT_VICMD_SYMBOL="‹"
 # cli colors
 # dircolors
 case "$OSTYPE" in
-  *darwin*)
-    export LSCOLORS="exfxcxdxbxegedabagacad"
-    export CLICOLOR=1
-    # source iTerm2 shell integration
-    [ "$TERM_PROGRAM" = "iTerm.app" ] && \
-      [ -e "${HOME}/.iterm2_shell_integration.zsh" ] && \
-      source "${HOME}/.iterm2_shell_integration.zsh"
+*darwin*)
+	export LSCOLORS="exfxcxdxbxegedabagacad"
+	export CLICOLOR=1
+	# source iTerm2 shell integration
+	[ "$TERM_PROGRAM" = "iTerm.app" ] &&
+		[ -e "${HOME}/.iterm2_shell_integration.zsh" ] &&
+		source "${HOME}/.iterm2_shell_integration.zsh"
 
-    ;;
-  *linux*)
-    eval "$(dircolors -b)"
-    # alias xdg-open to open
-    alias open='xdg-open'
-    ;;
+	;;
+*linux*)
+	eval "$(dircolors -b)"
+	# alias xdg-open to open
+	alias open='xdg-open'
+	;;
 esac
 
 # direnv
-if command -v direnv > /dev/null 2>&1; then
-  eval "$(direnv hook zsh)"
+if command -v direnv >/dev/null 2>&1; then
+	eval "$(direnv hook zsh)"
 fi
 
 # exa (ls replacement)
-if command -v exa > /dev/null 2>&1; then
-  alias ls="exa"
-  alias tree="exa --tree"
+if command -v exa >/dev/null 2>&1; then
+	alias ls="exa"
+	alias tree="exa --tree"
 fi
 
 # zoxide (smarter cd)
-if command -v zoxide > /dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-  alias cd="z"
-  alias cdi="zi"
+if command -v zoxide >/dev/null 2>&1; then
+	eval "$(zoxide init --no-cmd --cmd cd zsh)"
 fi
 
 # GPG
@@ -117,7 +116,7 @@ fi
 # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Examples.html#Agent-Examples
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+	export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
 export GPG_TTY=$(tty)
 
