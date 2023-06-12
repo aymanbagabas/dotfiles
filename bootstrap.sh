@@ -4,9 +4,11 @@
 set -e
 
 # Source global variables
-. ./.vars
+if [ -f ".vars" ]; then
+	. ./.vars
+fi
 
-DOTFILES=$(realpath $(dirname -- "${BASH_SOURCE[0]}"))
+DOTFILES=$(realpath $(dirname -- "$0"))
 DRY_RUN=false
 
 function link_file() {
@@ -32,7 +34,6 @@ function insert_line() {
 	if ! $DRY_RUN; then
 		grep -q "$query" "$file" || echo "$line" >>"$file"
 	fi
-
 }
 
 function command_exist() {
@@ -83,9 +84,6 @@ function _install() {
 
 	echo "Done installing/updating dotfiles"
 	echo
-
-	# Set shell
-	. "$DOTFILES/scripts/set-shell.sh"
 }
 
 function _usage() {
@@ -93,9 +91,15 @@ function _usage() {
 	echo
 	echo "Commands:"
 	echo "  install   Install dotfiles"
-	echo "  packages  Install packages"
-	echo "  bin       Install binaries"
 	echo "  help      Show this help message and exit"
+	if [ -d "$DOTFILES/scripts" ]; then
+		for s in $DOTFILES/scripts/*.sh; do
+			local s=${s%*/}
+			local s=${s##*/}
+			local s=${s%.sh}
+			echo "  $s"
+		done
+	fi
 	echo
 	echo "Options:"
 	echo "  -h        Show this help message and exit"
@@ -127,17 +131,15 @@ function _main() {
 	install)
 		_install
 		;;
-	packages)
-		. "$DOTFILES/scripts/packages.sh"
-		;;
-	bin)
-		. "$DOTFILES/scripts/bin.sh"
-		;;
 	help)
 		_usage
 		;;
 	*)
 		if [ -n "$cmd" ]; then
+			if [ -f "$DOTFILES/scripts/$cmd.sh" ]; then
+				. "$DOTFILES/scripts/$cmd.sh"
+				exit 0
+			fi
 			echo "Invalid command: $cmd" >&2
 		fi
 		_usage
