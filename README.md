@@ -44,3 +44,9 @@ Use `-d` to `dry-run` the script without modifying your environment
 - `htop`
 - `jq`
 - `source-highlight`
+
+## Screenshots
+
+Neovim:
+
+![neovim](https://github.com/aymanbagabas/dotfiles/assets/3187948/37ba40e4-52eb-49a0-9f9d-a5df36f22530)
