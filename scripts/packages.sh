@@ -92,6 +92,7 @@ linux*)
 					fzf \
 					ripgrep \
 					gnupg \
+					pinentry \
 					pinentry-tty \
 					exa \
 					direnv \
@@ -117,6 +118,7 @@ linux*)
 					ripgrep \
 					gnupg \
 					pinentry \
+					pinentry-tty \
 					exa \
 					direnv \
 					bat \
