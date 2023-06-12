@@ -68,7 +68,11 @@ linux*)
 	. /etc/os-release
 	id=$ID
 
-	for i in {1..2}; do
+	# count the number of items in $ID_LIKE
+	IFS=' ' read -r -a id_like <<<"$ID_LIKE"
+
+	# for i in {1..2}; do
+	for i in $(seq ${#id_like[@]}); do
 		case "$id" in
 		ubuntu | debian)
 			# Install packages
@@ -93,6 +97,7 @@ linux*)
 					htop \
 					jq \
 					source-highlight
+				# TODO: dd difftastic
 			fi
 			;;
 		fedora | rhel)
@@ -114,13 +119,14 @@ linux*)
 					fortune-mod \
 					htop \
 					jq \
-					source-highlight
+					source-highlight \
+					difftastic
 			fi
 			;;
 		*)
-			if [ $i = 1 ]; then
-				# Choose the first item in $ID_LIKE
-				id=$(echo "$ID_LIKE" | cut -d' ' -f1)
+			if [ "$i" -ne ${#id_like[@]} ]; then
+				# Choose the next item in $ID_LIKE
+				id=${id_like[$i]}
 			else
 				echo "Unsupported distro: $id"
 				exit 1

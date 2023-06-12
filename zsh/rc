@@ -35,7 +35,6 @@ zinit ice wait lucid
 zinit light "zsh-users/zsh-syntax-highlighting"
 
 # This should be last
-# https://github.com/zdharma-continuum/zinit/blob/main/README.md#calling-compinit-with-turbo-mode
 zinit ice wait lucid
 zinit light "zsh-users/zsh-completions"
 
