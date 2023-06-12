@@ -13,7 +13,7 @@ case "$SHELL" in
 	echo "Setting zsh as default shell..."
 
 	if ! $DRY_RUN; then
-		sudo chsh -s /bin/zsh
+		sudo chsh -s /bin/zsh "$USER"
 	fi
 	;;
 esac
