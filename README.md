@@ -2,6 +2,12 @@
 
 Ayman's (~) dotfiles
 
+```
+Colorscheme: Onedark
+Shell:       zsh
+Terminal:    iTerm2/Wezterm
+```
+
 ## Dependencies
 
 - `git` to clone the repository
