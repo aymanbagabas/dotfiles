@@ -63,4 +63,70 @@ darwin*)
 		EOF
 	fi
 	;;
+linux*)
+	# Use /etc/os-release to determine distro
+	. /etc/os-release
+	id=$ID
+
+	for i in {1..2}; do
+		case "$id" in
+		ubuntu | debian)
+			# Install packages
+			echo "Installing packages..."
+			if ! $DRY_RUN; then
+				sudo apt-get install software-properties-common
+				sudo add-apt-repository -y ppa:neovim-ppa/unstable
+				sudo apt-get update
+				sudo apt-get install -y \
+					git \
+					zsh \
+					tmux \
+					neovim \
+					fzf \
+					ripgrep \
+					gnupg \
+					pinentry-tty \
+					exa \
+					direnv \
+					bat \
+					fortune-mod \
+					htop \
+					jq \
+					source-highlight
+			fi
+			;;
+		fedora | rhel)
+			# Install packages
+			echo "Installing packages..."
+			if ! $DRY_RUN; then
+				sudo yum install -y \
+					git \
+					zsh \
+					tmux \
+					neovim \
+					fzf \
+					ripgrep \
+					gnupg \
+					pinentry \
+					exa \
+					direnv \
+					bat \
+					fortune-mod \
+					htop \
+					jq \
+					source-highlight
+			fi
+			;;
+		*)
+			if [ $i = 1 ]; then
+				# Choose the first item in $ID_LIKE
+				id=$(echo "$ID_LIKE" | cut -d' ' -f1)
+			else
+				echo "Unsupported distro: $id"
+				exit 1
+			fi
+			;;
+		esac
+	done
+	;;
 esac
