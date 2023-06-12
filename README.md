@@ -29,13 +29,13 @@ cd ~/.dotfiles
 ./bootstrap.sh packages # install required & recommended packages
 ./bootstrap.sh install # install the dotfiles
 ./bootstrap.sh bin # install local binaries
+./bootstrap.sh set-shell # sets the default shell (zsh)
 ```
 
 Use `-d` to `dry-run` the script without modifying your environment
 
 ## Recommended Software
 
-- `difftastic`
 - `tig`
 - `tmux`
 - `neovim`
@@ -51,6 +51,7 @@ Use `-d` to `dry-run` the script without modifying your environment
 - `htop`
 - `jq`
 - `source-highlight`
+- [`diff-highlight`](https://github.com/git/git/blob/master/contrib/diff-highlight)
 
 ## Screenshots
 
