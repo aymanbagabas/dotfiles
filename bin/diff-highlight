@@ -22,12 +22,10 @@ for prefix in /usr/share /usr/local/share; do
 	fi
 done
 
-if [ -n "$hilite" ]; then
-	if [ -x "$hilite" ]; then
-		exec "$hilite" "$@"
-	elif command -v perl >/dev/null 2>&1; then
-		perl "$hilite" "$@"
-	fi
+if [ -x "$hilite" ]; then
+	exec "$hilite" "$@"
+elif command -v perl >/dev/null 2>&1; then
+	perl "$hilite" "$@"
 else
 	cat
 fi
