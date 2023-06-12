@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # diff-highlight locates the diff-highlight script in the git source tree and
 # runs it.
 # https://github.com/git/git/blob/master/contrib/diff-highlight

@@ -63,6 +63,7 @@ darwin*)
 		EOF
 	fi
 	;;
+# TODO: add freebsd
 linux*)
 	# Use /etc/os-release to determine distro
 	. /etc/os-release
