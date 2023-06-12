@@ -1,55 +1,48 @@
-# TODO: migrate to zinit
-# https://zdharma-continuum.github.io/zinit/wiki/
-if [ ! -e "$HOME/.zplug" ]; then
-    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-fi
-source ~/.zplug/init.zsh
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
-# Manage zplug
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+zinit snippet OMZL::key-bindings.zsh
 
-# Sane defaults from OMZ
-zplug "lib/key-bindings", from:oh-my-zsh
-zplug "lib/completion", from:oh-my-zsh
-zplug "lib/theme-and-appearance", from:oh-my-zsh
+zinit snippet OMZL::completion.zsh
 
-### Plugins
-zplug "lukechilds/zsh-nvm"
-zplug "plugins/git", from:oh-my-zsh
-zplug "plugins/systemd", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
-zplug "plugins/dnf", from:oh-my-zsh, if:"[[ $OSTYPE == linux* ]]"
-zplug "plugins/fzf", from:oh-my-zsh
-zplug "jimeh/tmuxifier", \
-  from:"github", \
-  use:"completion/tmuxifier.zsh"
-zplug "jimeh/tmuxifier", \
-  on:"jimeh/tmuxifier", \
-  as:"command", \
-  use:"bin/tmuxifier"
+zinit snippet OMZL::theme-and-appearance.zsh
 
-# Defer after compinit
-zplug "zsh-users/zsh-completions", defer:2
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zinit ice wait lucid
+zinit light "lukechilds/zsh-nvm"
 
-### Theme
-zplug "chriskempson/base16-shell", hook-load:"base16_onedark", from:github
-zplug "mafredri/zsh-async", from:"github", use:"async.zsh"
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-zplug "tinted-theming/base16-fzf", use:"bash/base16-onedark.config", from:github, as:theme
+zinit snippet OMZP::git
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
+zinit ice if"[[ $OSTYPE == linux* ]]"
+zinit snippet OMZP::systemd
 
-# Then, source plugins and add commands to $PATH
-zplug load # --verbose
+zinit ice if"[[ $OSTYPE == linux* ]]"
+zinit snippet OMZP::dnf
+
+zinit snippet OMZP::fzf
+
+zinit ice atload"base16_onedark"
+zinit load "chriskempson/base16-shell"
+
+zinit ice src"bash/base16-onedark.config"
+zinit load "tinted-theming/base16-fzf"
+
+zinit ice pick"async.zsh" src"pure.zsh" # with zsh-async library that's bundled with it.
+zinit light sindresorhus/pure
+
+zinit ice wait lucid
+zinit light "zsh-users/zsh-completions"
+
+# Load zsh compinit
+autoload -U compinit && compinit
+
+zinit ice wait lucid
+zinit light "zsh-users/zsh-syntax-highlighting"
 
 # User configuration
 source "$HOME/.aliases"
+
 # Pass arguments to command if pattern matching fails
 # This fixes using carrot (^) in git for example
 # https://stackoverflow.com/a/16864766/10913628
