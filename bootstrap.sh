@@ -8,17 +8,18 @@ if [ -f ".vars" ]; then
 	. ./.vars
 fi
 
-DOTFILES=$(realpath $(dirname -- "$0"))
+DOTFILES=$(realpath "$(dirname -- "$0")")
 DRY_RUN=false
 
 function link_file() {
-	local path=$(realpath $(dirname -- ${BASH_SOURCE[1]}))
+	local path
+	path="$(realpath "$(dirname -- "${BASH_SOURCE[1]}")")"
 	local from=$path/$1
 	local to=$2
 	printf "Linking '%s' to '%s'\n" "$from" "$to"
 
-	if [ ! -d $(dirname -- "$to") ]; then
-		mkdir -p $(dirname -- "$to")
+	if [ ! -d "$(dirname -- "$to")" ]; then
+		mkdir -p "$(dirname -- "$to")"
 	fi
 
 	if ! $DRY_RUN; then
@@ -58,6 +59,7 @@ function _install() {
 		local install="$src/install.sh"
 		if [ -f "$install" ]; then
 			echo "===== Installing" "$src" "dotfiles..."
+			# shellcheck source=/dev/null
 			. "$install"
 			echo
 		fi
@@ -67,6 +69,7 @@ function _install() {
 			local install="$src/install_darwin.sh"
 			if [ -f "$install" ]; then
 				echo "===== Installing" "$src" "dotfiles for darwin..."
+				# shellcheck source=/dev/null
 				. "$install"
 				echo
 			fi
@@ -75,6 +78,7 @@ function _install() {
 			local install="$src/install_linux.sh"
 			if [ -f "$install" ]; then
 				echo "===== Installing" "$src" "dotfiles for linux..."
+				# shellcheck source=/dev/null
 				. "$install"
 				echo
 			fi
@@ -137,6 +141,7 @@ function _main() {
 	*)
 		if [ -n "$cmd" ]; then
 			if [ -f "$DOTFILES/scripts/$cmd.sh" ]; then
+				# shellcheck source=/dev/null
 				. "$DOTFILES/scripts/$cmd.sh"
 				exit 0
 			fi

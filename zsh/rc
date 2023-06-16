@@ -68,10 +68,13 @@ fi
 
 # Disable vim-mode tracking
 # Pure prompt handles this
+# shellcheck disable=SC2034
 VIM_MODE_TRACK_KEYMAP=no
 
 # pure prompt
+# shellcheck disable=SC2034
 PURE_PROMPT_SYMBOL="›"
+# shellcheck disable=SC2034
 PURE_PROMPT_VICMD_SYMBOL="‹"
 
 # cli colors
@@ -120,9 +123,11 @@ fi
 if command -v gpg >/dev/null 2>&1 && command -v gpgconf >/dev/null 2>&1; then
 	unset SSH_AGENT_PID
 	if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-		export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+		SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+		export SSH_AUTH_SOCK
 	fi
-	export GPG_TTY=$(tty)
+	GPG_TTY=$(tty)
+	export GPG_TTY
 fi
 
 # vim: ft=sh

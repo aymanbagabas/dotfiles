@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 case "$OSTYPE" in
 darwin*)
@@ -63,14 +63,13 @@ darwin*)
 		EOF
 	fi
 	;;
-# TODO: add freebsd
 linux*)
 	# Use /etc/os-release to determine distro
 	. /etc/os-release
 	id=$ID
 
 	# count the number of items in $ID_LIKE
-	id_like=($id)
+	id_like=("$id")
 	if [ -n "$ID_LIKE" ]; then
 		IFS=' ' read -r -a id_like <<<"$ID_LIKE"
 	fi
