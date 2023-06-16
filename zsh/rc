@@ -20,8 +20,6 @@ zinit snippet OMZP::systemd
 zinit ice if"[[ $OSTYPE == linux* ]]" depth"1"
 zinit snippet OMZP::dnf
 
-zinit snippet OMZP::fzf
-
 zinit ice atload"base16_onedark" depth"1"
 zinit load "chriskempson/base16-shell"
 
@@ -33,6 +31,14 @@ zinit light "sindresorhus/pure"
 
 zinit ice wait lucid depth"1"
 zinit light "zsh-users/zsh-syntax-highlighting"
+
+# Make sure this comes after zsh-syntax-highlighting
+zinit ice wait lucid depth"1"
+zinit light "softmoth/zsh-vim-mode"
+
+# Load this after vim-mode to restore ctrl-r
+zinit ice wait"1" lucid depth"1"
+zinit snippet OMZP::fzf
 
 # This should be last
 zinit ice wait lucid depth"1"
@@ -60,16 +66,9 @@ if [ -e "$(which fortune)" ]; then
 	echo "" && fortune -s && echo ""
 fi
 
-# Vi-mode
-bindkey -v
-# open command in vim (ctrl-v)
-bindkey -M vicmd '^V' edit-command-line
-# ctrl-p & ctrl-n to behave like arrow keys
-bindkey '^P' up-line-or-beginning-search
-bindkey '^N' down-line-or-beginning-search
-# allow ctrl-a and ctrl-e to move to beginning/end of line
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
+# Disable vim-mode tracking
+# Pure prompt handles this
+VIM_MODE_TRACK_KEYMAP=no
 
 # pure prompt
 PURE_PROMPT_SYMBOL="›"
