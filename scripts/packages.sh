@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# shared package names
+pkgs=(
+	git
+	zsh
+	tmux
+	neovim
+	fzf
+	ripgrep
+	gnupg
+	pinentry
+	exa
+	direnv
+	bat
+	htop
+	jq
+	source-highlight
+)
+
 case "$OSTYPE" in
 darwin*)
 	# Install Xcode command line tools
@@ -23,26 +41,20 @@ darwin*)
 	if ! $DRY_RUN; then
 		brew install --quiet git zsh mas
 		brew bundle --no-lock --file=/dev/stdin <<-EOF
-			brew "difftastic"
-			brew "tig"
-			brew "tmux"
-			brew "neovim", args: ['HEAD']
-			brew "fzf"
-			brew "ripgrep"
-			brew "gnupg"
-			brew "pinentry"
+			$(
+				for pkg in "${pkgs[@]}"; do
+					if [ "$pkg" = "neovim" ]; then
+						echo "brew \"$pkg\", args: ['HEAD']"
+					else
+						echo "brew \"$pkg\""
+					fi
+				done
+			)
 			brew "pinentry-mac"
 			brew "gsed"
-			brew "exa"
-			brew "direnv"
-			brew "zoxide"
-			brew "bat"
 			brew "fortune"
 			brew "gh"
 			brew "hub"
-			brew "htop"
-			brew "jq"
-			brew "source-highlight"
 			brew "tz"
 
 			cask "google-chrome"
@@ -85,22 +97,9 @@ linux*)
 				sudo add-apt-repository -y ppa:neovim-ppa/unstable
 				sudo apt-get update
 				sudo apt-get install -y \
-					git \
-					zsh \
-					tmux \
-					neovim \
-					fzf \
-					ripgrep \
-					gnupg \
-					pinentry \
+					"${pkgs[@]}" \
 					pinentry-tty \
-					exa \
-					direnv \
-					bat \
-					fortune-mod \
-					htop \
-					jq \
-					source-highlight
+					fortune-mod
 			fi
 			break
 			;;
@@ -109,22 +108,9 @@ linux*)
 			echo "Installing packages..."
 			if ! $DRY_RUN; then
 				sudo yum install -y \
-					git \
-					zsh \
-					tmux \
-					neovim \
-					fzf \
-					ripgrep \
-					gnupg \
-					pinentry \
+					"${pkgs[@]}" \
 					pinentry-tty \
-					exa \
-					direnv \
-					bat \
-					fortune-mod \
-					htop \
-					jq \
-					source-highlight
+					fortune-mod
 			fi
 			break
 			;;
@@ -133,21 +119,8 @@ linux*)
 			echo "Installing packages..."
 			if ! $DRY_RUN; then
 				sudo pacman -S --noconfirm \
-					git \
-					zsh \
-					tmux \
-					neovim \
-					fzf \
-					ripgrep \
-					gnupg \
-					pinentry \
-					exa \
-					direnv \
-					bat \
-					fortune-mod \
-					htop \
-					jq \
-					source-highlight
+					"${pkgs[@]}" \
+					fortune-mod
 			fi
 			;;
 		*)
