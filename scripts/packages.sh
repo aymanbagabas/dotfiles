@@ -9,7 +9,6 @@ pkgs=(
 	fzf
 	ripgrep
 	gnupg
-	pinentry
 	exa
 	direnv
 	bat
@@ -120,6 +119,7 @@ linux*)
 			if ! $DRY_RUN; then
 				sudo pacman -S --noconfirm \
 					"${pkgs[@]}" \
+					pinentry \
 					base-devel \
 					fortune-mod
 			fi
