@@ -62,7 +62,7 @@ stty start undef
 stty -ixon
 
 # Display fortune
-if [ -e "$(which fortune)" ]; then
+if [ -e "$(command -v fortune)" ]; then
 	echo "" && fortune -s && echo ""
 fi
 

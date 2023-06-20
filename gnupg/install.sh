@@ -19,11 +19,11 @@ _pinentry=""
 case "$OSTYPE" in
 darwin*)
 	require "pinentry-mac"
-	_pinentry=$(which pinentry-mac)
+	_pinentry=$(command -v pinentry-mac)
 	;;
 linux*)
 	require "pinentry-tty"
-	_pinentry=$(which pinentry-tty)
+	_pinentry=$(command -v pinentry-tty)
 	;;
 esac
 if [ -n "$_pinentry" ]; then
