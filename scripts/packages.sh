@@ -120,6 +120,7 @@ linux*)
 			if ! $DRY_RUN; then
 				sudo pacman -S --noconfirm \
 					"${pkgs[@]}" \
+					base-devel \
 					fortune-mod
 			fi
 			;;
