@@ -36,6 +36,7 @@ Use `-d` to `dry-run` the script without modifying your environment
 
 ## Recommended Software
 
+- `zsh`
 - `tig`
 - `tmux`
 - `neovim`
@@ -51,7 +52,6 @@ Use `-d` to `dry-run` the script without modifying your environment
 - `htop`
 - `jq`
 - `source-highlight`
-- [`diff-highlight`](https://github.com/git/git/blob/master/contrib/diff-highlight)
 
 ## Screenshots
 
