@@ -159,37 +159,6 @@ return {
         desc = "Quickfix List (Trouble)",
       }
     end,
-    dependencies = {
-      {
-        "simrat39/inlay-hints.nvim",
-        -- disabled for now
-        enabled = false,
-        config = function()
-          require("inlay-hints").setup({
-            renderer = "inlay-hints/render/eol",
-            -- https://github.com/simrat39/inlay-hints.nvim/issues/3
-            only_current_line = true,
-            eol = {
-              parameter = {
-                format = function(hints)
-                  return string.format(" <- (%s)", hints):gsub(":", "")
-                end,
-              },
-              type = {
-                format = function(hints)
-                  return string.format(" » (%s)", hints):gsub(":", "")
-                end,
-              },
-            },
-          })
-          require("lazyvim.util").on_attach(function(client, buffer)
-            if client.server_capabilities.inlayHintProvider then
-              require("inlay-hints").on_attach(client, buffer)
-            end
-          end)
-        end,
-      },
-    },
     opts = {
       diagnostics = {
         virtual_text = false,
@@ -212,6 +181,22 @@ return {
         },
       },
       servers = {
+        lua_ls = {
+          mason = true,
+          settings = {
+            Lua = {
+              hint = {
+                enable = true,
+              },
+              workspace = {
+                checkThirdParty = false,
+              },
+              completion = {
+                callSnippet = "Replace",
+              },
+            },
+          },
+        },
         -- Markdown
         grammarly = {},
         ltex = {
