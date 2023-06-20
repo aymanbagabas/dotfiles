@@ -141,7 +141,6 @@ linux*)
 					ripgrep \
 					gnupg \
 					pinentry \
-					pinentry-tty \
 					exa \
 					direnv \
 					bat \
