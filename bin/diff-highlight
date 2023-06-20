@@ -11,7 +11,17 @@ for prefix in /usr/share /usr/local/share; do
 		hilite="/usr/share/git-core/contrib/diff-highlight"
 	elif [ -d "$prefix/git-core/contrib/diff-highlight" ]; then
 		hilite="$prefix/git-core/contrib/diff-highlight/diff-highlight"
-	# Then try doc directory
+		# Then try git contrib directory
+	elif [ -f "$prefix/git/contrib/diff-highlight" ]; then
+		hilite="$prefix/git/contrib/diff-highlight"
+	elif [ -d "$prefix/git/contrib/diff-highlight" ]; then
+		hilite="$prefix/git/contrib/diff-highlight/diff-highlight"
+		# Try git directory
+	elif [ -f "$prefix/git/diff-highlight" ]; then
+		hilite="$prefix/git/diff-highlight"
+	elif [ -d "$prefix/git/diff-highlight" ]; then
+		hilite="$prefix/git/diff-highlight/diff-highlight"
+		# Then try doc directory
 	elif [ -f "$prefix/doc/git/contrib/diff-highlight" ]; then
 		hilite="$prefix/doc/git/contrib/diff-highlight"
 	elif [ -d "$prefix/doc/git/contrib/diff-highlight" ]; then
