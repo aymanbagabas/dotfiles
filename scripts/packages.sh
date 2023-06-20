@@ -128,6 +128,29 @@ linux*)
 			fi
 			break
 			;;
+		arch)
+			# Install packages
+			echo "Installing packages..."
+			if ! $DRY_RUN; then
+				sudo pacman -S --noconfirm \
+					git \
+					zsh \
+					tmux \
+					neovim \
+					fzf \
+					ripgrep \
+					gnupg \
+					pinentry \
+					pinentry-tty \
+					exa \
+					direnv \
+					bat \
+					fortune-mod \
+					htop \
+					jq \
+					source-highlight
+			fi
+			;;
 		*)
 			if [ "$i" -ne ${#id_like[@]} ]; then
 				# Choose the next item in $ID_LIKE
