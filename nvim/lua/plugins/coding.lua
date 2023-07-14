@@ -3,7 +3,7 @@ return {
     -- use setup similar to 'tpope/vim-surround'~
     "echasnovski/mini.surround",
     enabled = false,
-    keys = function(_, keys)
+    keys = function(_, _)
       -- Populate the keys based on the user's options
       local plugin = require("lazy.core.config").spec.plugins["mini.surround"]
       local opts = require("lazy.core.plugin").values(plugin, "opts", false)
@@ -92,7 +92,7 @@ return {
   {
     "L3MON4D3/LuaSnip",
     build = "make install_jsregexp",
-    opts = function(_, opts)
+    opts = function(_, _)
       -- Hide Copilot suggestions when in a snippet
       -- https://github.com/zbirenbaum/copilot.lua#suggestion
       vim.api.nvim_create_autocmd("User", {
@@ -204,7 +204,7 @@ return {
             if cmp.visible() then
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             else
-              vim.api.nvim_feedkeys(t("<Down>"), "n", true)
+              vim.api.nvim_feedkeys("<Down>", "n", true)
             end
           end,
           i = function(fallback)
@@ -220,7 +220,7 @@ return {
             if cmp.visible() then
               cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
             else
-              vim.api.nvim_feedkeys(t("<Up>"), "n", true)
+              vim.api.nvim_feedkeys("<Up>", "n", true)
             end
           end,
           i = function(fallback)

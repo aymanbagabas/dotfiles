@@ -48,7 +48,7 @@ return {
         "go",
         "gomod",
         "gosum",
-        "help",
+        "gowork",
         "html",
         "javascript",
         "json",
@@ -61,6 +61,7 @@ return {
         "toml",
         "typescript",
         "vim",
+        "vimdoc",
         "yaml",
       })
     end,

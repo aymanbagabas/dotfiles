@@ -100,7 +100,7 @@ require("lazyvim.util").on_attach(function(client, buffer)
       callback = function()
         if is_alive(client) then
           -- This function was only added in nvim-0.9
-          vim.lsp.codelens.clear()
+          vim.lsp.codelens.clear(client.id, buffer)
           -- pcall(vim.lsp.codelens.clear)
         end
       end,

@@ -33,6 +33,11 @@ return {
   },
 
   {
+    "folke/flash.nvim",
+    enabled = false,
+  },
+
+  {
     "lewis6991/gitsigns.nvim",
     opts = function(_, opts)
       return vim.tbl_extend("force", opts, {
