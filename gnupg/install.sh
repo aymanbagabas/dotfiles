@@ -32,7 +32,9 @@ fi
 
 # ask passphrase once every day
 insert_line "default-cache-ttl" "default-cache-ttl 86400" ~/.gnupg/gpg-agent.conf
+insert_line "default-cache-ttl-ssh" "default-cache-ttl-ssh 86400" ~/.gnupg/gpg-agent.conf
 insert_line "max-cache-ttl" "max-cache-ttl 86400" ~/.gnupg/gpg-agent.conf
+insert_line "max-cache-ttl-ssh" "max-cache-ttl-ssh 86400" ~/.gnupg/gpg-agent.conf
 
 # enable ssh support
 insert_line "enable-ssh-support" "enable-ssh-support" ~/.gnupg/gpg-agent.conf
