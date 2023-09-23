@@ -9,9 +9,6 @@ local unmap = vim.keymap.del
 -- copy to clipboard
 map({ "n", "x" }, "<leader>y", '"+y', { desc = "Copy to clipboard" })
 map("n", "<leader>Y", '"+Y', { desc = "Copy line to clipboard" })
--- restore gw to default
-unmap("n", "gw")
-unmap("x", "gw")
 
 -- Move Lines
 -- remap <C-j> and <C-k> to move lines up and down
