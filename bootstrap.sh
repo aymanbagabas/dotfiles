@@ -11,6 +11,15 @@ fi
 DOTFILES=$(realpath "$(dirname -- "$0")")
 DRY_RUN=false
 
+function templatize() {
+	local template="$(realpath "$(dirname -- "${BASH_SOURCE[1]}")")/$1"
+
+	eval "cat <<EOF
+$(<$template)
+EOF
+" 2>/dev/null
+}
+
 function link_file() {
 	local path
 	path="$(realpath "$(dirname -- "${BASH_SOURCE[1]}")")"

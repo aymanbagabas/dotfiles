@@ -7,37 +7,36 @@ fi
 
 ##### gpg.conf
 
-insert_line "default-key" "default-key $KEYID" ~/.gnupg/gpg.conf
-insert_line "default-recipient-self" "default-recipient-self" ~/.gnupg/gpg.conf
-# Use OpenPGP keyserver
-insert_line "keyserver" "keyserver hkps://keys.openpgp.org" ~/.gnupg/gpg.conf
+echo "Creating gpg.conf file..."
+if ! $DRY_RUN; then
+	gpgconf=$(templatize gpg.conf)
+	echo "$gpgconf" >~/.gnupg/gpg.conf
+fi
 
 ##### gpg-agent.conf
 
 # set pinentry
-_pinentry=""
+PINENTRY_PROGRAM=""
 case "$OSTYPE" in
 darwin*)
 	require "pinentry-mac"
-	_pinentry=$(command -v pinentry-mac)
+	PINENTRY_PROGRAM=$(command -v pinentry-mac)
 	;;
 linux*)
 	require "pinentry-tty"
-	_pinentry=$(command -v pinentry-tty)
+	PINENTRY_PROGRAM=$(command -v pinentry-tty)
+	;;
+*)
+	require "pinentry"
+	PINENTRY_PROGRAM=$(command -v pinentry)
 	;;
 esac
-if [ -n "$_pinentry" ]; then
-	insert_line "pinentry-program" "pinentry-program $_pinentry" ~/.gnupg/gpg-agent.conf
+
+echo "Creating gpg-agent.conf file..."
+if ! $DRY_RUN; then
+	gpgagentconf=$(templatize gpg-agent.conf)
+	echo "$gpgagentconf" >~/.gnupg/gpg-agent.conf
 fi
-
-# ask passphrase once every day
-insert_line "default-cache-ttl" "default-cache-ttl 86400" ~/.gnupg/gpg-agent.conf
-insert_line "default-cache-ttl-ssh" "default-cache-ttl-ssh 86400" ~/.gnupg/gpg-agent.conf
-insert_line "max-cache-ttl" "max-cache-ttl 86400" ~/.gnupg/gpg-agent.conf
-insert_line "max-cache-ttl-ssh" "max-cache-ttl-ssh 86400" ~/.gnupg/gpg-agent.conf
-
-# enable ssh support
-insert_line "enable-ssh-support" "enable-ssh-support" ~/.gnupg/gpg-agent.conf
 
 if command_exist gpp-connect-agent; then
 	gpg-connect-agent reloadagent /bye
