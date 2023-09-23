@@ -128,6 +128,7 @@ if command -v gpg >/dev/null 2>&1 && command -v gpgconf >/dev/null 2>&1; then
 	fi
 	GPG_TTY=$(tty)
 	export GPG_TTY
+	gpgconf --launch gpg-agent
 fi
 
 # vim: ft=sh
