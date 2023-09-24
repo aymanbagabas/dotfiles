@@ -276,4 +276,8 @@ return {
       }
     end,
   },
+
+  {
+    "jamessan/vim-gnupg",
+  },
 }
