@@ -29,6 +29,23 @@ function Templatize {
 	Get-Content "$TemplatePath" -Raw | ForEach-Object { $ExecutionContext.InvokeCommand.ExpandString($_) }
 }
 
+function Insert-Line {
+	param(
+		[Parameter(Mandatory = $true)]
+		[string]$Pattern,
+		[Parameter(Mandatory = $true)]
+		[string]$Line,
+		[Parameter(Mandatory = $true)]
+		[string]$Path
+	)
+	Write-Host "Inserting line '$Line' into '$Path'"
+	if (!$DRY_RUN) {
+		if ((Get-Content "$Path" | Select-String -Pattern "$Pattern" -Quiet) -eq $false) {
+			Write-Output "$Line" | Out-File -Append "$Path"
+		}
+	}
+}
+
 function Link-File {
 	param(
 		[Parameter(Mandatory = $true)]
