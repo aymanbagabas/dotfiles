@@ -7,6 +7,12 @@ param(
 	[string]$Action = $null
 )
 
+# Exit if not running on Windows
+if ($PSVersionTable.Platform -ne "Win32NT") {
+	Write-Host "This script is only supported on Windows"
+	exit 1
+}
+
 # Global variables
 Get-Content .vars | ForEach-Object { Invoke-Expression "`$$_" }
 $DRY_RUN = $false
