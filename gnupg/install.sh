@@ -19,16 +19,22 @@ fi
 PINENTRY_PROGRAM=""
 case "$OSTYPE" in
 darwin*)
-	require "pinentry-mac"
-	PINENTRY_PROGRAM=$(command -v pinentry-mac)
+	PINENTRY_PROGRAM="/usr/local/bin/pinentry-mac"
+	if command_exist pinentry-mac; then
+		PINENTRY_PROGRAM=$(command -v pinentry-mac)
+	fi
 	;;
 linux*)
-	require "pinentry-tty"
-	PINENTRY_PROGRAM=$(command -v pinentry-tty)
+	PINENTRY_PROGRAM="/usr/bin/pinentry-tty"
+	if command_exist pinentry-tty; then
+		PINENTRY_PROGRAM=$(command -v pinentry-tty)
+	fi
 	;;
 *)
-	require "pinentry"
-	PINENTRY_PROGRAM=$(command -v pinentry)
+	PINENTRY_PROGRAM="/usr/bin/pinentry"
+	if command_exist pinentry; then
+		PINENTRY_PROGRAM=$(command -v pinentry)
+	fi
 	;;
 esac
 

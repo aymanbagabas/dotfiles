@@ -47,7 +47,7 @@ function insert_line() {
 }
 
 function command_exist() {
-	command -v "$1" >/dev/null 2>&1
+	command -v "$1" 2>&1 >/dev/null
 }
 
 function require() {
