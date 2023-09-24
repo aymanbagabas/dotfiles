@@ -1,8 +1,7 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
-    [
+    "actions": [
         {
             "command": "find",
             "keys": "ctrl+shift+f"
@@ -12,16 +11,14 @@
             "keys": "ctrl+v"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "copy",
                 "singleLine": false
             },
             "keys": "ctrl+c"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "splitPane",
                 "split": "auto",
                 "splitMode": "duplicate"
@@ -32,29 +29,23 @@
     "copyFormatting": "none",
     "copyOnSelect": false,
     "defaultProfile": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
-    "newTabMenu": 
-    [
+    "newTabMenu": [
         {
             "type": "remainingProfiles"
         }
     ],
-    "profiles": 
-    {
-        "defaults": 
-        {
+    "profiles": {
+        "defaults": {
             "colorScheme": "One Half Dark",
-            "font": 
-            {
+            "font": {
                 "face": "InconsolataGo Nerd Font Mono"
             },
             "useAtlasEngine": false
         },
-        "list": 
-        [
+        "list": [
             {
                 "colorScheme": "One Half Dark",
-                "font": 
-                {
+                "font": {
                     "face": "InconsolataGo Nerd Font Mono"
                 },
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
@@ -63,8 +54,7 @@
             },
             {
                 "colorScheme": "One Half Dark",
-                "font": 
-                {
+                "font": {
                     "face": "InconsolataGo Nerd Font Mono"
                 },
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
@@ -79,8 +69,7 @@
             },
             {
                 "colorScheme": "One Half Dark",
-                "font": 
-                {
+                "font": {
                     "face": "InconsolataGo Nerd Font Mono"
                 },
                 "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
@@ -108,6 +97,7 @@
             },
             {
                 "colorScheme": "One Half Dark",
+                "commandline": "C:\\Program Files\\PowerShell\\7\\pwsh.exe -nologo",
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
                 "name": "PowerShell",
@@ -135,8 +125,7 @@
             }
         ]
     },
-    "schemes": 
-    [
+    "schemes": [
         {
             "background": "#0C0C0C",
             "black": "#0C0C0C",
@@ -345,46 +334,39 @@
             "yellow": "#808000"
         }
     ],
-    "themes": 
-    [
+    "themes": [
         {
             "name": "legacyDark",
-            "tab": 
-            {
+            "tab": {
                 "background": null,
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "window": 
-            {
+            "window": {
                 "applicationTheme": "dark",
                 "useMica": false
             }
         },
         {
             "name": "legacyLight",
-            "tab": 
-            {
+            "tab": {
                 "background": null,
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "window": 
-            {
+            "window": {
                 "applicationTheme": "light",
                 "useMica": false
             }
         },
         {
             "name": "legacySystem",
-            "tab": 
-            {
+            "tab": {
                 "background": null,
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "window": 
-            {
+            "window": {
                 "applicationTheme": "system",
                 "useMica": false
             }
