@@ -7,6 +7,8 @@ if (!$DRY_RUN) {
 if (!$DRY_RUN) {
 	Install-Module -Name pure-pwsh -Scope CurrentUser -Force
 	Install-Module -Name posh-git -Scope CurrentUser -Force
+	Install-Module -Name Get-Quote
+	Install-Module -Name git-aliases
 }
 
 # Link files
