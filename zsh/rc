@@ -75,7 +75,20 @@ VIM_MODE_TRACK_KEYMAP=no
 # shellcheck disable=SC2034
 PURE_PROMPT_SYMBOL="›"
 # shellcheck disable=SC2034
-PURE_PROMPT_VICMD_SYMBOL="‹"
+PURE_PROMPT_VICMD_SYMBOL="›"
+
+# Change cursor style on Vi mode change
+prompt_pure_update_vim_prompt_widget() {
+	setopt localoptions noshwordsplit
+	prompt_pure_state[prompt]=${${KEYMAP/vicmd/${PURE_PROMPT_VICMD_SYMBOL:-❮}}/(main|viins)/${PURE_PROMPT_SYMBOL:-❯}}
+
+	case $KEYMAP in
+	vicmd) echo -ne "\e[1 q" ;; # blinking block
+	*) echo -ne "\e[5 q" ;;     # blinking line
+	esac
+
+	prompt_pure_reset_prompt
+}
 
 # cli colors
 # dircolors
