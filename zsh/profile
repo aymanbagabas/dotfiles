@@ -33,10 +33,17 @@ KEYID=$(grep 'default-key' $HOME/.gnupg/gpg.conf | cut -d' ' -f2)
 export KEYID
 export HISTSIZE=10000
 export SAVEHIST=10000
-export EDITOR="nvim"
-export VISUAL="nvim"
 export PAGER="less"
 export KEYTIMEOUT=1 # fix vi-mode timeout
+export EDITOR="vim"
+export VISUAL="vim"
+
+# Alias vim to nvim
+if command -v nvim 2>&1 >/dev/null; then
+	export EDITOR="nvim"
+	export VISUAL="nvim"
+	alias vim=nvim
+fi
 
 # Enable mouse support in less
 export LESS='-R --mouse --wheel-lines=3'
