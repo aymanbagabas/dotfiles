@@ -9,7 +9,6 @@ pkgs=(
 	fzf
 	ripgrep
 	gnupg
-	exa
 	direnv
 	bat
 	htop
@@ -42,11 +41,7 @@ darwin*)
 		brew bundle --no-lock --file=/dev/stdin <<-EOF
 			$(
 				for pkg in "${pkgs[@]}"; do
-					if [ "$pkg" = "neovim" ]; then
-						echo "brew \"$pkg\", args: ['HEAD']"
-					else
-						echo "brew \"$pkg\""
-					fi
+					echo "brew \"$pkg\""
 				done
 			)
 			brew "pinentry-mac"
@@ -55,6 +50,7 @@ darwin*)
 			brew "gh"
 			brew "hub"
 			brew "tz"
+			brew "eza"
 
 			cask "google-chrome"
 			cask "alfred"
@@ -92,13 +88,20 @@ linux*)
 			# Install packages
 			echo "Installing packages..."
 			if ! $DRY_RUN; then
+				# Add gierens.de for "eza"
+				sudo mkdir -p /etc/apt/keyrings
+				wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+				echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+				sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+
 				sudo apt-get install software-properties-common
 				sudo add-apt-repository -y ppa:neovim-ppa/unstable
 				sudo apt-get update
 				sudo apt-get install -y \
 					"${pkgs[@]}" \
 					pinentry-tty \
-					fortune-mod
+					fortune-mod \
+					eza
 			fi
 			break
 			;;
@@ -109,7 +112,8 @@ linux*)
 				sudo yum install -y \
 					"${pkgs[@]}" \
 					pinentry-tty \
-					fortune-mod
+					fortune-mod \
+					exa
 			fi
 			break
 			;;
@@ -121,7 +125,8 @@ linux*)
 					"${pkgs[@]}" \
 					pinentry \
 					base-devel \
-					fortune-mod
+					fortune-mod \
+					eza
 			fi
 			;;
 		*)

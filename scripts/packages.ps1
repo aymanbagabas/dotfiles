@@ -7,7 +7,8 @@ $PGKS = @(
 	"Microsoft.VisualStudioCode",
 	"Microsoft.WindowsTerminal",
 	"Neovim.Neovim",
-	"Notepad++.Notepad++"
+	"Notepad++.Notepad++",
+	"eza-community.eza"
 )
 
 Write-Host "Installing packages..."
