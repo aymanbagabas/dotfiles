@@ -5,7 +5,9 @@ return {
       filesystem = {
         -- hijack_netrw_behavior = "open_default",
         hijack_netrw_behavior = "disabled",
-        follow_current_file = true,
+        follow_current_file = {
+          enabled = false,
+        },
       },
     },
   },

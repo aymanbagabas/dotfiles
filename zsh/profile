@@ -17,6 +17,7 @@ if command -v go >/dev/null 2>&1; then
 	export PATH=$PATH:$GOPATH/bin
 fi
 
+export DOTNET_CLI_TELEMETRY_OPTOUT=1 # Disable dotnet telemetry
 if [ -d "$HOME/.dotnet" ]; then
 	export PATH="$PATH:$HOME/.dotnet" # Add the directory where the dotnet executable lives
 fi
