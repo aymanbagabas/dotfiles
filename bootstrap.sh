@@ -8,22 +8,28 @@ if [ -f ".vars" ]; then
 	. ./.vars
 fi
 
-DOTFILES=$(realpath "$(dirname -- "$0")")
+# see: https://stackoverflow.com/questions/3572030/bash-script-absolute-path-with-os-x#comment64141768_3572030
+function abspath() {
+	cd "$(dirname -- "$1")"
+	pwd -P
+}
+
+DOTFILES=$(abspath "$(dirname -- "$0")")
 DRY_RUN=false
 
 function templatize() {
-	local template="$(realpath "$(dirname -- "${BASH_SOURCE[1]}")")/$1"
+	local template
+	template="$(abspath "${BASH_SOURCE[1]}")/$1"
 
 	eval "cat <<EOF
-$(<$template)
+$(<"$template")
 EOF
 " 2>/dev/null
 }
 
 function link_file() {
-	local path
-	path="$(realpath "$(dirname -- "${BASH_SOURCE[1]}")")"
-	local from=$path/$1
+	local from
+	from=$(abspath "${BASH_SOURCE[1]}")/$1
 	local to=$2
 	printf "Linking '%s' to '%s'\n" "$from" "$to"
 
@@ -47,7 +53,7 @@ function insert_line() {
 }
 
 function command_exist() {
-	command -v "$1" 2>&1 >/dev/null
+	command -v "$1" >/dev/null 2>&1
 }
 
 function require() {
@@ -63,7 +69,7 @@ function _install() {
 	fi
 	echo
 
-	for src in $DOTFILES/*/; do
+	for src in "$DOTFILES"/*/; do
 		local src=${src%*/}
 		local install="$src/install.sh"
 		if [ -f "$install" ]; then
@@ -106,7 +112,7 @@ function _usage() {
 	echo "  install   Install dotfiles"
 	echo "  help      Show this help message and exit"
 	if [ -d "$DOTFILES/scripts" ]; then
-		for s in $DOTFILES/scripts/*.sh; do
+		for s in "$DOTFILES"/scripts/*.sh; do
 			local s=${s%*/}
 			local s=${s##*/}
 			local s=${s%.sh}
