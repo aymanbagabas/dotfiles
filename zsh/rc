@@ -120,10 +120,10 @@ if command -v direnv >/dev/null 2>&1; then
 	eval "$(direnv hook zsh)"
 fi
 
-# exa (ls replacement)
-if command -v exa >/dev/null 2>&1; then
-	alias ls="exa"
-	alias tree="exa --tree"
+# eza (ls replacement)
+if command -v eza >/dev/null 2>&1; then
+	alias ls="eza"
+	alias tree="eza --tree"
 fi
 
 # zoxide (smarter cd)
