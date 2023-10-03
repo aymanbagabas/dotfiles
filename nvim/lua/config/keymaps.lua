@@ -12,12 +12,33 @@ map("n", "<leader>Y", '"+Y', { desc = "Copy line to clipboard" })
 
 -- Move Lines
 -- remap <C-j> and <C-k> to move lines up and down
+-- and remap tmux keys
+unmap({ "n", "t" }, "<C-h>")
+unmap({ "n", "t" }, "<C-j>")
+unmap({ "n", "t" }, "<C-k>")
+unmap({ "n", "t" }, "<C-l>")
+unmap({ "n", "i", "v" }, "<A-j>")
+unmap({ "n", "i", "v" }, "<A-k>")
+
 map("n", "<C-j>", "<cmd>m .+1<cr>==", { desc = "Move down" })
 map("n", "<C-k>", "<cmd>m .-2<cr>==", { desc = "Move up" })
 map("i", "<C-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move down" })
 map("i", "<C-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
 map("v", "<C-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
 map("v", "<C-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
+
+local nvim_tmux_nav = require("nvim-tmux-navigation")
+
+nvim_tmux_nav.setup({
+  disable_when_zoomed = true, -- defaults to false
+})
+
+map({ "n", "i", "v" }, "<M-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
+map({ "n", "i", "v" }, "<M-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
+map({ "n", "i", "v" }, "<M-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
+map({ "n", "i", "v" }, "<M-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
+map({ "n", "i", "v" }, "<M-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
+map({ "n", "i", "v" }, "<M-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
 
 -- search and center screen on search result
 map({ "n", "x", "o" }, "n", "nzzzv", { desc = "Next search result" })

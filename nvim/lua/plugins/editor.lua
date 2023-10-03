@@ -1,15 +1,29 @@
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
-    opts = {
-      filesystem = {
-        -- hijack_netrw_behavior = "open_default",
-        hijack_netrw_behavior = "disabled",
-        follow_current_file = {
-          enabled = false,
+    opts = function(_, opts)
+      return vim.tbl_extend("force", opts, {
+        close_if_last_window = true,
+        filesystem = {
+          bind_to_cwd = false,
+          hijack_netrw_behavior = "disabled", -- we disable netrw
+          follow_current_file = {
+            enabled = true,
+          },
+          use_libuv_file_watcher = true,
         },
-      },
-    },
+      })
+    end,
+    -- opts = {
+    --   close_if_last_window = true,
+    --   filesystem = {
+    --     -- hijack_netrw_behavior = "open_default",
+    --     hijack_netrw_behavior = "disabled",
+    --     follow_current_file = {
+    --       enabled = false,
+    --     },
+    --   },
+    -- },
   },
 
   {
@@ -172,36 +186,6 @@ return {
   {
     "alexghergh/nvim-tmux-navigation",
     branch = "main",
-    event = { "VimEnter" },
-    keys = function()
-      local ok, nav = pcall(require, "nvim-tmux-navigation")
-      if not ok then
-        return
-      end
-      return {
-        {
-          "<M-h>",
-          nav.NvimTmuxNavigateLeft,
-          desc = "Navigate Left",
-        },
-        { "<M-j>", nav.NvimTmuxNavigateDown, desc = "Navigate Down" },
-        { "<M-k>", nav.NvimTmuxNavigateUp, desc = "Navigate Up" },
-        { "<M-l>", nav.NvimTmuxNavigateRight, desc = "Navigate Right" },
-        {
-          "<M-\\>",
-          nav.NvimTmuxNavigateLastActive,
-          desc = "Navigate Last Active",
-        },
-        {
-          "<M-Space>",
-          nav.NvimTmuxNavigateNext,
-          desc = "Navigate Next",
-        },
-      }
-    end,
-    opts = {
-      disable_when_zoomed = true, -- defaults to false
-    },
   },
 
   {
