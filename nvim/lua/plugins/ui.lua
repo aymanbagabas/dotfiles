@@ -360,13 +360,10 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     opts = {
-      char = "▏",
-      context_char = "▏",
-      space_char_blankline = " ",
-      filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
-      show_trailing_blankline_indent = false,
-      show_current_context = false,
-      show_current_context_start = false,
+      indent = {
+        char = "▏",
+        tab_char = "▏",
+      },
     },
   },
 
@@ -380,7 +377,6 @@ return {
         },
         -- symbol = "│",
         symbol = "▏",
-        options = { try_as_border = true },
       }
     end,
   },

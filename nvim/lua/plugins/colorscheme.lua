@@ -3,8 +3,8 @@ return {
   {
     -- "navarasu/onedark.nvim",
     "aymanbagabas/onedark.nvim",
-    branch = "spell",
-    -- dir = "~/Workspace/onedark.nvim",
+    branch = "ibl3",
+    -- dir = "~/Source/navarasu/onedark.nvim",
     priority = 1000, -- Ensure it loads first
     lazy = true,
     config = function()
