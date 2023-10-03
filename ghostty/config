@@ -48,4 +48,6 @@ palette = 14=#56b6c2
 # bright white
 palette = 15=#ffffff
 
+macos-option-as-alt = true
+
 # vim:ft=config
