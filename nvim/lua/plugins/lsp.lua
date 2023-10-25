@@ -62,7 +62,7 @@ end
 
 local organize_group = vim.api.nvim_create_augroup("LspOrganize", { clear = true })
 local codelens_group = vim.api.nvim_create_augroup("LspCodeLens", { clear = true })
-require("lazyvim.util").on_attach(function(client, buffer)
+require("lazyvim.util").lsp.on_attach(function(client, buffer)
   -- Ignore null-ls
   if client.name == "null-ls" then
     return
@@ -272,7 +272,7 @@ return {
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
         eslint = function()
-          require("lazyvim.util").on_attach(function(client)
+          require("lazyvim.util").lsp.on_attach(function(client)
             if client.name == "eslint" then
               client.server_capabilities.documentFormattingProvider = true
             elseif client.name == "tsserver" then
@@ -325,41 +325,6 @@ return {
         "terraform-ls",
         -- SQL
         "sqlls",
-      })
-    end,
-  },
-
-  {
-    "nvimtools/none-ls.nvim",
-    opts = function(_, opts)
-      local nls = require("null-ls")
-      -- opts.debug = true
-      ---@diagnostic disable-next-line: missing-parameter
-      vim.list_extend(opts.sources, {
-        nls.builtins.formatting.prettier,
-        -- nls.builtins.formatting.prettierd.with({
-        --   generator_opts = {
-        --     command = "prettierd",
-        --     args = function(params)
-        --       if params.method == methods.FORMATTING then
-        --         return { "$FILENAME" }
-        --       end
-        --       --
-        --       -- local row, end_row = params.range.row - 1, params.range.end_row - 1
-        --       -- local col, end_col = params.range.col - 1, params.range.end_col - 1
-        --       -- local start_offset = vim.api.nvim_buf_get_offset(params.bufnr, row) + col
-        --       -- local end_offset = vim.api.nvim_buf_get_offset(params.bufnr, end_row) + end_col
-        --       --
-        --       -- return { "$FILENAME", "--range-start=" .. -1, "--range-end=" .. -1 }
-        --     end,
-        --   },
-        -- }),
-        -- Go
-        nls.builtins.code_actions.gomodifytags,
-        -- Shell
-        nls.builtins.code_actions.shellcheck,
-        -- GitHub Action
-        nls.builtins.diagnostics.actionlint,
       })
     end,
   },
