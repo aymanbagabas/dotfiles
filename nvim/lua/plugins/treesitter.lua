@@ -22,16 +22,7 @@ return {
           })
         end,
       },
-      {
-        "JoosepAlviste/nvim-ts-context-commentstring",
-        config = function()
-          require("nvim-treesitter.configs").setup({
-            context_commentstring = {
-              enable = true,
-            },
-          })
-        end,
-      },
+      { "JoosepAlviste/nvim-ts-context-commentstring" },
     },
     opts = function(_, opts)
       ---@diagnostic disable-next-line: missing-parameter

@@ -27,3 +27,6 @@ opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal
 -- Global options
 local g = vim.g
 g.blameline = false
+
+-- JoosepAlviste/nvim-ts-context-commentstring skip backwards compatibility and speed up loading
+vim.g.skip_ts_context_commentstring_module = true
