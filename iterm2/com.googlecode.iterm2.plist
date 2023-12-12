@@ -4,6 +4,12 @@
 <dict>
 	<key>AllowClipboardAccess</key>
 	<true/>
+	<key>BracketedPasteMode</key>
+	<true/>
+	<key>CommandSelection</key>
+	<true/>
+	<key>ConvertDosNewlines</key>
+	<false/>
 	<key>Custom Color Presets</key>
 	<dict>
 		<key>base16-onedark-256</key>
@@ -267,6 +273,8 @@
 	<string>E41CAB1E-C558-48DD-8498-04D10E0FD8B3</string>
 	<key>EnableProxyIcon</key>
 	<false/>
+	<key>EscapeShellCharsWithBackslash</key>
+	<false/>
 	<key>FocusFollowsMouse</key>
 	<false/>
 	<key>GlobalKeyMap</key>
@@ -382,6 +390,8 @@
 	<true/>
 	<key>HotkeyModifiers</key>
 	<integer>1179914</integer>
+	<key>LeftCommand</key>
+	<integer>7</integer>
 	<key>NeverWarnAboutShortLivedSessions_B1AB6F76-49E1-4F7A-8026-6F459EA35853</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_B1AB6F76-49E1-4F7A-8026-6F459EA35853_selection</key>
@@ -1858,7 +1868,21 @@
 			<string>/Users/ayman</string>
 		</dict>
 	</array>
+	<key>OptionClickMovesCursor</key>
+	<true/>
 	<key>PMPrintingExpandedStateForPrint2</key>
+	<false/>
+	<key>PassOnControlClick</key>
+	<false/>
+	<key>PasteSpecialChunkDelay</key>
+	<real>0.01</real>
+	<key>PasteSpecialChunkSize</key>
+	<integer>1024</integer>
+	<key>PasteSpecialRegex</key>
+	<string></string>
+	<key>PasteSpecialSubstitution</key>
+	<string></string>
+	<key>PasteSpecialUseRegexSubstitution</key>
 	<false/>
 	<key>PointerActions</key>
 	<dict>
@@ -1907,6 +1931,8 @@
 	<false/>
 	<key>UseBorder</key>
 	<false/>
+	<key>UseMetal</key>
+	<true/>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>findMode_iTerm</key>
@@ -1915,5 +1941,7 @@
 	<integer>0</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>
 	<false/>
+	<key>preferIntegratedGPU</key>
+	<true/>
 </dict>
 </plist>
