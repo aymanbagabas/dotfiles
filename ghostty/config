@@ -1,15 +1,21 @@
-term = "ghostty"
+term = "xterm-256color"
+#term = "ghostty"
 
-font-family = "Inconsolata"
-font-style = "Medium"
-font-family-bold = "Inconsolata"
+font-family = "Inconsolata LGC"
+font-style = "Regular"
+font-family-bold = "Inconsolata LGC"
 font-style-bold = "Bold"
-font-family-italic = "Inconsolata"
+font-family-italic = "Inconsolata LGC"
 font-style-italic = "Italic"
-font-family-bold-italic = "Inconsolata"
-font-style-bold-italic = "Bold Italic"
+font-family-bold-italic = "Inconsolata LGC"
+font-style-bold-italic = "BoldItalic"
 
-font-size = 14
+font-size = 13
+font-thicken = true
+
+adjust-cell-width = -10%
+# adjust-underline-position = 50
+adjust-underline-thickness = -1
 
 background = #282c34
 foreground = #abb2bf

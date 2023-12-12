@@ -5,4 +5,4 @@ if ! $DRY_RUN; then
 	mkdir -p ~/.config/ghostty
 fi
 
-link_file config ~/.config/ghostty/
+link_file config ~/.config/ghostty/config
