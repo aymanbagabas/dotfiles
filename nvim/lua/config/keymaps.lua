@@ -59,8 +59,6 @@ map("n", "<leader>gT", function()
 end, { desc = "Tig (cwd)" })
 
 -- buffers
-map("n", "<leader>bo", [[<Cmd>%bd|e#|bd#<Cr>|'"<Cr>]], { desc = "Close other buffers" })
-map("n", "<leader>bO", [[<Cmd>%bd|e#|bw#<Cr>|'"<Cr>]], { desc = "Wipe other buffers" })
 unmap("n", "<leader>wd")
 unmap("n", "<leader>ww")
 map("n", "<leader>ww", "<cmd>bd<cr>", { desc = "Close current buffer" })

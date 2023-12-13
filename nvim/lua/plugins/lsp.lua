@@ -132,32 +132,7 @@ return {
       keys[#keys + 1] = { "<leader>cl", vim.lsp.codelens.run, desc = "CodeLens" }
       keys[#keys + 1] = { "<leader>xl", vim.diagnostic.setloclist, desc = "Location List" }
       keys[#keys + 1] = { "<leader>xq", vim.diagnostic.setqflist, desc = "Quickfix List" }
-      keys[#keys + 1] = { "<leader>cR", "<cmd>echo 'Restarting LSP...'<cr><cmd>LspRestart<cr>", desc = "Restart LSP" }
-      -- Populate diagnostics before opening trouble
-      keys[#keys + 1] = {
-        "<leader>xL",
-        function()
-          local ok, trouble = pcall(require, "trouble")
-          if not ok then
-            return
-          end
-          vim.diagnostic.setloclist({ open = false })
-          trouble.toggle({ "loclist" })
-        end,
-        desc = "Location List (Trouble)",
-      }
-      keys[#keys + 1] = {
-        "<leader>xQ",
-        function()
-          local ok, trouble = pcall(require, "trouble")
-          if not ok then
-            return
-          end
-          vim.diagnostic.setqflist({ open = false })
-          trouble.toggle({ "quickfix" })
-        end,
-        desc = "Quickfix List (Trouble)",
-      }
+      keys[#keys + 1] = { "<leader>cQ", "<cmd>echo 'Restarting LSP...'<cr><cmd>LspRestart<cr>", desc = "Restart LSP" }
     end,
     opts = {
       diagnostics = {
@@ -217,7 +192,8 @@ return {
           filetypes = { "sh", "zsh", "bash" },
         },
         -- Terraform
-        terraformls = {},
+        -- XXX: replaced by lazyvim.plugins.extras.lang.terraform
+        -- terraformls = {},
         -- Python
         jedi_language_server = {},
         -- Java
@@ -225,47 +201,49 @@ return {
         -- Rust
         rust_analyzer = {},
         -- C/C++
-        clangd = {},
+        -- XXX: replaced by lazyvim.plugins.extras.lang.clangd
+        -- clangd = {},
         -- Go
         golangci_lint_ls = {
           filetypes = { "go", "gomod" },
         },
-        gopls = {
-          settings = {
-            gopls = {
-              hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-              },
-              analyses = {
-                fieldalignment = false,
-                staticcheck = true,
-                unusedparams = true,
-              },
-              codelenses = {
-                run_govulncheck = true,
-              },
-            },
-            gofumpt = false,
-            hints = {
-              assignVariableTypes = true,
-              compositeLiteralFields = true,
-              compositeLiteralTypes = true,
-              constantValues = true,
-              functionTypeParameters = true,
-              parameterNames = true,
-              rangeVariableTypes = true,
-            },
-          },
-          flags = {
-            debounce_text_changes = 150,
-          },
-        },
+        -- XXX: replaced by lazyvim.plugins.extras.lang.go
+        -- gopls = {
+        --   settings = {
+        --     gopls = {
+        --       hints = {
+        --         assignVariableTypes = true,
+        --         compositeLiteralFields = true,
+        --         compositeLiteralTypes = true,
+        --         constantValues = true,
+        --         functionTypeParameters = true,
+        --         parameterNames = true,
+        --         rangeVariableTypes = true,
+        --       },
+        --       analyses = {
+        --         fieldalignment = false,
+        --         staticcheck = true,
+        --         unusedparams = true,
+        --       },
+        --       codelenses = {
+        --         run_govulncheck = true,
+        --       },
+        --     },
+        --     gofumpt = false,
+        --     hints = {
+        --       assignVariableTypes = true,
+        --       compositeLiteralFields = true,
+        --       compositeLiteralTypes = true,
+        --       constantValues = true,
+        --       functionTypeParameters = true,
+        --       parameterNames = true,
+        --       rangeVariableTypes = true,
+        --     },
+        --   },
+        --   flags = {
+        --     debounce_text_changes = 150,
+        --   },
+        -- },
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
@@ -280,9 +258,10 @@ return {
             end
           end)
         end,
-        clangd = function(_, opts)
-          opts.capabilities.offsetEncoding = { "utf-16" }
-        end,
+        -- XXX: replaced by lazyvim.plugins.extras.lang.clangd
+        -- clangd = function(_, opts)
+        --   opts.capabilities.offsetEncoding = { "utf-16" }
+        -- end,
       },
     },
   },

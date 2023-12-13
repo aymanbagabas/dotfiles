@@ -4,28 +4,30 @@
 local autocmd = vim.api.nvim_create_autocmd
 
 -- Autotoggle relativenumber
-autocmd({
-  "BufEnter",
-  "FocusGained",
-  "InsertLeave",
-  "WinEnter",
-}, {
-  pattern = { "*" },
-  callback = function()
-    vim.cmd([[if &nu && mode() != "i" | set rnu | endif]])
-  end,
-})
-autocmd({
-  "BufLeave",
-  "FocusLost",
-  "InsertEnter",
-  "WinLeave",
-}, {
-  pattern = { "*" },
-  callback = function()
-    vim.cmd([[if &nu | set nornu | endif]])
-  end,
-})
+if vim.g.smart_relativenumber then
+  autocmd({
+    "BufEnter",
+    "FocusGained",
+    "InsertLeave",
+    "WinEnter",
+  }, {
+    pattern = { "*" },
+    callback = function()
+      vim.cmd([[if &nu && mode() != "i" | set rnu | endif]])
+    end,
+  })
+  autocmd({
+    "BufLeave",
+    "FocusLost",
+    "InsertEnter",
+    "WinLeave",
+  }, {
+    pattern = { "*" },
+    callback = function()
+      vim.cmd([[if &nu | set nornu | endif]])
+    end,
+  })
+end
 
 -- Restore cursor last position
 -- see also :help last-position-jump
@@ -117,7 +119,16 @@ autocmd("VimEnter", {
     vim.g.save_session = false
 
     -- check if directory is a project directory
-    for _, root in ipairs({ ".git", ".hg", ".bzr", ".svn" }) do
+    for _, root in ipairs({
+      ".git",
+      ".hg",
+      ".bzr",
+      ".svn",
+      "_darcs",
+      "Makefile",
+      "package.json",
+      "go.mod",
+    }) do
       if vim.fn.isdirectory(data.file .. "/" .. root) == 1 then
         vim.g.save_session = true
         break
@@ -128,7 +139,7 @@ autocmd("VimEnter", {
       -- source session.vim if it exists
       local sessionfile = vim.fn.resolve(data.file .. "/.nvim/session.vim")
       if vim.fn.filereadable(sessionfile) == 1 then
-        vim.cmd("source " .. sessionfile)
+        vim.cmd("silent! source " .. sessionfile)
       end
     end
 
@@ -145,6 +156,12 @@ autocmd("VimLeave", {
       return
     end
 
+    -- sanitize bad sessionoptions
+    local sessionopts = vim.opt.sessionoptions:get()
+    vim.opt.sessionoptions:remove("blank")
+    vim.opt.sessionoptions:remove("options")
+    vim.opt.sessionoptions:append("tabpages")
+
     local sessionfile = ".nvim/session.vim"
     if vim.v.this_session ~= "" then
       sessionfile = vim.v.this_session
@@ -152,5 +169,8 @@ autocmd("VimLeave", {
 
     vim.fn.mkdir(".nvim", "p")
     vim.cmd("mksession! " .. sessionfile)
+
+    -- restore sessionoptions
+    vim.opt.sessionoptions = sessionopts
   end,
 })

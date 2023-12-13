@@ -57,6 +57,7 @@ return {
     keys = {
       { "<leader>bh", "<cmd>BufferLineCloseLeft<cr>", desc = "Close all to the left" },
       { "<leader>bl", "<cmd>BufferLineCloseRight<cr>", desc = "Close all to the right" },
+      { "<leader>bo", "<cmd>BufferLineCloseOther<cr>", desc = "Close all other" },
       {
         "<BSlash>",
         "<cmd>BufferLinePick<CR>",
@@ -154,7 +155,8 @@ return {
           { action = "Telescope oldfiles",                desc = " Recent files",    icon = " ", key = "r" },
           { action = "Telescope live_grep",               desc = " Find text",       icon = " ", key = "g" },
           { action = "e $MYVIMRC",                        desc = " Config",          icon = " ", key = "c" },
-          { action = 'lua require("persistence").load()', desc = " Restore Session", icon = " ", key = "s" },
+          { action = "Telescope projects",                desc = " Projects",        icon = " ", key = "p" },
+          -- { action = 'lua require("persistence").load()', desc = " Restore Session", icon = " ", key = "s" },
           { action = "LazyExtras",                        desc = " Lazy Extras",     icon = " ", key = "e" },
           { action = "Lazy",                              desc = " Lazy",            icon = "󰒲 ", key = "l" },
           { action = "qa",                                desc = " Quit",            icon = " ", key = "q" },
@@ -313,6 +315,15 @@ return {
       }
     end,
   },
+
+  -- TODO: enable this after nvim v0.10
+  -- {
+  --   "Bekaboo/dropbar.nvim",
+  --   -- optional, but required for fuzzy finder support
+  --   dependencies = {
+  --     "nvim-telescope/telescope-fzf-native.nvim",
+  --   },
+  -- },
 
   {
     "utilyre/barbecue.nvim",

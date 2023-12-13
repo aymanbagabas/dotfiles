@@ -22,11 +22,15 @@ opt.spell = true
 -- Set completeopt
 opt.completeopt = "menu,menuone,noinsert"
 -- Set sessionoptions
-opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,terminal"
 
 -- Global options
 local g = vim.g
 g.blameline = false
+g.smart_relativenumber = true
 
 -- JoosepAlviste/nvim-ts-context-commentstring skip backwards compatibility and speed up loading
-vim.g.skip_ts_context_commentstring_module = true
+g.skip_ts_context_commentstring_module = true
+
+-- Load local config
+pcall(require, "config.local")
