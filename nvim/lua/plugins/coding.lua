@@ -123,10 +123,6 @@ return {
       -- Don't select anything by default
       opts.preselect = cmp.PreselectMode.None
 
-      opts.completion = {
-        completeopt = "menu,menuone,noinsert",
-      }
-
       ---@diagnostic disable-next-line: missing-parameter
       opts.sources = cmp.config.sources(vim.list_extend(opts.sources, {
         {

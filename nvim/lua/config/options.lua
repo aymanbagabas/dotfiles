@@ -20,7 +20,7 @@ opt.listchars:append({ tab = "  " })
 -- Enable spell checking
 opt.spell = true
 -- Set completeopt
-opt.completeopt = "menu,menuone,noinsert"
+opt.completeopt = "menu,menuone,noinsert,noselect"
 -- Set sessionoptions
 opt.sessionoptions = "buffers,curdir,folds,help,tabpages,winsize,terminal"
 
