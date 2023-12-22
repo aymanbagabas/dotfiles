@@ -32,6 +32,11 @@ return {
   },
 
   {
+    "sitiom/nvim-numbertoggle",
+    cond = vim.g.smart_relativenumber,
+  },
+
+  {
     "RRethy/vim-illuminate",
     opts = {
       filetypes_denylist = vim.g.exclude_filetypes,
