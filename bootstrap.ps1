@@ -8,7 +8,7 @@ param(
 )
 
 # Exit if not running on Windows
-if ($PSVersionTable.Platform -ne "Win32NT") {
+if ($IsWindows -or $ENV:OS -eq "Windows_NT")
 	Write-Host "This script is only supported on Windows"
 	exit 1
 }
