@@ -8,7 +8,7 @@ param(
 )
 
 # Exit if not running on Windows
-if ($IsWindows -or $ENV:OS -eq "Windows_NT")
+if ($ENV:OS -ne "Windows_NT" -and [System.Environment]::OSVersion.Platform -ne "Win32NT") {
 	Write-Host "This script is only supported on Windows"
 	exit 1
 }
