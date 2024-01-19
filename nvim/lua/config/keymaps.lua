@@ -64,13 +64,6 @@ unmap("n", "<leader>ww")
 map("n", "<leader>ww", "<cmd>bd<cr>", { desc = "Close current buffer" })
 map("n", "<leader>wo", "<C-W>p", { desc = "Other window" })
 map("n", "<leader>wq", "<cmd>q<cr>", { desc = "Quit window" })
-if Util.has("bufferline.nvim") then
-  map("n", "<Tab>", "<cmd>BufferLineCycleNext<CR>", { desc = "Next Buffer" })
-  map("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<CR>", { desc = "Prev Buffer" })
-else
-  map("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-  map("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-end
 -- unmap H & L
 unmap("n", "<S-h>")
 unmap("n", "<S-l>")
