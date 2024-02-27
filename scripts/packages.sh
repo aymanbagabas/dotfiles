@@ -51,6 +51,7 @@ darwin*)
 			brew "hub"
 			brew "tz"
 			brew "eza"
+			brew "fd"
 
 			cask "google-chrome"
 			cask "alfred"
@@ -101,6 +102,7 @@ linux*)
 					"${pkgs[@]}" \
 					pinentry-tty \
 					fortune-mod \
+					fd-find \
 					eza
 			fi
 			break
@@ -113,6 +115,7 @@ linux*)
 					"${pkgs[@]}" \
 					pinentry-tty \
 					fortune-mod \
+					fd-find \
 					exa
 			fi
 			break
@@ -126,6 +129,7 @@ linux*)
 					pinentry \
 					base-devel \
 					fortune-mod \
+					fd \
 					eza
 			fi
 			;;

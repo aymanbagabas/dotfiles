@@ -1,6 +1,7 @@
 
 $PGKS = @(
 	"7zip.7zip",
+	"BurntSushi.ripgrep.MSVC",
 	"Git.Git",
 	"GnuPG.Gpg4win",
 	"Microsoft.PowerShell",
@@ -8,7 +9,9 @@ $PGKS = @(
 	"Microsoft.WindowsTerminal",
 	"Neovim.Neovim",
 	"Notepad++.Notepad++",
-	"eza-community.eza"
+	"eza-community.eza",
+	"junegunn.fzf",
+	"sharkdp.fd"
 )
 
 Write-Host "Installing packages..."
