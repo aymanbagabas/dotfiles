@@ -1,21 +1,21 @@
 term = "xterm-256color"
 #term = "ghostty"
 
-font-family = "Inconsolata LGC"
-font-style = "Regular"
-font-family-bold = "Inconsolata LGC"
-font-style-bold = "Bold"
-font-family-italic = "Inconsolata LGC"
-font-style-italic = "Italic"
-font-family-bold-italic = "Inconsolata LGC"
-font-style-bold-italic = "BoldItalic"
+font-family = "Inconsolata LGC Nerd Font"
+# font-style = "Regular"
+# font-family-bold = "Inconsolata LGC"
+# font-style-bold = "Bold"
+# font-family-italic = "Inconsolata LGC"
+# font-style-italic = "Italic"
+# font-family-bold-italic = "Inconsolata LGC"
+# font-style-bold-italic = "BoldItalic"
 
-font-size = 13
+font-size = 12
 font-thicken = true
 
 adjust-cell-width = -10%
 # adjust-underline-position = 50
-adjust-underline-thickness = -1
+#adjust-underline-thickness = -1
 
 background = #282c34
 foreground = #abb2bf
@@ -55,5 +55,6 @@ palette = 14=#56b6c2
 palette = 15=#ffffff
 
 macos-option-as-alt = true
+macos-titlebar-tabs = true
 
 # vim:ft=config
