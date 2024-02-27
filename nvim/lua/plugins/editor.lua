@@ -27,6 +27,22 @@ return {
   },
 
   {
+    "stevearc/oil.nvim",
+    keys = {
+      {
+        "-",
+        "<cmd>Oil<cr>",
+        desc = "Open parent directory",
+        mode = { "n" },
+      },
+    },
+    cmd = {
+      "Oil",
+    },
+    opts = {},
+  },
+
+  {
     "nvim-telescope/telescope.nvim",
     keys = {},
   },
