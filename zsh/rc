@@ -12,13 +12,17 @@ zinit snippet OMZL::theme-and-appearance.zsh
 zinit ice wait lucid depth"1"
 zinit light "lukechilds/zsh-nvm"
 
+zinit ice lucid has"git"
 zinit snippet OMZP::git
 
-zinit ice if"[[ $OSTYPE == linux* ]]" depth"1"
+zinit ice lucid if"[[ $OSTYPE == linux* ]]"
 zinit snippet OMZP::systemd
 
-zinit ice if"[[ $OSTYPE == linux* ]]" depth"1"
+zinit ice lucid if"[[ $OSTYPE == linux* ]]"
 zinit snippet OMZP::dnf
+
+zinit ice lucid has"gcloud"
+zinit snippet OMZP::gcloud
 
 zinit ice atload"base16_onedark" depth"1"
 zinit load "chriskempson/base16-shell"
@@ -38,7 +42,7 @@ zinit ice wait lucid depth"1"
 zinit light "softmoth/zsh-vim-mode"
 
 # Load this after vim-mode to restore ctrl-r
-zinit ice wait"1" lucid depth"1"
+zinit ice wait"1" lucid
 zinit snippet OMZP::fzf
 
 # This should be last
