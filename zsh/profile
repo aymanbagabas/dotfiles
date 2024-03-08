@@ -30,7 +30,7 @@ if [ ! -d "$HOME/.nvm" ]; then
 	mkdir $HOME/.nvm
 fi
 
-KEYID=$(grep 'default-key' $HOME/.gnupg/gpg.conf | cut -d' ' -f2)
+KEYID=$(grep 'default-key' $HOME/.gnupg/gpg.conf | cut -d' ' -f2 | tr -d '"')
 export KEYID
 export HISTSIZE=10000
 export SAVEHIST=10000
