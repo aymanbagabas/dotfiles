@@ -3,6 +3,10 @@ return {
     "nvim-neo-tree/neo-tree.nvim",
     opts = function(_, opts)
       return vim.tbl_extend("force", opts, {
+        source_selector = {
+          winbar = false,
+          statusline = false,
+        },
         close_if_last_window = true,
         filesystem = {
           bind_to_cwd = false,
