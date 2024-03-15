@@ -5,14 +5,14 @@ Ayman's (~) dotfiles
 ```
 Colorscheme: Onedark
 Shell:       zsh/pwsh
-Terminal:    iTerm2/WindowsTerminal
+Terminal:    Ghostty/iTerm2/WindowsTerminal
 Font:        Inconsolata + NF
 ```
 
 ## Dependencies
 
 - `git` to clone the repository
-- `bash` to run the bootstrap script on *nix
+- `bash` to run the bootstrap script on \*nix
 - `powershell` to run the bootstrap script on Windows
 
 ## Installation
@@ -66,7 +66,7 @@ cd $Env:USERPROFILE\.dotfiles
 - `fzf`
 - `ripgrep`
 - `gnupg`
-- `exa`
+- `eza`
 - `direnv`
 - `zoxide`
 - `bat`
