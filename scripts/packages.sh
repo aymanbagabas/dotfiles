@@ -116,7 +116,7 @@ linux*)
 					pinentry-tty \
 					fortune-mod \
 					fd-find \
-					exa
+					eza
 			fi
 			break
 			;;
