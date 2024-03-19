@@ -1,9 +1,9 @@
 return {
   -- add onedark
   {
-    "navarasu/onedark.nvim",
-    -- "aymanbagabas/onedark.nvim",
-    -- branch = "ibl3",
+    -- "navarasu/onedark.nvim",
+    "aymanbagabas/onedark.nvim",
+    branch = "diff-ts",
     -- dir = "~/Source/navarasu/onedark.nvim",
     priority = 1000, -- Ensure it loads first
     lazy = true,
