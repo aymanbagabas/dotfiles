@@ -74,6 +74,10 @@ export NVM_DIR="$HOME/.nvm"
 export NVM_LAZY_LOAD=true
 export NVM_COMPLETION=true
 
+# Terminfo dir
+# https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
+export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
+
 # Add any local overrides
 if [ -f "$HOME/.zprofile.local" ]; then
 	source $HOME/.zprofile.local
