@@ -35,6 +35,8 @@ require("lazy").setup({
   install = { colorscheme = { "onedark" } },
   checker = { enabled = true }, -- automatically check for plugin updates
   performance = {
+    -- we install some packages via nix so we want to load from packpath too
+    reset_packpath = false,
     rtp = {
       -- disable some rtp plugins
       disabled_plugins = {
