@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Based on https://github.com/meowgorithm/dotfiles/blob/master/modules/home/scripts/tmls
+
+ensure() {
+    if ! command -v "$1" &>/dev/null; then
+        printf "%s not found. Please install it (or check your PATH) and try again.\n" "$1"
+        exit 1
+    fi
+}
+
+filter() {
+    local height=""
+    if [ "$2" != "" ]; then
+        height="--height $2"
+    fi
+    # shellcheck disable=2086
+    tmux list-sessions -F "#S" | fzf --header "$1" $height
+}
+
+ensure tmux
+ensure fzf
+
+if ! tmux ls &>/dev/null; then
+    printf "no sessions\n"
+    exit 1
+fi
+
+if [ "$TMUX" != "" ]; then
+    session="$(filter "switch session")"
+    [ -n "$session" ] && tmux switch-client -t "$session"
+else
+    session="$(filter "attach session" 12)"
+    [ -n "$session" ] && tmux attach-session -t "$session"
+fi
