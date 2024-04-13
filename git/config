@@ -40,3 +40,5 @@ git config --global alias.purge-tags "!git tag -l | xargs git tag -d && git fetc
 git config --global tig.mouse true
 git config --global tig.mouse-wheel-cursor true
 git config --global tig.color.cursor "black green bold"
+git config --global tig.color.title-blur "black blue"
+git config --global tig.color.title-focus "black blue bold"
