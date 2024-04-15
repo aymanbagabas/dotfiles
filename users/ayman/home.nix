@@ -49,5 +49,6 @@
   imports = [
     ../../modules/gpg.nix
     ../../modules/shell.nix
+    ../../modules/tmux
   ];
 }
