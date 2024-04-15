@@ -8,7 +8,7 @@ let
   (readDir ./.);
 
   scripts = mapAttrs' (name: _:
-      nameValuePair ".local/bin/${name}" { source = ./${name}; }
+      nameValuePair ".bin/${name}" { source = ./${name}; }
   ) files;
 in
 {

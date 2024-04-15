@@ -1,12 +1,14 @@
 { config, pkgs, ... }:
 
 let
+  lib = pkgs.lib;
   pathJoin = builtins.concatStringsSep ":";
+  secretSessionVariablesPath = ../secrets/sessionVariables.json;
 in {
   programs.zsh = rec {
     enable = true;
     enableCompletion = true;
-    autosuggestion.enable = true;
+    autosuggestion.enable = false;
     syntaxHighlighting.enable = true;
 
     plugins = [
@@ -78,7 +80,7 @@ in {
 
     sessionVariables = {
       PATH = pathJoin [
-        "$HOME/.local/bin"
+        "$HOME/.bin"
         "$PATH"
       ];
 
@@ -89,13 +91,6 @@ in {
       KEYTIMEOUT = "1"; # Fix vi-mode timeout
 
       LESS = "-R --mouse --wheel-lines=3";
-      LESS_TERMCAP_mb="$'\E[01;31m'";
-      LESS_TERMCAP_md="$'\E[01;31m'";
-      LESS_TERMCAP_me="$'\E[0m'";
-      LESS_TERMCAP_se="$'\E[0m'";
-      LESS_TERMCAP_so="$'\E[01;44;32m'";
-      LESS_TERMCAP_ue="$'\E[0m'";
-      LESS_TERMCAP_us="$'\E[01;33m'";
       LESSOPEN="| $(command -v src-hilite-lesspipe.sh) %s";
       FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore-vcs --glob '!.git/*'";
 
@@ -113,11 +108,11 @@ in {
       # pure prompt
       PURE_PROMPT_SYMBOL="›";
       PURE_PROMPT_VICMD_SYMBOL="›";
-    } // (if pkgs.stdenv.isDarwin then {
+    } // (lib.optionalAttrs pkgs.stdenv.isDarwin {
       LSCOLORS = "exfxcxdxbxegedabagacad";
       CLICOLOR = "1";
-    } else {
-    }) // builtins.fromJSON (builtins.readFile ../secrets/sessionVariables.json);
+    }) // lib.optionalAttrs (builtins.pathExists secretSessionVariablesPath)
+      builtins.fromJSON (builtins.readFile secretSessionVariablesPath);
 
     shellAliases = {
       grep = "grep --color=auto";
@@ -127,9 +122,8 @@ in {
       watch = "watch --color ";
       gpg-reload-agent="gpg-connect-agent reloadagent /bye";
       gpg-other-card="gpg-connect-agent 'scd serialno' 'learn --force' /bye";
-    } // (if pkgs.stdenv.isLinux then {
+    } // (lib.optionalAttrs pkgs.stdenv.isLinux {
       open = "xdg-open";
-    } else {
     });
 
     history.size = 10000;
@@ -174,6 +168,15 @@ in {
 
       add-zle-hook-widget zle-line-finish reset_vim_prompt_widget
       add-zle-hook-widget zle-keymap-select update_vim_prompt_widget
+
+      # Set less colors
+      export LESS_TERMCAP_mb=$'\E[01;31m'
+      export LESS_TERMCAP_md=$'\E[01;31m'
+      export LESS_TERMCAP_me=$'\E[0m'
+      export LESS_TERMCAP_se=$'\E[0m'
+      export LESS_TERMCAP_so=$'\E[01;44;32m'
+      export LESS_TERMCAP_ue=$'\E[0m'
+      export LESS_TERMCAP_us=$'\E[01;33m'
     '';
   };
 }
