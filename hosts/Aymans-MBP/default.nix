@@ -56,6 +56,7 @@
       "slack"
       "spotify"
       "syncthing"
+      "tailscale"
       "telegram"
       "the-unarchiver"
       "vmware-fusion"
