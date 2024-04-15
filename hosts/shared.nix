@@ -17,5 +17,6 @@
     cachix
     coreutils
     git
+    neovim
   ];
 }

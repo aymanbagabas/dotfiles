@@ -18,13 +18,14 @@ in systemFunc {
 
     modules = [
       { nixpkgs.overlays = overlays; }
-      ../machines/${hostname}
-      (if isDarwin then ../users/${user}/darwin.nix else ../users/${user}/nixos.nix)
-      home-manager.home-manager
-      {
+      ../hosts/${hostname}
+      home-manager.home-manager {
         home-manager.useGlobalPkgs = useGlobalPkgs;
         home-manager.useUserPackages = useUserPkgs;
         home-manager.users.${user} = import ../users/${user}/home.nix;
+        home-manager.extraSpecialArgs = {
+            inherit inputs overlays;
+        };
       }
     ];
   }

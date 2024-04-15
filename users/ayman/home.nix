@@ -47,8 +47,8 @@
   ];
 
   imports = [
-    ../../modules/gpg.nix
-    ../../modules/shell.nix
-    ../../modules/tmux
+    ./gpg.nix
+    ./shell.nix
+    ./tmux
   ];
 }
