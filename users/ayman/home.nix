@@ -1,9 +1,10 @@
-{ pkgs, hostname, ... }:
+{ config, pkgs, hostname, ... }:
 
 let
   inherit (pkgs) lib;
   isDarwin = pkgs.stdenv.isDarwin;
   isDesktop = hostname == "Aymans-MBP";
+
 in {
   home.username = "ayman";
   home.homeDirectory = (if isDarwin then "/Users" else "/home") + "/ayman";
@@ -43,6 +44,15 @@ in {
     wget
     yarn
     zoxide
+
+    # Fonts
+    inconsolata-lgc
+    jetbrains-mono
+
+    # DevOps
+    (google-cloud-sdk.withExtraComponents [
+      google-cloud-sdk.components.gke-gcloud-auth-plugin
+    ])
   ] ++ (lib.optionals isDesktop [
     # Applications
     _1password
@@ -50,14 +60,15 @@ in {
     alacritty
     discord
     kitty
-    rectangle
     slack
     spotify
     syncthing
     tailscale
     telegram-desktop
-  ]) ++ (lib.optionals isDarwin [
+  ]) ++ (lib.optionals (isDesktop && isDarwin) [
     iterm2
+    rectangle
+    xquartz
   ]);
 
   imports = [
@@ -67,9 +78,15 @@ in {
     ./tmux
   ];
 
+  home.file = {
+    ".Xresources".source = ./Xresources;
+  };
   xdg.configFile = {
     "ghostty/config".source = ./ghostty.conf;
   } // lib.mkIf (isDarwin) {
-    "karabiner/karabiner.json".source = ./karabiner.json;
+    # Need to symlink karabiner.json to the correct location
+    # https://github.com/nix-community/home-manager/issues/2085
+    "karabiner/karabiner.json".source = config.lib.file.mkOutOfStoreSymlink
+      "${config.home.homeDirectory}/.dotfiles/users/ayman/karabiner.json";
   };
 }

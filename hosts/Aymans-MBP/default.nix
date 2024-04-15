@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
-{
+rec {
   imports = [
     ../shared.nix
   ];
@@ -50,7 +50,6 @@
       "the-unarchiver"
       "vmware-fusion"
       "whatsapp"
-      "xquartz"
     ];
   };
 
@@ -65,9 +64,11 @@
     defaults = {
       CustomUserPreferences = {
         "com.googlecode.iterm2.plist" = {
-		  # Specify the preferences directory
-          PrefsCustomFolder = ./.;
-		  # Tell iTerm2 to use the custom preferences in the directory
+          # Specify the preferences directory
+          # Cannot be a nix store link
+          # https://github.com/nix-community/home-manager/issues/2085
+          PrefsCustomFolder = "${users.users.ayman.home}/.dotfiles/users/ayman";
+          # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
         };
       };
