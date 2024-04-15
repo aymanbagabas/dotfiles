@@ -56,4 +56,12 @@
       "xquartz"
     ];
   };
+
+  environment.systemPackages = with pkgs; [
+    gnupg
+  ];
+
+  # gpg-agent is handled by home-manager
+  #programs.gnupg.agent.enable = true;
+  #programs.gnupg.agent.enableSSHSupport = true;
 }

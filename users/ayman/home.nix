@@ -24,6 +24,9 @@
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  # Enable XDG
+  xdg.enable = true;
+
   home.packages = with pkgs; with pkgs.nodePackages_latest; [
     age
     curl
@@ -31,8 +34,8 @@
     fd
     fortune
     fzf
-    htop
     git-crypt
+    htop
     jq
     lsd
     p7zip
@@ -44,6 +47,7 @@
   ];
 
   imports = [
+    ../../modules/gpg.nix
     ../../modules/shell.nix
   ];
 }
