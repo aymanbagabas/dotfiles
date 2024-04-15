@@ -3,7 +3,7 @@
 let
   lib = pkgs.lib;
   pathJoin = builtins.concatStringsSep ":";
-  secretSessionVariablesPath = ../secrets/sessionVariables.json;
+  secretSessionVariablesPath = ../../secrets/sessionVariables.json;
 in {
   programs.zsh = rec {
     enable = true;
@@ -91,7 +91,7 @@ in {
       KEYTIMEOUT = "1"; # Fix vi-mode timeout
 
       LESS = "-R --mouse --wheel-lines=3";
-      LESSOPEN="| $(command -v src-hilite-lesspipe.sh) %s";
+      # LESSOPEN="| $(command -v src-hilite-lesspipe.sh) %s"; # replaced by lesspipe
       FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore-vcs --glob '!.git/*'";
 
       # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/

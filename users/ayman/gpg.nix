@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  inherit (pkgs.lib) mkIf mkMerge optionalAttrs optionalString optional concatStringsSep concatMapStrings getExe;
+  inherit (pkgs.lib) optionalAttrs optionalString optional concatStringsSep concatMapStrings getExe;
   homedir = "${config.home.homeDirectory}/.gnupg";
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;

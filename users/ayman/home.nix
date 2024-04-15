@@ -30,23 +30,19 @@
   home.packages = with pkgs; with pkgs.nodePackages_latest; [
     age
     curl
-    eza
     fd
     fortune
-    fzf
-    git-crypt
     htop
     jq
-    lsd
     p7zip
     ripgrep
-    sourceHighlight
     wget
     yarn
     zoxide
   ];
 
   imports = [
+    ./git.nix
     ./gpg.nix
     ./shell.nix
     ./tmux
