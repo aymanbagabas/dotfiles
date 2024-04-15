@@ -16,6 +16,9 @@ let
 in systemFunc {
     inherit system;
 
+    specialArgs = {
+      inherit inputs overlays hostname;
+    };
     modules = [
       { nixpkgs.overlays = overlays; }
       ../hosts/${hostname}
@@ -24,7 +27,7 @@ in systemFunc {
         home-manager.useUserPackages = useUserPkgs;
         home-manager.users.${user} = import ../users/${user}/home.nix;
         home-manager.extraSpecialArgs = {
-            inherit inputs overlays;
+            inherit inputs overlays hostname;
         };
       }
     ];

@@ -1,8 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, hostname, ... }:
 
-{
+let
+  inherit (pkgs) lib;
+  isDarwin = pkgs.stdenv.isDarwin;
+  isDesktop = hostname == "Aymans-MBP";
+in {
   home.username = "ayman";
-  home.homeDirectory = (if pkgs.stdenv.isDarwin then "/Users" else "/home") + "/ayman";
+  home.homeDirectory = (if isDarwin then "/Users" else "/home") + "/ayman";
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -39,7 +43,22 @@
     wget
     yarn
     zoxide
-  ];
+  ] ++ (lib.optionals isDesktop [
+    # Applications
+    _1password
+    _1password-gui
+    alacritty
+    discord
+    kitty
+    rectangle
+    slack
+    spotify
+    syncthing
+    tailscale
+    telegram-desktop
+  ]) ++ (lib.optionals isDarwin [
+    iterm2
+  ]);
 
   imports = [
     ./git.nix
@@ -47,4 +66,10 @@
     ./shell.nix
     ./tmux
   ];
+
+  xdg.configFile = {
+    "ghostty/config".source = ./ghostty.conf;
+  } // lib.mkIf (isDarwin) {
+    "karabiner/karabiner.json".source = ./karabiner.json;
+  };
 }

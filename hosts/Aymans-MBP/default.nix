@@ -38,37 +38,39 @@
     enable = true;
     casks = [
       "1password"
-      "alacritty"
       "alt-tab"
       "clipy"
-      "discord"
       "docker"
       "firefox"
       "font-inconsolata-lgc"
       "font-symbols-only-nerd-font"
       "google-chrome"
-      "iterm2-beta"
-      "karabiner-elements"
-      "kitty"
       "microsoft-remote-desktop"
       "multitouch"
-      "rectangle"
-      "slack"
-      "spotify"
-      "syncthing"
-      "tailscale"
-      "telegram"
       "the-unarchiver"
       "vmware-fusion"
+      "whatsapp"
       "xquartz"
     ];
   };
 
-  environment.systemPackages = with pkgs; [
-    gnupg
-  ];
-
   # gpg-agent is handled by home-manager
   #programs.gnupg.agent.enable = true;
   #programs.gnupg.agent.enableSSHSupport = true;
+
+  # Karabiner Elements
+  services.karabiner-elements.enable = true;
+
+  system = {
+    defaults = {
+      CustomUserPreferences = {
+        "com.googlecode.iterm2.plist" = {
+		  # Specify the preferences directory
+          PrefsCustomFolder = ./.;
+		  # Tell iTerm2 to use the custom preferences in the directory
+          LoadPrefsFromCustomFolder = true;
+        };
+      };
+    };
+  };
 }
