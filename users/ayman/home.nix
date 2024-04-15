@@ -1,9 +1,10 @@
-{ config, pkgs, hostname, ... }:
+{ config, pkgs, inputs, currentSystem, hostname, ... }:
 
 let
   inherit (pkgs) lib;
   isDarwin = pkgs.stdenv.isDarwin;
-  isDesktop = hostname == "Aymans-MBP";
+  isLinux = pkgs.stdenv.isLinux;
+  isHeadless = hostname != "Aymans-MBP";
 
 in {
   home.username = "ayman";
@@ -53,7 +54,7 @@ in {
     (google-cloud-sdk.withExtraComponents [
       google-cloud-sdk.components.gke-gcloud-auth-plugin
     ])
-  ] ++ (lib.optionals isDesktop [
+  ] ++ (with inputs; lib.optionals (!isHeadless) [
     # Applications
     _1password
     _1password-gui
@@ -65,10 +66,12 @@ in {
     syncthing
     tailscale
     telegram-desktop
-  ]) ++ (lib.optionals (isDesktop && isDarwin) [
+  ]) ++ (lib.optionals (!isHeadless && isDarwin) [
     iterm2
     rectangle
     xquartz
+  ]) ++ (lib.optionals (!isHeadless && isLinux) [
+    ghostty.packages.${currentSystem}.default # Ghostty is only available on Linux
   ]);
 
   imports = [
