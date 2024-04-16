@@ -1,10 +1,7 @@
-{ config, pkgs, inputs, currentSystem, hostname, ... }:
+{ config, pkgs, inputs, currentSystem, isDarwin, isLinux, isHeadless, ... }:
 
 let
   inherit (pkgs) lib;
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
-  isHeadless = hostname != "Aymans-MBP";
 
 in {
   home.username = "ayman";
@@ -34,6 +31,7 @@ in {
   xdg.enable = true;
 
   home.packages = with pkgs; with pkgs.nodePackages_latest; [
+    _1password
     age
     curl
     fd
@@ -55,8 +53,7 @@ in {
       google-cloud-sdk.components.gke-gcloud-auth-plugin
     ])
   ] ++ (with inputs; lib.optionals (!isHeadless) [
-    # Applications
-    _1password
+    # Applications (GUI)
     _1password-gui
     alacritty
     discord
@@ -79,14 +76,14 @@ in {
     ./gpg.nix
     ./shell.nix
     ./tmux
+    ./xresources.nix
+
+    # Applications (GUI)
+    ./alacritty.nix
+    ./ghostty.nix
   ];
 
-  home.file = {
-    ".Xresources".source = ./Xresources;
-  };
-  xdg.configFile = {
-    "ghostty/config".source = ./ghostty.conf;
-  } // lib.mkIf (isDarwin) {
+  xdg.configFile = lib.mkIf (isDarwin) {
     # Need to symlink karabiner.json to the correct location
     # https://github.com/nix-community/home-manager/issues/2085
     "karabiner/karabiner.json".source = config.lib.file.mkOutOfStoreSymlink
