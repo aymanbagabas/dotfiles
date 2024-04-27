@@ -33,10 +33,10 @@ if [ -d "$HOME/.cargo" ]; then
 fi
 
 if [ ! -d "$HOME/.nvm" ]; then
-	mkdir $HOME/.nvm
+	mkdir "$HOME/.nvm"
 fi
 
-KEYID=$(grep 'default-key' $HOME/.gnupg/gpg.conf | cut -d' ' -f2 | tr -d '"')
+KEYID=$(grep 'default-key' "$HOME/.gnupg/gpg.conf" | cut -d' ' -f2 | tr -d '"')
 export KEYID
 export HISTSIZE=10000
 export SAVEHIST=10000
@@ -86,7 +86,8 @@ export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 
 # Add any local overrides
 if [ -f "$HOME/.zprofile.local" ]; then
-	source $HOME/.zprofile.local
+	# shellcheck disable=SC1091
+	source "$HOME/.zprofile.local"
 fi
 
 # vim: ft=sh

@@ -1,6 +1,7 @@
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname "$ZINIT_HOME")"
+[ ! -d "$ZINIT_HOME/.git" ] && git clone --depth 1 https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+# shellcheck disable=SC1091
 source "${ZINIT_HOME}/zinit.zsh"
 
 zinit snippet OMZL::key-bindings.zsh
@@ -52,6 +53,7 @@ zinit light "zsh-users/zsh-completions"
 autoload -Uz compinit && compinit
 
 # User configuration
+# shellcheck disable=SC1091
 . "$HOME/.aliases"
 
 # Pass arguments to command if pattern matching fails
@@ -107,6 +109,7 @@ case "$OSTYPE" in
 	export LSCOLORS="exfxcxdxbxegedabagacad"
 	export CLICOLOR=1
 	# source iTerm2 shell integration
+	# shellcheck disable=SC1091
 	[ "$TERM_PROGRAM" = "iTerm.app" ] &&
 		[ -e "${HOME}/.iterm2_shell_integration.zsh" ] &&
 		source "${HOME}/.iterm2_shell_integration.zsh"
