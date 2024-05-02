@@ -2,8 +2,9 @@
 
 {
   home.packages = with pkgs; [
+    gh
     git-crypt
-    git-hub
+    hub
     tig
   ];
 

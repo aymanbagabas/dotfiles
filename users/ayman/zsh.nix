@@ -68,8 +68,8 @@ in {
         src = pkgs.fetchFromGitHub {
           owner = "tinted-theming";
           repo = "tinted-fzf";
-          rev = "e9a7bd60a660c1686ab01c81aa6ec10de225c72b"; # Apr 7, 2024
-          hash = "sha256-X89FsG9QICDw3jZvOCB/KsPBVOLUeE7xN3VCtf0DD3E=";
+          rev = "87368a6f4f545916d0dbc7bb86b8492258d77293"; # Apr 21, 2024
+          hash = "sha256-Lo5++1pOD9i62ahI3Ta2s/F/U80LXOu0sWMLUng3GbQ=";
         };
       }
     ] ++ (pkgs.lib.optionals pkgs.stdenv.isLinux {
@@ -79,10 +79,14 @@ in {
     });
 
     sessionVariables = {
-      PATH = pathJoin [
-        "$HOME/.bin"
-        "$PATH"
-      ];
+      PATH = pathJoin (
+        [
+          "/opt/homebrew/bin"
+          "/opt/homebrew/sbin"
+          "$HOME/.bin"
+          "$PATH"
+        ]
+      );
 
       BASE16_THEME = "onedark";
 
@@ -112,6 +116,7 @@ in {
       LSCOLORS = "exfxcxdxbxegedabagacad";
       CLICOLOR = "1";
     }) // lib.optionalAttrs (builtins.pathExists secretSessionVariablesPath)
+      # TODO: make this optional
       builtins.fromJSON (builtins.readFile secretSessionVariablesPath);
 
     shellAliases = {

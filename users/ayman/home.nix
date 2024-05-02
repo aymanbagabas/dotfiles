@@ -48,6 +48,10 @@ in {
     inconsolata-lgc
     jetbrains-mono
 
+    # Dev tools
+    go
+    nodejs
+
     # DevOps
     (google-cloud-sdk.withExtraComponents [
       google-cloud-sdk.components.gke-gcloud-auth-plugin
