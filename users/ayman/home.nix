@@ -49,7 +49,6 @@ in {
     jetbrains-mono
 
     # Dev tools
-    go
     nodejs
 
     # DevOps
@@ -82,6 +81,9 @@ in {
     ./shell.nix
     ./tmux
     ./xresources.nix
+
+    # Dev
+    ./go.nix
 
     # Applications (GUI)
     ./alacritty.nix

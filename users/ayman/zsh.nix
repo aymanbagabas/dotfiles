@@ -83,6 +83,7 @@ in {
         [
           "/opt/homebrew/bin"
           "/opt/homebrew/sbin"
+          "$HOME/.go/bin"
           "$HOME/.bin"
           "$PATH"
         ]
