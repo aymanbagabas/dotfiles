@@ -42,7 +42,7 @@
 
     in {
       darwinConfigurations.Aymans-MBP = mkSystem {
-        system = "x86_64-darwin";
+        system = "aarch64-darwin";
         hostname = "Aymans-MBP";
         user = "ayman";
       };
