@@ -78,6 +78,7 @@ in {
   imports = [
     ./git.nix
     ./gpg.nix
+    ./neovim.nix
     ./shell.nix
     ./tmux
     ./xresources.nix
