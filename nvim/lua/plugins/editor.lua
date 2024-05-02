@@ -52,7 +52,7 @@ return {
   },
 
   {
-    "sitiom/nvim-numbertoggle",
+    "jeffkreeftmeijer/vim-numbertoggle",
     cond = vim.g.smart_relativenumber,
   },
 
@@ -200,8 +200,7 @@ return {
   },
 
   {
-    "alexghergh/nvim-tmux-navigation",
-    branch = "main",
+    "christoomey/vim-tmux-navigator",
   },
 
   {

@@ -50,6 +50,7 @@ in {
 
     # Dev tools
     nodejs
+    yarn
 
     # DevOps
     (google-cloud-sdk.withExtraComponents [
@@ -84,6 +85,7 @@ in {
 
     # Dev
     ./go.nix
+    ./npm.nix
 
     # Applications (GUI)
     ./alacritty.nix

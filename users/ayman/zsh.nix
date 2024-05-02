@@ -83,6 +83,7 @@ in {
         [
           "/opt/homebrew/bin"
           "/opt/homebrew/sbin"
+          "$HOME/.npm-global/bin"
           "$HOME/.go/bin"
           "$HOME/.bin"
           "$PATH"
