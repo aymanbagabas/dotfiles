@@ -62,6 +62,14 @@ rec {
 
   system = {
     defaults = {
+      dock = {
+        autohide = true;
+        autohide-delay = 0.0;
+        orientation = "bottom";
+      };
+      trackpad = {
+        Clicking = true;
+      };
       CustomUserPreferences = {
         "com.googlecode.iterm2.plist" = {
           # Specify the preferences directory
