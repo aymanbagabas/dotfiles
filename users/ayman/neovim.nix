@@ -63,6 +63,7 @@
       nvim-web-devicons
       oil-nvim
       onedark-nvim
+      other-nvim
       persistence-nvim
       plenary-nvim
       project-nvim
@@ -115,6 +116,7 @@
           json
           jsonc
           lua
+          nix
           python
           regex
           rust
@@ -152,6 +154,7 @@
     lua-language-server
     markdownlint-cli2
     marksman
+    nixd
     prettier
     revive
     rust-analyzer

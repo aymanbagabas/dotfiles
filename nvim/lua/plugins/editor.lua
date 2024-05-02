@@ -281,4 +281,19 @@ return {
   {
     "jamessan/vim-gnupg",
   },
+
+  {
+    "rgroli/other.nvim",
+    name = "other-nvim",
+    cmd = {
+      "Other",
+      "OtherTabNew",
+      "OtherSplit",
+      "OtherVSPlit",
+      "OtherClear",
+    },
+    keys = {
+      { "<leader>o", "<cmd>Other<cr>", desc = "Open Other file" },
+    },
+  },
 }

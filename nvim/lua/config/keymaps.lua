@@ -27,11 +27,11 @@ map("i", "<C-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
 map("v", "<C-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
 map("v", "<C-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 
-map({ "n", "i", "v" }, "<M-h>", "<cmd><C-U>TmuxNavigateLeft<cr>")
-map({ "n", "i", "v" }, "<M-j>", "<cmd><C-U>TmuxNavigateDown<cr>")
-map({ "n", "i", "v" }, "<M-k>", "<cmd><C-U>TmuxNavigateUp<cr>")
-map({ "n", "i", "v" }, "<M-l>", "<cmd><C-U>TmuxNavigateRight<cr>")
-map({ "n", "i", "v" }, "<M-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>")
+map({ "n", "i", "v" }, "<M-h>", "<cmd>TmuxNavigateLeft<cr>")
+map({ "n", "i", "v" }, "<M-j>", "<cmd>TmuxNavigateDown<cr>")
+map({ "n", "i", "v" }, "<M-k>", "<cmd>TmuxNavigateUp<cr>")
+map({ "n", "i", "v" }, "<M-l>", "<cmd>TmuxNavigateRight<cr>")
+map({ "n", "i", "v" }, "<M-\\>", "<cmd>TmuxNavigatePrevious<cr>")
 
 -- search and center screen on search result
 map({ "n", "x", "o" }, "n", "nzzzv", { desc = "Next search result" })

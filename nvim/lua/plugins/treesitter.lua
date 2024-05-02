@@ -43,4 +43,9 @@ return {
       return opts
     end,
   },
+
+  {
+    "calops/hmts.nvim",
+    version = "*",
+  },
 }
