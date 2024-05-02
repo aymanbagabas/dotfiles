@@ -85,6 +85,7 @@ in {
     # Applications (GUI)
     ./alacritty.nix
     ./ghostty.nix
+    ./kitty.nix
   ];
 
   xdg.configFile = lib.mkIf (isDarwin) {

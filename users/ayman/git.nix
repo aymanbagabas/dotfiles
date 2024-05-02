@@ -56,6 +56,9 @@
       github = {
         user = "aymanbagabas";
       };
+      hub = {
+        protocol = "ssh";
+      };
       color = {
         ui = true;
         diff = {
