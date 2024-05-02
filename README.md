@@ -17,13 +17,17 @@ This is only necessary when you're _not_ running NixOS.
 ```sh
 # On MacOS
 sh <(curl -L https://nixos.org/nix/install)
+# Install Homebrew (Optional)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Add the fonts tap (Optional)
+brew tap homebrew/cask-fonts
 # On Linux
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
 See [Nix download](https://nixos.org/download/) page for more info.
 
-## Enable flakes
+## enable flakes
 
 This dotfiles use Nix Flakes, make sure it's enabled on your system.
 
@@ -62,6 +66,12 @@ nix develop .#default --command dot-apply
 # sync with latest
 nix develop .#default --command dot-sync
 ```
+
+## Tips
+
+### Fix Tmux Colors on MacOS
+
+See [this gist](https://gist.github.com/bbqtd/a4ac060d6f6b9ea6fe3aabe735aa9d95).
 
 ## Screenshots
 
