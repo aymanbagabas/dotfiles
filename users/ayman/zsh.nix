@@ -118,6 +118,8 @@ in {
       LSCOLORS = "exfxcxdxbxegedabagacad";
       CLICOLOR = "1";
     }) // lib.optionalAttrs (builtins.pathExists secretSessionVariablesPath)
+      # TODO: make this optional
+      # Use Sops & sops-nix?
       (import secretSessionVariablesPath);
 
     shellAliases = {
