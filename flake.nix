@@ -41,9 +41,15 @@
       });
 
     in {
-      darwinConfigurations.Aymans-MBP = mkSystem {
+      darwinConfigurations.Spaceship = mkSystem {
+        system = "x86_64-darwin";
+        hostname = "Spaceship";
+        user = "ayman";
+      };
+
+      darwinConfigurations.Blackhole = mkSystem {
         system = "aarch64-darwin";
-        hostname = "Aymans-MBP";
+        hostname = "Blackhole";
         user = "ayman";
       };
 

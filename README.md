@@ -21,6 +21,12 @@ sh <(curl -L https://nixos.org/nix/install)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 # Add the fonts tap (Optional)
 brew tap homebrew/cask-fonts
+# Change the hostname and machine name
+# Go to System Settings and change both the machine name and Sharing hostname
+# to the machine hostname.
+# You also want to set the hostname using `scutil`
+sudo scutil --set HostName <hostname>
+
 # On Linux
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
