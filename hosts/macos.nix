@@ -47,6 +47,7 @@ rec {
       "google-chrome"
       "microsoft-remote-desktop"
       "multitouch"
+      "raycast"
       "the-unarchiver"
       "vmware-fusion"
       "whatsapp"
