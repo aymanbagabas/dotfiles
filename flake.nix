@@ -41,16 +41,18 @@
       });
 
     in {
-      darwinConfigurations.Spaceship = mkSystem {
-        system = "x86_64-darwin";
-        hostname = "Spaceship";
-        user = "ayman";
-      };
+      darwinConfigurations = {
+        Spaceship = mkSystem {
+          system = "x86_64-darwin";
+          hostname = "Spaceship";
+          user = "ayman";
+        };
 
-      darwinConfigurations.Blackhole = mkSystem {
-        system = "aarch64-darwin";
-        hostname = "Blackhole";
-        user = "ayman";
+        Blackhole = mkSystem {
+          system = "aarch64-darwin";
+          hostname = "Blackhole";
+          user = "ayman";
+        };
       };
 
       devShells = forAllSystems (system:

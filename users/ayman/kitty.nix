@@ -1,6 +1,8 @@
 { ... }:
 
-{
+let
+  colors = import ./colors.nix;
+in {
   xdg.configFile."kitty/kitty.conf".text = ''
   macos_option_as_alt left
 
@@ -22,42 +24,51 @@
   map cmd+9 goto_tab 9
   map cmd+0 goto_tab 0
 
-  tab_separator " │ "
-  tab_title_template "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{title}"
   tab_bar_edge top
   tab_bar_style separator
+  tab_separator " │ "
+  tab_title_template "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{title} #{index}"
 
   # One Dark by Giuseppe Cesarano, https://github.com/GiuseppeCesarano
   # This work is licensed under the terms of the GPL-2.0 license.
   # For a copy, see https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html.
-  
+
   # Colors
-  
-  foreground #979eab
-  background #282c34
-  
-  color0 #282c34
-  color1 #e06c75
-  color2 #98c379
-  color3 #e5c07b
-  color4 #61afef
-  color5 #be5046
-  color6 #56b6c2
-  color7 #979eab
-  color8 #393e48
-  color9 #d19a66
-  color10 #56b6c2
-  color11 #e5c07b
-  color12 #61afef
-  color13 #be5046
-  color14 #56b6c2
-  color15 #abb2bf
-  
+
+  foreground ${colors.primary.foreground}
+  background ${colors.primary.background}
+
+  color0 ${colors.normal.black}
+  color1 ${colors.normal.red}
+  color2 ${colors.normal.green}
+  color3 ${colors.normal.yellow}
+  color4 ${colors.normal.blue}
+  color5 ${colors.normal.magenta}
+  color6 ${colors.normal.cyan}
+  color7 ${colors.normal.white}
+  color8 ${colors.bright.black}
+  color9 ${colors.bright.red}
+  color10 ${colors.bright.green}
+  color11 ${colors.bright.yellow}
+  color12 ${colors.bright.blue}
+  color13 ${colors.bright.magenta}
+  color14 ${colors.bright.cyan}
+  color15 ${colors.bright.white}
+
   # Tab Bar
-  
-  active_tab_foreground   #282c34
-  active_tab_background   #979eab
-  inactive_tab_foreground #abb2bf
-  inactive_tab_background #282c34
+
+  selection_background ${colors.primary.foreground}
+  selection_foreground ${colors.primary.background}
+
+  url_color #565c64
+  cursor ${colors.normal.white}
+  active_border_color #545862
+  inactive_border_color #353b45
+
+  active_tab_foreground ${colors.primary.foreground}
+  active_tab_background ${colors.primary.background}
+  inactive_tab_background #353b45
+  inactive_tab_foreground #565c64
+  tab_bar_background #353b45
   '';
 }

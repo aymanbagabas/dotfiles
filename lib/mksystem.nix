@@ -19,7 +19,7 @@ in systemFunc rec {
     inherit system;
 
     specialArgs = {
-      inherit inputs overlays hostname isDarwin isLinux isHeadless;
+      inherit inputs overlays hostname user isDarwin isLinux isHeadless;
       currentSystem = system;
     };
     modules = [

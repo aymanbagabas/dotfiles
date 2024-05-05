@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ pkgs, user, ... }:
 
 rec {
   imports = [
-    ../shared.nix
+    ./shared.nix
   ];
 
   # We install Nix using a separate installer so we don't want nix-darwin
@@ -12,15 +12,15 @@ rec {
   nix = {
     package = pkgs.nix;
     settings = {
-      trusted-users = [ "root" "ayman" ];
+      trusted-users = [ "root" "${user}" ];
     };
   };
 
   # The user should already exist, but we need to set this up so Nix knows
   # what our home directory is (https://github.com/LnL7/nix-darwin/issues/423).
-  users.users.ayman = {
-    name = "ayman";
-    home = "/Users/ayman";
+  users.users.${user} = {
+    name = "${user}";
+    home = "/Users/${user}";
   };
 
   # zsh is the default shell on Mac and we want to make sure that we're
@@ -75,7 +75,7 @@ rec {
           # Specify the preferences directory
           # Cannot be a nix store link
           # https://github.com/nix-community/home-manager/issues/2085
-          PrefsCustomFolder = "${users.users.ayman.home}/.dotfiles/users/ayman";
+          PrefsCustomFolder = "${users.users.${user}.home}/.dotfiles/users/${user}";
           # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
         };
