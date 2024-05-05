@@ -40,6 +40,7 @@ in {
     jq
     p7zip
     ripgrep
+    tz
     wget
     yarn
     zoxide

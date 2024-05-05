@@ -79,6 +79,8 @@ return {
   -- first: disable default <tab> and <s-tab> behavior in LuaSnip
   {
     "L3MON4D3/LuaSnip",
+    name = "luasnip",
+    enabled = false, -- FIXME: Disabled because of an issue with Nix
     build = "make install_jsregexp",
     opts = function(_, _)
       -- Hide Copilot suggestions when in a snippet

@@ -7,7 +7,7 @@
     plugins = with pkgs.vimPlugins; [
       # LazyVim list of plugins (keep up-to-date!)
       LazyVim
-      luasnip
+      # luasnip
       SchemaStore-nvim
       aerial-nvim
       barbecue-nvim
@@ -143,6 +143,7 @@
     dockerfile-language-server-nodejs
     go-tools
     gofumpt
+    golangci-lint
     golangci-lint-langserver
     gomodifytags
     gopls

@@ -284,7 +284,8 @@ return {
 
   {
     "rgroli/other.nvim",
-    name = "other-nvim",
+    name = "other-nvim", -- FIXME: Disabled because of an issue with Nix
+    enabled = false,
     cmd = {
       "Other",
       "OtherTabNew",
