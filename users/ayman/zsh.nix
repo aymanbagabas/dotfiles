@@ -3,7 +3,7 @@
 let
   lib = pkgs.lib;
   pathJoin = builtins.concatStringsSep ":";
-  secretSessionVariablesPath = ../../secrets/sessionVariables.json;
+  secretSessionVariablesPath = ../../secrets/sessionVariables.nix;
 in {
   programs.zsh = rec {
     enable = true;
@@ -98,28 +98,27 @@ in {
 
       LESS = "-R --mouse --wheel-lines=3";
       # LESSOPEN="| $(command -v src-hilite-lesspipe.sh) %s"; # replaced by lesspipe
-      FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore-vcs --glob '!.git/*'";
+      FZF_DEFAULT_COMMAND = "rg --files --hidden --no-ignore-vcs --glob '!.git/*'";
 
       # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
-      TERMINFO_DIRS="$TERMINFO_DIRS:$HOME/.local/share/terminfo";
-      DOTNET_CLI_TELEMETRY_OPTOUT=1; # Disable dotnet telemetry
+      TERMINFO_DIRS = "$TERMINFO_DIRS:$HOME/.local/share/terminfo";
+      DOTNET_CLI_TELEMETRY_OPTOUT = 1; # Disable dotnet telemetry
 
       # Disable vim-mode tracking
       # Pure prompt handles this
-      VIM_MODE_TRACK_KEYMAP="no";
+      VIM_MODE_TRACK_KEYMAP = "no";
 
       # Disable vim-mode indicator
       MODE_INDICATOR = "";
 
       # pure prompt
-      PURE_PROMPT_SYMBOL="›";
-      PURE_PROMPT_VICMD_SYMBOL="›";
+      PURE_PROMPT_SYMBOL = "›";
+      PURE_PROMPT_VICMD_SYMBOL = "›";
     } // (lib.optionalAttrs pkgs.stdenv.isDarwin {
       LSCOLORS = "exfxcxdxbxegedabagacad";
       CLICOLOR = "1";
     }) // lib.optionalAttrs (builtins.pathExists secretSessionVariablesPath)
-      # TODO: make this optional
-      builtins.fromJSON (builtins.readFile secretSessionVariablesPath);
+      (import secretSessionVariablesPath);
 
     shellAliases = {
       grep = "grep --color=auto";
@@ -127,8 +126,8 @@ in {
       sudo = "sudo "; # Fix sudo + aliases https://askubuntu.com/a/22043
       tf = "terraform";
       watch = "watch --color ";
-      gpg-reload-agent="gpg-connect-agent reloadagent /bye";
-      gpg-other-card="gpg-connect-agent 'scd serialno' 'learn --force' /bye";
+      gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
+      gpg-other-card = "gpg-connect-agent 'scd serialno' 'learn --force' /bye";
     } // (lib.optionalAttrs pkgs.stdenv.isLinux {
       open = "xdg-open";
     });
