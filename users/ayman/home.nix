@@ -1,8 +1,7 @@
-{ config, pkgs, inputs, currentSystem, isDarwin, isLinux, isHeadless, ... }:
+{ config, pkgs, inputs, isDarwin, isLinux, isHeadless, ... }:
 
 let
   inherit (pkgs) lib;
-
 in {
   home.username = "ayman";
   home.homeDirectory = (if isDarwin then "/Users" else "/home") + "/ayman";
@@ -73,7 +72,7 @@ in {
     rectangle
     xquartz
   ]) ++ (lib.optionals (!isHeadless && isLinux) [
-    ghostty.packages.${currentSystem}.default # Ghostty is only available on Linux
+    inputs.ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
   ]);
 
   imports = [

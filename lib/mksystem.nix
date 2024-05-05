@@ -20,7 +20,6 @@ in systemFunc rec {
 
     specialArgs = {
       inherit inputs overlays hostname user isDarwin isLinux isHeadless;
-      currentSystem = system;
     };
     modules = [
       { nixpkgs.overlays = overlays; }
