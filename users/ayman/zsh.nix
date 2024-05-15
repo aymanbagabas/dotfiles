@@ -117,10 +117,7 @@ in {
     } // (lib.optionalAttrs pkgs.stdenv.isDarwin {
       LSCOLORS = "exfxcxdxbxegedabagacad";
       CLICOLOR = "1";
-    }) // lib.optionalAttrs (builtins.pathExists secretSessionVariablesPath)
-      # TODO: make this optional
-      # Use Sops & sops-nix?
-      (import secretSessionVariablesPath);
+    });
 
     shellAliases = {
       grep = "grep --color=auto";
@@ -176,7 +173,9 @@ in {
 
       add-zle-hook-widget zle-line-finish reset_vim_prompt_widget
       add-zle-hook-widget zle-keymap-select update_vim_prompt_widget
+    '';
 
+    profileExtra = ''
       # Set less colors
       export LESS_TERMCAP_mb=$'\E[01;31m'
       export LESS_TERMCAP_md=$'\E[01;31m'
@@ -185,6 +184,12 @@ in {
       export LESS_TERMCAP_so=$'\E[01;44;32m'
       export LESS_TERMCAP_ue=$'\E[0m'
       export LESS_TERMCAP_us=$'\E[01;33m'
+
+      # Add any local overrides
+      if [ -f "$HOME/.zprofile.local" ]; then
+              # shellcheck disable=SC1091
+              source "$HOME/.zprofile.local"
+      fi
     '';
   };
 }
