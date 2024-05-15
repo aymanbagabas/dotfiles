@@ -25,11 +25,18 @@
     ghostty = {
       url = "git+ssh://git@github.com/mitchellh/ghostty";
     };
+
+    neovim-config = {
+      url = "github:aymanbagabas/neovim-config";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, darwin, ... }:
     let
-      overlays = [];
+      overlays = [
+        inputs.neovim-config.overlays.default
+      ];
 
       mkSystem = import ./lib/mksystem.nix {
         inherit nixpkgs overlays inputs;
@@ -66,9 +73,12 @@
                 git tag -m "$(date +%Y.%m.%d)" "$(date +%Y.%m.%d)"
                 git push --tags
               '')
-              (writeScriptBin "dot-sync" ''
+              (writeScriptBin "dot-update" ''
                 nix flake update
                 dot-apply
+              '')
+              (writeScriptBin "dot-sync" ''
+                dot-update
                 nix-collect-garbage -d
                 dot-apply
               '')

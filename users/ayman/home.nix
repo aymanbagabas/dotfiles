@@ -30,6 +30,8 @@ in {
   xdg.enable = true;
 
   home.packages = with pkgs; with pkgs.nodePackages_latest; [
+    nvim-pkg
+
     _1password
     age
     curl
@@ -78,7 +80,7 @@ in {
   imports = [
     ./git.nix
     ./gpg.nix
-    ./neovim.nix
+    # ./neovim.nix
     ./shell.nix
     ./tmux
     ./xresources.nix

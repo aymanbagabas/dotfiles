@@ -84,6 +84,11 @@
           title-focus = "black blue bold";
         };
       };
+      url = {
+        "git@github.com:" = {
+          insteadOf = "https://github.com/";
+        };
+      };
     };
   };
 }
