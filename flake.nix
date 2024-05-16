@@ -25,17 +25,11 @@
     ghostty = {
       url = "git+ssh://git@github.com/mitchellh/ghostty";
     };
-
-    neovim-config = {
-      url = "github:aymanbagabas/neovim-config";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, darwin, ... }:
     let
       overlays = [
-        inputs.neovim-config.overlays.default
       ];
 
       mkSystem = import ./lib/mksystem.nix {
