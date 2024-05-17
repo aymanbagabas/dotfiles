@@ -1,37 +1,81 @@
 require("user.lsp").setup()
 
+-- neoconf must come before lspconfig
+require("neoconf").setup({})
+
 local lspconfig = require("lspconfig")
 local userlsp = require("user.lsp")
 local util = require("lspconfig.util")
 
----@param client vim.lsp.client LSP client
----@param bufnr number Buffer number
----@diagnostic disable: unused-local
-local on_attach = function(client, bufnr)
-  userlsp.on_attach(client, bufnr)
-end
+lspconfig.html.setup({})
 
-local servers = {
-  html = {},
-  cssls = {},
-  jsonls = {},
-  eslint = {},
-  dockerls = {},
-  yamlls = {},
-  bashls = {
-    filetypes = { "sh", "zsh", "bash" },
-  },
-  ltex = {
-    filetypes = { "markdown", "text", "pandoc" },
-    flags = { debounce_text_changes = 300 },
-  },
-  rust_analyzer = {},
-}
+lspconfig.cssls.setup({})
 
-servers.gopls = {
+lspconfig.jsonls.setup({
+  settings = {
+    -- Use schemastore with json
+    json = {
+      schemas = require("schemastore").json.schemas(),
+      validate = { enable = true },
+    },
+  },
+})
+
+lspconfig.eslint.setup({})
+
+lspconfig.dockerls.setup({})
+
+lspconfig.yamlls.setup({
   on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
+    -- Neovim < 0.10 does not have dynamic registration for formatting
+    if vim.fn.has("nvim-0.10") == 0 then
+      if client.name == "yamlls" then
+        client.server_capabilities.documentFormattingProvider = true
+      end
+    end
+  end,
+  -- Have to add this for yamlls to understand that we support line folding
+  capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true,
+      },
+    },
+  },
+  settings = {
+    redhat = { telemetry = { enabled = false } },
+    yaml = {
+      keyOrdering = false,
+      format = {
+        enable = true,
+      },
+      validate = true,
+      schemaStore = {
+        -- Must disable built-in schemaStore support to use
+        -- schemas from SchemaStore.nvim plugin
+        enable = false,
+        -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+        url = "",
+      },
+      schemas = require("schemastore").yaml.schemas(),
+    },
+  },
+})
 
+lspconfig.bashls.setup({
+  filetypes = { "sh", "zsh", "bash" },
+})
+
+lspconfig.ltex.setup({
+  filetypes = { "markdown", "text", "pandoc" },
+  flags = { debounce_text_changes = 300 },
+})
+
+lspconfig.rust_analyzer.setup({})
+
+lspconfig.gopls.setup({
+  on_attach = function(client, bufnr)
     -- workaround for gopls not supporting semanticTokensProvider
     -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
     if client.name == "gopls" then
@@ -87,15 +131,15 @@ servers.gopls = {
   flags = {
     debounce_text_changes = 150,
   },
-}
+})
 
-servers.nil_ls = {
+lspconfig.golangci_lint_ls.setup({})
+
+lspconfig.nil_ls.setup({
   root_dir = util.root_pattern("flake.nix", "default.nix", "shell.nix", ".git"),
-}
+})
 
-servers.lua_ls = {
-  on_attach = on_attach,
-  capabilities = userlsp.make_client_capabilities(),
+lspconfig.lua_ls.setup({
   on_init = function(client)
     local path = client.workspace_folders[1].name
     if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
@@ -151,15 +195,4 @@ servers.lua_ls = {
       },
     },
   },
-}
-
-servers.golangci_lint_ls = {
-  filetypes = { "go", "gomod" },
-}
-
-for k, v in pairs(servers) do
-  local opts = v or {}
-  opts.on_attach = opts.on_attach or on_attach
-  opts.capabilities = userlsp.make_client_capabilities()
-  lspconfig[k].setup(opts)
-end
+})

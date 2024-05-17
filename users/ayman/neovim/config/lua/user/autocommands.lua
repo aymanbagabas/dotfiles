@@ -1,16 +1,16 @@
-local tempdirgroup = vim.api.nvim_create_augroup('tempdir', { clear = true })
+local tempdirgroup = vim.api.nvim_create_augroup("tempdir", { clear = true })
 -- Do not set undofile for files in /tmp
-vim.api.nvim_create_autocmd('BufWritePre', {
-  pattern = '/tmp/*',
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "/tmp/*",
   group = tempdirgroup,
   callback = function()
-    vim.cmd.setlocal('noundofile')
+    vim.cmd.setlocal("noundofile")
   end,
 })
 
 -- Disable spell checking in terminal buffers
-local nospell_group = vim.api.nvim_create_augroup('nospell', { clear = true })
-vim.api.nvim_create_autocmd('TermOpen', {
+local nospell_group = vim.api.nvim_create_augroup("nospell", { clear = true })
+vim.api.nvim_create_autocmd("TermOpen", {
   group = nospell_group,
   callback = function()
     vim.wo[0].spell = false
@@ -18,28 +18,28 @@ vim.api.nvim_create_autocmd('TermOpen', {
 })
 
 --- Don't create a comment string when hitting <Enter> on a comment line
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = vim.api.nvim_create_augroup('DisableNewLineAutoCommentString', {}),
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("DisableNewLineAutoCommentString", {}),
   callback = function()
-    vim.opt.formatoptions = vim.opt.formatoptions - { 'c', 'r', 'o' }
+    vim.opt.formatoptions = vim.opt.formatoptions - { "c", "r", "o" }
   end,
 })
 
 -- Toggle between relative/absolute line numbers
 -- Show relative line numbers in the current buffer,
 -- absolute line numbers in inactive buffers
-local numbertoggle = vim.api.nvim_create_augroup('numbertoggle', { clear = true })
-vim.api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'InsertLeave', 'CmdlineLeave', 'WinEnter' }, {
-  pattern = '*',
+local numbertoggle = vim.api.nvim_create_augroup("numbertoggle", { clear = true })
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
+  pattern = "*",
   group = numbertoggle,
   callback = function()
-    if vim.g.smart_relativenumber and vim.o.nu and vim.api.nvim_get_mode().mode ~= 'i' then
+    if vim.g.smart_relativenumber and vim.o.nu and vim.api.nvim_get_mode().mode ~= "i" then
       vim.opt.relativenumber = true
     end
   end,
 })
-vim.api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'CmdlineEnter', 'WinLeave' }, {
-  pattern = '*',
+vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEnter", "WinLeave" }, {
+  pattern = "*",
   group = numbertoggle,
   callback = function()
     if vim.g.smart_relativenumber and vim.o.nu then
@@ -142,7 +142,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   end,
 })
 
-
 -- Set spell & wrap for certain files
 vim.api.nvim_create_autocmd({ "FileType", "BufRead" }, {
   pattern = {
@@ -212,6 +211,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
     -- wipe the directory buffer
     vim.cmd("bw " .. data.buf)
+
+    -- open the directory in Oil
+    if not vim.g.save_session then
+      require("oil").open(data.file)
+    end
   end,
   nested = true,
 })

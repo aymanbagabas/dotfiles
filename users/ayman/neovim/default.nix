@@ -10,6 +10,8 @@
     plugins = with pkgs.vimPlugins; [
       # plugins from nixpkgs go in here.
       # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
+      # TODO: use grammars that we use only
+      SchemaStore-nvim
       barbecue-nvim
       bufferline-nvim
       cmp-buffer # current buffer as completion source | https://github.com/hrsh7th/cmp-buffer/
@@ -17,7 +19,6 @@
       cmp-cmdline-history # cmp command line history suggestions
       cmp-emoji
       cmp-nvim-lsp # LSP as completion source | https://github.com/hrsh7th/cmp-nvim-lsp/
-      cmp-nvim-lsp-signature-help # https://github.com/hrsh7th/cmp-nvim-lsp-signature-help/
       cmp-nvim-lua # neovim lua API as completion source | https://github.com/hrsh7th/cmp-nvim-lua/
       cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
       cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
@@ -52,7 +53,6 @@
       nvim-treesitter-context # nvim-treesitter-context
       nvim-treesitter-endwise
       nvim-treesitter-textobjects # https://github.com/nvim-treesitter/nvim-treesitter-textobjects/
-      # TODO: use grammars that we use only
       nvim-treesitter.withAllGrammars
       nvim-ts-autotag
       nvim-ts-context-commentstring # https://github.com/joosepalviste/nvim-ts-context-commentstring/

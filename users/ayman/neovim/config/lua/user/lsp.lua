@@ -4,6 +4,8 @@
 ---LSP related functions
 ---@brief ]]
 
+local lspconfig = require("lspconfig")
+
 -- Format code and organize imports (if supported).
 --
 -- https://github.com/neovim/nvim-lspconfig/issues/115#issuecomment-902680058
@@ -70,8 +72,8 @@ function M.make_client_capabilities()
         },
       },
     })
-    return capabilities
   end
+  return capabilities
 end
 
 --- Set keymap
@@ -189,6 +191,7 @@ end
 
 M.setup = function(opts)
   local group = vim.api.nvim_create_augroup("LspAttachGroup", { clear = true })
+  -- local servers = opts.servers or {}
 
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)

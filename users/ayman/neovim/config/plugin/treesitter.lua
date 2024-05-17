@@ -13,7 +13,7 @@ configs.setup({
   },
   autotag = {
     enable = true,
-  }
+  },
   highlight = {
     enable = true,
     disable = function(_, buf)
@@ -50,9 +50,9 @@ require("treesitter-context").setup({
 
 require("ts_context_commentstring").setup()
 
-require('nvim-ts-autotag').setup()
+require("nvim-ts-autotag").setup()
 
-require('nvim-treesitter-textobjects')
+require("nvim-treesitter-textobjects")
 
 -- Tree-sitter based folding
 -- vim.opt.foldmethod = 'expr'

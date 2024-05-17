@@ -31,7 +31,7 @@ local opts = {
   },
   snippet = {
     expand = function(args)
-      require("luasnip").lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({
@@ -99,10 +99,16 @@ local opts = {
     { name = "copilot", keyword_length = 3 },
     --{ name = 'nvim_lsp_signature_help', keyword_length = 3 },
     { name = "nvim_lsp", keyword_length = 3 },
-    { name = "luasnip" },
+    {
+      name = "luasnip",
+      keyword_length = 2,
+      priority = 50,
+    },
     { name = "path" },
   }, {
-    { name = "buffer" },
+    { name = "buffer", keyword_length = 5 },
+  }, {
+    { name = "emoji", priority = 999 },
   }),
   formatting = {
     format = function(_, item)
