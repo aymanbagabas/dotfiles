@@ -245,7 +245,9 @@
         "ghostty": "ghostty",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable_2"
+        "nixpkgs-unstable": "nixpkgs-unstable_2",
+        "tinted-shell": "tinted-shell",
+        "zsh-vim-mode": "zsh-vim-mode"
       }
     },
     "systems": {
@@ -260,6 +262,22 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "tinted-shell": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1713661900,
+        "narHash": "sha256-V2umHKMsJLCNZXrWxSypVBs3RPAoDpgSRdB3ulHrMzc=",
+        "owner": "tinted-theming",
+        "repo": "tinted-shell",
+        "rev": "26a63a9020ae114c847c882bec66d8963a43869b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tinted-theming",
+        "repo": "tinted-shell",
         "type": "github"
       }
     },
@@ -333,6 +351,22 @@
         "owner": "zigtools",
         "ref": "master",
         "repo": "zls",
+        "type": "github"
+      }
+    },
+    "zsh-vim-mode": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1616290526,
+        "narHash": "sha256-a+6EWMRY1c1HQpNtJf5InCzU7/RphZjimLdXIXbO6cQ=",
+        "owner": "softmoth",
+        "repo": "zsh-vim-mode",
+        "rev": "1f9953b7d6f2f0a8d2cb8e8977baa48278a31eab",
+        "type": "github"
+      },
+      "original": {
+        "owner": "softmoth",
+        "repo": "zsh-vim-mode",
         "type": "github"
       }
     }

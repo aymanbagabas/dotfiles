@@ -1,11 +1,14 @@
-{ config, pkgs, ... }:
+{ inputs, config, pkgs, ... }:
 
 let
   lib = pkgs.lib;
   pathJoin = builtins.concatStringsSep ":";
-  secretSessionVariablesPath = ../../secrets/sessionVariables.nix;
 in {
-  programs.zsh = rec {
+  home.packages = with pkgs; [
+    pure-prompt
+  ];
+
+  programs.zsh = {
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = false;
@@ -14,18 +17,13 @@ in {
     plugins = [
       {
         name = "pure-prompt";
-        file = "async.zsh";
-        src = pkgs.fetchFromGitHub {
-          owner = "sindresorhus";
-          repo = "pure";
-          rev = "v1.23.0";
-          hash = "sha256-BmQO4xqd/3QnpLUitD2obVxL0UulpboT8jGNEh4ri8k=";
-        };
+        file = "share/zsh/site-functions/async";
+        src = pkgs.pure-prompt;
       }
       {
         name = "pure-prompt";
-        file = "pure.zsh";
-        src = (builtins.elemAt plugins 0).src;
+        file = "share/zsh/site-functions/prompt_pure_setup";
+        src = pkgs.pure-prompt;
       }
       {
         name = "omzl-key-bindings";
@@ -50,12 +48,7 @@ in {
       {
         name = "zsh-vim-mode";
         file = "zsh-vim-mode.plugin.zsh";
-        src = pkgs.fetchFromGitHub {
-            owner = "softmoth";
-            repo = "zsh-vim-mode";
-            rev = "1f9953b7d6f2f0a8d2cb8e8977baa48278a31eab"; # Mar 21, 2021
-            hash = "sha256-a+6EWMRY1c1HQpNtJf5InCzU7/RphZjimLdXIXbO6cQ=";
-        };
+        src = inputs.zsh-vim-mode;
       }
       {
         name = "zsh-completions";
@@ -65,12 +58,7 @@ in {
       {
         name = "base16-shell";
         file = "base16-shell.plugin.zsh";
-        src = pkgs.fetchFromGitHub {
-          owner = "tinted-theming";
-          repo = "tinted-fzf";
-          rev = "87368a6f4f545916d0dbc7bb86b8492258d77293"; # Apr 21, 2024
-          hash = "sha256-Lo5++1pOD9i62ahI3Ta2s/F/U80LXOu0sWMLUng3GbQ=";
-        };
+        src = inputs.tinted-shell;
       }
     ] ++ (pkgs.lib.optionals pkgs.stdenv.isLinux {
        name = "omzp-systemd";

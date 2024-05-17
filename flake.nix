@@ -25,6 +25,17 @@
     ghostty = {
       url = "git+ssh://git@github.com/mitchellh/ghostty";
     };
+
+    # Zsh Plugins
+    tinted-shell = {
+      url = "github:tinted-theming/tinted-shell";
+      flake = false;
+    };
+
+    zsh-vim-mode = {
+      url = "github:softmoth/zsh-vim-mode";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, darwin, ... }:
