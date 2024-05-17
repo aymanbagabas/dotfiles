@@ -10,15 +10,15 @@ return {
     LogPoint = ".>",
   },
   diagnostics = {
-    Error = " ",
-    Warn = " ",
-    Hint = " ",
-    Info = " ",
+    Error = "E ",
+    Warn = "W ",
+    Hint = "H ",
+    Info = "I ",
   },
   git = {
-    added = "+ ",
-    modified = "~ ",
-    removed = "- ",
+    added = "+",
+    modified = "~",
+    removed = "-",
   },
   kinds = {
     Array = " ",

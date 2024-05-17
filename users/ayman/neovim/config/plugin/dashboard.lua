@@ -25,6 +25,9 @@ local opts = {
       { action = "Telescope projects",                desc = " Projects",        icon = " ", key = "p" },
       { action = "qa",                                desc = " Quit",            icon = " ", key = "q" },
     },
+    footer = {
+      "Ayman Bagabas ™️",
+    },
   },
 }
 
@@ -32,4 +35,4 @@ for _, button in ipairs(opts.config.center) do
   button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
 end
 
-require('dashboard').setup(opts)
+require("dashboard").setup(opts)
