@@ -42,7 +42,6 @@
       neodev-nvim
       noice-nvim
       nui-nvim
-      nvim-autopairs
       nvim-cmp # https://github.com/hrsh7th/nvim-cmp
       nvim-colorizer-lua
       nvim-lspconfig
