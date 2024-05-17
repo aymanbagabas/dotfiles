@@ -191,5 +191,10 @@ in {
               source "$HOME/.zprofile.local"
       fi
     '';
+
+    # Fixes https://github.com/nix-community/home-manager/issues/2562
+    initExtraBeforeCompInit = ''
+      fpath+=("${config.home.profileDirectory}"/share/zsh/site-functions "${config.home.profileDirectory}"/share/zsh/$ZSH_VERSION/functions "${config.home.profileDirectory}"/share/zsh/vendor-completions)
+    '';
   };
 }
