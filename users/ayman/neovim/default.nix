@@ -8,9 +8,8 @@
     withNodeJs = true;
 
     plugins = with pkgs.vimPlugins; [
-      # plugins from nixpkgs go in here.
       # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
-      # TODO: use grammars that we use only
+      # plugins from nixpkgs go in here.
       SchemaStore-nvim
       barbecue-nvim
       bufferline-nvim
@@ -28,6 +27,7 @@
       copilot-lua
       dashboard-nvim
       dressing-nvim
+      friendly-snippets
       fugitive-gitlab-vim
       gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
       headlines-nvim
