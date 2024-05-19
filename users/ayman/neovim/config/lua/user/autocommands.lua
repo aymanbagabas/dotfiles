@@ -214,7 +214,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
     -- open the directory in Oil
     if not vim.g.save_session then
-      require("oil").open(data.file)
+      vim.cmd("Explore " .. data.file)
     end
   end,
   nested = true,

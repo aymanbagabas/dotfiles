@@ -57,7 +57,6 @@
       nvim-ts-autotag
       nvim-ts-context-commentstring # https://github.com/joosepalviste/nvim-ts-context-commentstring/
       nvim-web-devicons
-      oil-nvim
       onedark-nvim
       plenary-nvim
       project-nvim
@@ -68,7 +67,6 @@
       undotree
       vim-abolish
       vim-fubitive
-      vim-fugitive
       vim-fugitive # https://github.com/tpope/vim-fugitive/
       vim-gnupg
       vim-illuminate
@@ -79,6 +77,7 @@
       vim-startuptime
       vim-tmux-navigator
       vim-unimpaired # predefined ] and [ navigation keymaps | https://github.com/tpope/vim-unimpaired/
+      vim-vinegar
       which-key-nvim
       zen-mode-nvim
     ];

@@ -16,6 +16,9 @@ vim.g.autoformat = true
 -- Don't define default vim-tmux-navigator keybindings
 vim.g.tmux_navigator_no_mappings = 1
 
+-- Netrw settings, show [nu]mber
+vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
+
 -- Enable true colour support
 if vim.fn.has("termguicolors") then
   vim.opt.termguicolors = true
