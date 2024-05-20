@@ -47,6 +47,7 @@ in {
     # Fonts
     inconsolata-lgc
     jetbrains-mono
+    (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
 
     # Dev tools
     nodejs

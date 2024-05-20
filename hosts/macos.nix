@@ -42,8 +42,6 @@ rec {
       "clipy"
       "docker"
       "firefox"
-      "font-inconsolata-lgc"
-      "font-symbols-only-nerd-font"
       "google-chrome"
       "microsoft-remote-desktop"
       "multitouch"
