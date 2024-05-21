@@ -1,6 +1,6 @@
 -- <leader> key. Defaults to `\`. Some people prefer space.
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = ","
 
 vim.g.smart_relativenumber = true
 vim.g.blameline = false
