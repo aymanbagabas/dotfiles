@@ -4,8 +4,6 @@
 ---LSP related functions
 ---@brief ]]
 
-local lspconfig = require("lspconfig")
-
 -- Format code and organize imports (if supported).
 --
 -- https://github.com/neovim/nvim-lspconfig/issues/115#issuecomment-902680058
@@ -77,7 +75,7 @@ function M.make_client_capabilities()
 end
 
 --- Set keymap
----@param client vim.api.client LSP client
+---@param client vim.lsp.Client LSP client
 ---@param bufnr number Buffer number
 M.set_keymap = function(client, bufnr)
   local keymap = function(modes, lhs, rhs, opts)
@@ -131,16 +129,16 @@ M.set_keymap = function(client, bufnr)
     })
   end, { desc = "Source Action" })
 
-  if client.server_capabilities.inlayHintProvider then
-    keymap("n", "<space>ch", function()
-      local current_setting = vim.lsp.inlay_hint.is_enabled(bufnr)
-      vim.lsp.inlay_hint.enable(bufnr, not current_setting)
+  if client.supports_method("textDocument/inlayHint") then
+    keymap("n", "<space>uh", function()
+      local current_setting = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+      vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
     end, { desc = "Toggle Inlay Hints" })
   end
 end
 
 --- On attach for key maps.
----@param client vim.api.client LSP client
+---@param client vim.lsp.Client LSP client
 ---@param bufnr number Buffer number
 M.on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
@@ -154,31 +152,14 @@ M.on_attach = function(client, bufnr)
   M.set_keymap(client, bufnr)
 
   -- Auto-refresh code lenses
-  if not client then
-    return
-  end
-  local function buf_refresh_codeLens()
-    vim.schedule(function()
-      if client.server_capabilities.codeLensProvider then
-        vim.lsp.codelens.refresh()
-        return
+  vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+    callback = function()
+      if client.supports_method("textDocument/codeLens") then
+        vim.lsp.codelens.refresh({ bufnr = bufnr })
       end
-    end)
-  end
-  local group = vim.api.nvim_create_augroup(string.format("lsp-%s-%s", bufnr, client.id), {})
-  if client.server_capabilities.codeLensProvider then
-    vim.api.nvim_create_autocmd({ "InsertLeave", "BufWritePost", "TextChanged" }, {
-      group = group,
-      callback = buf_refresh_codeLens,
-      buffer = bufnr,
-    })
-    buf_refresh_codeLens()
-  end
-  if vim.fn.has("nvim-0.10.0") == 1 then
-    if client.server_capabilities.codeLensProvider then
-      vim.lsp.inlay_hint.enable(true)
-    end
-  end
+    end,
+    group = vim.api.nvim_create_augroup(string.format("LspCodeLensReferesh-%s-%s", bufnr, client.id), {}),
+  })
 end
 
 function M.diagnostic_goto(next, severity)
@@ -189,9 +170,8 @@ function M.diagnostic_goto(next, severity)
   end
 end
 
-M.setup = function(opts)
+M.setup = function()
   local group = vim.api.nvim_create_augroup("LspAttachGroup", { clear = true })
-  -- local servers = opts.servers or {}
 
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
@@ -203,9 +183,16 @@ M.setup = function(opts)
 
       M.on_attach(client, bufnr)
 
+      -- Enable inlay hints if option is set
+      if vim.g.show_inlay_hints then
+        if client.supports_method("textDocument/inlayHint") then
+          vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+        end
+      end
+
       vim.api.nvim_create_autocmd("LspDetach", {
         callback = function()
-          if client.server_capabilities.codeLensProvider then
+          if client.supports_method("textDocument/codeLens") then
             vim.lsp.codelens.clear(client.id)
           end
         end,

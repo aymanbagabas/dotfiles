@@ -83,6 +83,10 @@
     ];
 
     extraPackages = with pkgs; with pkgs.nodePackages_latest; [
+      # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
+      gnused
+      (writeShellScriptBin "gsed" "exec ${gnused}/bin/sed \"$@\"")
+
       actionlint
       bash-language-server
       clang-tools
@@ -99,7 +103,7 @@
       hadolint
       impl
       ltex-ls
-      #lua-language-server
+      lua-language-server
       markdownlint-cli2
       marksman
       nil # nix LSP

@@ -4,6 +4,7 @@ vim.g.maplocalleader = "\\"
 
 vim.g.smart_relativenumber = true
 vim.g.blameline = false
+vim.g.show_inlayhints = false
 vim.g.editorconfig = true
 vim.opt.compatible = false
 

@@ -131,7 +131,7 @@ vim.keymap.set("n", "<leader>ub", function()
   -- toggle current line blame
   -- vim.g.blameline is defined in options
   vim.g.blameline = not vim.g.blameline
-  require("gitsigns").toggle_current_line_blame(blameline)
+  require("gitsigns").toggle_current_line_blame(vim.g.blameline)
   vim.notify("Blame Line: " .. (vim.g.blameline and "on" or "off"))
 end, { desc = "Toggle Git Line Blame" })
 

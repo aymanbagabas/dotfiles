@@ -1,17 +1,23 @@
-require("user.lsp").setup()
+local userlsp = require("user.lsp")
+userlsp.setup()
 
 -- neoconf must come before lspconfig
 require("neoconf").setup({})
 
 local lspconfig = require("lspconfig")
-local userlsp = require("user.lsp")
 local util = require("lspconfig.util")
+local capabilities = userlsp.make_client_capabilities()
 
-lspconfig.html.setup({})
+lspconfig.html.setup({
+  capabilities = capabilities,
+})
 
-lspconfig.cssls.setup({})
+lspconfig.cssls.setup({
+  capabilities = capabilities,
+})
 
 lspconfig.jsonls.setup({
+  capabilities = capabilities,
   settings = {
     -- Use schemastore with json
     json = {
@@ -21,9 +27,13 @@ lspconfig.jsonls.setup({
   },
 })
 
-lspconfig.eslint.setup({})
+lspconfig.eslint.setup({
+  capabilities = capabilities,
+})
 
-lspconfig.dockerls.setup({})
+lspconfig.dockerls.setup({
+  capabilities = capabilities,
+})
 
 lspconfig.yamlls.setup({
   on_attach = function(client, bufnr)
@@ -35,14 +45,14 @@ lspconfig.yamlls.setup({
     end
   end,
   -- Have to add this for yamlls to understand that we support line folding
-  capabilities = {
+  capabilities = vim.tbl_deep_extend("keep", {
     textDocument = {
       foldingRange = {
         dynamicRegistration = false,
         lineFoldingOnly = true,
       },
     },
-  },
+  }, capabilities),
   settings = {
     redhat = { telemetry = { enabled = false } },
     yaml = {
@@ -64,17 +74,22 @@ lspconfig.yamlls.setup({
 })
 
 lspconfig.bashls.setup({
+  capabilities = capabilities,
   filetypes = { "sh", "zsh", "bash" },
 })
 
 lspconfig.ltex.setup({
+  capabilities = capabilities,
   filetypes = { "markdown", "text", "pandoc" },
   flags = { debounce_text_changes = 300 },
 })
 
-lspconfig.rust_analyzer.setup({})
+lspconfig.rust_analyzer.setup({
+  capabilities = capabilities,
+})
 
 lspconfig.gopls.setup({
+  capabilities = capabilities,
   on_attach = function(client, bufnr)
     -- workaround for gopls not supporting semanticTokensProvider
     -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
@@ -133,13 +148,17 @@ lspconfig.gopls.setup({
   },
 })
 
-lspconfig.golangci_lint_ls.setup({})
+lspconfig.golangci_lint_ls.setup({
+  capabilities = capabilities,
+})
 
 lspconfig.nil_ls.setup({
+  capabilities = capabilities,
   root_dir = util.root_pattern("flake.nix", "default.nix", "shell.nix", ".git"),
 })
 
 lspconfig.lua_ls.setup({
+  capabilities = capabilities,
   on_init = function(client)
     local path = client.workspace_folders[1].name
     if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
@@ -192,6 +211,34 @@ lspconfig.lua_ls.setup({
       },
       hint = { -- inlay hints (supported in Neovim >= 0.10)
         enable = true,
+      },
+    },
+  },
+})
+
+lspconfig.tsserver.setup({
+  capabilities = capabilities,
+  settings = {
+    javascript = {
+      inlayHints = {
+        includeInlayEnumMemberValueHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayVariableTypeHints = true,
+      },
+    },
+    typescript = {
+      inlayHints = {
+        includeInlayEnumMemberValueHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayVariableTypeHints = true,
       },
     },
   },
