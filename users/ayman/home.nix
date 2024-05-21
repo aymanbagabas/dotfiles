@@ -63,6 +63,7 @@ in {
     alacritty
     discord
     kitty
+    obsidian
     slack
     spotify
     syncthing
