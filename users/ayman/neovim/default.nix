@@ -8,6 +8,7 @@
     withNodeJs = true;
 
     plugins = with pkgs.vimPlugins; [
+
       # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
       # plugins from nixpkgs go in here.
       SchemaStore-nvim
@@ -35,7 +36,6 @@
       indent-blankline-nvim
       lspkind-nvim # vscode-like LSP pictograms | https://github.com/onsails/lspkind.nvim/
       lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
-      luasnip # snippets | https://github.com/l3mon4d3/luasnip/
       markdown-preview-nvim
       mini-nvim
       neo-tree-nvim
@@ -48,6 +48,7 @@
       nvim-lspconfig
       nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic
       nvim-notify
+      nvim-snippets
       nvim-spectre
       nvim-surround # https://github.com/kylechui/nvim-surround/
       nvim-treesitter-context # nvim-treesitter-context

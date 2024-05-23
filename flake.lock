@@ -239,6 +239,22 @@
         "type": "github"
       }
     },
+    "nvim-snippets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1716408055,
+        "narHash": "sha256-M7CXn2Xm+zk3WBUh0EzsvE6h/7vqQZ+VDH+KqTsXaYA=",
+        "owner": "garymjr",
+        "repo": "nvim-snippets",
+        "rev": "b3fe9af9fe2bf735f7d3988ad87f4c2fceadcc2b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "garymjr",
+        "repo": "nvim-snippets",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
@@ -246,6 +262,7 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable_2",
+        "nvim-snippets": "nvim-snippets",
         "tinted-shell": "tinted-shell",
         "zsh-vim-mode": "zsh-vim-mode"
       }

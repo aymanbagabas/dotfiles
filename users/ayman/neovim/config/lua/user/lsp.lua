@@ -4,6 +4,8 @@
 ---LSP related functions
 ---@brief ]]
 
+local ms = vim.lsp.protocol.Methods
+
 -- Format code and organize imports (if supported).
 --
 ---@param client vim.lsp.Client Client
@@ -12,7 +14,7 @@
 local organize_imports = function(client, bufnr, timeoutms)
   local params = vim.lsp.util.make_range_params()
   params.context = { only = { "source.organizeImports" } }
-  local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeoutms)
+  local result = vim.lsp.buf_request_sync(bufnr, ms.textDocument_codeAction, params, timeoutms)
   for cid, res in pairs(result or {}) do
     if cid == client.id then
       for _, r in pairs(res.result or {}) do
@@ -128,7 +130,7 @@ M.set_keymap = function(client, bufnr)
     })
   end, { desc = "Source Action" })
 
-  if client.supports_method("textDocument/inlayHint") then
+  if client.supports_method(ms.textDocument_inlayHint) then
     keymap("n", "<space>uh", function()
       local current_setting = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
       vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
@@ -144,7 +146,7 @@ M.on_attach = function(client, bufnr)
   vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
   -- Attach navic
-  if client.supports_method("textDocument/documentSymbol") then
+  if client.supports_method(ms.textDocument_documentSymbol) then
     require("nvim-navic").attach(client, bufnr)
   end
 
@@ -154,7 +156,7 @@ M.on_attach = function(client, bufnr)
   vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
     group = vim.api.nvim_create_augroup(string.format("LspCodeLensReferesh-%s-%s", bufnr, client.id), {}),
     callback = function()
-      if client.server_capabilities.codeLensProvider then
+      if client.supports_method(ms.textDocument_codeLens) then
         vim.lsp.codelens.refresh({ bufnr = bufnr })
       end
     end,
@@ -184,8 +186,8 @@ M.setup = function()
       M.on_attach(client, bufnr)
 
       -- Enable inlay hints if option is set
-      if vim.g.show_inlay_hints then
-        if client.supports_method("textDocument/inlayHint") then
+      if vim.g.show_inlay_hint then
+        if client.supports_method(ms.textDocument_inlayHint) then
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
       end
@@ -194,8 +196,8 @@ M.setup = function()
       if client.name ~= "lua_ls" then
         vim.api.nvim_create_autocmd({ "BufWritePre" }, {
           callback = function()
-            if client.supports_method("textDocument/codeAction") then
-              organize_imports(client, bufnr, 1500)
+            if client.supports_method(ms.textDocument_codeAction) then
+              organize_imports(client, bufnr, 1000)
             end
           end,
           group = group,
@@ -213,7 +215,7 @@ M.setup = function()
         return
       end
 
-      if client.supports_method("textDocument/codeLens") then
+      if client.supports_method(ms.textDocument_codeLens) then
         vim.lsp.codelens.clear(client.id, bufnr)
       end
     end,

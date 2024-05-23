@@ -6,10 +6,17 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
 
+-- nvim-snippets
+-- this needs to be set before cmp.setup()
+require("snippets").setup({
+  create_cmp_source = true,
+  friendly_snippets = true,
+  global_snippets = { "all", "global" },
+})
+
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 local cmp = require("cmp")
 local defaults = require("cmp.config.default")()
-local luasnip = require("luasnip")
 local copilot = require("copilot.suggestion")
 
 require("copilot_cmp").setup()
@@ -31,16 +38,17 @@ local opts = {
   },
   snippet = {
     expand = function(args)
-      luasnip.lsp_expand(args.body)
+      vim.snippet.expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() and has_words_before() then
         cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-      elseif luasnip.expand_or_jumpable() then
-        -- TODO: use vim.snippet in nvim-0.10
-        luasnip.expand_or_jump()
+      elseif vim.snippet.active({ direction = 1 }) then
+        vim.schedule(function()
+          vim.snippet.jump(1)
+        end)
       elseif copilot.is_visible() then
         copilot.accept()
         cmp.close()
@@ -51,8 +59,10 @@ local opts = {
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() and has_words_before() then
         cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
+      elseif vim.snippet.active({ direction = -1 }) then
+        vim.schedule(function()
+          vim.snippet.jump(-1)
+        end)
       else
         fallback()
       end
@@ -101,7 +111,7 @@ local opts = {
     --{ name = 'nvim_lsp_signature_help', keyword_length = 3 },
     { name = "nvim_lsp", keyword_length = 3 },
     {
-      name = "luasnip",
+      name = "snippets",
       keyword_length = 2,
       priority = 50,
     },
