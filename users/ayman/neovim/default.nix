@@ -100,6 +100,7 @@
       gomodifytags
       gopls
       gotests
+      gotools
       hadolint
       impl
       ltex-ls

@@ -6,23 +6,22 @@
 
 -- Format code and organize imports (if supported).
 --
--- https://github.com/neovim/nvim-lspconfig/issues/115#issuecomment-902680058
---
----@param client table Client object
+---@param client vim.lsp.Client Client
 ---@param bufnr number Buffer number
 ---@param timeoutms number timeout in ms
 local organize_imports = function(client, bufnr, timeoutms)
-  local params = vim.lsp.util.make_range_params(nil, client.offset_encoding)
+  local params = vim.lsp.util.make_range_params()
   params.context = { only = { "source.organizeImports" } }
-  ---@diagnostic disable-next-line: param-type-mismatch
   local result = vim.lsp.buf_request_sync(bufnr, "textDocument/codeAction", params, timeoutms)
-  for _, res in pairs(result or {}) do
-    for _, r in pairs(res.result or {}) do
-      if r.edit then
-        vim.lsp.util.apply_workspace_edit(r.edit, client.offset_encoding)
-      else
-        -- ignore output
-        pcall(vim.lsp.buf.execute_command, r.command)
+  for cid, res in pairs(result or {}) do
+    if cid == client.id then
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          local enc = client.offset_encoding or "utf-16"
+          vim.lsp.util.apply_workspace_edit(r.edit, enc)
+        elseif r.command and r.command.command then
+          vim.lsp.buf.execute_command(r.command)
+        end
       end
     end
   end
@@ -153,12 +152,12 @@ M.on_attach = function(client, bufnr)
 
   -- Auto-refresh code lenses
   vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+    group = vim.api.nvim_create_augroup(string.format("LspCodeLensReferesh-%s-%s", bufnr, client.id), {}),
     callback = function()
-      if client.supports_method("textDocument/codeLens") then
+      if client.server_capabilities.codeLensProvider then
         vim.lsp.codelens.refresh({ bufnr = bufnr })
       end
     end,
-    group = vim.api.nvim_create_augroup(string.format("LspCodeLensReferesh-%s-%s", bufnr, client.id), {}),
   })
 end
 
@@ -174,6 +173,7 @@ M.setup = function()
   local group = vim.api.nvim_create_augroup("LspAttachGroup", { clear = true })
 
   vim.api.nvim_create_autocmd("LspAttach", {
+    group = group,
     callback = function(args)
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -190,15 +190,6 @@ M.setup = function()
         end
       end
 
-      vim.api.nvim_create_autocmd("LspDetach", {
-        callback = function()
-          if client.supports_method("textDocument/codeLens") then
-            vim.lsp.codelens.clear(client.id)
-          end
-        end,
-        group = group,
-      })
-
       -- Organize imports before save
       if client.name ~= "lua_ls" then
         vim.api.nvim_create_autocmd({ "BufWritePre" }, {
@@ -209,6 +200,21 @@ M.setup = function()
           end,
           group = group,
         })
+      end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("LspDetach", {
+    group = vim.api.nvim_create_augroup("LspDetachGroup", { clear = true }),
+    callback = function(args)
+      local bufnr = args.buf
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      if client == nil then
+        return
+      end
+
+      if client.supports_method("textDocument/codeLens") then
+        vim.lsp.codelens.clear(client.id, bufnr)
       end
     end,
   })

@@ -1,7 +1,6 @@
 require("conform").setup({
   formatters_by_ft = {
     css = { "prettier" },
-    fish = { "fish_indent" },
     html = { "prettier" },
     javascript = { "prettier" },
     json = { "jq" },
@@ -31,6 +30,6 @@ vim.keymap.set("n", "<leader>uf", function()
   vim.notify("Auto Format (Global): " .. (vim.g.autoformat and "enabled" or "disabled"))
 end, { desc = "Toggle Auto Format (Global)" })
 vim.keymap.set("n", "<leader>uF", function(bufnr)
-  vim.b.autoformat = not vim.b.autoformat
-  vim.notify("Auto Format (Buffer): " .. (vim.b.autoformat and "enabled" or "disabled"))
+  vim.b[bufnr].autoformat = not vim.b[bufnr].autoformat
+  vim.notify("Auto Format (Buffer): " .. (vim.b[bufnr].autoformat and "enabled" or "disabled"))
 end, { desc = "Toggle Auto Format (Buffer)" })
