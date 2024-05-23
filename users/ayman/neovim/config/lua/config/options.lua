@@ -105,47 +105,6 @@ if vim.fn.has("nvim-0.10") == 1 then
   vim.opt.smoothscroll = true
 end
 
--- Configure Neovim diagnostic messages
-
-local function prefix_diagnostic(prefix, diagnostic)
-  return string.format(prefix .. " %s", diagnostic.message)
-end
-
-local sign = function(opts)
-  vim.fn.sign_define(opts.name, {
-    texthl = opts.name,
-    text = opts.text,
-    numhl = "",
-  })
-end
-
--- Requires Nerd fonts
-local icons = require("icons").diagnostics
-sign({ name = "DiagnosticSignError", text = icons.Error })
-sign({ name = "DiagnosticSignWarn", text = icons.Warn })
-sign({ name = "DiagnosticSignInfo", text = icons.Info })
-sign({ name = "DiagnosticSignHint", text = icons.Hint })
-
-vim.diagnostic.config({
-  virtual_text = {
-    spacing = 4,
-    source = "if_many",
-    prefix = "●",
-  },
-  signs = true,
-  update_in_insert = false,
-  underline = true,
-  severity_sort = true,
-  float = {
-    focusable = false,
-    style = "minimal",
-    border = "rounded",
-    source = "if_many",
-    header = "",
-    prefix = "",
-  },
-})
-
 vim.opt.colorcolumn = "100"
 
 -- Native plugins

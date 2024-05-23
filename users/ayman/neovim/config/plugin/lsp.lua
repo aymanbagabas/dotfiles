@@ -1,5 +1,38 @@
+local ms = vim.lsp.protocol.Methods
 local userlsp = require("user.lsp")
 userlsp.setup()
+
+-- Requires Nerd fonts
+for name, icon in pairs(require("icons").diagnostics) do
+  name = "DiagnosticSign" .. name
+  vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
+end
+
+local float_config = {
+  focusable = false,
+  style = "minimal",
+  border = "rounded",
+  source = "always",
+  header = "",
+  prefix = "",
+}
+
+-- setup diagnostics
+vim.diagnostic.config({
+  virtual_text = {
+    spacing = 4,
+    source = "if_many",
+    prefix = "●",
+  },
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+  float = float_config,
+})
+
+vim.lsp.handlers[ms.textDocument_hover] = vim.lsp.with(vim.lsp.handlers.hover, float_config)
+vim.lsp.handlers[ms.textDocument_signatureHelp] = vim.lsp.with(vim.lsp.handlers.signature_help, float_config)
 
 -- neoconf must come before lspconfig
 require("neoconf").setup({})
