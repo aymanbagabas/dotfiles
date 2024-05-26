@@ -95,9 +95,13 @@ M.set_keymap = function(client, bufnr)
   keymap("n", "<leader>xl", vim.diagnostic.setloclist, { desc = "Location List" })
   keymap("n", "<leader>xq", vim.diagnostic.setqflist, { desc = "Quickfix List" })
   keymap("n", "<leader>cR", "<cmd>echo 'Restarting LSP...'<cr><cmd>LspRestart<cr>", { desc = "Restart LSP" })
-  keymap("n", "gd", function()
-    require("telescope.builtin").lsp_definitions({ reuse_win = true })
-  end, { desc = "Goto Definition" })
+
+  if client.supports_method(ms.textDocument_definition) then
+    keymap("n", "gd", function()
+      require("telescope.builtin").lsp_definitions({ reuse_win = true })
+    end, { desc = "Goto Definition" })
+  end
+
   keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
   keymap("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
   keymap("n", "gI", function()
@@ -107,8 +111,12 @@ M.set_keymap = function(client, bufnr)
     require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
   end, { desc = "Goto T[y]pe Definition" })
   keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-  keymap("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-  keymap("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+
+  if client.supports_method(ms.textDocument_signatureHelp) then
+    keymap("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+    keymap("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+  end
+
   keymap("n", "]d", M.diagnostic_goto(true), { desc = "Next Diagnostic" })
   keymap("n", "[d", M.diagnostic_goto(false), { desc = "Prev Diagnostic" })
   keymap("n", "]e", M.diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
@@ -116,19 +124,25 @@ M.set_keymap = function(client, bufnr)
   keymap("n", "]w", M.diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
   keymap("n", "[w", M.diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
   keymap("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
-  keymap({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" })
-  keymap("n", "<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
-  keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
-  keymap("n", "<leader>cA", function()
-    vim.lsp.buf.code_action({
-      context = {
-        only = {
-          "source",
+
+  if client.supports_method(ms.textDocument_codeAction) then
+    keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
+    keymap("n", "<leader>cA", function()
+      vim.lsp.buf.code_action({
+        context = {
+          only = {
+            "source",
+          },
+          diagnostics = {},
         },
-        diagnostics = {},
-      },
-    })
-  end, { desc = "Source Action" })
+      })
+    end, { desc = "Source Action" })
+  end
+
+  if client.supports_method(ms.textDocument_codeLens) then
+    keymap({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" })
+    keymap("n", "<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
+  end
 
   if client.supports_method(ms.textDocument_inlayHint) then
     keymap("n", "<space>uh", function()
@@ -162,7 +176,15 @@ M.on_attach = function(client, bufnr)
       if not vim.api.nvim_buf_is_valid(buffer) then
         return
       end
-      if client.supports_method(ms.textDocument_codeLens) then
+      -- don't trigger on non-listed buffers
+      if not vim.bo[buffer].buflisted then
+        return
+      end
+      -- don't trigger on nofile buffers
+      if vim.bo[buffer].buftype == "nofile" then
+        return
+      end
+      if client.server_capabilities.codeLensProvider and client.supports_method(ms.textDocument_codeLens) then
         vim.lsp.codelens.refresh({ bufnr = buffer })
       end
     end,
