@@ -162,11 +162,7 @@ telescope.setup({
         ["<C-Up>"] = actions.cycle_history_prev,
         ["<C-f>"] = actions.preview_scrolling_down,
         ["<C-b>"] = actions.preview_scrolling_up,
-        ["<C-q>"] = actions.send_to_qflist,
-        ["<C-l>"] = actions.send_to_loclist,
-        ["<esc>"] = actions.close,
-        ["<C-s>"] = actions.cycle_previewers_next,
-        ["<C-a>"] = actions.cycle_previewers_prev,
+        ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
       },
       n = {
         ["q"] = actions.close,
