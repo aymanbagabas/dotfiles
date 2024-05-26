@@ -44,22 +44,31 @@
       url = "github:garymjr/nvim-snippets";
       flake = false;
     };
+
+    ts-comments-nvim = {
+      url = "github:folke/ts-comments.nvim";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, darwin, ... }:
     let
       overlays = [
-        # Overlay for nvim-snippets
+        # Overlay for vim plugins
         (self: super:
           let
             nvim-snippets = super.vimUtils.buildVimPlugin {
               name = "nvim-snippets";
               src = inputs.nvim-snippets;
             };
+            ts-comments-nvim = super.vimUtils.buildVimPlugin {
+              name = "ts-comments-nvim";
+              src = inputs.ts-comments-nvim;
+            };
           in
           {
             vimPlugins = super.vimPlugins // {
-              inherit nvim-snippets;
+              inherit nvim-snippets ts-comments-nvim;
             };
           }
         )

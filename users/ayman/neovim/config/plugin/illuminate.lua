@@ -1,10 +1,10 @@
-require('illuminate').configure({
+require("illuminate").configure({
   delay = 200,
   large_file_cutoff = 2000,
   large_file_overrides = {
     providers = { "lsp" },
   },
-  filetypes_denylist = require('exclude_list')
+  filetypes_denylist = require("exclude_list"),
 })
 
 local function map(key, dir, buffer)

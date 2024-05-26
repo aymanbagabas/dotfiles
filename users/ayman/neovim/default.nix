@@ -22,7 +22,6 @@
       cmp-nvim-lua # neovim lua API as completion source | https://github.com/hrsh7th/cmp-nvim-lua/
       cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
       cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
-      comment-nvim
       conform-nvim
       copilot-cmp
       copilot-lua
@@ -65,6 +64,7 @@
       telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
       todo-comments-nvim
       trouble-nvim
+      ts-comments-nvim
       undotree
       vim-abolish
       vim-fubitive
