@@ -14,17 +14,13 @@ local ms = vim.lsp.protocol.Methods
 local organize_imports = function(client, bufnr, timeoutms)
   local params = vim.lsp.util.make_range_params()
   params.context = { only = { "source.organizeImports" } }
-  local result = vim.lsp.buf_request_sync(bufnr, ms.textDocument_codeAction, params, timeoutms)
-  for cid, res in pairs(result or {}) do
-    if cid == client.id then
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          local enc = client.offset_encoding or "utf-16"
-          vim.lsp.util.apply_workspace_edit(r.edit, enc)
-        elseif r.command and r.command.command then
-          vim.lsp.buf.execute_command(r.command)
-        end
-      end
+  local result = client.request_sync(ms.textDocument_codeAction, params, timeoutms, bufnr) or {}
+  for _, r in pairs(result.result or {}) do
+    if r.edit then
+      local enc = client.offset_encoding or "utf-16"
+      vim.lsp.util.apply_workspace_edit(r.edit, enc)
+    elseif r.command and r.command.command then
+      vim.lsp.buf.execute_command(r.command)
     end
   end
 end
@@ -221,15 +217,16 @@ M.setup = function()
       end
 
       -- Organize imports before save
-      if client.name ~= "lua_ls" then
-        vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-          callback = function()
-            if client.supports_method(ms.textDocument_codeAction) then
+      if client.supports_method(ms.textDocument_codeAction) then
+        if client.name ~= "lua_ls" then
+          vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+            buffer = bufnr,
+            callback = function()
               organize_imports(client, bufnr, 1000)
-            end
-          end,
-          group = group,
-        })
+            end,
+            group = group,
+          })
+        end
       end
     end,
   })
@@ -240,6 +237,19 @@ M.setup = function()
       local bufnr = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
       if client == nil then
+        return
+      end
+
+      -- don't trigger on invalid buffers
+      if not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+      end
+      -- don't trigger on non-listed buffers
+      if not vim.bo[bufnr].buflisted then
+        return
+      end
+      -- don't trigger on nofile buffers
+      if vim.bo[bufnr].buftype == "nofile" then
         return
       end
 
