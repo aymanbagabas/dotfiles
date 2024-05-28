@@ -11,6 +11,7 @@ require("conform").setup({
     sh = { "shfmt" },
     sql = { "pg_format", "sql_formatter" },
     tf = { "terraform_fmt" },
+    typescript = { "prettier" },
     yaml = { "prettier" },
     zig = { "zigfmt" },
     ["_"] = { "trim_whitespace", "trim_newlines" },
