@@ -29,8 +29,6 @@ local project_files_cwd = function()
   project_files({ cwd = false })
 end
 
-local kind_filter = require("kind_filter")
-
 vim.keymap.set(
   "n",
   "<leader>,",
@@ -88,14 +86,14 @@ vim.keymap.set("n", "<leader>uC", function()
 end, { desc = "Colorscheme with Preview" })
 vim.keymap.set("n", "<leader>ss", function()
   builtin.lsp_document_symbols({
-    symbols = kind_filter,
+    symbols = require("kind_filter").get(),
   })
 end, {
   desc = "Goto Symbol",
 })
 vim.keymap.set("n", "<leader>sS", function()
   builtin.lsp_dynamic_workspace_symbols({
-    symbols = kind_filter,
+    symbols = require("kind_filter").get(),
   })
 end, {
   desc = "Goto Symbol (Workspace)",
