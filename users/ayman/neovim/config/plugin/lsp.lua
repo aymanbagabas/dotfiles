@@ -183,6 +183,7 @@ lspconfig.gopls.setup({
 
 lspconfig.golangci_lint_ls.setup({
   capabilities = capabilities,
+  filetypes = { "go", "gomod" },
 })
 
 lspconfig.nil_ls.setup({
