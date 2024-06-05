@@ -93,6 +93,8 @@ in {
     ./alacritty.nix
     ./ghostty.nix
     ./kitty.nix
+
+    ./nixpkgs.nix
   ];
 
   xdg.configFile = lib.mkIf (isDarwin) {
