@@ -14,6 +14,7 @@
       SchemaStore-nvim
       barbecue-nvim
       bufferline-nvim
+      clangd_extensions-nvim
       cmp-buffer # current buffer as completion source | https://github.com/hrsh7th/cmp-buffer/
       cmp-cmdline # cmp command line suggestions
       cmp-cmdline-history # cmp command line history suggestions
