@@ -64,7 +64,7 @@ in {
     palette = 15=${colors.bright.white}
 
     macos-option-as-alt = true
-    macos-titlebar-tabs = true
+    macos-titlebar-style = "tabs"
 
     # vim:ft=config
     '';
