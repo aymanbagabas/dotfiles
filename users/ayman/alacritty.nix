@@ -3,7 +3,7 @@
 let
   lib = pkgs.lib;
   colors = import ./colors.nix;
-  fontFamily = "Inconsolata LGC Nerd Font";
+  fontFamily = "Inconsolata LGC";
 in {
   programs.alacritty = {
     enable = !isHeadless;
