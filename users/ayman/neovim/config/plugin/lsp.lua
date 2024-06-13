@@ -122,7 +122,14 @@ lspconfig.rust_analyzer.setup({
 })
 
 lspconfig.gopls.setup({
-  capabilities = capabilities,
+  capabilities = vim.tbl_extend("force", capabilities, {
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true, -- needs fswatch on linux
+        relativePatternSupport = true,
+      },
+    },
+  }),
   on_attach = function(client, bufnr)
     -- workaround for gopls not supporting semanticTokensProvider
     -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
