@@ -51,23 +51,13 @@ local M = {}
 ---Extends the object with capabilities provided by plugins.
 ---@return lsp.ClientCapabilities
 function M.make_client_capabilities()
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- Add com_nvim_lsp capabilities
-  local cmp_lsp = require("cmp_nvim_lsp")
-  local cmp_lsp_capabilities = cmp_lsp.default_capabilities()
-  capabilities = vim.tbl_deep_extend("keep", capabilities, cmp_lsp_capabilities)
-  -- Add any additional plugin capabilities here.
-  -- Make sure to follow the instructions provided in the plugin's docs.
-  if vim.fn.has("nvim-0.10.0") == 1 then
-    capabilities = vim.tbl_deep_extend("force", capabilities, {
-      workspace = {
-        didChangeWatchedFiles = {
-          dynamicRegistration = true, -- needs fswatch on linux
-          relativePatternSupport = true,
-        },
-      },
-    })
-  end
+  local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  local capabilities = vim.tbl_deep_extend(
+    "force",
+    {},
+    vim.lsp.protocol.make_client_capabilities(),
+    has_cmp and cmp_nvim_lsp.default_capabilities() or {}
+  )
   return capabilities
 end
 
@@ -98,7 +88,7 @@ M.set_keymap = function(client, bufnr)
     end, { desc = "Goto Definition" })
   end
 
-  keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
+  keymap("n", "gr", require("telescope.builtin").lsp_references, { desc = "References" })
   keymap("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
   keymap("n", "gI", function()
     require("telescope.builtin").lsp_implementations({ reuse_win = true })

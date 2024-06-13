@@ -32,7 +32,7 @@ vim.opt.path = vim.o.path .. "**"
 
 vim.opt.autowrite = true -- Enable auto write
 vim.opt.clipboard = ""
-vim.opt.completeopt = "menu,menuone,noselect"
+vim.opt.completeopt = "menu,menuone,noinsert,noselect"
 vim.opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line

@@ -21,12 +21,36 @@ cmp.event:on("menu_closed", function()
   vim.b.copilot_suggestion_hidden = false
 end)
 
+---Confirm selection or jump to the next snippet selection.
+---@param opts cmp.ConfirmOption
+---@return function(callback: function())
+local confirmOrJump = function(opts)
+  return function(fallback)
+    if cmp.visible() then
+      if vim.snippet.active({ direction = 1 }) then
+        local entry = cmp.get_selected_entry()
+        if not entry then
+          cmp.select_next_item()
+        end
+        vim.schedule(function()
+          vim.snippet.jump(1)
+        end)
+      else
+        cmp.confirm(opts)
+      end
+    else
+      fallback()
+    end
+  end
+end
+
 local opts = {
   auto_brackets = {}, -- configure any filetype to auto add brackets
   completion = {
-    completeopt = "menu,menuone,noinsert",
+    completeopt = "menu,menuone,noinsert,noselect",
     keyword_length = 3,
   },
+  preselect = cmp.PreselectMode.None,
   snippet = {
     expand = function(args)
       vim.snippet.expand(args.body)
@@ -35,7 +59,7 @@ local opts = {
   mapping = cmp.mapping.preset.insert({
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() and has_words_before() then
-        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+        cmp.select_next_item()
       elseif vim.snippet.active({ direction = 1 }) then
         vim.schedule(function()
           vim.snippet.jump(1)
@@ -43,13 +67,15 @@ local opts = {
       elseif copilot.is_visible() then
         copilot.accept()
         cmp.close()
+      elseif has_words_before() then
+        cmp.complete()
       else
         fallback()
       end
     end, { "i", "s" }),
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() and has_words_before() then
-        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+        cmp.select_prev_item()
       elseif vim.snippet.active({ direction = -1 }) then
         vim.schedule(function()
           vim.snippet.jump(-1)
@@ -79,10 +105,28 @@ local opts = {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     }, { "i", "c" }),
-    ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-    ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+    ["<C-n>"] = cmp.mapping.select_next_item(),
+    ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-k>"] = cmp.mapping(function(fallback)
+      if vim.snippet.active({ direction = 1 }) then
+        vim.schedule(function()
+          vim.snippet.jump(1)
+        end)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+    ["<C-j>"] = cmp.mapping(function(fallback)
+      if vim.snippet.active({ direction = -1 }) then
+        vim.schedule(function()
+          vim.snippet.jump(-1)
+        end)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping(function()
       -- Dismiss Copilot
@@ -91,24 +135,27 @@ local opts = {
       end
       cmp.abort()
     end, { "i" }),
-    ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    ["<S-CR>"] = cmp.mapping.confirm({
+    ["<CR>"] = cmp.mapping(confirmOrJump({
+      behavior = cmp.ConfirmBehavior.Insert,
+      select = true,
+    })),
+    ["<S-CR>"] = cmp.mapping(confirmOrJump({
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
-    }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    })),
     ["<C-CR>"] = function(fallback)
       cmp.abort()
       fallback()
     end,
   }),
   sources = cmp.config.sources({
+    { name = "nvim_lsp_signature_help", keyword_length = 2 },
+    { name = "nvim_lsp", keyword_length = 2 },
     { name = "copilot", keyword_length = 3 },
-    --{ name = 'nvim_lsp_signature_help', keyword_length = 3 },
-    { name = "nvim_lsp", keyword_length = 3 },
     {
       name = "snippets",
       keyword_length = 2,
-      priority = 50,
+      priority = 99,
     },
     { name = "path" },
   }, {
