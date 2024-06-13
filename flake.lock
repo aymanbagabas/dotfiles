@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1716993688,
-        "narHash": "sha256-vo5k2wQekfeoq/2aleQkBN41dQiQHNTniZeVONWiWLs=",
+        "lastModified": 1717976995,
+        "narHash": "sha256-u3HBinyIyUvL1+N816bODpJmSQdgn0Mbb8BprFw7kqo=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "c0d5b8c54d6828516c97f6be9f2d00c63a363df4",
+        "rev": "315aa649ba307704db0b16c92f097a08a65ec955",
         "type": "github"
       },
       "original": {
@@ -108,11 +108,11 @@
         "zls": "zls"
       },
       "locked": {
-        "lastModified": 1717516756,
-        "narHash": "sha256-2sS+2e7Nsl+sZs5LL12EEBTK/7exRMdgJj9hlteaKms=",
+        "lastModified": 1717982703,
+        "narHash": "sha256-384NbaLel8Gg9jP02/7ivKGqONKXu6P6T7WPWAAaKG4=",
         "ref": "refs/heads/main",
-        "rev": "955246d6a0b4d3b7c79ac606aa1441a4794b5c40",
-        "revCount": 6258,
+        "rev": "4e4b6ea6de4bb513fb03d39b09b0ea3a740a127f",
+        "revCount": 6308,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -150,11 +150,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1717525419,
-        "narHash": "sha256-5z2422pzWnPXHgq2ms8lcCfttM0dz+hg+x1pCcNkAws=",
+        "lastModified": 1718141734,
+        "narHash": "sha256-cA+6l8ZCZ7MXGijVuY/1f55+wF/RT4PlTR9+g4bx86w=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "a7117efb3725e6197dd95424136f79147aa35e5b",
+        "rev": "892f76bd0aa09a0f7f73eb41834b8a904b6d0fad",
         "type": "github"
       },
       "original": {
@@ -177,11 +177,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1717281328,
-        "narHash": "sha256-evZPzpf59oNcDUXxh2GHcxHkTEG4fjae2ytWP85jXRo=",
+        "lastModified": 1718086528,
+        "narHash": "sha256-hoB7B7oPgypePz16cKWawPfhVvMSXj4G/qLsfFuhFjw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b3b2b28c1daa04fe2ae47c21bb76fd226eac4ca1",
+        "rev": "47b604b07d1e8146d5398b42d3306fdebd343986",
         "type": "github"
       },
       "original": {
@@ -225,11 +225,11 @@
     },
     "nixpkgs-unstable_2": {
       "locked": {
-        "lastModified": 1717196966,
-        "narHash": "sha256-yZKhxVIKd2lsbOqYd5iDoUIwsRZFqE87smE2Vzf6Ck0=",
+        "lastModified": 1718160348,
+        "narHash": "sha256-9YrUjdztqi4Gz8n3mBuqvCkMo4ojrA6nASwyIKWMpus=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "57610d2f8f0937f39dbd72251e9614b1561942d8",
+        "rev": "57d6973abba7ea108bac64ae7629e7431e0199b6",
         "type": "github"
       },
       "original": {
@@ -241,11 +241,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1717548551,
-        "narHash": "sha256-AdAqWt3bQlLcv9hVWM7vS78Pfd0YjCGQaM4imFLN2io=",
+        "lastModified": 1718221614,
+        "narHash": "sha256-yfYrqKVECU4XBi1q8u7DaEK0QcDQMfjY5/dGeALv4dg=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "dfceb15024a051ec9ce314851ec525d6f61e92a7",
+        "rev": "9edb05163b86238999c6f6cab06c193e4de951f8",
         "type": "github"
       },
       "original": {
@@ -257,11 +257,11 @@
     "nvim-snippets": {
       "flake": false,
       "locked": {
-        "lastModified": 1717422659,
-        "narHash": "sha256-NmpW08WDehvJ+1TdWXw170UtRJ3UQCgOpOds5aw5N7g=",
+        "lastModified": 1718024495,
+        "narHash": "sha256-vturjhIAUNRig2y5kTsKXrcudbPXztyIsICL9DhrEOk=",
         "owner": "garymjr",
         "repo": "nvim-snippets",
-        "rev": "cff37a199a92f3c3cd52bb1593a7d01669b35d23",
+        "rev": "5c978b3ba0c504dc9f94ca93d17029f26064d229",
         "type": "github"
       },
       "original": {
@@ -318,11 +318,11 @@
     "ts-comments-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1717061223,
-        "narHash": "sha256-1ZT5D3HnrJp4/zphTCkz8crT/cyERBBHYt2tcqYQMRE=",
+        "lastModified": 1718004784,
+        "narHash": "sha256-0QfERW3RFp/v5/isgHVRWT8lYm6uYh8PUZ3qC0F7NPA=",
         "owner": "folke",
         "repo": "ts-comments.nvim",
-        "rev": "e339090c076871069c00e488b11def49aaf4e413",
+        "rev": "c075b4ee00f6e111b44bf99a8cfd5a4cfce9258a",
         "type": "github"
       },
       "original": {
