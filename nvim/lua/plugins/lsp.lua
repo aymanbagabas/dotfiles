@@ -270,41 +270,43 @@ return {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       ---@diagnostic disable-next-line: missing-parameter
-      vim.list_extend(opts.ensure_installed, {
-        -- markdown
-        "ltex-ls",
-        -- lua stuff
-        "lua-language-server",
-        "stylua",
-        -- web dev stuff
-        "css-lsp",
-        "html-lsp",
-        "typescript-language-server",
-        "prettier",
-        -- yaml
-        "yaml-language-server",
-        -- golang
-        "gopls",
-        "delve",
-        "gomodifytags",
-        "goimports",
-        "staticcheck",
-        -- "golangci-lint",
-        "golangci-lint-langserver",
-        "revive",
-        "gotests",
-        -- shell
-        "shfmt",
-        "shellcheck",
-        -- Github Action
-        "actionlint",
-        -- Dockerfile
-        "dockerfile-language-server",
-        -- Terraform
-        "terraform-ls",
-        -- SQL
-        "sqlls",
-      })
+      -- handled with Nix
+      opts.ensure_installed = {}
+      -- vim.list_extend(opts.ensure_installed, {
+      --   -- markdown
+      --   "ltex-ls",
+      --   -- lua stuff
+      --   "lua-language-server",
+      --   "stylua",
+      --   -- web dev stuff
+      --   "css-lsp",
+      --   "html-lsp",
+      --   "typescript-language-server",
+      --   "prettier",
+      --   -- yaml
+      --   "yaml-language-server",
+      --   -- golang
+      --   "gopls",
+      --   "delve",
+      --   "gomodifytags",
+      --   "goimports",
+      --   "staticcheck",
+      --   -- "golangci-lint",
+      --   "golangci-lint-langserver",
+      --   "revive",
+      --   "gotests",
+      --   -- shell
+      --   "shfmt",
+      --   "shellcheck",
+      --   -- Github Action
+      --   "actionlint",
+      --   -- Dockerfile
+      --   "dockerfile-language-server",
+      --   -- Terraform
+      --   "terraform-ls",
+      --   -- SQL
+      --   "sqlls",
+      -- })
     end,
   },
 }

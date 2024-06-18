@@ -27,18 +27,11 @@ map("i", "<C-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move up" })
 map("v", "<C-j>", ":m '>+1<cr>gv=gv", { desc = "Move down" })
 map("v", "<C-k>", ":m '<-2<cr>gv=gv", { desc = "Move up" })
 
-local nvim_tmux_nav = require("nvim-tmux-navigation")
-
-nvim_tmux_nav.setup({
-  disable_when_zoomed = true, -- defaults to false
-})
-
-map({ "n", "i", "v" }, "<M-h>", nvim_tmux_nav.NvimTmuxNavigateLeft)
-map({ "n", "i", "v" }, "<M-j>", nvim_tmux_nav.NvimTmuxNavigateDown)
-map({ "n", "i", "v" }, "<M-k>", nvim_tmux_nav.NvimTmuxNavigateUp)
-map({ "n", "i", "v" }, "<M-l>", nvim_tmux_nav.NvimTmuxNavigateRight)
-map({ "n", "i", "v" }, "<M-\\>", nvim_tmux_nav.NvimTmuxNavigateLastActive)
-map({ "n", "i", "v" }, "<M-Space>", nvim_tmux_nav.NvimTmuxNavigateNext)
+map({ "n", "i", "v" }, "<M-h>", "<cmd>TmuxNavigateLeft<cr>")
+map({ "n", "i", "v" }, "<M-j>", "<cmd>TmuxNavigateDown<cr>")
+map({ "n", "i", "v" }, "<M-k>", "<cmd>TmuxNavigateUp<cr>")
+map({ "n", "i", "v" }, "<M-l>", "<cmd>TmuxNavigateRight<cr>")
+map({ "n", "i", "v" }, "<M-\\>", "<cmd>TmuxNavigatePrevious<cr>")
 
 -- search and center screen on search result
 map({ "n", "x", "o" }, "n", "nzzzv", { desc = "Next search result" })

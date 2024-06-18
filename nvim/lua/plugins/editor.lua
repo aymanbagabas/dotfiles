@@ -52,7 +52,7 @@ return {
   },
 
   {
-    "sitiom/nvim-numbertoggle",
+    "jeffkreeftmeijer/vim-numbertoggle",
     cond = vim.g.smart_relativenumber,
   },
 
@@ -200,8 +200,7 @@ return {
   },
 
   {
-    "alexghergh/nvim-tmux-navigation",
-    branch = "main",
+    "christoomey/vim-tmux-navigator",
   },
 
   {
@@ -281,5 +280,21 @@ return {
 
   {
     "jamessan/vim-gnupg",
+  },
+
+  {
+    "rgroli/other.nvim",
+    name = "other-nvim", -- FIXME: Disabled because of an issue with Nix
+    enabled = false,
+    cmd = {
+      "Other",
+      "OtherTabNew",
+      "OtherSplit",
+      "OtherVSPlit",
+      "OtherClear",
+    },
+    keys = {
+      { "<leader>o", "<cmd>Other<cr>", desc = "Open Other file" },
+    },
   },
 }

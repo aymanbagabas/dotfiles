@@ -1,80 +1,83 @@
 # dotfiles
 
-Ayman's (~) dotfiles
+Ayman's (~) Nix and NixOS dotfiles
+It uses nixOS, home-manager, and nix-darwin.
 
 ```
 Colorscheme: Onedark
 Shell:       zsh/pwsh
 Terminal:    Ghostty/iTerm2/WindowsTerminal
-Font:        Inconsolata + NF
+Font:        Inconsolata LGC + NF
 ```
 
-## Dependencies
+## Install Nix
 
-- `git` to clone the repository
-- `bash` to run the bootstrap script on \*nix
-- `powershell` to run the bootstrap script on Windows
-
-## Installation
-
-Clone to `~/.dotfiles`
+This is only necessary when you're _not_ running NixOS.
 
 ```sh
-# On *nix
+# On MacOS
+sh <(curl -L https://nixos.org/nix/install)
+# Install Homebrew (Optional)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+# Add the fonts tap (Optional)
+brew tap homebrew/cask-fonts
+# Change the hostname and machine name
+# Go to System Settings and change both the machine name and Sharing hostname
+# to the machine hostname.
+# You also want to set the hostname using `scutil`
+sudo scutil --set HostName <hostname>
+
+# On Linux
+sh <(curl -L https://nixos.org/nix/install) --daemon
+```
+
+See [Nix download](https://nixos.org/download/) page for more info.
+
+## enable flakes
+
+This dotfiles use Nix Flakes, make sure it's enabled on your system.
+
+Using NixOS, add the following to your `configuration.nix`:
+
+```nix
+nix = {
+  package = pkgs.nixFlakes;
+  extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+};
+```
+
+Otherwise:
+
+```sh
+mkdir -p "$HOME/.config/nix"
+echo "experimental-features = nix-command flakes" >> "$HOME/.config/nix/nix.conf"
+```
+
+## Management
+
+To apply or update the dotfiles and configurations, first make sure you have
+cloned the repository:
+
+```sh
 git clone https://github.com/aymanbagabas/dotfiles.git ~/.dotfiles
-# On Windows PowerShell
-git clone https://github.com/aymanbagabas/dotfiles.git $Env:USERPROFILE\.dotfiles
 ```
 
-Or download the [tarball](https://github.com/aymanbagabas/dotfiles/archive/refs/heads/master.zip) and extract it to `~/.dotfiles`
-
-### Unix
-
-To install the dotfiles use `bootstrap.sh`
-
-Use [`.vars`](./.vars) to set global variables like your name, email, and GPG
-key id to use throughout the bootstrap process.
+Now you can use `nix develop` to run the commands in development shell.
 
 ```sh
-cd ~/.dotfiles
-./bootstrap.sh help # show help
-./bootstrap.sh packages # install required & recommended packages
-./bootstrap.sh install # install the dotfiles
-./bootstrap.sh bin # install local binaries
-./bootstrap.sh set-shell # sets the default shell (zsh)
+# apply dotfiles
+nix develop .#default --command dot-apply
+# sync with latest
+nix develop .#default --command dot-sync
 ```
 
-Use `-d` to `dry-run` the script without modifying your environment
+## Tips
 
-### Windows
+### Fix Tmux Colors on MacOS
 
-Use `bootstrap.ps1` to install the dotfiles on Windows
-
-```powershell
-cd $Env:USERPROFILE\.dotfiles
-.\bootstrap.ps1 help # show help
-.\bootstrap.ps1 packages # install required & recommended packages
-.\bootstrap.ps1 install # install the dotfiles
-```
-
-## Recommended Software
-
-- `zsh`
-- `tig`
-- `tmux`
-- `neovim`
-- `fzf`
-- `ripgrep`
-- `gnupg`
-- `eza`
-- `direnv`
-- `zoxide`
-- `bat`
-- `gh`
-- `hub`
-- `htop`
-- `jq`
-- `source-highlight`
+See [this gist](https://gist.github.com/bbqtd/a4ac060d6f6b9ea6fe3aabe735aa9d95).
 
 ## Screenshots
 

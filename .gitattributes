@@ -1,1 +1,2 @@
 *.plist filter=xmlplist
+secrets/** filter=git-crypt diff=git-crypt
