@@ -155,7 +155,7 @@ M.on_attach = function(client, bufnr)
   -- Auto-refresh code lenses
   vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
     buffer = bufnr,
-    group = vim.api.nvim_create_augroup(string.format("LspCodeLensReferesh-%s-%s", bufnr, client.id), {}),
+    group = vim.api.nvim_create_augroup("LspCodeLensReferesh", { clear = true }),
     callback = function(args)
       local buffer = args.buf or bufnr
       -- don't trigger on invalid buffers
@@ -170,7 +170,7 @@ M.on_attach = function(client, bufnr)
       if vim.bo[buffer].buftype == "nofile" then
         return
       end
-      if client.server_capabilities.codeLensProvider and client.supports_method(ms.textDocument_codeLens) then
+      if client.supports_method(ms.textDocument_codeLens) then
         vim.lsp.codelens.refresh({ bufnr = buffer })
       end
     end,
