@@ -119,8 +119,6 @@
       stylua
       terraform-ls
       typescript-language-server
-      vscode-html-languageserver-bin
-      vscode-json-languageserver-bin
       vscode-langservers-extracted
       yaml-language-server
     ];

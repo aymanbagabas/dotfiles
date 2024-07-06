@@ -38,45 +38,13 @@
       url = "github:softmoth/zsh-vim-mode";
       flake = false;
     };
-
-    # Neovim Plugins
-    # TODO: use vimPlugins.nvim-snippets one this is merged
-    # https://github.com/NixOS/nixpkgs/pull/313070
-    nvim-snippets = {
-      url = "github:garymjr/nvim-snippets";
-      flake = false;
-    };
-
-    ts-comments-nvim = {
-      url = "github:folke/ts-comments.nvim";
-      flake = false;
-    };
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, darwin, nur, ... }:
     let
       overlays = [
         nur.overlay
-
-        # Overlay for vim plugins
-        (self: super:
-          let
-            nvim-snippets = super.vimUtils.buildVimPlugin {
-              name = "nvim-snippets";
-              src = inputs.nvim-snippets;
-            };
-            ts-comments-nvim = super.vimUtils.buildVimPlugin {
-              name = "ts-comments-nvim";
-              src = inputs.ts-comments-nvim;
-            };
-          in
-          {
-            vimPlugins = super.vimPlugins // {
-              inherit nvim-snippets ts-comments-nvim;
-            };
-          }
-        )
-      ];
+    ];
 
       mkSystem = import ./lib/mksystem.nix {
         inherit nixpkgs overlays inputs;
