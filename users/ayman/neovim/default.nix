@@ -31,7 +31,6 @@
       friendly-snippets
       fugitive-gitlab-vim
       gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
-      headlines-nvim
       hmts-nvim
       indent-blankline-nvim
       lspkind-nvim # vscode-like LSP pictograms | https://github.com/onsails/lspkind.nvim/
