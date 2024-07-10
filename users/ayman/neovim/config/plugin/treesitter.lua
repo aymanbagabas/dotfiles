@@ -11,9 +11,6 @@ configs.setup({
   endwise = {
     enable = true,
   },
-  autotag = {
-    enable = true,
-  },
   highlight = {
     enable = true,
     disable = function(_, buf)
