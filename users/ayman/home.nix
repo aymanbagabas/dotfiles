@@ -35,6 +35,7 @@ in {
     curl
     fd
     fortune
+    gnused
     htop
     jq
     p7zip

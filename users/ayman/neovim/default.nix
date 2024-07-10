@@ -85,7 +85,6 @@
 
     extraPackages = with pkgs; with pkgs.nodePackages_latest; [
       # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
-      gnused
       (writeShellScriptBin "gsed" "exec ${gnused}/bin/sed \"$@\"")
 
       actionlint
