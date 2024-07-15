@@ -25,7 +25,7 @@ local opts = {
       },
       ["O"] = {
         function(state)
-          require("lazy.util").open(state.tree:get_node().path, { system = true })
+          require("util").open(state.tree:get_node().path)
         end,
         desc = "Open with System Application",
       },
