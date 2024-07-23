@@ -44,37 +44,7 @@
     let
       overlays = [
         nur.overlay
-
-        # Fix nvim-spectre https://github.com/NixOS/nixpkgs/pull/324952
-        (self: super:
-          {
-            vimPlugins = super.vimPlugins // {
-              nvim-spectre = super.vimPlugins.nvim-spectre.overrideAttrs (old:
-                let
-                  spectre_oxi = super.rustPlatform.buildRustPackage {
-                    pname = "spectre_oxi";
-                    inherit (old) version src;
-                    sourceRoot = "${old.src.name}/spectre_oxi";
-
-                    cargoHash = "sha256-SqbU9YwZ5pvdFUr7XBAkkfoqiLHI0JwJRwH7Wj1JDNg=";
-
-                    preCheck = ''
-                    mkdir tests/tmp/
-                    '';
-                  };
-                in
-                  {
-                    dependencies = with self.vimPlugins;
-                    [ plenary-nvim ];
-                    postInstall = ''
-                    ln -s ${spectre_oxi}/lib/libspectre_oxi.* $out/lua/spectre_oxi.so
-                    '';
-                  }
-                );
-            };
-          }
-        )
-    ];
+      ];
 
       mkSystem = import ./lib/mksystem.nix {
         inherit nixpkgs overlays inputs;
