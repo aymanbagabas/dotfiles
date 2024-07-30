@@ -21,6 +21,7 @@ rec {
   users.users.${user} = {
     name = "${user}";
     home = "/Users/${user}";
+    shell = pkgs.zsh;
   };
 
   # zsh is the default shell on Mac and we want to make sure that we're
