@@ -76,6 +76,10 @@
         in
         {
           default = pkgs.mkShellNoCC {
+            shellHook = ''
+              # Use GitHub access tokens to avoid rate limiting
+              export NIX_CONFIG="access-tokens = github=$(${pkgs.gh}/bin/gh auth token)"
+            '';
             buildInputs = with pkgs; [
               (writeScriptBin "dot-release" ''
                 git tag -m "$(date +%Y.%m.%d)" "$(date +%Y.%m.%d)"
