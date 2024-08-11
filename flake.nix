@@ -50,33 +50,27 @@
         inherit nixpkgs overlays inputs;
       };
 
+      # Generate a list of systems based on their hostname
+      mkSystems = list: builtins.listToAttrs (
+        map (
+          x: { name = x.hostname; value = mkSystem x; }
+        ) list
+      );
+
       forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.unix;
       nixpkgsFor = forAllSystems (system: import nixpkgs {
         inherit system overlays;
       });
 
     in {
-      nixosConfigurations = {
-        media = mkSystem {
-          system = "x86_64-linux";
-          hostname = "media";
-          user = "ayman";
-        };
-      };
+      nixosConfigurations = mkSystems [
+        { hostname = "media"; system = "x86_64-linux"; }
+      ];
 
-      darwinConfigurations = {
-        spaceship = mkSystem {
-          system = "x86_64-darwin";
-          hostname = "spaceship";
-          user = "ayman";
-        };
-
-        blackhole = mkSystem {
-          system = "aarch64-darwin";
-          hostname = "blackhole";
-          user = "ayman";
-        };
-      };
+      darwinConfigurations = mkSystems [
+        { hostname = "spaceship"; system = "x86_64-darwin"; }
+        { hostname = "blackhole"; system = "aarch64-darwin"; }
+      ];
 
       devShells = forAllSystems (system:
         let

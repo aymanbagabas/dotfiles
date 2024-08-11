@@ -3,7 +3,7 @@
 {
   system,
   hostname,
-  user,
+  user ? "ayman",
   useGlobalPkgs ? true,
   useUserPkgs ? true,
   isHeadless ? false

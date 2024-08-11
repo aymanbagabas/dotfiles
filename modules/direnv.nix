@@ -1,7 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, user, ... }:
 
 let
-  homeDirectory = (if pkgs.stdenv.isDarwin then "/Users" else "/home") + "/ayman";
+  homeDirectory = (if pkgs.stdenv.isDarwin then "/Users" else "/home") + "/${user}";
 in
 {
   programs.direnv = {
