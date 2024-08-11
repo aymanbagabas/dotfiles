@@ -1,3 +1,4 @@
+# This defines common home-manager configuration for all users.
 { config, pkgs, isDarwin, ... }:
 
 let
