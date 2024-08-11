@@ -60,11 +60,13 @@ in {
         file = "base16-shell.plugin.zsh";
         src = inputs.tinted-shell;
       }
-    ] ++ (pkgs.lib.optionals pkgs.stdenv.isLinux {
-       name = "omzp-systemd";
-       file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
-       src = pkgs.oh-my-zsh;
-    });
+    ] ++ (pkgs.lib.optionals pkgs.stdenv.isLinux [
+      {
+        name = "omzp-systemd";
+        file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
+        src = pkgs.oh-my-zsh;
+      }
+    ]);
 
     sessionVariables = {
       PATH = pathJoin (
