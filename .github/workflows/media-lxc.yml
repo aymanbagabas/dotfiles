@@ -51,7 +51,7 @@ jobs:
 
       # Create a GitHub release and attach the generated container template.
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         if: ${{ github.event_name == 'push' }}
         with:
           name: ${{ env.TAG_NAME }}-media
