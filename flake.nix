@@ -82,7 +82,7 @@
             '';
             buildInputs = with pkgs; [
               (writeScriptBin "dot-release" ''
-                git tag -m "$(date +%Y.%m.%d)" "$(date +%Y.%m.%d)"
+                git tag -m "$(date +%Y-%m-%d)" "$(date +%Y-%m-%d)"
                 git push --tags
               '')
               (writeScriptBin "dot-update" ''
