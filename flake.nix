@@ -56,6 +56,14 @@
       });
 
     in {
+      nixosConfigurations = {
+        media = mkSystem {
+          system = "x86_64-linux";
+          hostname = "media";
+          user = "ayman";
+        };
+      };
+
       darwinConfigurations = {
         spaceship = mkSystem {
           system = "x86_64-darwin";
