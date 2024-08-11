@@ -7,6 +7,10 @@
     name = "${user}";
     home = (if isDarwin then "/Users" else "/home") + "/${user}";
     shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINoKgI3rm5LJSKyaKg8ke4prIwRao0rMdrennfVwfLQx"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICtyoux0Kzj64dAbq/WWbPKmxWBLb1Wug3hBMyH/71z3"
+    ];
   };
 
   nix = {

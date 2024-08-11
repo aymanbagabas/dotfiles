@@ -9,3 +9,6 @@ onedark.setup({
 })
 
 onedark.load()
+
+-- Load the colorscheme
+vim.cmd.colorscheme("onedark")
