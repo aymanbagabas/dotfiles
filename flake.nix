@@ -57,15 +57,15 @@
 
     in {
       darwinConfigurations = {
-        Spaceship = mkSystem {
+        spaceship = mkSystem {
           system = "x86_64-darwin";
-          hostname = "Spaceship";
+          hostname = "spaceship";
           user = "ayman";
         };
 
-        Blackhole = mkSystem {
+        blackhole = mkSystem {
           system = "aarch64-darwin";
-          hostname = "Blackhole";
+          hostname = "blackhole";
           user = "ayman";
         };
       };
