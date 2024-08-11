@@ -1,43 +1,54 @@
-# Media runs on a Proxmox LXC container, so we need to add the Proxmox LXC
-# module to the imports list.
-{ modulesPath, user, ... }:
+# Edit this configuration file to define what should be installed on
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
+{ config, pkgs, user, hostname, ... }:
 
 {
   imports = [
     ../nixos.nix
-    (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    ./hardware-configuration.nix
   ];
 
-  # Make user login passwordless.
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # Set your time zone.
+  time.timeZone = "America/New_York";
+
+  # Make initial login passwordless.
   # https://nixos.org/manual/nixos/stable/options#opt-users.users._name_.initialHashedPassword
   users.users.root.initialHashedPassword = "";
   users.users.${user}.initialHashedPassword = "";
 
-  proxmoxLXC = {
-    privileged = false;
-    manageHostName = false;
-  };
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "24.05"; # Did you read the comment?
 
-  services.nginx = {
+  environment.systemPackages = [ pkgs.cifs-utils ];
+
+  networking.hostName = hostname;
+
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
+
+  services.plex = {
     enable = true;
-    upstreams = {
-      tautulli.servers."media.local:8181" = { };
-    };
-    virtualHosts."media.local" = {
-      locations."~ /tautulli/(.*)" = {
-        proxyPass = "http://tautulli/$1$is_args$args";
-        priority = 1;
-        extraConfig = ''
-          proxy_redirect off;
-          proxy_set_header Host $host;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Host $server_name;
-        '';
-      };
-    };
+    openFirewall = true;
+    group = "wheel";
+    user = "${user}";
   };
-
+  services.tautulli = {
+    enable = true;
+    openFirewall = true;
+    group = "wheel";
+    user = "${user}";
+  };
   services.sonarr = {
     enable = true;
     openFirewall = true;
@@ -66,12 +77,15 @@
     enable = true;
     openFirewall = true;
   };
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05"; # Did you read the comment?
+  services.calibre-server = {
+    enable = true;
+    group = "wheel";
+    user = "${user}";
+  };
+  services.calibre-web = {
+    enable = true;
+    openFirewall = true;
+    group = "wheel";
+    user = "${user}";
+  };
 }
