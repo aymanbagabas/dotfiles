@@ -8,6 +8,11 @@
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
   ];
 
+  # Make user login passwordless.
+  # https://nixos.org/manual/nixos/stable/options#opt-users.users._name_.initialHashedPassword
+  users.users.root.initialHashedPassword = "";
+  users.users.${user}.initialHashedPassword = "";
+
   proxmoxLXC = {
     privileged = false;
     manageHostName = false;
