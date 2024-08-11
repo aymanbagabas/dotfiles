@@ -111,12 +111,8 @@ in {
 
     shellAliases = {
       grep = "grep --color=auto";
-      git = "hub";
       sudo = "sudo "; # Fix sudo + aliases https://askubuntu.com/a/22043
-      tf = "terraform";
       watch = "watch --color ";
-      gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
-      gpg-other-card = "gpg-connect-agent 'scd serialno' 'learn --force' /bye";
     } // (lib.optionalAttrs pkgs.stdenv.isLinux {
       open = "xdg-open";
     });

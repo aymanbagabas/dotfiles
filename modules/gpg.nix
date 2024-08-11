@@ -36,6 +36,12 @@ let
   };
 
 in {
+
+  programs.zsh.shellAliases = {
+    gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
+    gpg-other-card = "gpg-connect-agent 'scd serialno' 'learn --force' /bye";
+  };
+
   programs.gpg = {
     enable = true;
     homedir = homedir;

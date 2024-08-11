@@ -8,6 +8,9 @@
     tig
   ];
 
+  # Alias git to hub
+  programs.zsh.shellAliases.git = "hub";
+
   programs.git = {
     enable = true;
     package = pkgs.gitFull; # install git tools
