@@ -38,18 +38,6 @@
     };
   };
 
-  services.plex = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-  };
-  services.tautulli = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-  };
   services.sonarr = {
     enable = true;
     openFirewall = true;
