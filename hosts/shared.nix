@@ -16,7 +16,22 @@
       experimental-features = nix-command flakes
     '';
     settings = {
+      auto-optimise-store = true;
+      substituters = [
+        "https://cache.nixos.org"
+        "https://aymanbagabas.cachix.org"
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "aymanbagabas.cachix.org-1:4juS6J97CtV+S4TKmcNXp2hxVbaWFvsDrn/vl/fM2Gg="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
       trusted-users = [ "root" "${user}" ];
+    };
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 30d";
     };
   };
 
@@ -38,7 +53,10 @@
   environment.systemPackages = with pkgs; [
     cachix
     coreutils
+    curl
     git
     neovim
+    unzip
+    wget
   ];
 }
