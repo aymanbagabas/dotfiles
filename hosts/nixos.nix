@@ -5,6 +5,11 @@
     ./shared.nix
   ];
 
+  users.users.${user} = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
+
   # Add "@wheel" group to trusted-users.
   nix.settings.trusted-users = [ "@wheel" ];
 
@@ -25,6 +30,15 @@
       ];
     }
   ];
+
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+  };
+
+  programs.zsh = {
+    enable = true;
+  };
 
   # Common services.
   services.openssh.enable = true;
