@@ -2,7 +2,9 @@
 
 {
   imports = [
+    ../../modules/direnv.nix
     ../../modules/home.nix
-    ../../modules/shell.nix
+    ../../modules/scripts
+    ../../modules/zsh.nix
   ];
 }
