@@ -2,6 +2,6 @@
 
 {
   imports = [
-    ../macos.nix
+    ../darwin.nix
   ];
 }

@@ -23,11 +23,11 @@ in systemFunc rec {
     };
     modules = [
       { nixpkgs.overlays = overlays; }
-      ../hosts/${hostname}
+      ../hosts/${hostname}/configuration.nix
       home-manager.home-manager {
         home-manager.useGlobalPkgs = useGlobalPkgs;
         home-manager.useUserPackages = useUserPkgs;
-        home-manager.users.${user} = import ../users/${user}/home.nix;
+        home-manager.users.${user} = import ../hosts/${hostname}/home.nix;
         home-manager.extraSpecialArgs = specialArgs;
       }
     ];
