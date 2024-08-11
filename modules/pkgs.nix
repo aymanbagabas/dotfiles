@@ -44,13 +44,13 @@ in {
     slack
     spotify
     syncthing
-    tailscale
     telegram-desktop
   ]) ++ (lib.optionals (!isHeadless && isDarwin) [
     iterm2
     rectangle
     xquartz
   ]) ++ (lib.optionals (!isHeadless && isLinux) [
+    tailscale # We use Homebrew for macOS
     inputs.ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
   ]);
 }

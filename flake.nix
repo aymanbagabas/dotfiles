@@ -103,14 +103,19 @@
                 dot-apply
               '')
               (writeScriptBin "dot-apply" ''
-                if test $(uname -s) == "Linux"; then
-                  sudo nixos-rebuild switch --flake .#
-                fi
-                if test $(uname -s) == "Darwin"; then
-                  HOST=$(hostname | cut -f1 -d'.')
-                  nix build ".#darwinConfigurations.$HOST.system"
-                  ./result/sw/bin/darwin-rebuild switch --flake .#$HOST
-                fi
+                case "$(uname -s)" in
+                  Linux)
+                    sudo nixos-rebuild switch --flake .#$HOST
+                    ;;
+                  Darwin)
+                    HOST=$(hostname | cut -f1 -d'.')
+                    nix run nix-darwin -- switch --flake .#$HOST
+                    ;;
+                  *)
+                    echo "Unsupported OS"
+                    exit 1
+                    ;;
+                esac
               '')
             ];
           };

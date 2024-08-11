@@ -36,6 +36,7 @@
       "microsoft-remote-desktop"
       "multitouch"
       "raycast"
+      "tailscale"
       "the-unarchiver"
       "vmware-fusion"
       "whatsapp"
