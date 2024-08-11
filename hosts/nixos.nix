@@ -1,4 +1,4 @@
-{ user, hostname, ... }:
+{ pkgs, user, hostname, ... }:
 
 {
   imports = [
@@ -9,6 +9,8 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
   };
+
+  users.defaultUserShell = pkgs.zsh;
 
   # Add "@wheel" group to trusted-users.
   nix.settings.trusted-users = [ "@wheel" ];
