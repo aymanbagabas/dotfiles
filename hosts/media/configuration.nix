@@ -37,6 +37,16 @@
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
 
+# Enable OpenSSH X11 forwarding.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      X11Forwarding = true;
+      PasswordAuthentication = false;
+    };
+  };
+
   services.plex = {
     enable = true;
     openFirewall = true;
