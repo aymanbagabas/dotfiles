@@ -11,6 +11,32 @@ local M = {}
 ---@type RootSpec[]
 M.spec = { "lsp", { ".git", "lua" }, "cwd" }
 
+---@type table<number, string>
+M.cache = {}
+
+M.detectors = {}
+
+function M.detectors.pattern(buf, patterns)
+  patterns = type(patterns) == "string" and { patterns } or patterns
+  local path = M.bufpath(buf) or vim.uv.cwd()
+  local pattern = vim.fs.find(function(name)
+    for _, p in ipairs(patterns) do
+      if name == p then
+        return true
+      end
+      if p:sub(1, 1) == "*" and name:find(vim.pesc(p:sub(2)) .. "$") then
+        return true
+      end
+    end
+    return false
+  end, { path = path, upward = true })[1]
+  return pattern and { vim.fs.dirname(pattern) } or {}
+end
+
+function M.bufpath(buf)
+  return M.realpath(vim.api.nvim_buf_get_name(assert(buf)))
+end
+
 function M.is_win()
   return vim.uv.os_uname().sysname:find("Windows") ~= nil
 end
@@ -29,6 +55,29 @@ function M.norm(path)
   end
   path = path:gsub("\\", "/"):gsub("/+", "/")
   return path:sub(-1) == "/" and path:sub(1, -2) or path
+end
+
+---@param spec RootSpec
+---@return RootFn
+function M.resolve(spec)
+  if M.detectors[spec] then
+    return M.detectors[spec]
+  elseif type(spec) == "function" then
+    return spec
+  end
+  return function(buf)
+    return M.detectors.pattern(buf, spec)
+  end
+end
+
+---@param path string
+---@return string|nil
+function M.realpath(path)
+  if path == "" or path == nil then
+    return nil
+  end
+  path = vim.uv.fs_realpath(path) or path
+  return M.norm(path)
 end
 
 ---@param opts? { buf?: number, spec?: RootSpec[], all?: boolean }
