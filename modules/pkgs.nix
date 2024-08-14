@@ -36,7 +36,6 @@ in {
     ])
   ] ++ (with inputs; lib.optionals (!isHeadless) [
     # Applications (GUI)
-    _1password-gui
     alacritty
     discord
     kitty
@@ -50,6 +49,7 @@ in {
     rectangle
     xquartz
   ]) ++ (lib.optionals (!isHeadless && isLinux) [
+    _1password-gui
     tailscale # We use Homebrew for macOS
     inputs.ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
   ]);
