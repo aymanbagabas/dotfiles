@@ -47,7 +47,7 @@
       ];
 
       mkSystem = import ./lib/mksystem.nix {
-        inherit nixpkgs overlays inputs;
+        inherit nixpkgs nixpkgs-unstable overlays inputs;
       };
 
       # Generate a list of systems based on their hostname

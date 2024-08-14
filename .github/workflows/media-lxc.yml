@@ -1,0 +1,65 @@
+name: Generate Media LXC Container
+# Based on https://freddydumont.com/blog/nixos-github-actions
+
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches:
+      - master
+    tags:
+      - "v*.*.*"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+# The following permissions are required for softprops/action-gh-release@v1.
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract tag name
+        run: |
+          tag_name="nightly"
+          case "$GITHUB_REF_NAME" in
+            v*.*.*)
+              tag_name="$GITHUB_REF_NAME"
+              ;;
+          esac
+          echo "TAG_NAME=$tag_name" >> $GITHUB_ENV
+
+      - name: Install nix
+        uses: cachix/install-nix-action@V27
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate NixOS LXC configuration
+        run: |
+          nix run github:nix-community/nixos-generators -- -f proxmox-lxc --flake .#media | {
+            read path
+            echo "BUILD_PATH=$path" >> $GITHUB_ENV
+          }
+
+      - name: Modify file name
+        run: |
+          NEW_FILENAME="media-${{ env.TAG_NAME }}-$(basename ${{ env.BUILD_PATH }})"
+          RELEASE_PATH="${{ github.workspace }}/$NEW_FILENAME"
+          cp "${{ env.BUILD_PATH }}" "$RELEASE_PATH"
+          echo "RELEASE_PATH=$RELEASE_PATH" >> $GITHUB_ENV
+
+      # Create a GitHub release and attach the generated container template.
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ github.event_name == 'push' }}
+        with:
+          name: ${{ env.TAG_NAME }}-media
+          files: ${{ env.RELEASE_PATH }}
+          prerelease: ${{ env.TAG_NAME == 'nightly' }}
+          tag_name: ${{ env.TAG_NAME }}
