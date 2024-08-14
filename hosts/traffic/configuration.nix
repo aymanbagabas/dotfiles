@@ -1,8 +1,12 @@
 { pkgs, pkgs-unstable, modulesPath, hostname, user, ... }:
 
 let
-  serverHost = builtins.getEnv "SERVER_HOST";
-  email = builtins.getEnv "EMAIL";
+  serverHostPath = "/etc/nixos/server-host";
+  serverHost = if builtins.pathExists serverHostPath
+    then builtins.readFile serverHostPath
+    else "example.com";
+
+  email = "";
 in {
   imports = [
     ../nixos.nix
