@@ -29,7 +29,7 @@
     ];
 
   fileSystems."/mnt/share/backups" = {
-    device = "//nas.local/backups";
+    device = "//nas/backups";
     fsType = "cifs";
     options = [
       # Prevent hanging on network split
@@ -48,7 +48,7 @@
   };
 
   fileSystems."/mnt/share/autopirate" = {
-    device = "//nas.local/autopirate";
+    device = "//nas/autopirate";
     fsType = "cifs";
     options = [
       # Prevent hanging on network split
