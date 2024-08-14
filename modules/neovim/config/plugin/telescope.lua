@@ -18,7 +18,9 @@ local layout_config = {
 
 -- Fall back to find_files if not in a git repo
 local project_files = function(opt)
-  local opts = opt or {} -- define here if you want to define something
+  local opts = opt or {
+    show_untracked = true,
+  }
   local ok = pcall(builtin.git_files, opts)
   if not ok then
     builtin.find_files(opts)
