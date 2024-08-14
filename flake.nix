@@ -65,7 +65,7 @@
     in {
       nixosConfigurations = mkSystems [
         { hostname = "media"; system = "x86_64-linux"; isHeadless = true; }
-        { hostname = "vm"; system = "x86_64-linux"; isHeadless = true; }
+        { hostname = "traffic"; system = "x86_64-linux"; isHeadless = true; }
       ];
 
       darwinConfigurations = mkSystems [

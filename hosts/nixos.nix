@@ -43,7 +43,13 @@
   };
 
   # Common services.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
+  };
   services.cron.enable = true;
   services.avahi = {
     enable = true;
