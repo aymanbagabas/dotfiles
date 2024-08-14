@@ -280,32 +280,35 @@ M.setup = function()
         end
       end
 
-      vim.api.nvim_create_autocmd("LspDetach", {
-        group = vim.api.nvim_create_augroup("LspDetachGroup_" .. bufnr, { clear = true }),
-        callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client == nil then
-            return
-          end
+      vim.schedule(function()
+        -- don't trigger on invalid buffers
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+          return
+        end
+        -- don't trigger on non-listed buffers
+        if not vim.bo[bufnr].buflisted then
+          return
+        end
+        -- don't trigger on nofile buffers
+        if vim.bo[bufnr].buftype == "nofile" then
+          return
+        end
 
-          -- don't trigger on invalid buffers
-          if not vim.api.nvim_buf_is_valid(bufnr) then
-            return
-          end
-          -- don't trigger on non-listed buffers
-          if not vim.bo[bufnr].buflisted then
-            return
-          end
-          -- don't trigger on nofile buffers
-          if vim.bo[bufnr].buftype == "nofile" then
-            return
-          end
+        vim.api.nvim_create_autocmd("LspDetach", {
+          buffer = bufnr,
+          group = vim.api.nvim_create_augroup("LspDetachGroup_" .. bufnr, { clear = true }),
+          callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            if client == nil then
+              return
+            end
 
-          if client.supports_method(ms.textDocument_codeLens) then
-            vim.lsp.codelens.clear(client.id, bufnr)
-          end
-        end,
-      })
+            if client.supports_method(ms.textDocument_codeLens) then
+              vim.lsp.codelens.clear(client.id, bufnr)
+            end
+          end,
+        })
+      end)
     end,
   })
 end
