@@ -52,7 +52,14 @@ jobs:
           NEW_FILENAME="traffic-${{ env.TAG_NAME }}-$(basename ${{ env.BUILD_PATH }})"
           RELEASE_PATH="${{ github.workspace }}/$NEW_FILENAME"
           cp "${{ env.BUILD_PATH }}" "$RELEASE_PATH"
+          echo "FILENAME=$NEW_FILENAME" >> $GITHUB_ENV
           echo "RELEASE_PATH=$RELEASE_PATH" >> $GITHUB_ENV
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILENAME }}
+          path: ${{ env.RELEASE_PATH }}
+          compression-level: 0 # File is already compressed
 
       # Create a GitHub release and attach the generated container template.
       - name: Release
