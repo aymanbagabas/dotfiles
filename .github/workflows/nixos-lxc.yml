@@ -1,4 +1,4 @@
-name: Generate Media LXC Container
+name: nixos lxc container generator
 # Based on https://freddydumont.com/blog/nixos-github-actions
 
 on:
@@ -40,26 +40,33 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate NixOS LXC configuration
+      - name: Generate NixOS configuration
         run: |
-          nix run github:nix-community/nixos-generators -- -f proxmox-lxc --flake .#media | {
+          nix run github:nix-community/nixos-generators -- -f proxmox-lxc --flake .#genericlxc | {
             read path
             echo "BUILD_PATH=$path" >> $GITHUB_ENV
           }
 
       - name: Modify file name
         run: |
-          NEW_FILENAME="media-${{ env.TAG_NAME }}-$(basename ${{ env.BUILD_PATH }})"
+          NEW_FILENAME="genericlxc-${{ env.TAG_NAME }}-$(basename ${{ env.BUILD_PATH }})"
           RELEASE_PATH="${{ github.workspace }}/$NEW_FILENAME"
           cp "${{ env.BUILD_PATH }}" "$RELEASE_PATH"
+          echo "FILENAME=$NEW_FILENAME" >> $GITHUB_ENV
           echo "RELEASE_PATH=$RELEASE_PATH" >> $GITHUB_ENV
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILENAME }}
+          path: ${{ env.RELEASE_PATH }}
+          compression-level: 0 # File is already compressed
 
       # Create a GitHub release and attach the generated container template.
       - name: Release
         uses: softprops/action-gh-release@v2
         if: ${{ github.event_name == 'push' }}
         with:
-          name: ${{ env.TAG_NAME }}-media
+          name: ${{ env.TAG_NAME }}-genericlxc
           files: ${{ env.RELEASE_PATH }}
           prerelease: ${{ env.TAG_NAME == 'nightly' }}
           tag_name: ${{ env.TAG_NAME }}

@@ -33,21 +33,34 @@
     }
   ];
 
+  # Enable basic programs.
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    vimAlias = true;
+    viAlias = true;
   };
 
   programs.zsh = {
     enable = true;
+    syntaxHighlighting.enable = true;
   };
 
+  programs.less.enable = true;
+
   # Common services.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
+  };
   services.cron.enable = true;
   services.avahi = {
     enable = true;
     nssmdns4 = true;
+    openFirewall = true;
     publish = {
       enable = true;
       domain = true;
@@ -58,7 +71,7 @@
   # Restart Avahi on failure.
   systemd.services.avahi-daemon = {
     unitConfig.StartLimitIntervalSec = 30;
-    unitConfig.StartLimitBurst = 2;
+    unitConfig.StartLimitBurst = 3;
     serviceConfig.Restart = "on-failure";
   };
 }
