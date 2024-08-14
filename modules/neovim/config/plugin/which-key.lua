@@ -9,6 +9,7 @@ local opts = {
     ["<leader><tab>"] = { name = "+tabs" },
     ["<leader>b"] = { name = "+buffer" },
     ["<leader>c"] = { name = "+code" },
+    ["<leader>l"] = { name = "+lsp" },
     ["<leader>f"] = { name = "+file/find" },
     ["<leader>g"] = { name = "+git" },
     ["<leader>gh"] = { name = "+hunks" },
