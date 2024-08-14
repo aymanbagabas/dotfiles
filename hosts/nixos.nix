@@ -54,4 +54,11 @@
       addresses = true;
     };
   };
+
+  # Restart Avahi on failure.
+  systemd.services.avahi-daemon = {
+    unitConfig.StartLimitIntervalSec = 30;
+    unitConfig.StartLimitBurst = 2;
+    serviceConfig.Restart = "on-failure";
+  };
 }
