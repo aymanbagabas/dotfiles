@@ -1,13 +1,6 @@
 { pkgs, pkgs-unstable, modulesPath, hostname, user, ... }:
 
-let
-  serverHostPath = "/etc/nixos/server-host";
-  serverHost = if builtins.pathExists serverHostPath
-    then builtins.readFile serverHostPath
-    else "example.com";
-
-  email = "";
-in {
+{
   imports = [
     ../nixos.nix
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
@@ -32,19 +25,4 @@ in {
   system.stateVersion = "24.05"; # Did you read the comment?
 
   networking.hostName = hostname;
-
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = email;
-  };
-
-  services.nginx = {
-    enable = true;
-    virtualHosts.${serverHost} = {
-      addSSL = true;
-      enableACME = true;
-    };
-  };
 }
