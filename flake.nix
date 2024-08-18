@@ -17,6 +17,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    inputs.disko.url = "github:nix-community/disko";
+    inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
+
     # NOTE: This will require your git SSH access to the repo.
     #
     # WARNING: Do NOT pin the `nixpkgs` input, as that will

@@ -11,9 +11,10 @@
 
 
 let
-  isDarwin = nixpkgs.lib.strings.hasInfix "darwin" system;
-  isLinux = nixpkgs.lib.strings.hasInfix "linux" system;
-  systemFunc = if isDarwin then inputs.darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;
+  lib = nixpkgs.lib;
+  isDarwin = lib.strings.hasInfix "darwin" system;
+  isLinux = lib.strings.hasInfix "linux" system;
+  systemFunc = if isDarwin then inputs.darwin.lib.darwinSystem else lib.nixosSystem;
   home-manager = if isDarwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
 in systemFunc rec {
     inherit system;
@@ -30,5 +31,7 @@ in systemFunc rec {
         home-manager.users.${user} = import ../hosts/${hostname}/home.nix;
         home-manager.extraSpecialArgs = specialArgs;
       }
-    ];
+    ] ++ (lib.optionals isLinux [
+      inputs.disko.nixosModules.disko
+    ]);
   }
