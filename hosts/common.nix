@@ -9,6 +9,7 @@ in {
     ../modules/gpg.nix
     ../modules/neovim
     ../modules/shell.nix
+    ../modules/ssh.nix
     ../modules/tmux
     ../modules/xresources.nix
 
