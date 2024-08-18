@@ -103,13 +103,13 @@ in {
     user = "${user}";
     dataDir = "${dataDir}/prowlarr";
   };
-  # Disable for now, Calibre Server includes BonJour which interferes with
-  # Avahi Daemon.
-  # services.calibre-server = {
-  #   enable = true;
-  #   group = "wheel";
-  #   user = "${user}";
-  # };
+  services.calibre-server = {
+    enable = true;
+    group = "wheel";
+    user = "${user}";
+    libraries = [ "/mnt/share/autopirate/Books" ];
+    extraFlags = [ "--disable-use-bonjour" ]; # Disable Bonjour because it interferes with Avahi
+  };
   services.calibre-web = {
     enable = true;
     openFirewall = true;
