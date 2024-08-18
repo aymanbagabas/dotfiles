@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ pkgs, user, hostname, ... }:
+{ config, pkgs, user, hostname, ... }:
 
 {
   imports = [
@@ -20,7 +20,10 @@
   # Make initial login passwordless.
   # https://nixos.org/manual/nixos/stable/options#opt-users.users._name_.initialHashedPassword
   users.users.root.initialHashedPassword = "";
-  users.users.${user}.initialHashedPassword = "";
+  users.users.${user} = {
+    initialHashedPassword = "";
+    extraGroups = [ "docker" ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -99,5 +102,44 @@
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+  };
+
+  # Virtualisation using Docker
+  virtualisation.docker.enable = true;
+  virtualisation.docker.daemon.settings = {
+    userland-proxy = false;
+  };
+
+  # Searcharr
+  systemd.tmpfiles.settings."10-searcharr"."/var/lib/searcharr".d = {
+    inherit user;
+    group = "wheel";
+    mode = "0700";
+  };
+  virtualisation.oci-containers = {
+    backend = "docker";
+    containers = {
+      searcharr = rec {
+	image = "toddrob/searcharr";
+	imageFile = pkgs.dockerTools.pullImage {
+	  imageName = "${image}";
+	  finalImageTag = "v3.2.2";
+	  imageDigest = "sha256:99290b20c772a9a346376d8725cf173171a9784f150d2dd734ef1707d101b899";
+	  sha256 = "sha256-WultDmzquasFDitfTq/O6c1q5Ykxxrc9cMVfT9jw6c8=";
+	  os = "linux";
+	  arch = "amd64";
+	};
+	autoStart = true;
+	extraOptions = [ "--network=host" ];
+	environment = {
+	  TZ = "${config.time.timeZone}";
+	};
+	volumes = [
+	  "/var/lib/searcharr/data:/app/data"
+	  "/var/lib/searcharr/logs:/app/logs"
+	  "/var/lib/searcharr/settings.py:/app/settings.py"
+	];
+      };
+    };
   };
 }
