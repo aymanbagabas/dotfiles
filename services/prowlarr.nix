@@ -54,7 +54,6 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "prowlarr";
         ExecStart = "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
