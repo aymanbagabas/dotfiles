@@ -13,17 +13,6 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-label/boot";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
-
-  fileSystems."/" =
-    { device = "/dev/vg1/root";
-      fsType = "ext4";
-    };
-
   fileSystems."/mnt/data" =
     { device = "/dev/disk/by-label/media-data";
       fsType = "ext4";
