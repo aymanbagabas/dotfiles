@@ -98,6 +98,8 @@ in {
   services.prowlarr = {
     enable = true;
     openFirewall = true;
+    group = "wheel";
+    user = "${user}";
     dataDir = "${dataDir}/prowlarr";
   };
   # Disable for now, Calibre Server includes BonJour which interferes with
