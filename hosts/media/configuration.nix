@@ -18,6 +18,12 @@ in {
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Enable serial console display on serial=0.
+  # We use this because there's a bug when passing through Intel iGPU to a VM
+  # with a display.
+  #  [drm:i915_gem_init_stolen [i915]] *ERROR* conflict detected with stolen region
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
+
   # Set your time zone.
   time.timeZone = "America/New_York";
 
