@@ -3,9 +3,12 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 { config, pkgs, user, hostname, ... }:
 
-{
+let
+  dataDir = "/mnt/data/services";
+in {
   imports = [
     ../nixos.nix
+    ../../services
     ./hardware-configuration.nix
   ];
 
@@ -55,40 +58,47 @@
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/plex";
   };
   services.tautulli = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/tautulli";
   };
   services.sonarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/sonarr";
   };
   services.readarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/readarr";
   };
   services.radarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/radarr";
   };
   services.bazarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/bazarr";
   };
   services.prowlarr = {
     enable = true;
     openFirewall = true;
+    dataDir = "${dataDir}/prowlarr";
   };
   # Disable for now, Calibre Server includes BonJour which interferes with
   # Avahi Daemon.
@@ -102,6 +112,8 @@
     openFirewall = true;
     group = "wheel";
     user = "${user}";
+    dataDir = "${dataDir}/calibre-web";
+    listen.ip = "0.0.0.0";
   };
 
   # Virtualisation using Docker
@@ -111,7 +123,7 @@
   };
 
   # Searcharr
-  systemd.tmpfiles.settings."10-searcharr"."/var/lib/searcharr".d = {
+  systemd.tmpfiles.settings."10-searcharr"."${dataDir}/searcharr".d = {
     inherit user;
     group = "wheel";
     mode = "0700";
@@ -135,9 +147,9 @@
 	  TZ = "${config.time.timeZone}";
 	};
 	volumes = [
-	  "/var/lib/searcharr/data:/app/data"
-	  "/var/lib/searcharr/logs:/app/logs"
-	  "/var/lib/searcharr/settings.py:/app/settings.py"
+	  "${dataDir}/searcharr/data:/app/data"
+	  "${dataDir}/searcharr/logs:/app/logs"
+	  "${dataDir}/searcharr/settings.py:/app/settings.py"
 	];
       };
     };
