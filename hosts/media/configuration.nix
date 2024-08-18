@@ -54,6 +54,13 @@ in {
     };
   };
 
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+    group = "wheel";
+    user = "${user}";
+    dataDir = "${dataDir}/jellyfin";
+  };
   services.plex = {
     enable = true;
     openFirewall = true;
