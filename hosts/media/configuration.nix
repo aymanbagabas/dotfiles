@@ -109,8 +109,13 @@ in {
     user = "${user}";
     openFirewall = true;
     libraries = [ "/mnt/share/autopirate/Books" ];
-    extraFlags = [ "--disable-use-bonjour" ]; # Disable Bonjour because it interferes with Avahi
-    auth.userDb = "/mnt/data/services/calibre-server/users.sqlite";
+    extraFlags = [
+      "--disable-use-bonjour" # Disable Bonjour because it interferes with Avahi
+    ];
+    auth = {
+      enable = true;
+      userDb = "/mnt/data/services/calibre-server/users.sqlite";
+    };
   };
   services.calibre-web = {
     enable = true;
