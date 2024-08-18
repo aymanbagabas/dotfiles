@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ config, pkgs, pkgs-unstable, user, hostname, ... }:
+{ pkgs, user, hostname, ... }:
 
 {
   imports = [
@@ -52,35 +52,30 @@
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.plex;
   };
   services.tautulli = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.tautulli;
   };
   services.sonarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.sonarr;
   };
   services.readarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.readarr;
   };
   services.radarr = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.radarr;
   };
   services.bazarr = {
     enable = true;
@@ -91,19 +86,16 @@
   services.prowlarr = {
     enable = true;
     openFirewall = true;
-    package = pkgs-unstable.prowlarr;
   };
   services.calibre-server = {
     enable = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.calibre;
   };
   services.calibre-web = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    package = pkgs-unstable.calibre-web;
   };
 }

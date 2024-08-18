@@ -3,19 +3,18 @@
 
   inputs = {
     # We use the unstable nixpkgs repo
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     nur.url = "github:nix-community/NUR";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     darwin = {
       url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # NOTE: This will require your git SSH access to the repo.
@@ -40,14 +39,14 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, home-manager, darwin, nur, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, darwin, nur, ... }:
     let
       overlays = [
         nur.overlay
       ];
 
       mkSystem = import ./lib/mksystem.nix {
-        inherit nixpkgs nixpkgs-unstable overlays inputs;
+        inherit nixpkgs overlays inputs;
       };
 
       # Generate a list of systems based on their hostname

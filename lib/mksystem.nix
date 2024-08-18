@@ -1,4 +1,4 @@
-{ nixpkgs, nixpkgs-unstable, overlays, inputs }:
+{ nixpkgs, overlays, inputs }:
 
 {
   system,
@@ -20,10 +20,6 @@ in systemFunc rec {
 
     specialArgs = {
       inherit inputs overlays hostname user isDarwin isLinux isHeadless;
-      pkgs-unstable = import nixpkgs-unstable {
-        inherit system;
-        config = import ../modules/nixpkgs-config.nix;
-      };
     };
     modules = [
       { nixpkgs.overlays = overlays; }
