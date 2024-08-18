@@ -107,6 +107,11 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.settings."10-calibre-web".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
+
     systemd.services.calibre-web = let
       appDb = "${cfg.dataDir}/app.db";
       gdriveDb = "${cfg.dataDir}/gdrive.db";
@@ -134,7 +139,6 @@ in
           User = cfg.user;
           Group = cfg.group;
 
-          StateDirectory = cfg.dataDir;
           ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
             ''
               __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
