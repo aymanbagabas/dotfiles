@@ -106,8 +106,8 @@ in
         };
 
         userDb = mkOption {
-          default = null;
-          type = types.nullOr types.path;
+          default = "";
+          type = types.nullOr types.string;
           description = ''
             Choose users database file to use for authentication.
             Make sure users database file is initialized before service startup.
