@@ -85,6 +85,12 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Open ports in the firewall for the Calibre Server web interface.";
+      };
+
       auth = {
         enable = mkOption {
           type = types.bool;
@@ -147,6 +153,10 @@ in
       calibre-server = {
         gid = config.ids.gids.calibre-server;
       };
+    };
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
     };
 
   };

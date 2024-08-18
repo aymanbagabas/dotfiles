@@ -107,6 +107,7 @@ in {
     enable = true;
     group = "wheel";
     user = "${user}";
+    openFirewall = true;
     libraries = [ "/mnt/share/autopirate/Books" ];
     extraFlags = [ "--disable-use-bonjour" ]; # Disable Bonjour because it interferes with Avahi
     auth.userDb = "/mnt/data/services/calibre-server/users.sqlite";
