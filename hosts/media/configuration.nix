@@ -87,11 +87,13 @@
     enable = true;
     openFirewall = true;
   };
-  services.calibre-server = {
-    enable = true;
-    group = "wheel";
-    user = "${user}";
-  };
+  # Disable for now, Calibre Server includes BonJour which interferes with
+  # Avahi Daemon.
+  # services.calibre-server = {
+  #   enable = true;
+  #   group = "wheel";
+  #   user = "${user}";
+  # };
   services.calibre-web = {
     enable = true;
     openFirewall = true;
