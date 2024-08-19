@@ -26,8 +26,8 @@ in {
     (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
 
     # Dev tools
-    (with nur.repos.caarlos0; svu)
     nodejs
+    svu
     yarn
 
     # DevOps
