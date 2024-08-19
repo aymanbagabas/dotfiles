@@ -113,7 +113,7 @@ in
 
         userDb = mkOption {
           default = "";
-          type = types.nullOr types.string;
+          type = types.nullOr types.str;
           description = ''
             Choose users database file to use for authentication.
             Make sure users database file is initialized before service startup.
