@@ -2,11 +2,11 @@
 
 {
   imports = [
-    ../../modules/direnv.nix
-    ../../modules/home.nix
-    ../../modules/nixpkgs.nix
-    ../../modules/scripts
-    ../../modules/zsh.nix
+    ../modules/direnv.nix
+    ../modules/home.nix
+    ../modules/nixpkgs.nix
+    ../modules/scripts
+    ../modules/zsh.nix
   ];
 
   home.packages = with pkgs; [
