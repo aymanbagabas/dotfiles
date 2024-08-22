@@ -37,19 +37,17 @@ in {
   ] ++ (with inputs; lib.optionals (!isHeadless) [
     # Applications (GUI)
     alacritty
-    discord
     kitty
     obsidian
-    slack
-    spotify
-    syncthing
     telegram-desktop
   ]) ++ (lib.optionals (!isHeadless && isDarwin) [
-    iterm2
     rectangle
     xquartz
   ]) ++ (lib.optionals (!isHeadless && isLinux) [
     _1password-gui
+    discord
+    slack
+    spotify
     tailscale # We use Homebrew for macOS
     inputs.ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
   ]);
