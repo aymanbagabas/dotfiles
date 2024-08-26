@@ -35,6 +35,7 @@
       "firefox"
       "google-chrome"
       "iterm2"
+      "karabiner-elements"
       "microsoft-remote-desktop"
       "multitouch"
       "raycast"
@@ -52,7 +53,7 @@
   #programs.gnupg.agent.enableSSHSupport = true;
 
   # Karabiner Elements
-  services.karabiner-elements.enable = true;
+  #services.karabiner-elements.enable = true; # use homebrew instead
 
   system = {
     defaults = {
