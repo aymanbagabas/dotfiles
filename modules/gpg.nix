@@ -8,7 +8,7 @@ let
   cfg = {
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-    pinentryPackage = with pkgs; if isDarwin then pinentry_mac else pinentry-gnome;
+    pinentryPackage = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
     defaultCacheTtlSsh = 31536000;
@@ -65,7 +65,7 @@ in {
   # https://github.com/nix-community/home-manager/blob/9f32c66a51d05e6d4ec0dea555bbff9135749ec7/modules/services/gpg-agent.nix
   # We need this because GPG agent is not started by default on macOS and the
   # hm module does not support macOS
-  home.file."${homedir}/gpg-agent.conf".text = optionalString isDarwin concatStringsSep "\n"
+  home.file."${homedir}/gpg-agent.conf".text = optionalString isDarwin (concatStringsSep "\n"
     (optional (cfg.enableSshSupport) "enable-ssh-support"
       ++ optional cfg.grabKeyboardAndMouse "grab"
       ++ optional (!cfg.enableScDaemon) "disable-scdaemon"
@@ -79,7 +79,7 @@ in {
       "max-cache-ttl-ssh ${toString cfg.maxCacheTtlSsh}"
       ++ optional (cfg.pinentryPackage != null)
       "pinentry-program ${getExe cfg.pinentryPackage}"
-      ++ [ cfg.extraConfig ]);
+      ++ [ cfg.extraConfig ]));
 
   programs.zsh.initExtra = optionalString (isDarwin && cfg.enableZshIntegration) ''
     # use gpg-agent for ssh
