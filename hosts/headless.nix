@@ -3,9 +3,11 @@
 {
   imports = [
     ../modules/direnv.nix
+    ../modules/gpg.nix
     ../modules/home.nix
     ../modules/nixpkgs.nix
     ../modules/scripts
+    ../modules/tmux
     ../modules/zsh.nix
   ];
 
