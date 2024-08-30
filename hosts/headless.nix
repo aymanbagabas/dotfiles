@@ -12,6 +12,7 @@
   ];
 
   home.packages = with pkgs; [
+    git-crypt
     (with nur.repos.aymanbagabas; shcopy)
   ];
 }
