@@ -54,6 +54,8 @@
     settings = {
       PermitRootLogin = "no";
       PasswordAuthentication = false;
+      # Allow GnuPG agent forwarding.
+      StreamLocalBindUnlink = "yes";
     };
   };
   services.cron.enable = true;
