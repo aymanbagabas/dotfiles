@@ -20,6 +20,9 @@
 
   networking.hostName = hostname;
 
+  # Set your time zone.
+  time.timeZone = "America/New_York";
+
   # Enable passwordless sudo
   security.sudo.extraRules = [
     {

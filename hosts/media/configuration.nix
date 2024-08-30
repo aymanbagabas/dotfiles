@@ -24,9 +24,6 @@ in {
   #  [drm:i915_gem_init_stolen [i915]] *ERROR* conflict detected with stolen region
   boot.kernelParams = [ "console=ttyS0,115200n8" ];
 
-  # Set your time zone.
-  time.timeZone = "America/New_York";
-
   # Make initial login passwordless.
   # https://nixos.org/manual/nixos/stable/options#opt-users.users._name_.initialHashedPassword
   users.users.root.initialHashedPassword = "";
