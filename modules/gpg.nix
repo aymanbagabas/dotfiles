@@ -5,6 +5,7 @@ let
   homedir = "${config.home.homeDirectory}/.gnupg";
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
+  defaultKey = "593D6EEE7871708E329619322EBA00DFFCC63351";
   cfg = {
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
@@ -37,6 +38,10 @@ let
 
 in {
 
+  imports = [
+    ./gpg-auto-import.nix
+  ];
+
   programs.zsh.shellAliases = {
     gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
     gpg-other-card = "gpg-connect-agent 'scd serialno' 'learn --force' /bye";
@@ -45,8 +50,11 @@ in {
   programs.gpg = {
     enable = true;
     homedir = homedir;
+    autoImport = {
+      keys = [ defaultKey ];
+    };
     settings = {
-      default-key = "593D6EEE7871708E329619322EBA00DFFCC63351";
+      default-key = defaultKey;
       default-recipient-self = true;
       use-agent = true;
       keyserver = "hkps://keys.openpgp.org";
