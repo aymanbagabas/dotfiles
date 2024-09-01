@@ -45,7 +45,7 @@
     # WARNING: You should remove or change this to your own dotfiles repo,
     # otherwise running this flake will not work.
     dotfiles = {
-      url = "git+ssh://git@github.com/aymanbagabas/dotfiles.local?shallow=1&ref=refs/heads/secrets";
+      url = "git+ssh://git@github.com/aymanbagabas/dotfiles.local?shallow=1";
       flake = false;
     };
 
