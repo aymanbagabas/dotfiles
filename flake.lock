@@ -40,6 +40,24 @@
         "type": "github"
       }
     },
+    "dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1725167201,
+        "narHash": "sha256-GG+k9ceoRRiKnxJ/s1HoWxZiODk5lB8NT8z5Viftxl4=",
+        "ref": "refs/heads/secrets",
+        "rev": "8721beea3dd5baea95120db95b7376aaeaed2305",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
+      },
+      "original": {
+        "ref": "refs/heads/secrets",
+        "shallow": true,
+        "type": "git",
+        "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -268,6 +286,7 @@
       "inputs": {
         "darwin": "darwin",
         "disko": "disko",
+        "dotfiles": "dotfiles",
         "ghostty": "ghostty",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",

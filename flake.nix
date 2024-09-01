@@ -22,14 +22,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # NOTE: This will require your git SSH access to the repo.
-    #
-    # WARNING: Do NOT pin the `nixpkgs` input, as that will
-    # declare the cache useless. If you do, you will have
-    # to compile LLVM, Zig and Ghostty itself on your machine,
-    # which will take a very very long time.
-    ghostty = {
-      url = "git+ssh://git@github.com/mitchellh/ghostty";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Zsh Plugins
@@ -41,6 +36,25 @@
     zsh-vim-mode = {
       url = "github:softmoth/zsh-vim-mode";
       flake = false;
+    };
+
+    # NOTE: The following inputs will require your git SSH access to the repo.
+
+    # Here we have my local dotfiles repo, which contains private
+    # variables, configurations, and Sops secrets.
+    # WARNING: You should remove or change this to your own dotfiles repo,
+    # otherwise running this flake will not work.
+    dotfiles = {
+      url = "git+ssh://git@github.com/aymanbagabas/dotfiles.local?shallow=1&ref=refs/heads/secrets";
+      flake = false;
+    };
+
+    # WARNING: Do NOT pin the `nixpkgs` input, as that will
+    # declare the cache useless. If you do, you will have
+    # to compile LLVM, Zig and Ghostty itself on your machine,
+    # which will take a very very long time.
+    ghostty = {
+      url = "git+ssh://git@github.com/mitchellh/ghostty";
     };
   };
 

@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ config, pkgs, tinted-shell, zsh-vim-mode, ... }:
 
 let
   lib = pkgs.lib;
@@ -48,7 +48,7 @@ in {
       {
         name = "zsh-vim-mode";
         file = "zsh-vim-mode.plugin.zsh";
-        src = inputs.zsh-vim-mode;
+        src = zsh-vim-mode;
       }
       {
         name = "zsh-completions";
@@ -58,7 +58,7 @@ in {
       {
         name = "base16-shell";
         file = "base16-shell.plugin.zsh";
-        src = inputs.tinted-shell;
+        src = tinted-shell;
       }
     ] ++ (pkgs.lib.optionals pkgs.stdenv.isLinux [
       {
