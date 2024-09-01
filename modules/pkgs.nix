@@ -1,5 +1,5 @@
 
-{ pkgs, ghostty, isDarwin, isLinux, isHeadless, ... }:
+{ pkgs, dotfiles, ghostty, isDarwin, isLinux, isHeadless, ... }:
 
 let
   inherit (pkgs) lib;
@@ -51,4 +51,9 @@ in {
     tailscale # We use Homebrew for macOS
     ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
   ]);
+
+  home.sessionVariables = {
+    # tz timezone list
+    TZ_LIST = builtins.readFile "${dotfiles}/vars/tz_list";
+  };
 }

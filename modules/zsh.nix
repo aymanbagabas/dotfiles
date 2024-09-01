@@ -1,8 +1,9 @@
 { config, pkgs, tinted-shell, zsh-vim-mode, ... }:
 
+with pkgs.lib;
+
 let
-  lib = pkgs.lib;
-  pathJoin = builtins.concatStringsSep ":";
+  inherit (pkgs.stdenv) isLinux;
 in {
   home.packages = with pkgs; [
     pure-prompt
@@ -60,7 +61,7 @@ in {
         file = "base16-shell.plugin.zsh";
         src = tinted-shell;
       }
-    ] ++ (pkgs.lib.optionals pkgs.stdenv.isLinux [
+    ] ++ (optionals isLinux [
       {
         name = "omzp-systemd";
         file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
@@ -69,30 +70,11 @@ in {
     ]);
 
     sessionVariables = {
-      PATH = pathJoin (
-        [
-          "/opt/homebrew/bin"
-          "/opt/homebrew/sbin"
-          "$HOME/.npm-global/bin"
-          "$HOME/.go/bin"
-          "$HOME/.bin"
-          "$PATH"
-        ]
-      );
-
+      # Set the base16 theme (needs tinted-shell).
       BASE16_THEME = "onedark";
 
-      KEYID = "593D6EEE7871708E329619322EBA00DFFCC63351"; # GPG key ID
-      PAGER = "less";
-      KEYTIMEOUT = "1"; # Fix vi-mode timeout
-
-      LESS = "-R --mouse --wheel-lines=3";
-      # LESSOPEN="| $(command -v src-hilite-lesspipe.sh) %s"; # replaced by lesspipe
-      FZF_DEFAULT_COMMAND = "rg --files --hidden --no-ignore-vcs --glob '!.git/*'";
-
-      # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
-      TERMINFO_DIRS = "$TERMINFO_DIRS:$HOME/.local/share/terminfo";
-      DOTNET_CLI_TELEMETRY_OPTOUT = 1; # Disable dotnet telemetry
+      # Fix vi-mode timeout
+      KEYTIMEOUT = "1";
 
       # Disable vim-mode tracking
       # Pure prompt handles this
@@ -104,18 +86,7 @@ in {
       # pure prompt
       PURE_PROMPT_SYMBOL = "›";
       PURE_PROMPT_VICMD_SYMBOL = "›";
-    } // (lib.optionalAttrs pkgs.stdenv.isDarwin {
-      LSCOLORS = "exfxcxdxbxegedabagacad";
-      CLICOLOR = "1";
-    });
-
-    shellAliases = {
-      grep = "grep --color=auto";
-      sudo = "sudo "; # Fix sudo + aliases https://askubuntu.com/a/22043
-      watch = "watch --color ";
-    } // (lib.optionalAttrs pkgs.stdenv.isLinux {
-      open = "xdg-open";
-    });
+    };
 
     history.size = 10000;
     history.save = 10000;
