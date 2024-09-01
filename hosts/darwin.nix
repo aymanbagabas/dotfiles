@@ -42,6 +42,7 @@
       "google-chrome"
       "iterm2"
       "karabiner-elements"
+      "kitty"
       "microsoft-remote-desktop"
       "multitouch"
       "raycast"

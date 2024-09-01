@@ -37,7 +37,6 @@ in {
   ] ++ (with inputs; lib.optionals (!isHeadless) [
     # Applications (GUI)
     alacritty
-    kitty
     obsidian
     telegram-desktop
   ]) ++ (lib.optionals (!isHeadless && isDarwin) [
@@ -46,6 +45,7 @@ in {
   ]) ++ (lib.optionals (!isHeadless && isLinux) [
     _1password-gui
     discord
+    kitty
     slack
     spotify
     tailscale # We use Homebrew for macOS
