@@ -30,6 +30,7 @@
       dressing-nvim
       friendly-snippets
       fugitive-gitlab-vim
+      git-conflict-nvim
       gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
       hmts-nvim
       indent-blankline-nvim
