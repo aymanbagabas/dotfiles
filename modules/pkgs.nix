@@ -1,5 +1,5 @@
 
-{ pkgs, inputs, isDarwin, isLinux, isHeadless, ... }:
+{ pkgs, dotfiles, ghostty, isDarwin, isLinux, isHeadless, ... }:
 
 let
   inherit (pkgs) lib;
@@ -34,7 +34,7 @@ in {
     (google-cloud-sdk.withExtraComponents [
       google-cloud-sdk.components.gke-gcloud-auth-plugin
     ])
-  ] ++ (with inputs; lib.optionals (!isHeadless) [
+  ] ++ (with ghostty; lib.optionals (!isHeadless) [
     # Applications (GUI)
     alacritty
     obsidian
@@ -49,6 +49,11 @@ in {
     slack
     spotify
     tailscale # We use Homebrew for macOS
-    inputs.ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
+    ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
   ]);
+
+  home.sessionVariables = {
+    # tz timezone list
+    TZ_LIST = builtins.readFile "${dotfiles}/vars/tz_list";
+  };
 }

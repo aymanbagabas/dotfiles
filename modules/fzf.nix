@@ -18,4 +18,8 @@
       };
     }
   ];
+
+  home.sessionVariables = {
+    FZF_DEFAULT_COMMAND = "rg --files --hidden --no-ignore-vcs --glob '!.git/*'";
+  };
 }

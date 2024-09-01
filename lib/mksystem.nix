@@ -19,8 +19,8 @@ let
 in systemFunc rec {
     inherit system;
 
-    specialArgs = {
-      inherit inputs overlays hostname user isDarwin isLinux isHeadless;
+    specialArgs = inputs // {
+      inherit overlays hostname user isDarwin isLinux isHeadless;
     };
     modules = [
       { nixpkgs.overlays = overlays; }
@@ -33,5 +33,6 @@ in systemFunc rec {
       }
     ] ++ (lib.optionals isLinux [
       inputs.disko.nixosModules.disko
+      inputs.sops-nix.nixosModules.sops # Darwin doesn't support sops-nix yet
     ]);
   }
