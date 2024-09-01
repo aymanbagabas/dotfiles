@@ -1,4 +1,4 @@
-{ ... }:
+{ dotfiles, ... }:
 
 {
   programs.ssh = {
@@ -22,4 +22,6 @@
       };
     };
   };
+
+  home.file."~/.ssh/config.local".source = "${dotfiles}/ssh/config";
 }
