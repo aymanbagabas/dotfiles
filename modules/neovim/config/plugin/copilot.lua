@@ -22,20 +22,10 @@ local opts = {
       dismiss = false,
     },
   },
-  filetypes = {
-    yaml = false,
-    markdown = false,
-    help = false,
-    gitcommit = false,
-    gitrebase = false,
-    hgcommit = false,
-    svn = false,
-    cvs = false,
-    ["."] = false,
-  },
+  filetypes = {},
   --copilot_node_command = "node", -- Node version must be < 18
   --plugin_manager_path = vim.fn.stdpath("data") .. "/lazy",
   server_opts_overrides = {},
 }
 
-require('copilot').setup(opts)
+require("copilot").setup(opts)
