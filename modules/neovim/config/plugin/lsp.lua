@@ -201,6 +201,10 @@ lspconfig.nil_ls.setup({
 lspconfig.lua_ls.setup({
   capabilities = capabilities,
   on_init = function(client)
+    if #client.workspace_folders == 0 then
+      return
+    end
+
     local path = client.workspace_folders[1].name
     if vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc") then
       return
