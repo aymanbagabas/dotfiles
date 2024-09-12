@@ -8,7 +8,8 @@
     nur.url = "github:nix-community/NUR";
 
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "git+file:///Users/ayman/Source/nix-community/home-manager";
+      # url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
