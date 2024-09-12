@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
-{
+let
+  package = pkgs.gitFull;
+  diffHighlight = "${package}/share/git/contrib/diff-highlight/diff-highlight";
+in {
   home.packages = with pkgs; [
     gh
     git-crypt
@@ -13,7 +16,7 @@
 
   programs.git = {
     enable = true;
-    package = pkgs.gitFull; # install git tools
+    package = package; # install git tools
     lfs.enable = true; # install git-lfs
     userName = "Ayman Bagabas";
     userEmail = "ayman.bagabas@gmail.com";
@@ -51,7 +54,9 @@
         editor = "nvim";
         abbrev = 12;
         # quotePath = false; # Do I need this?
+        pager = "${diffHighlight} | ${pkgs.less}/bin/less";
       };
+      interactive.diffFilter = diffHighlight;
       pull.rebase = false;
       init.defaultBranch = "master";
       format.signOff = true;
