@@ -26,6 +26,7 @@ in {
     (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
 
     # Dev tools
+    gum
     nodejs
     (pkgs.writeScriptBin "svu" ''
       #!/usr/bin/env bash
