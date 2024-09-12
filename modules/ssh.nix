@@ -23,5 +23,5 @@
     };
   };
 
-  home.file."~/.ssh/config.local".source = "${dotfiles}/ssh/config";
+  home.file.".ssh/config.local".source = "${dotfiles}/ssh/config";
 }
