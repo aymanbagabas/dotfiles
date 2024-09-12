@@ -46,12 +46,14 @@
       "microsoft-remote-desktop"
       "multitouch"
       "raycast"
+      "rectangle"
       "slack"
       "spotify"
       "tailscale"
       "the-unarchiver"
       "vmware-fusion"
       "whatsapp"
+      "xquartz"
     ];
   };
 

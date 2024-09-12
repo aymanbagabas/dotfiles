@@ -48,9 +48,6 @@ in {
     alacritty
     obsidian
     telegram-desktop
-  ]) ++ (lib.optionals (!isHeadless && isDarwin) [
-    rectangle
-    xquartz
   ]) ++ (lib.optionals (!isHeadless && isLinux) [
     _1password-gui
     discord
