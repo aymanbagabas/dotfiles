@@ -44,19 +44,16 @@ in {
     (google-cloud-sdk.withExtraComponents [
       google-cloud-sdk.components.gke-gcloud-auth-plugin
     ])
-  ] ++ (with ghostty; lib.optionals (!isHeadless) [
-    # Applications (GUI)
-    alacritty
-    obsidian
-    telegram-desktop
-  ]) ++ (lib.optionals (!isHeadless && isLinux) [
+  ] ++ (lib.optionals (!isHeadless && isLinux) [
     _1password-gui
+    alacritty
     discord
+    ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
     kitty
     slack
     spotify
     tailscale # We use Homebrew for macOS
-    ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
+    telegram-desktop
   ]);
 
   home.sessionVariables = {

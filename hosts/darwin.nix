@@ -34,6 +34,7 @@
     enable = true;
     casks = [
       "1password"
+      "alacritty"
       "alt-tab"
       "clipy"
       "discord"
@@ -50,6 +51,7 @@
       "slack"
       "spotify"
       "tailscale"
+      "telegram-desktop"
       "the-unarchiver"
       "vmware-fusion"
       "whatsapp"
