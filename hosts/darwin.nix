@@ -6,6 +6,10 @@
     ./shared.nix
   ];
 
+  # nix-darwin system state version.
+  # https://daiderd.com/nix-darwin/manual/index.html#opt-system.stateVersion
+  system.stateVersion = 5;
+
   # nix-darwin has an "interval" option instead of "dates".
   nix.gc.interval = { Weekday = 0; Hour = 0; Minute = 0; }; # 0th day of every week
 
