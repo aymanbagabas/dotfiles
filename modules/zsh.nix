@@ -57,7 +57,7 @@ in {
         src = pkgs.zsh-completions;
       }
       {
-        name = "base16-shell";
+        name = "tinted-shell";
         file = "base16-shell.plugin.zsh";
         src = tinted-shell;
       }
@@ -72,6 +72,7 @@ in {
     sessionVariables = {
       # Set the base16 theme (needs tinted-shell).
       BASE16_THEME = "onedark";
+      BASE24_THEME = "one-dark";
 
       # Fix vi-mode timeout
       KEYTIMEOUT = "1";

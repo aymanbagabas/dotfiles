@@ -33,6 +33,11 @@
       flake = false;
     };
 
+    tinted-fzf = {
+      url = "github:tinted-theming/tinted-fzf";
+      flake = false;
+    };
+
     zsh-vim-mode = {
       url = "github:softmoth/zsh-vim-mode";
       flake = false;
