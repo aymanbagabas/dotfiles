@@ -49,6 +49,10 @@ in {
       graph = "log --graph --all --decorate --oneline";
       purge-tags = "!git tag -l | xargs git tag -d && git fetch -t";
     };
+    diff-highlight = {
+      enable = true;
+      pagerOpts = [];
+    };
     extraConfig = {
       core = {
         editor = "nvim";
