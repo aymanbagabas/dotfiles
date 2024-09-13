@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 let
-  package = pkgs.gitFull;
+  package = pkgs.git;
   diffHighlight = "${package}/share/git/contrib/diff-highlight/diff-highlight";
 in {
   home.packages = with pkgs; [
