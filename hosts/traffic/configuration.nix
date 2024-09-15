@@ -60,6 +60,9 @@ in {
       proxy = url: base {
         "/" = {
           proxyPass = "${url}";
+          # Host and X-Forwarded-For headers are added using the
+          # "recommendedProxySettings". Some applications don't recognize
+          # X-Forwarded-Proto so we need to add X-Forwarded-Protocol as well.
           extraConfig = ''
             proxy_set_header X-Forwarded-Protocol $scheme;
 	  '';
@@ -71,47 +74,51 @@ in {
       "prowlarr.${altDomain}" = proxy "http://media.local:9696/";
       "readarr.${altDomain}" = proxy "http://media.local:8787/";
       "books.${altDomain}" = proxy "http://media.local:8083/";
-      "nas.${altDomain}" = proxy "https://nas.local/" // {
-        locations = {
+      "nas.${altDomain}" = base {
+        "/" = {
+          proxyPass = "https://nas.local:5001/";
           # Skip the SSL verification for the NAS as it uses a self-signed certificate.
-          "/".extraConfig = ''
+          extraConfig = ''
+            proxy_set_header X-Forwarded-Protocol $scheme;
             proxy_ssl_verify off;
           '';
         };
       };
-      "plex.${altDomain}" = let
-        extraConfig = ''
-          proxy_set_header Sec-WebSocket-Extensions $http_sec_websocket_extensions;
-          proxy_set_header Sec-WebSocket-Key $http_sec_websocket_key;
-          proxy_set_header Sec-WebSocket-Version $http_sec_websocket_version;
-
-          proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection "Upgrade";
-
-          proxy_redirect off;
-          proxy_buffering off;
-	'';
-      in base {
+      "plex.${altDomain}" = base {
         "/" = {
-	  proxyPass = "http://media.local:32400/";
-	  inherit extraConfig;
-	};
+          proxyPass = "http://media.local:32400/";
+          extraConfig = ''
+            proxy_set_header X-Forwarded-Protocol $scheme;
+
+            proxy_set_header Sec-WebSocket-Extensions $http_sec_websocket_extensions;
+            proxy_set_header Sec-WebSocket-Key $http_sec_websocket_key;
+            proxy_set_header Sec-WebSocket-Version $http_sec_websocket_version;
+
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "Upgrade";
+
+            proxy_redirect off;
+            proxy_buffering off;
+          '';
+        };
       };
       "jellyfin.${altDomain}" = base {
         "/" = {
-	  proxyPass = "http://media.local:8096/";
-	  extraConfig = ''
+          proxyPass = "http://media.local:8096/";
+          extraConfig = ''
+            proxy_set_header X-Forwarded-Protocol $scheme;
+
             # Disable buffering when the nginx proxy gets very resource heavy upon streaming
             proxy_buffering off;
-	  '';
-	};
+          '';
+        };
         "/socket" = {
-	  proxyPass = "http://media.local:8096/";
-	  extraConfig = ''
+          proxyPass = "http://media.local:8096/";
+          extraConfig = ''
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
-	  '';
-	};
+          '';
+        };
       };
       "${altDomain}" = base {
         "/".return = "301 http://${mainDomain}$request_uri";
