@@ -22,7 +22,17 @@ local opts = {
       dismiss = false,
     },
   },
-  filetypes = {},
+  filetypes = {
+    yaml = true,
+    markdown = true,
+    help = false,
+    gitcommit = true,
+    gitrebase = false,
+    hgcommit = false,
+    svn = false,
+    cvs = false,
+    ["."] = false,
+  },
   --copilot_node_command = "node", -- Node version must be < 18
   --plugin_manager_path = vim.fn.stdpath("data") .. "/lazy",
   server_opts_overrides = {},
