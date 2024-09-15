@@ -9,7 +9,7 @@
 
   proxmoxLXC = {
     privileged = false;
-    manageHostName = false;
+    manageHostName = true;
   };
 
   # Make initial login passwordless.
@@ -25,5 +25,29 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.05"; # Did you read the comment?
 
+  networking.useNetworkd = true;
   networking.hostName = hostname;
+  # Enable mDNS firewall rules.
+  networking.firewall.allowedUDPPorts = [ 5353 ];
+
+  # Use networkd mDNS and LLMNR.
+  systemd.network = {
+    enable = true;
+    networks."10-eth0" = {
+      matchConfig.Name = "eth0";
+      networkConfig = {
+        MulticastDNS = true;
+      };
+      linkConfig = {
+        Multicast = true;
+      };
+    };
+  };
+
+  # Enable resolved mDNS
+  services.resolved = {
+    extraConfig = ''
+      MulticastDNS=true
+    '';
+  };
 }

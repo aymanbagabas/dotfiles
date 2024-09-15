@@ -62,29 +62,4 @@
     };
   };
   services.cron.enable = true;
-
-  # Enable mDNS using Avahi.
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-    publish = {
-      enable = true;
-      domain = true;
-      addresses = true;
-    };
-  };
-  # We need to disable resolved mDNS for Avahi to work without issues.
-  services.resolved = {
-    extraConfig = ''
-      MulticastDNS=false
-    '';
-  };
-
-  # Restart Avahi on failure.
-  systemd.services.avahi-daemon = {
-    unitConfig.StartLimitIntervalSec = 30;
-    unitConfig.StartLimitBurst = 3;
-    serviceConfig.Restart = "on-failure";
-  };
 }

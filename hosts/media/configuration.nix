@@ -54,6 +54,25 @@ in {
 
   networking.hostName = hostname;
 
+  # Use Avahi for mDNS
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    publish = {
+      enable = true;
+      domain = true;
+      addresses = true;
+    };
+  };
+
+  # Restart Avahi on failure.
+  systemd.services.avahi-daemon = {
+    unitConfig.StartLimitIntervalSec = 30;
+    unitConfig.StartLimitBurst = 3;
+    serviceConfig.Restart = "on-failure";
+  };
+
+
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
 
