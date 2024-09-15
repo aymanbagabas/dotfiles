@@ -11,6 +11,7 @@ in {
     ../../services
     ./hardware-configuration.nix
     ./disko-config.nix
+    ../autoupgrade.nix
   ];
 
   # Use the systemd-boot EFI boot loader.

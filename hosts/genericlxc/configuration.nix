@@ -4,6 +4,7 @@
   imports = [
     ../nixos.nix
     (modulesPath + "/virtualisation/proxmox-lxc.nix")
+    ../autoupgrade.nix
   ];
 
   proxmoxLXC = {
