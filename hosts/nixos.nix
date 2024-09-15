@@ -62,6 +62,8 @@
     };
   };
   services.cron.enable = true;
+
+  # Enable mDNS using Avahi.
   services.avahi = {
     enable = true;
     nssmdns4 = true;
@@ -71,6 +73,12 @@
       domain = true;
       addresses = true;
     };
+  };
+  # We need to disable resolved mDNS for Avahi to work without issues.
+  services.resolved = {
+    extraConfig = ''
+      MulticastDNS=false
+    '';
   };
 
   # Restart Avahi on failure.
