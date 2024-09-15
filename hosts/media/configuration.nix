@@ -3,8 +3,17 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 { config, pkgs, user, hostname, ... }:
 
+with pkgs.lib;
+
 let
   dataDir = "/mnt/data/services";
+  mkService = name: {
+    enable = true;
+    openFirewall = true;
+    group = "wheel";
+    user = "${user}";
+    dataDir = "${dataDir}/${name}";
+  };
 in {
   imports = [
     ../nixos.nix
@@ -73,67 +82,22 @@ in {
     ];
   };
 
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/jellyfin";
-  };
-  services.plex = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/plex";
-  };
-  services.tautulli = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/tautulli";
-  };
-  services.sonarr = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/sonarr";
-  };
-  services.readarr = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/readarr";
-  };
-  services.radarr = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/radarr";
-  };
-  services.bazarr = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/bazarr";
-  };
-  services.prowlarr = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/prowlarr";
+  services.jellyfin = mkService "jellyfin";
+  services.plex = mkService "plex";
+  services.tautulli = mkService "tautulli";
+  services.sonarr = mkService "sonarr";
+  services.readarr = mkService "readarr";
+  services.radarr = mkService "radarr";
+  services.bazarr = mkService "bazarr";
+  services.prowlarr = mkService "prowlarr";
+  services.calibre-web = mkService "calibre-web" // {
+    listen.ip = "0.0.0.0";
   };
   services.calibre-server = {
     enable = true;
+    openFirewall = true;
     group = "wheel";
     user = "${user}";
-    openFirewall = true;
     libraries = [ "/mnt/share/autopirate/Books" ];
     extraFlags = [
       "--disable-use-bonjour" # Disable Bonjour because it interferes with Avahi
@@ -142,14 +106,6 @@ in {
       enable = true;
       userDb = "/mnt/data/services/calibre-server/users.sqlite";
     };
-  };
-  services.calibre-web = {
-    enable = true;
-    openFirewall = true;
-    group = "wheel";
-    user = "${user}";
-    dataDir = "${dataDir}/calibre-web";
-    listen.ip = "0.0.0.0";
   };
 
   # Virtualisation using Docker
