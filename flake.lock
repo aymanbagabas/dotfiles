@@ -43,10 +43,10 @@
     "dotfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1725207711,
-        "narHash": "sha256-A7KLeRBAHyupNl7PL8txVooCJ7p1qySpEGIQgs8aSSo=",
+        "lastModified": 1726372532,
+        "narHash": "sha256-+a0Xik1YiyOZm0h8Fnwbu3yiZZ5ilY/4Ly3DoMQ1E7s=",
         "ref": "refs/heads/master",
-        "rev": "43913fcc354cfd5e4636c530ebeea4ca75e04fca",
+        "rev": "9cc4c88d58ba72d9d6a0dc5c50b0da73757b0949",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
@@ -181,11 +181,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1726372163,
-        "narHash": "sha256-juhO4Nf8NwFzN9PHzLGz3Q+Yuar/EKGaJ4tqElrvy9A=",
+        "lastModified": 1726373161,
+        "narHash": "sha256-1VCsmzFMjPNlssgmzGZsmnMT/DYDSqBAIN9RAey0P54=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "22678607e48f6b0b9bfbfd849d5c2a2e0b5866ba",
+        "rev": "73da91b7f670af71cf8884e7313865f235a0458a",
         "type": "github"
       },
       "original": {
