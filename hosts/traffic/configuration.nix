@@ -71,6 +71,14 @@ in {
       "prowlarr.${altDomain}" = proxy "http://media.local:9696/";
       "readarr.${altDomain}" = proxy "http://media.local:8787/";
       "books.${altDomain}" = proxy "http://media.local:8083/";
+      "nas.${altDomain}" = proxy "https://nas.local/" // {
+        locations = {
+          # Skip the SSL verification for the NAS as it uses a self-signed certificate.
+          "/".extraConfig = ''
+            proxy_ssl_verify off;
+          '';
+        };
+      };
       "plex.${altDomain}" = let
         extraConfig = ''
           proxy_set_header Sec-WebSocket-Extensions $http_sec_websocket_extensions;
