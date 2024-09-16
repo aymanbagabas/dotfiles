@@ -1,9 +1,6 @@
 { config, pkgs, ... }:
 
-let
-  package = pkgs.git;
-  diffHighlight = "${package}/share/git/contrib/diff-highlight/diff-highlight";
-in {
+{
   home.packages = with pkgs; [
     gh
     git-crypt
@@ -16,7 +13,7 @@ in {
 
   programs.git = {
     enable = true;
-    package = package; # install git tools
+    package = pkgs.git; # install git tools
     lfs.enable = true; # install git-lfs
     userName = "Ayman Bagabas";
     userEmail = "ayman.bagabas@gmail.com";
@@ -49,14 +46,13 @@ in {
       graph = "log --graph --all --decorate --oneline";
       purge-tags = "!git tag -l | xargs git tag -d && git fetch -t";
     };
+    diff-highlight.enable = true;
     extraConfig = {
       core = {
         editor = "nvim";
         abbrev = 12;
         # quotePath = false; # Do I need this?
-        pager = "${diffHighlight} | ${pkgs.less}/bin/less";
       };
-      interactive.diffFilter = diffHighlight;
       pull.rebase = false;
       init.defaultBranch = "master";
       format.signOff = true;
