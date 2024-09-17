@@ -61,6 +61,7 @@
       onedark-nvim
       plenary-nvim
       project-nvim
+      render-markdown
       telescope-fzf-native-nvim
       telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
       todo-comments-nvim
@@ -109,7 +110,7 @@
       markdownlint-cli2
       marksman
       nil # nix LSP
-      nixd
+      nixfmt-rfc-style
       prettier
       revive
       rust-analyzer
