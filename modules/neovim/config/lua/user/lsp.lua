@@ -114,6 +114,16 @@ function M.make_client_capabilities()
     vim.lsp.protocol.make_client_capabilities(),
     has_cmp and cmp_nvim_lsp.default_capabilities() or {}
   )
+
+  -- enable lsp file watch support
+  capabilities = vim.tbl_extend("force", capabilities, {
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = true, -- needs fswatch on linux
+        relativePatternSupport = true,
+      },
+    },
+  })
   return capabilities
 end
 

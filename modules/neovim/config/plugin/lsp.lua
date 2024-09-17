@@ -122,14 +122,7 @@ lspconfig.rust_analyzer.setup({
 })
 
 lspconfig.gopls.setup({
-  capabilities = vim.tbl_extend("force", capabilities, {
-    workspace = {
-      didChangeWatchedFiles = {
-        dynamicRegistration = true, -- needs fswatch on linux
-        relativePatternSupport = true,
-      },
-    },
-  }),
+  capabilities = capabilities,
   on_attach = function(client, bufnr)
     -- workaround for gopls not supporting semanticTokensProvider
     -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
@@ -196,6 +189,13 @@ lspconfig.golangci_lint_ls.setup({
 lspconfig.nil_ls.setup({
   capabilities = capabilities,
   root_dir = util.root_pattern("flake.nix", "default.nix", "shell.nix", ".git"),
+  settings = {
+    ["nil"] = {
+      formatting = {
+        command = { "nixfmt" },
+      },
+    },
+  },
 })
 
 lspconfig.lua_ls.setup({
