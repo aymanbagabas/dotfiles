@@ -43,10 +43,10 @@
     "dotfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1726420119,
-        "narHash": "sha256-QZblACpE5eaP8HCMupT07J6Ai7lO6rSthAUmSyO0vQw=",
+        "lastModified": 1726376728,
+        "narHash": "sha256-WsteHKB1u+X65lKtAPCGK9aIYMoI4LqM93cZ2OM2fBg=",
         "ref": "refs/heads/master",
-        "rev": "0ef3988b1d18268647f676a06ac675454bb79f22",
+        "rev": "3fd933f3c8481cd19990b857df58b9513d91d663",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
@@ -82,11 +82,11 @@
         "zig": "zig"
       },
       "locked": {
-        "lastModified": 1726605047,
-        "narHash": "sha256-Fs/5s+RqqfS1DV7i93y6bjCX19v1p64Alr8BBthJeeo=",
+        "lastModified": 1726286796,
+        "narHash": "sha256-5mop4eJrzPTuEsUaqRZizzjySOx+vK9ZXl7HlJqWh1M=",
         "ref": "refs/heads/main",
-        "rev": "b7ac7bf33642bf35271933dfffb4a412ddfffbc6",
-        "revCount": 7334,
+        "rev": "4241eac890b8f4b6bbadf27b2d109ce483813fe9",
+        "revCount": 7314,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
