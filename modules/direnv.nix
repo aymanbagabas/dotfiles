@@ -1,9 +1,9 @@
 { pkgs, user, ... }:
 
 let
-  homeDirectory = (if pkgs.stdenv.isDarwin then "/Users" else "/home") + "/${user}";
-in
-{
+  homeDirectory = (if pkgs.stdenv.isDarwin then "/Users" else "/home")
+    + "/${user}";
+in {
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;

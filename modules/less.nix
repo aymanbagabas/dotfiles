@@ -4,9 +4,7 @@
   programs.less.enable = true;
   programs.lesspipe.enable = true;
 
-  home.packages = with pkgs; [
-    sourceHighlight
-  ];
+  home.packages = with pkgs; [ sourceHighlight ];
 
   home.sessionVariables = {
     PAGER = "less";

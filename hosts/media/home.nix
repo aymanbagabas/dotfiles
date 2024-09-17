@@ -1,7 +1,5 @@
 { ... }:
 
 {
-  imports = [
-    ../headless.nix
-  ];
+  imports = [ ../headless.nix ];
 }

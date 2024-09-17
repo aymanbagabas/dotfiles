@@ -11,10 +11,7 @@ let
 
   useStaging = false;
 in {
-  imports = [
-    ../genericlxc/configuration.nix
-    ./secrets.nix
-  ];
+  imports = [ ../genericlxc/configuration.nix ./secrets.nix ];
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];
 
@@ -22,18 +19,16 @@ in {
     acceptTerms = true;
     defaults = {
       email = "${email}";
-      server = mkIf useStaging "https://acme-staging-v02.api.letsencrypt.org/directory";
+      server = mkIf useStaging
+        "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
     certs."${mainDomain}" = {
       group = "wheel";
       domain = "${subMainDomain}";
       dnsProvider = dnsProvider;
       dnsPropagationCheck = true;
-      extraDomainNames = [
-        "*.${subMainDomain}"
-        "${altDomain}"
-        "*.${altDomain}"
-      ];
+      extraDomainNames =
+        [ "*.${subMainDomain}" "${altDomain}" "*.${altDomain}" ];
       environmentFile = "${config.sops.secrets.cert.path}";
     };
   };
@@ -47,27 +42,25 @@ in {
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
     recommendedBrotliSettings = true;
-    resolver.addresses = [
-      "192.168.2.2"
-      "127.0.0.1"
-    ];
+    resolver.addresses = [ "192.168.2.2" "127.0.0.1" ];
     virtualHosts = let
       base = locations: {
         inherit locations;
-	forceSSL = true;
-	enableACME = true;
+        forceSSL = true;
+        enableACME = true;
       };
-      proxy = url: base {
-        "/" = {
-          proxyPass = "${url}";
-          # Host and X-Forwarded-For headers are added using the
-          # "recommendedProxySettings". Some applications don't recognize
-          # X-Forwarded-Proto so we need to add X-Forwarded-Protocol as well.
-          extraConfig = ''
-            proxy_set_header X-Forwarded-Protocol $scheme;
-	  '';
-	};
-      };
+      proxy = url:
+        base {
+          "/" = {
+            proxyPass = "${url}";
+            # Host and X-Forwarded-For headers are added using the
+            # "recommendedProxySettings". Some applications don't recognize
+            # X-Forwarded-Proto so we need to add X-Forwarded-Protocol as well.
+            extraConfig = ''
+                          proxy_set_header X-Forwarded-Protocol $scheme;
+              	  '';
+          };
+        };
     in {
       "radarr.${altDomain}" = proxy "http://media.local:7878/";
       "sonarr.${altDomain}" = proxy "http://media.local:8989/";
@@ -120,9 +113,8 @@ in {
           '';
         };
       };
-      "${altDomain}" = base {
-        "/".return = "301 http://${mainDomain}$request_uri";
-      };
+      "${altDomain}" =
+        base { "/".return = "301 http://${mainDomain}$request_uri"; };
     };
   };
 

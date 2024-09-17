@@ -55,14 +55,13 @@ in {
   networking.hostName = hostname;
 
   services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
+  services.spice-vdagentd.enable =
+    true; # enable copy and paste between host and guest
 
-# Enable OpenSSH X11 forwarding.
+  # Enable OpenSSH X11 forwarding.
   services.openssh = {
     enable = true;
-    settings = {
-      X11Forwarding = true;
-    };
+    settings = { X11Forwarding = true; };
   };
 
   # enable vaapi on OS-level
@@ -90,9 +89,7 @@ in {
   services.radarr = mkService "radarr";
   services.bazarr = mkService "bazarr";
   services.prowlarr = mkService "prowlarr";
-  services.calibre-web = mkService "calibre-web" // {
-    listen.ip = "0.0.0.0";
-  };
+  services.calibre-web = mkService "calibre-web" // { listen.ip = "0.0.0.0"; };
   services.calibre-server = {
     enable = true;
     openFirewall = true;
@@ -110,9 +107,7 @@ in {
 
   # Virtualisation using Docker
   virtualisation.docker.enable = true;
-  virtualisation.docker.daemon.settings = {
-    userland-proxy = false;
-  };
+  virtualisation.docker.daemon.settings = { userland-proxy = false; };
 
   # Searcharr
   systemd.tmpfiles.settings."10-searcharr"."${dataDir}/searcharr".d = {
@@ -124,25 +119,24 @@ in {
     backend = "docker";
     containers = {
       searcharr = rec {
-	image = "toddrob/searcharr";
-	imageFile = pkgs.dockerTools.pullImage {
-	  imageName = "${image}";
-	  finalImageTag = "v3.2.2";
-	  imageDigest = "sha256:99290b20c772a9a346376d8725cf173171a9784f150d2dd734ef1707d101b899";
-	  sha256 = "sha256-WultDmzquasFDitfTq/O6c1q5Ykxxrc9cMVfT9jw6c8=";
-	  os = "linux";
-	  arch = "amd64";
-	};
-	autoStart = true;
-	extraOptions = [ "--network=host" ];
-	environment = {
-	  TZ = "${config.time.timeZone}";
-	};
-	volumes = [
-	  "${dataDir}/searcharr/data:/app/data"
-	  "${dataDir}/searcharr/logs:/app/logs"
-	  "${dataDir}/searcharr/settings.py:/app/settings.py"
-	];
+        image = "toddrob/searcharr";
+        imageFile = pkgs.dockerTools.pullImage {
+          imageName = "${image}";
+          finalImageTag = "v3.2.2";
+          imageDigest =
+            "sha256:99290b20c772a9a346376d8725cf173171a9784f150d2dd734ef1707d101b899";
+          sha256 = "sha256-WultDmzquasFDitfTq/O6c1q5Ykxxrc9cMVfT9jw6c8=";
+          os = "linux";
+          arch = "amd64";
+        };
+        autoStart = true;
+        extraOptions = [ "--network=host" ];
+        environment = { TZ = "${config.time.timeZone}"; };
+        volumes = [
+          "${dataDir}/searcharr/data:/app/data"
+          "${dataDir}/searcharr/logs:/app/logs"
+          "${dataDir}/searcharr/settings.py:/app/settings.py"
+        ];
       };
     };
   };

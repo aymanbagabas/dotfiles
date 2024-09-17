@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+{ config, pkgs, ... }: {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -85,47 +84,46 @@
       zen-mode-nvim
     ];
 
-    extraPackages = with pkgs; with pkgs.nodePackages_latest; [
-      # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
-      (writeShellScriptBin "gsed" "exec ${gnused}/bin/sed \"$@\"")
+    extraPackages = with pkgs;
+      with pkgs.nodePackages_latest; [
+        # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
+        (writeShellScriptBin "gsed" ''exec ${gnused}/bin/sed "$@"'')
 
-      actionlint
-      bash-language-server
-      clang-tools
-      delve
-      docker-compose-language-service
-      dockerfile-language-server-nodejs
-      go-tools
-      gofumpt
-      golangci-lint
-      golangci-lint-langserver
-      gomodifytags
-      gopls
-      gotests
-      gotools
-      hadolint
-      impl
-      ltex-ls
-      lua-language-server
-      markdownlint-cli2
-      marksman
-      nil # nix LSP
-      nixfmt-rfc-style
-      prettier
-      revive
-      rust-analyzer
-      shellcheck
-      shfmt
-      stylua
-      terraform-ls
-      typescript-language-server
-      vscode-langservers-extracted
-      yaml-language-server
-    ];
+        actionlint
+        bash-language-server
+        clang-tools
+        delve
+        docker-compose-language-service
+        dockerfile-language-server-nodejs
+        go-tools
+        gofumpt
+        golangci-lint
+        golangci-lint-langserver
+        gomodifytags
+        gopls
+        gotests
+        gotools
+        hadolint
+        impl
+        ltex-ls
+        lua-language-server
+        markdownlint-cli2
+        marksman
+        nil # nix LSP
+        nixfmt-rfc-style
+        prettier
+        revive
+        rust-analyzer
+        shellcheck
+        shfmt
+        stylua
+        terraform-ls
+        typescript-language-server
+        vscode-langservers-extracted
+        yaml-language-server
+      ];
 
-    extraPython3Packages = ps: [
-      ps.python-lsp-server
-    ];
+    extraPython3Packages = ps: [ ps.python-lsp-server ];
   };
 
   xdg.configFile."nvim" = {

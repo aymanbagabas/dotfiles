@@ -26,7 +26,7 @@ in {
       keys = mkOption {
         description = "List of gpg keys to automatically import";
         type = types.listOf (types.either types.str types.path);
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -34,7 +34,7 @@ in {
   config = {
     programs.gpg.enable = mkDefault true;
 
-    systemd.user.services.gpg-import-keys = mkIf (cfg.keys != []) {
+    systemd.user.services.gpg-import-keys = mkIf (cfg.keys != [ ]) {
       Unit = {
         Description = "Auto import gpg keys";
         After = [ "gpg-agent.socket" ];
@@ -44,11 +44,13 @@ in {
         Type = "oneshot";
         ExecStart = toString (pkgs.writeScript "import-gpg-keys" ''
           #! ${pkgs.runtimeShell} -el
-          ${optionalString (keyserverGPGKeys != []) ''
-          ${pkgs.gnupg}/bin/gpg --keyserver ${cfg.keyserver} --recv-keys ${concatStringsSep " " keyserverGPGKeys}
+          ${optionalString (keyserverGPGKeys != [ ]) ''
+            ${pkgs.gnupg}/bin/gpg --keyserver ${cfg.keyserver} --recv-keys ${
+              concatStringsSep " " keyserverGPGKeys
+            }
           ''}
-          ${optionalString (fileGPGKeys!= []) ''
-          ${pkgs.gnupg}/bin/gpg --import ${concatStringsSep " " fileGPGKeys}
+          ${optionalString (fileGPGKeys != [ ]) ''
+            ${pkgs.gnupg}/bin/gpg --import ${concatStringsSep " " fileGPGKeys}
           ''}
         '');
       };

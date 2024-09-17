@@ -40,9 +40,7 @@
   };
 
   # Allow unfree packages
-  nixpkgs = {
-    config = import ../modules/nixpkgs-config.nix;
-  };
+  nixpkgs = { config = import ../modules/nixpkgs-config.nix; };
 
   environment.pathsToLink = [ "/share/zsh" ];
   environment.shells = with pkgs; [ bashInteractive zsh ];

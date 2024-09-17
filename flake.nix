@@ -58,50 +58,59 @@
     # declare the cache useless. If you do, you will have
     # to compile LLVM, Zig and Ghostty itself on your machine,
     # which will take a very very long time.
-    ghostty = {
-      url = "git+ssh://git@github.com/mitchellh/ghostty";
-    };
+    ghostty = { url = "git+ssh://git@github.com/mitchellh/ghostty"; };
   };
 
   outputs = inputs@{ self, nixpkgs, home-manager, darwin, nur, ... }:
     let
-      overlays = [
-        nur.overlay
-      ];
+      overlays = [ nur.overlay ];
 
-      mkSystem = import ./lib/mksystem.nix {
-        inherit nixpkgs overlays inputs;
-      };
+      mkSystem = import ./lib/mksystem.nix { inherit nixpkgs overlays inputs; };
 
       # Generate a list of systems based on their hostname
-      mkSystems = list: builtins.listToAttrs (
-        map (
-          x: { name = x.hostname; value = mkSystem x; }
-        ) list
-      );
+      mkSystems = list:
+        builtins.listToAttrs (map (x: {
+          name = x.hostname;
+          value = mkSystem x;
+        }) list);
 
       forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.unix;
-      nixpkgsFor = forAllSystems (system: import nixpkgs {
-        inherit system overlays;
-      });
+      nixpkgsFor =
+        forAllSystems (system: import nixpkgs { inherit system overlays; });
 
     in {
       nixosConfigurations = mkSystems [
-        { hostname = "media"; system = "x86_64-linux"; isHeadless = true; }
-        { hostname = "traffic"; system = "x86_64-linux"; isHeadless = true; }
-        { hostname = "genericlxc"; system = "x86_64-linux"; isHeadless = true; }
+        {
+          hostname = "media";
+          system = "x86_64-linux";
+          isHeadless = true;
+        }
+        {
+          hostname = "traffic";
+          system = "x86_64-linux";
+          isHeadless = true;
+        }
+        {
+          hostname = "genericlxc";
+          system = "x86_64-linux";
+          isHeadless = true;
+        }
       ];
 
       darwinConfigurations = mkSystems [
-        { hostname = "spaceship"; system = "x86_64-darwin"; }
-        { hostname = "blackhole"; system = "aarch64-darwin"; }
+        {
+          hostname = "spaceship";
+          system = "x86_64-darwin";
+        }
+        {
+          hostname = "blackhole";
+          system = "aarch64-darwin";
+        }
       ];
 
       devShells = forAllSystems (system:
-        let
-          pkgs = nixpkgsFor.${system};
-        in
-        {
+        let pkgs = nixpkgsFor.${system};
+        in {
           default = pkgs.mkShellNoCC {
             shellHook = ''
               # Use GitHub access tokens to avoid rate limiting

@@ -1,16 +1,16 @@
 { config, pkgs, ... }:
 
 let
-  inherit (pkgs.lib) optionalAttrs optionalString optional concatStringsSep concatMapStrings getExe;
+  inherit (pkgs.lib)
+    optionalAttrs optionalString optional concatStringsSep concatMapStrings
+    getExe;
   homedir = "${config.home.homeDirectory}/.gnupg";
   isDarwin = pkgs.stdenv.isDarwin;
   defaultKey = "593D6EEE7871708E329619322EBA00DFFCC63351";
 
 in {
 
-  imports = [
-    ./gpg-auto-import.nix
-  ];
+  imports = [ ./gpg-auto-import.nix ];
 
   programs.zsh.shellAliases = {
     gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
@@ -20,9 +20,7 @@ in {
   programs.gpg = {
     enable = true;
     homedir = homedir;
-    autoImport = {
-      keys = [ defaultKey ];
-    };
+    autoImport = { keys = [ defaultKey ]; };
     settings = {
       default-key = defaultKey;
       default-recipient-self = true;
@@ -40,7 +38,8 @@ in {
 
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-    pinentryPackage = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
+    pinentryPackage = with pkgs;
+      if isDarwin then pinentry_mac else pinentry-tty;
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
     defaultCacheTtlSsh = 31536000;
@@ -59,10 +58,10 @@ in {
       # Note: each key grip line need to have the flags field and a trailing
       # newline.
       ''
-      # Ed25519 key added on: 2023-02-19 03:48:15
-      # Fingerprints:  MD5:e0:3d:d8:df:65:37:71:81:55:64:26:04:bf:73:30:e1
-      #                SHA256:1izFUbLJhlQts1tMgG4ZcXivcAx83DJdBmvSI4jK8fU
-      90E6532F3492CD9E14FF1E5366371FAA7A55EDEA 0
+        # Ed25519 key added on: 2023-02-19 03:48:15
+        # Fingerprints:  MD5:e0:3d:d8:df:65:37:71:81:55:64:26:04:bf:73:30:e1
+        #                SHA256:1izFUbLJhlQts1tMgG4ZcXivcAx83DJdBmvSI4jK8fU
+        90E6532F3492CD9E14FF1E5366371FAA7A55EDEA 0
       '' # Ayman@DESKTOP-DQ7A0U1
     ];
   };

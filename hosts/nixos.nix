@@ -1,9 +1,7 @@
 { pkgs, user, hostname, ... }:
 
 {
-  imports = [
-    ./shared.nix
-  ];
+  imports = [ ./shared.nix ];
 
   users.users.${user} = {
     isNormalUser = true;
@@ -24,17 +22,13 @@
   time.timeZone = "America/New_York";
 
   # Enable passwordless sudo
-  security.sudo.extraRules = [
-    {
-      users = [ "${user}" ];
-      commands = [
-      {
-        command = "ALL";
-        options = [ "NOPASSWD" ];
-      }
-      ];
-    }
-  ];
+  security.sudo.extraRules = [{
+    users = [ "${user}" ];
+    commands = [{
+      command = "ALL";
+      options = [ "NOPASSWD" ];
+    }];
+  }];
 
   # Enable basic programs.
   programs.neovim = {

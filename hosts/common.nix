@@ -1,8 +1,7 @@
 # This defines common home-manager configuration for all users.
 { config, pkgs, isDarwin, ... }:
 
-let
-  inherit (pkgs) lib;
+let inherit (pkgs) lib;
 in {
   imports = [
     ../modules/git.nix

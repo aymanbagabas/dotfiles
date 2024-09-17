@@ -12,10 +12,8 @@
             content = {
               type = "filesystem";
               format = "vfat"; # Format it as a FAT32 filesystem
-	      mountpoint = "/boot"; # Mount it to /boot
-	      mountOptions = [
-		"defaults"
-	      ];
+              mountpoint = "/boot"; # Mount it to /boot
+              mountOptions = [ "defaults" ];
             };
           };
           primary = { # Setup the LVM partition
@@ -34,9 +32,7 @@
         lvs = { # lvcreate
           swap = { # Logical Volume = "swap", /dev/vg1/swap
             size = "2G";
-            content = {
-              type = "swap";
-            };
+            content = { type = "swap"; };
           };
           root = { # Logical Volume = "root", /dev/vg1/root
             size = "100%FREE"; # Use the remaining space in the Volume Group
@@ -44,9 +40,7 @@
               type = "filesystem";
               format = "ext4";
               mountpoint = "/";
-              mountOptions = [
-                "defaults"
-              ];
+              mountOptions = [ "defaults" ];
             };
           };
         };

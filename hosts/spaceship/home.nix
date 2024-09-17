@@ -1,6 +1,1 @@
-{ ... }:
-{
-  imports = [
-    ../macos.nix
-  ];
-}
+{ ... }: { imports = [ ../macos.nix ]; }

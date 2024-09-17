@@ -14,8 +14,6 @@
           __zoxide_z "$@"
       }
     '';
-    shellAliases = {
-      cd = "z";
-    };
+    shellAliases = { cd = "z"; };
   };
 }

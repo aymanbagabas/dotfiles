@@ -2,17 +2,16 @@
 
 with lib;
 
-let
-  cfg = config.services.prowlarr;
+let cfg = config.services.prowlarr;
 
-in
-{
+in {
   options = {
     services.prowlarr = {
-      enable = mkEnableOption "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
+      enable = mkEnableOption
+        "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
 
       package = mkPackageOption pkgs "prowlarr" { };
-      
+
       dataDir = mkOption {
         type = types.str;
         default = "/var/lib/prowlarr/.config/Prowlarr";
@@ -22,7 +21,8 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Prowlarr web interface.";
+        description =
+          "Open ports in the firewall for the Prowlarr web interface.";
       };
 
       user = mkOption {
@@ -54,14 +54,13 @@ in
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
+        ExecStart =
+          "${lib.getExe cfg.package} -nobrowser -data='${cfg.dataDir}'";
         Restart = "on-failure";
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 9696 ];
-    };
+    networking.firewall = mkIf cfg.openFirewall { allowedTCPPorts = [ 9696 ]; };
 
     users.users = mkIf (cfg.user == "prowlarr") {
       prowlarr = {
@@ -71,8 +70,6 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "prowlarr") {
-      prowlarr = { };
-    };
+    users.groups = mkIf (cfg.group == "prowlarr") { prowlarr = { }; };
   };
 }

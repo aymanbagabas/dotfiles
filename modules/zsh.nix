@@ -2,12 +2,9 @@
 
 with pkgs.lib;
 
-let
-  inherit (pkgs.stdenv) isLinux;
+let inherit (pkgs.stdenv) isLinux;
 in {
-  home.packages = with pkgs; [
-    pure-prompt
-  ];
+  home.packages = with pkgs; [ pure-prompt ];
 
   programs.zsh = {
     enable = true;
@@ -32,19 +29,19 @@ in {
         src = pkgs.oh-my-zsh;
       }
       {
-          name = "omzl-completion";
-          file = "share/oh-my-zsh/lib/completion.zsh";
-          src = pkgs.oh-my-zsh;
+        name = "omzl-completion";
+        file = "share/oh-my-zsh/lib/completion.zsh";
+        src = pkgs.oh-my-zsh;
       }
       {
-          name = "omzl-theme-and-appearance";
-          file = "share/oh-my-zsh/lib/theme-and-appearance.zsh";
-          src = pkgs.oh-my-zsh;
+        name = "omzl-theme-and-appearance";
+        file = "share/oh-my-zsh/lib/theme-and-appearance.zsh";
+        src = pkgs.oh-my-zsh;
       }
       {
-          name = "omzp-git";
-          file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
-          src = pkgs.oh-my-zsh;
+        name = "omzp-git";
+        file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
+        src = pkgs.oh-my-zsh;
       }
       {
         name = "zsh-vim-mode";
@@ -61,13 +58,11 @@ in {
         file = "base16-shell.plugin.zsh";
         src = tinted-shell;
       }
-    ] ++ (optionals isLinux [
-      {
-        name = "omzp-systemd";
-        file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
-        src = pkgs.oh-my-zsh;
-      }
-    ]);
+    ] ++ (optionals isLinux [{
+      name = "omzp-systemd";
+      file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
+      src = pkgs.oh-my-zsh;
+    }]);
 
     sessionVariables = {
       # Set the base16 theme (needs tinted-shell).

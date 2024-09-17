@@ -2,16 +2,18 @@
 { user, config, ... }:
 
 {
-  imports = [
-    ./shared.nix
-  ];
+  imports = [ ./shared.nix ];
 
   # nix-darwin system state version.
   # https://daiderd.com/nix-darwin/manual/index.html#opt-system.stateVersion
   system.stateVersion = 5;
 
   # nix-darwin has an "interval" option instead of "dates".
-  nix.gc.interval = { Weekday = 0; Hour = 0; Minute = 0; }; # 0th day of every week
+  nix.gc.interval = {
+    Weekday = 0;
+    Hour = 0;
+    Minute = 0;
+  }; # 0th day of every week
 
   # We install Nix using a separate installer so we don't want nix-darwin
   # to manage it for us. This tells nix-darwin to just use whatever is running.
@@ -77,15 +79,14 @@
         autohide-delay = 0.0;
         orientation = "bottom";
       };
-      trackpad = {
-        Clicking = true;
-      };
+      trackpad = { Clicking = true; };
       CustomUserPreferences = {
         "com.googlecode.iterm2.plist" = {
           # Specify the preferences directory
           # Cannot be a nix store link
           # https://github.com/nix-community/home-manager/issues/2085
-          PrefsCustomFolder = "${config.users.users.${user}.home}/.dotfiles/users/${user}";
+          PrefsCustomFolder =
+            "${config.users.users.${user}.home}/.dotfiles/users/${user}";
           # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
         };

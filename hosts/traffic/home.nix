@@ -1,7 +1,5 @@
 { user, isDarwin, pkgs, ... }:
 
 {
-  imports = [
-    ../genericlxc/home.nix
-  ];
+  imports = [ ../genericlxc/home.nix ];
 }

@@ -8,10 +8,6 @@
     "services/misc/prowlarr.nix"
   ];
 
-  imports = [
-    ./bazarr.nix
-    ./calibre-server.nix
-    ./calibre-web.nix
-    ./prowlarr.nix
-  ];
+  imports =
+    [ ./bazarr.nix ./calibre-server.nix ./calibre-web.nix ./prowlarr.nix ];
 }

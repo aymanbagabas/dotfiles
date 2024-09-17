@@ -2,7 +2,7 @@
 { config, dotfiles, sops-nix, ... }:
 
 {
-  imports =  [
+  imports = [
     sops-nix.homeManagerModules.sops
     ../modules/home.nix
     ../modules/pkgs.nix
@@ -10,9 +10,7 @@
   ];
 
   sops = {
-    gnupg = {
-      home = "${config.programs.gpg.homedir}";
-    };
+    gnupg = { home = "${config.programs.gpg.homedir}"; };
     secrets = {
       # NOTE: Make sure the secret "key" matches the name, otherwise, you need
       # to specify the key name under "key" field.

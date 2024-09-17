@@ -7,26 +7,29 @@ let
   cfg = config.services.calibre-server;
 
   documentationLink = "https://manual.calibre-ebook.com";
-  generatedDocumentationLink = documentationLink + "/generated/en/calibre-server.html";
+  generatedDocumentationLink = documentationLink
+    + "/generated/en/calibre-server.html";
 
-  execFlags = (concatStringsSep " "
-    (mapAttrsToList (k: v: "${k} ${toString v}") (filterAttrs (name: value: value != null) {
+  execFlags = (concatStringsSep " " (mapAttrsToList (k: v: "${k} ${toString v}")
+    (filterAttrs (name: value: value != null) {
       "--listen-on" = cfg.host;
       "--port" = cfg.port;
       "--auth-mode" = cfg.auth.mode;
       "--userdb" = cfg.auth.userDb;
-    }) ++ [(optionalString (cfg.auth.enable == true) "--enable-auth")] ++ cfg.extraFlags)
-  );
-in
+    }) ++ [ (optionalString (cfg.auth.enable == true) "--enable-auth") ]
+    ++ cfg.extraFlags));
 
-{
+in {
   imports = [
-    (mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [ "services" "calibre-server" "libraries" ]
-      (config:
-        let libraryDir = getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
-        in [ libraryDir ]
-      )
-    )
+    (mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [
+      "services"
+      "calibre-server"
+      "libraries"
+    ] (config:
+      let
+        libraryDir =
+          getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
+      in [ libraryDir ]))
   ];
 
   options = {
@@ -47,7 +50,7 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra flags to pass to the calibre-server command.
           See the [calibre-server documentation](${generatedDocumentationLink}) for details.
@@ -88,7 +91,8 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = "Open ports in the firewall for the Calibre Server web interface.";
+        description =
+          "Open ports in the firewall for the Calibre Server web interface.";
       };
 
       auth = {
@@ -133,7 +137,9 @@ in
       serviceConfig = {
         User = cfg.user;
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/calibre-server ${lib.concatStringsSep " " cfg.libraries} ${execFlags}";
+        ExecStart = "${cfg.package}/bin/calibre-server ${
+            lib.concatStringsSep " " cfg.libraries
+          } ${execFlags}";
       };
 
     };
@@ -150,14 +156,11 @@ in
     };
 
     users.groups = optionalAttrs (cfg.group == "calibre-server") {
-      calibre-server = {
-        gid = config.ids.gids.calibre-server;
-      };
+      calibre-server = { gid = config.ids.gids.calibre-server; };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
+    networking.firewall =
+      mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
   };
 

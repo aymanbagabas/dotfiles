@@ -4,23 +4,27 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [ (modulesPath + "/profiles/qemu-guest.nix")
-    ];
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_pci" "ahci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [
+    "uhci_hcd"
+    "ehci_pci"
+    "ahci"
+    "virtio_pci"
+    "virtio_scsi"
+    "sd_mod"
+    "sr_mod"
+  ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/mnt/data" =
-    { device = "/dev/disk/by-label/media-data";
-      fsType = "ext4";
-    };
+  fileSystems."/mnt/data" = {
+    device = "/dev/disk/by-label/media-data";
+    fsType = "ext4";
+  };
 
-  swapDevices =
-    [ { device = "/dev/vg1/swap"; }
-    ];
+  swapDevices = [{ device = "/dev/vg1/swap"; }];
 
   fileSystems."/mnt/share/backups" = {
     device = "//nas/backups";
@@ -34,7 +38,7 @@
       "x-systemd.mount-timeout=5s"
       # Mount as user
       "uid=1000" # user
-      "gid=1"    # wheel
+      "gid=1" # wheel
       # Credentials need to be stored in a file
       "credentials=/etc/nixos/smb-secrets"
       "rw"
@@ -53,7 +57,7 @@
       "x-systemd.mount-timeout=5s"
       # Mount as user
       "uid=1000" # user
-      "gid=1"    # wheel
+      "gid=1" # wheel
       # Credentials need to be stored in a file
       "credentials=/etc/nixos/smb-secrets"
       "rw"
@@ -63,7 +67,8 @@
 
   # Allow Samba discovery
   # https://nixos.wiki/wiki/Samba#Firewall_configuration
-  networking.firewall.extraCommands = ''iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns'';
+  networking.firewall.extraCommands =
+    "iptables -t raw -A OUTPUT -p udp -m udp --dport 137 -j CT --helper netbios-ns";
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

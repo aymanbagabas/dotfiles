@@ -2,8 +2,7 @@
 
 with pkgs.lib;
 
-let
-  pathJoin = builtins.concatStringsSep ":";
+let pathJoin = builtins.concatStringsSep ":";
 in {
   home.username = "${user}";
   home.homeDirectory = (if isDarwin then "/Users" else "/home") + "/${user}";
@@ -24,16 +23,14 @@ in {
     EDITOR = "nvim";
     VISUAL = "nvim";
 
-    PATH = pathJoin (
-      [
-        "/opt/homebrew/bin"
-        "/opt/homebrew/sbin"
-        "$HOME/.npm-global/bin"
-        "$HOME/.go/bin"
-        "$HOME/.bin"
-        "$PATH"
-      ]
-    );
+    PATH = pathJoin ([
+      "/opt/homebrew/bin"
+      "/opt/homebrew/sbin"
+      "$HOME/.npm-global/bin"
+      "$HOME/.go/bin"
+      "$HOME/.bin"
+      "$PATH"
+    ]);
 
     # My GPG key ID
     KEYID = "${config.programs.gpg.settings.default-key}";
