@@ -26,11 +26,11 @@ require("conform").setup({
 
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
-vim.keymap.set("n", "<leader>uf", function()
+vim.keymap.set("n", "<leader>uF", function()
   vim.g.autoformat = not vim.g.autoformat
   vim.notify("Auto Format (Global): " .. (vim.g.autoformat and "enabled" or "disabled"))
 end, { desc = "Toggle Auto Format (Global)" })
-vim.keymap.set("n", "<leader>uF", function(bufnr)
+vim.keymap.set("n", "<leader>uf", function(bufnr)
   vim.b[bufnr].autoformat = not vim.b[bufnr].autoformat
   vim.notify("Auto Format (Buffer): " .. (vim.b[bufnr].autoformat and "enabled" or "disabled"))
 end, { desc = "Toggle Auto Format (Buffer)" })
