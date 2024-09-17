@@ -16,7 +16,11 @@ This is only necessary when you're _not_ running NixOS.
 
 ```sh
 # On MacOS
-sh <(curl -L https://nixos.org/nix/install)
+# Use Determinate Systems Nix installer
+# I find this a more stable and reliable installation for MacOS
+# You can also use the official Nix installer
+# sh <(curl -L https://nixos.org/nix/install)
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 # Install Homebrew (Optional)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 # Add the fonts tap (Optional)
