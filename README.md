@@ -37,7 +37,7 @@ sh <(curl -L https://nixos.org/nix/install) --daemon
 
 See [Nix download](https://nixos.org/download/) page for more info.
 
-## enable flakes
+## Enable flakes
 
 This dotfiles use Nix Flakes, make sure it's enabled on your system.
 
