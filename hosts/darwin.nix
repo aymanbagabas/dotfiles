@@ -60,6 +60,7 @@
       "telegram-desktop"
       "the-unarchiver"
       "vmware-fusion"
+      "wezterm@nightly"
       "whatsapp"
       "xquartz"
     ];
@@ -79,14 +80,15 @@
         autohide-delay = 0.0;
         orientation = "bottom";
       };
-      trackpad = { Clicking = true; };
+      trackpad = {
+        Clicking = true;
+      };
       CustomUserPreferences = {
         "com.googlecode.iterm2.plist" = {
           # Specify the preferences directory
           # Cannot be a nix store link
           # https://github.com/nix-community/home-manager/issues/2085
-          PrefsCustomFolder =
-            "${config.users.users.${user}.home}/.dotfiles/users/${user}";
+          PrefsCustomFolder = "${config.users.users.${user}.home}/.dotfiles/users/${user}";
           # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
         };
