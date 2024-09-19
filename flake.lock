@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726188813,
-        "narHash": "sha256-Vop/VRi6uCiScg/Ic+YlwsdIrLabWUJc57dNczp0eBc=",
+        "lastModified": 1726742753,
+        "narHash": "sha256-QclpWrIFIg/yvWRiOUaMp1WR+TGUE9tb7RE31xHlxWc=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "21fe31f26473c180390cfa81e3ea81aca0204c80",
+        "rev": "c03f85fa42d68d1056ca1740f3113b04f3addff2",
         "type": "github"
       },
       "original": {
@@ -27,11 +27,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726590912,
-        "narHash": "sha256-5bxY85siOIqOcQ8TOMAWLkMUZvLUADS2i5TsZhzUIZY=",
+        "lastModified": 1726730453,
+        "narHash": "sha256-Kdi7liMdbr1/uyMhMDl19O5b9LESxcnYgBRZblrJi9E=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "d32d1504c77d7f6ba7e033357dcf638baceab9b7",
+        "rev": "a31fe5ef162f2f963308289e6e27d37e3948a983",
         "type": "github"
       },
       "original": {
@@ -43,10 +43,10 @@
     "dotfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1726376728,
-        "narHash": "sha256-WsteHKB1u+X65lKtAPCGK9aIYMoI4LqM93cZ2OM2fBg=",
+        "lastModified": 1726420119,
+        "narHash": "sha256-QZblACpE5eaP8HCMupT07J6Ai7lO6rSthAUmSyO0vQw=",
         "ref": "refs/heads/master",
-        "rev": "3fd933f3c8481cd19990b857df58b9513d91d663",
+        "rev": "0ef3988b1d18268647f676a06ac675454bb79f22",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
@@ -82,11 +82,11 @@
         "zig": "zig"
       },
       "locked": {
-        "lastModified": 1726286796,
-        "narHash": "sha256-5mop4eJrzPTuEsUaqRZizzjySOx+vK9ZXl7HlJqWh1M=",
+        "lastModified": 1726762512,
+        "narHash": "sha256-GYt44uJE6fC4ydT6aiMzMAUrdlDHjLYOPllVJA/NPmA=",
         "ref": "refs/heads/main",
-        "rev": "4241eac890b8f4b6bbadf27b2d109ce483813fe9",
-        "revCount": 7314,
+        "rev": "bfd88ffc5eded37a2352aec01343b265db720092",
+        "revCount": 7361,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -102,11 +102,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1726611136,
-        "narHash": "sha256-H3XQ8DHc/wtEcztf34IzWW7CPk7RZHTdB6PZd++0yt8=",
+        "lastModified": 1726764199,
+        "narHash": "sha256-aiw08ZK7PBVwnOglT0rk+VI3ZqPgbFlOWP7SCFb8sHA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "4974dfb26e1c84d22bfdf943d41a33c9e51209a8",
+        "rev": "1f7b8188a9c9c5ba32f9a8351c55f42ecc22b77c",
         "type": "github"
       },
       "original": {
@@ -181,11 +181,11 @@
     },
     "nur": {
       "locked": {
-        "lastModified": 1726610999,
-        "narHash": "sha256-tILGjc4SsDXRx4m/Rn6jLxH48xhgcemSOycPD4LoM4w=",
+        "lastModified": 1726766869,
+        "narHash": "sha256-xsJ5GR5K5ypR68pkIIJ7sPvMI/Oj4uTTVotgDKue/ew=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "b116d177844b9611c2289897a6bf517df06e2bf1",
+        "rev": "75101e2278f7d9ea5652bdfedce719de4e97cb6f",
         "type": "github"
       },
       "original": {
