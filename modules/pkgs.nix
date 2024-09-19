@@ -1,8 +1,18 @@
-{ pkgs, dotfiles, ghostty, isDarwin, isLinux, isHeadless, ... }:
+{
+  pkgs,
+  dotfiles,
+  ghostty,
+  isLinux,
+  isHeadless,
+  ...
+}:
 
-let inherit (pkgs) lib;
-in {
-  home.packages = with pkgs;
+let
+  inherit (pkgs) lib;
+in
+{
+  home.packages =
+    with pkgs;
     with pkgs.nodePackages_latest;
     [
       _1password
@@ -41,9 +51,9 @@ in {
       yarn
 
       # DevOps
-      (google-cloud-sdk.withExtraComponents
-        [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
-    ] ++ (lib.optionals (!isHeadless && isLinux) [
+      (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    ]
+    ++ (lib.optionals (!isHeadless && isLinux) [
       _1password-gui
       alacritty
       discord
@@ -53,6 +63,7 @@ in {
       spotify
       tailscale # We use Homebrew for macOS
       telegram-desktop
+      wezterm
     ]);
 
   home.sessionVariables = {
