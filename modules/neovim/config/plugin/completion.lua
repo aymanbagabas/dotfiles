@@ -1,56 +1,30 @@
-local has_words_before = function()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
+-- Link CmpGhostText to Comment
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+
 local cmp = require("cmp")
 local defaults = require("cmp.config.default")()
-local copilot = require("copilot.suggestion")
-
-require("copilot_cmp").setup()
-
--- Hide Copilot suggestions when menu is opened
--- https://github.com/zbirenbaum/copilot.lua#suggestion
-cmp.event:on("menu_opened", function()
-  vim.b.copilot_suggestion_hidden = true
-end)
-
-cmp.event:on("menu_closed", function()
-  vim.b.copilot_suggestion_hidden = false
-end)
-
----Confirm selection or jump to the next snippet selection.
----@param opts cmp.ConfirmOption
----@return function(callback: function())
-local confirmOrJump = function(opts)
-  return function(fallback)
-    if cmp.visible() then
-      if vim.snippet.active({ direction = 1 }) then
-        local entry = cmp.get_selected_entry()
-        if not entry then
-          cmp.select_next_item()
-        end
-        vim.schedule(function()
-          vim.snippet.jump(1)
-        end)
-      else
-        cmp.confirm(opts)
-      end
-    else
-      fallback()
-    end
-  end
-end
+local suggestion = require("copilot.suggestion")
 
 local opts = {
+  enabled = function()
+    -- disable completion in comments
+    local context = require("cmp.config.context")
+    -- keep command mode completion enabled when cursor is in a comment
+    if vim.api.nvim_get_mode().mode == "c" then
+      return true
+    else
+      return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+    end
+  end,
+  performance = {
+    debounce = 120,
+  },
   auto_brackets = {}, -- configure any filetype to auto add brackets
   completion = {
     completeopt = "menu,menuone,noinsert,noselect",
     keyword_length = 3,
   },
-  preselect = cmp.PreselectMode.None,
+  preselect = cmp.PreselectMode.Item,
   snippet = {
     expand = function(args)
       vim.snippet.expand(args.body)
@@ -58,25 +32,25 @@ local opts = {
   },
   mapping = cmp.mapping.preset.insert({
     ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() and has_words_before() then
-        cmp.select_next_item()
-      elseif vim.snippet.active({ direction = 1 }) then
+      if vim.snippet.active({ direction = 1 }) then
         vim.schedule(function()
           vim.snippet.jump(1)
         end)
-      elseif copilot.is_visible() then
-        copilot.accept()
+      elseif suggestion.is_visible() and cmp.visible() then
         cmp.close()
-      elseif has_words_before() then
-        cmp.complete()
+      elseif suggestion.is_visible() then
+        suggestion.accept()
+        vim.schedule(function()
+          -- We need to schedule this to close the completion menu after accepting the suggestion
+          cmp.abort()
+        end)
       else
         fallback()
       end
     end, { "i", "s" }),
+
     ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() and has_words_before() then
-        cmp.select_prev_item()
-      elseif vim.snippet.active({ direction = -1 }) then
+      if vim.snippet.active({ direction = -1 }) then
         vim.schedule(function()
           vim.snippet.jump(-1)
         end)
@@ -86,21 +60,33 @@ local opts = {
     end, { "i", "s" }),
 
     -- Show next Copilot suggestion
-    ["<C-l>"] = cmp.mapping(function(fallback)
-      if copilot.is_visible() then
-        copilot.next()
-      else
-        fallback()
-      end
+    ["<C-k>"] = cmp.mapping(function()
+      suggestion.next()
     end, { "i" }),
+
     -- Show prev Copilot suggestion
-    ["<C-h>"] = cmp.mapping(function(fallback)
-      if copilot.is_visible() then
-        copilot.prev()
+    ["<C-j>"] = cmp.mapping(function()
+      suggestion.prev()
+    end, { "i" }),
+
+    -- Accept next word
+    ["<C-l>"] = cmp.mapping(function(fallback)
+      if suggestion.is_visible() then
+        suggestion.accept_word()
       else
         fallback()
       end
     end, { "i" }),
+
+    -- Accept line
+    ["<C-S-l>"] = cmp.mapping(function(fallback)
+      if suggestion.is_visible() then
+        suggestion.accept_line()
+      else
+        fallback()
+      end
+    end, { "i" }),
+
     ["<C-y>"] = cmp.mapping.confirm({
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
@@ -109,49 +95,19 @@ local opts = {
     ["<C-p>"] = cmp.mapping.select_prev_item(),
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-k>"] = cmp.mapping(function(fallback)
-      if vim.snippet.active({ direction = 1 }) then
-        vim.schedule(function()
-          vim.snippet.jump(1)
-        end)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-    ["<C-j>"] = cmp.mapping(function(fallback)
-      if vim.snippet.active({ direction = -1 }) then
-        vim.schedule(function()
-          vim.snippet.jump(-1)
-        end)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
     ["<C-Space>"] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping(function()
       -- Dismiss Copilot
-      if copilot.is_visible() then
-        copilot.dismiss()
-      end
+      suggestion.dismiss()
       cmp.abort()
     end, { "i" }),
-    ["<CR>"] = cmp.mapping(confirmOrJump({
-      behavior = cmp.ConfirmBehavior.Insert,
-      select = true,
-    })),
-    ["<S-CR>"] = cmp.mapping(confirmOrJump({
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    })),
-    ["<C-CR>"] = function(fallback)
-      cmp.abort()
-      fallback()
-    end,
+    ["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert }),
+    ["<S-CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace }),
   }),
   sources = cmp.config.sources({
-    { name = "nvim_lsp_signature_help", keyword_length = 2 },
-    { name = "nvim_lsp", keyword_length = 2 },
-    { name = "copilot", keyword_length = 3 },
+    { name = "nvim_lsp_signature_help", keyword_length = 1 },
+    { name = "nvim_lsp", keyword_length = 1 },
+    -- { name = "copilot", keyword_length = 3 },
     {
       name = "snippets",
       keyword_length = 2,
@@ -159,7 +115,7 @@ local opts = {
     },
     { name = "path" },
   }, {
-    { name = "buffer", keyword_length = 5 },
+    { name = "buffer", keyword_length = 3 },
   }, {
     { name = "emoji", priority = 999 },
   }),
@@ -185,4 +141,4 @@ end
 -- clangd extensions
 table.insert(opts.sorting.comparators, 1, require("clangd_extensions.cmp_scores"))
 
-require("cmp").setup(opts)
+cmp.setup(opts)

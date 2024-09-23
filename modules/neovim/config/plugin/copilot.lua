@@ -13,13 +13,16 @@ local opts = {
   suggestion = {
     enabled = true,
     auto_trigger = true,
+    hide_during_completion = false,
     debounce = 75,
     keymap = {
       -- Use nvim-cmp
-      accept = false,
-      next = false,
-      prev = false,
-      dismiss = false,
+      accept = false, -- "<M-l>",
+      accept_word = false,
+      accept_line = false,
+      next = false, -- "<M-]>",
+      prev = false, -- "<M-[>",
+      dismiss = false, -- "<C-]>",
     },
   },
   filetypes = {

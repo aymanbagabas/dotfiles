@@ -1,4 +1,5 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -23,7 +24,7 @@
       cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
       cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
       conform-nvim
-      copilot-cmp
+      # copilot-cmp
       copilot-lua
       dashboard-nvim
       dressing-nvim
@@ -84,8 +85,10 @@
       zen-mode-nvim
     ];
 
-    extraPackages = with pkgs;
-      with pkgs.nodePackages_latest; [
+    extraPackages =
+      with pkgs;
+      with pkgs.nodePackages_latest;
+      [
         # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
         (writeShellScriptBin "gsed" ''exec ${gnused}/bin/sed "$@"'')
 
