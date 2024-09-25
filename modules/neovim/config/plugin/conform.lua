@@ -16,8 +16,8 @@ require("conform").setup({
     zig = { "zigfmt" },
     ["_"] = { "trim_whitespace", "trim_newlines" },
   },
-  format_on_save = function(bufnr)
-    if not vim.g.autoformat and not vim.b[bufnr].autoformat then
+  format_on_save = function()
+    if not vim.g.autoformat or vim.b.autoformat == false then
       return
     end
     return { lsp_fallback = true, timeout_ms = 500 }
@@ -30,7 +30,9 @@ vim.keymap.set("n", "<leader>uF", function()
   vim.g.autoformat = not vim.g.autoformat
   vim.notify("Auto Format (Global): " .. (vim.g.autoformat and "enabled" or "disabled"))
 end, { desc = "Toggle Auto Format (Global)" })
-vim.keymap.set("n", "<leader>uf", function(bufnr)
-  vim.b[bufnr].autoformat = not vim.b[bufnr].autoformat
-  vim.notify("Auto Format (Buffer): " .. (vim.b[bufnr].autoformat and "enabled" or "disabled"))
+vim.keymap.set("n", "<leader>uf", function()
+  -- Toggle autoformat for the current buffer
+  -- Treat nil as true
+  vim.b.autoformat = not (vim.b.autoformat == nil or vim.b.autoformat)
+  vim.notify("Auto Format (Buffer): " .. (vim.b.autoformat and "enabled" or "disabled"))
 end, { desc = "Toggle Auto Format (Buffer)" })
