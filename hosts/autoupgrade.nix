@@ -1,4 +1,5 @@
-{ ... }: {
+{ ... }:
+{
   system.autoUpgrade = {
     enable = true;
     allowReboot = true;
@@ -8,6 +9,7 @@
       "--update-input"
       "nixpkgs"
       "-L" # print build logs
+      "--no-write-lock-file" # don't write to the lock file
     ];
   };
 }
