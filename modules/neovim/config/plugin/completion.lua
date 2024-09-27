@@ -39,11 +39,14 @@ local opts = {
       elseif suggestion.is_visible() and cmp.visible() then
         cmp.close()
       elseif suggestion.is_visible() then
+        -- Ignore TextChanged events to prevent triggering
+        -- completion again after accepting a suggestion
+        local origin = vim.o.eventignore
+        vim.o.eventignore = "TextChangedI,TextChangedP"
         suggestion.accept()
-        vim.schedule(function()
-          -- We need to schedule this to close the completion menu after accepting the suggestion
-          cmp.abort()
-        end)
+        vim.defer_fn(function()
+          vim.o.eventignore = origin
+        end, 10)
       else
         fallback()
       end
