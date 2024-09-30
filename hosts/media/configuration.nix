@@ -1,7 +1,12 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ config, pkgs, user, hostname, ... }:
+{
+  pkgs,
+  user,
+  hostname,
+  ...
+}:
 
 with pkgs.lib;
 
@@ -14,13 +19,15 @@ let
     user = "${user}";
     dataDir = "${dataDir}/${name}";
   };
-in {
+in
+{
   imports = [
-    ../nixos.nix
     ../../services
-    ./hardware-configuration.nix
-    ./disko-config.nix
     ../autoupgrade.nix
+    ../nixos.nix
+    ./containers.nix
+    ./disko-config.nix
+    ./hardware-configuration.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -55,13 +62,14 @@ in {
   networking.hostName = hostname;
 
   services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable =
-    true; # enable copy and paste between host and guest
+  services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
 
   # Enable OpenSSH X11 forwarding.
   services.openssh = {
     enable = true;
-    settings = { X11Forwarding = true; };
+    settings = {
+      X11Forwarding = true;
+    };
   };
 
   # enable vaapi on OS-level
@@ -89,7 +97,9 @@ in {
   services.radarr = mkService "radarr";
   services.bazarr = mkService "bazarr";
   services.prowlarr = mkService "prowlarr";
-  services.calibre-web = mkService "calibre-web" // { listen.ip = "0.0.0.0"; };
+  services.calibre-web = mkService "calibre-web" // {
+    listen.ip = "0.0.0.0";
+  };
   services.calibre-server = {
     enable = true;
     openFirewall = true;
@@ -107,37 +117,7 @@ in {
 
   # Virtualisation using Docker
   virtualisation.docker.enable = true;
-  virtualisation.docker.daemon.settings = { userland-proxy = false; };
-
-  # Searcharr
-  systemd.tmpfiles.settings."10-searcharr"."${dataDir}/searcharr".d = {
-    inherit user;
-    group = "wheel";
-    mode = "0700";
-  };
-  virtualisation.oci-containers = {
-    backend = "docker";
-    containers = {
-      searcharr = rec {
-        image = "toddrob/searcharr";
-        imageFile = pkgs.dockerTools.pullImage {
-          imageName = "${image}";
-          finalImageTag = "v3.2.2";
-          imageDigest =
-            "sha256:99290b20c772a9a346376d8725cf173171a9784f150d2dd734ef1707d101b899";
-          sha256 = "sha256-WultDmzquasFDitfTq/O6c1q5Ykxxrc9cMVfT9jw6c8=";
-          os = "linux";
-          arch = "amd64";
-        };
-        autoStart = true;
-        extraOptions = [ "--network=host" ];
-        environment = { TZ = "${config.time.timeZone}"; };
-        volumes = [
-          "${dataDir}/searcharr/data:/app/data"
-          "${dataDir}/searcharr/logs:/app/logs"
-          "${dataDir}/searcharr/settings.py:/app/settings.py"
-        ];
-      };
-    };
+  virtualisation.docker.daemon.settings = {
+    userland-proxy = false;
   };
 }
