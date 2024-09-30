@@ -61,7 +61,7 @@
       onedark-nvim
       plenary-nvim
       project-nvim
-      render-markdown
+      render-markdown-nvim
       telescope-fzf-native-nvim
       telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
       todo-comments-nvim
