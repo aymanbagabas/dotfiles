@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   user,
   ...
 }:
@@ -17,16 +16,8 @@ in
 
   virtualisation.oci-containers = {
     containers = {
-      searcharr = rec {
+      searcharr = {
         image = "toddrob/searcharr";
-        imageFile = pkgs.dockerTools.pullImage {
-          imageName = "${image}";
-          finalImageTag = "v3.2.2";
-          imageDigest = "sha256:99290b20c772a9a346376d8725cf173171a9784f150d2dd734ef1707d101b899";
-          sha256 = "sha256-WultDmzquasFDitfTq/O6c1q5Ykxxrc9cMVfT9jw6c8=";
-          os = "linux";
-          arch = "amd64";
-        };
         autoStart = true;
         extraOptions = [ "--network=host" ];
         environment = {
