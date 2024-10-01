@@ -38,6 +38,7 @@ in
       # Dev tools
       gum
       nodejs
+      terraform
       (pkgs.writeScriptBin "svu" ''
         #!/usr/bin/env bash
         root=$(git rev-parse --show-toplevel)
@@ -69,5 +70,9 @@ in
   home.sessionVariables = {
     # tz timezone list
     TZ_LIST = builtins.readFile "${dotfiles}/vars/tz_list";
+  };
+
+  home.shellAliases = {
+    tf = "terraform";
   };
 }
