@@ -1,16 +1,24 @@
 { config, pkgs, ... }:
 
 let
-  inherit (pkgs.lib)
-    optionalAttrs optionalString optional concatStringsSep concatMapStrings
-    getExe;
   homedir = "${config.home.homeDirectory}/.gnupg";
   isDarwin = pkgs.stdenv.isDarwin;
   defaultKey = "593D6EEE7871708E329619322EBA00DFFCC63351";
 
-in {
+in
+{
 
-  imports = [ ./gpg-auto-import.nix ];
+  disabledModules = [
+    # We're using our own gpg-agent module until the upstream one is fixed.
+    # See https://github.com/nix-community/home-manager/issues/3864#issuecomment-2377072254
+    # See https://github.com/nix-community/home-manager/pull/5901
+    "services/gpg-agent.nix"
+  ];
+
+  imports = [
+    ./gpg-agent.nix
+    ./gpg-auto-import.nix
+  ];
 
   programs.zsh.shellAliases = {
     gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
@@ -20,7 +28,9 @@ in {
   programs.gpg = {
     enable = true;
     homedir = homedir;
-    autoImport = { keys = [ defaultKey ]; };
+    autoImport = {
+      keys = [ defaultKey ];
+    };
     settings = {
       default-key = defaultKey;
       default-recipient-self = true;
@@ -35,11 +45,11 @@ in {
 
   services.gpg-agent = {
     enable = true;
+    verbose = true;
 
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-    pinentryPackage = with pkgs;
-      if isDarwin then pinentry_mac else pinentry-tty;
+    pinentryPackage = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
     defaultCacheTtlSsh = 31536000;
