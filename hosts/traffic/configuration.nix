@@ -67,6 +67,7 @@ in {
       "prowlarr.${altDomain}" = proxy "http://media.local:9696/";
       "readarr.${altDomain}" = proxy "http://media.local:8787/";
       "books.${altDomain}" = proxy "http://media.local:8083/";
+      "convert.${altDomain}" = proxy "http://media.local:3000/";
       "nas.${altDomain}" = base {
         "/" = {
           proxyPass = "https://nas.local:5001/";
