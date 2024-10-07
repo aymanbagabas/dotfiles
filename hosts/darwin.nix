@@ -1,5 +1,10 @@
 # This is a nix-darwin configuration module.
-{ user, config, ... }:
+{
+  user,
+  hostname,
+  config,
+  ...
+}:
 
 {
   imports = [ ./shared.nix ];
@@ -73,15 +78,52 @@
   # Karabiner Elements
   #services.karabiner-elements.enable = true; # use homebrew instead
 
+  networking = {
+    hostName = hostname;
+    localHostName = hostname;
+  };
+
   system = {
     defaults = {
       dock = {
         autohide = true;
         autohide-delay = 0.0;
         orientation = "bottom";
+        persistent-apps = [
+          "/System/Cryptexes/App/System/Applications/Safari.app"
+          "/System/Applications/Launchpad.app"
+          "/System/Applications/Messages.app"
+          "/System/Applications/Mail.app"
+          "/System/Applications/Calendar.app"
+          "/System/Applications/Contacts.app"
+          "/System/Applications/Reminders.app"
+          "/System/Applications/Notes.app"
+          "/Applications/Slack.app"
+          "/Applications/Discord.app"
+          "/Applications/Ghostty.app"
+          "/System/Applications/App Store.app"
+          "/System/Applications/System Settings.app"
+          "/Applications/Spotify.app"
+        ];
       };
       trackpad = {
         Clicking = true;
+      };
+      finder = {
+        FXPreferredViewStyle = "Nlsv";
+        _FXShowPosixPathInTitle = true;
+        FXEnableExtensionChangeWarning = false;
+        AppleShowAllFiles = true;
+        ShowStatusBar = true;
+        ShowPathbar = true;
+      };
+      NSGlobalDomain = {
+        NSAutomaticCapitalizationEnabled = false;
+        NSAutomaticDashSubstitutionEnabled = false;
+        NSAutomaticPeriodSubstitutionEnabled = false;
+        NSAutomaticQuoteSubstitutionEnabled = false;
+        NSAutomaticSpellingCorrectionEnabled = false;
+        "com.apple.mouse.tapBehavior" = 1;
       };
       CustomUserPreferences = {
         "com.googlecode.iterm2.plist" = {
@@ -91,6 +133,26 @@
           PrefsCustomFolder = "${config.users.users.${user}.home}/.dotfiles/users/${user}";
           # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
+        };
+        "com.apple.Safari" = {
+          IncludeInternalDebugMenu = true;
+          IncludeDevelopMenu = true;
+          WebKitDeveloperExtrasEnabledPreferenceKey = true;
+          ShowFullURLInSmartSearchField = true;
+          AutoOpenSafeDownloads = false;
+          HomePage = "";
+          AutoFillCreditCardData = false;
+          AutoFillFromAddressBook = false;
+          AutoFillMiscellaneousForms = false;
+          AutoFillPasswords = false;
+          "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
+          AlwaysRestoreSessionAtLaunch = 1;
+          ExcludePrivateWindowWhenRestoringSessionAtLaunch = 1;
+          ShowBackgroundImageInFavorites = 0;
+          ShowFrequentlyVisitedSites = 1;
+          ShowHighlightsInFavorites = 1;
+          ShowPrivacyReportInFavorites = 1;
+          ShowRecentlyClosedTabsPreferenceKey = 1;
         };
       };
     };
