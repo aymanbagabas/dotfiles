@@ -2,15 +2,31 @@
 
 let
   inherit (pkgs.lib)
-    optionalAttrs optionalString optional concatStringsSep concatMapStrings
-    getExe;
+    mkIf
+    optionalString
+    ;
   homedir = "${config.home.homeDirectory}/.gnupg";
   isDarwin = pkgs.stdenv.isDarwin;
   defaultKey = "593D6EEE7871708E329619322EBA00DFFCC63351";
 
-in {
+in
+{
 
   imports = [ ./gpg-auto-import.nix ];
+
+  programs.zsh.initExtra = mkIf (isDarwin && config.services.gpg-agent.enableSshSupport) ''
+        # use gpg-agent for ssh
+        # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Examples.html#Agent-Examples
+    	unset SSH_AGENT_PID
+    	if [ "''${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+          SSH_AUTH_SOCK="$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-ssh-socket)"
+          export SSH_AUTH_SOCK
+        fi
+        GPG_TTY="$(tty)"
+        export GPG_TTY
+    	${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
+        ${pkgs.gnupg}/bin/gpg-connect-agent updatestartuptty /bye > /dev/null
+  '';
 
   programs.zsh.shellAliases = {
     gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
@@ -20,7 +36,9 @@ in {
   programs.gpg = {
     enable = true;
     homedir = homedir;
-    autoImport = { keys = [ defaultKey ]; };
+    autoImport = {
+      keys = [ defaultKey ];
+    };
     settings = {
       default-key = defaultKey;
       default-recipient-self = true;
@@ -38,8 +56,7 @@ in {
 
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-    pinentryPackage = with pkgs;
-      if isDarwin then pinentry_mac else pinentry-tty;
+    pinentryPackage = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
     defaultCacheTtlSsh = 31536000;
