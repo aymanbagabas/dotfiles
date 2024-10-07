@@ -1,4 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,108 +19,147 @@ let
     ${gpgPkg}/bin/gpg-connect-agent updatestartuptty /bye > /dev/null
   '';
 
-  gpgInitStr = ''
-    GPG_TTY="$(tty)"
-    export GPG_TTY
-  '' + optionalString cfg.enableSshSupport gpgSshSupportStr;
+  gpgInitStr =
+    ''
+      GPG_TTY="$(tty)"
+      export GPG_TTY
+    ''
+    + optionalString cfg.enableSshSupport gpgSshSupportStr;
 
-  gpgFishInitStr = ''
-    set -gx GPG_TTY (tty)
-  '' + optionalString cfg.enableSshSupport gpgSshSupportStr;
+  gpgFishInitStr =
+    ''
+      set -gx GPG_TTY (tty)
+    ''
+    + optionalString cfg.enableSshSupport gpgSshSupportStr;
 
-  gpgNushellInitStr = ''
-    $env.GPG_TTY = (tty)
-  '' + optionalString cfg.enableSshSupport ''
-    ${gpgPkg}/bin/gpg-connect-agent updatestartuptty /bye | ignore
+  gpgNushellInitStr =
+    ''
+      $env.GPG_TTY = (tty)
+    ''
+    + optionalString cfg.enableSshSupport ''
+      ${gpgPkg}/bin/gpg-connect-agent updatestartuptty /bye | ignore
 
-    $env.SSH_AUTH_SOCK = ($env.SSH_AUTH_SOCK? | default (${gpgPkg}/bin/gpgconf --list-dirs agent-ssh-socket))
-  '';
+      $env.SSH_AUTH_SOCK = ($env.SSH_AUTH_SOCK? | default (${gpgPkg}/bin/gpgconf --list-dirs agent-ssh-socket))
+    '';
 
   # mimic `gpgconf` output for use in the service definitions.
   # we cannot use `gpgconf` directly because it heavily depends on system
   # state, but we need the values at build time. original:
   # https://github.com/gpg/gnupg/blob/c6702d77d936b3e9d91b34d8fdee9599ab94ee1b/common/homedir.c#L672-L681
-  gpgconf = dir:
+  gpgconf =
+    dir:
     let
-      hash =
-        substring 0 24 (hexStringToBase32 (builtins.hashString "sha1" homedir));
-      subdir = if homedir == options.programs.gpg.homedir.default then
-        "${dir}"
-      else
-        "d.${hash}/${dir}";
-    in if pkgs.stdenv.isDarwin then
-    # macOS GnuPG sockets always use the canonical path.
-    # See #3864
+      hash = substring 0 24 (hexStringToBase32 (builtins.hashString "sha1" homedir));
+      subdir = if homedir == options.programs.gpg.homedir.default then "${dir}" else "d.${hash}/${dir}";
+    in
+    if pkgs.stdenv.isDarwin then
+      # macOS GnuPG sockets always use the canonical path.
+      # See #3864
       "${homedir}/${subdir}"
     else
       "%t/gnupg/${subdir}";
 
   # Act like `xxd -r -p | base32` but with z-base-32 alphabet and no trailing padding.
   # Written in Nix for purity.
-  hexStringToBase32 = let
-    mod = a: b: a - a / b * b;
-    pow2 = elemAt [ 1 2 4 8 16 32 64 128 256 ];
+  hexStringToBase32 =
+    let
+      mod = a: b: a - a / b * b;
+      pow2 = elemAt [
+        1
+        2
+        4
+        8
+        16
+        32
+        64
+        128
+        256
+      ];
 
-    base32Alphabet = stringToCharacters "ybndrfg8ejkmcpqxot1uwisza345h769";
-    hexToIntTable = listToAttrs (genList (x: {
-      name = toLower (toHexString x);
-      value = x;
-    }) 16);
+      base32Alphabet = stringToCharacters "ybndrfg8ejkmcpqxot1uwisza345h769";
+      hexToIntTable = listToAttrs (
+        genList (x: {
+          name = toLower (toHexString x);
+          value = x;
+        }) 16
+      );
 
-    initState = {
-      ret = "";
-      buf = 0;
-      bufBits = 0;
-    };
-    go = { ret, buf, bufBits }:
-      hex:
-      let
-        buf' = buf * pow2 4 + hexToIntTable.${hex};
-        bufBits' = bufBits + 4;
-        extraBits = bufBits' - 5;
-      in if bufBits >= 5 then {
-        ret = ret + elemAt base32Alphabet (buf' / pow2 extraBits);
-        buf = mod buf' (pow2 extraBits);
-        bufBits = bufBits' - 5;
-      } else {
-        ret = ret;
-        buf = buf';
-        bufBits = bufBits';
+      initState = {
+        ret = "";
+        buf = 0;
+        bufBits = 0;
       };
-  in hexString: (foldl' go initState (stringToCharacters hexString)).ret;
+      go =
+        {
+          ret,
+          buf,
+          bufBits,
+        }:
+        hex:
+        let
+          buf' = buf * pow2 4 + hexToIntTable.${hex};
+          bufBits' = bufBits + 4;
+          extraBits = bufBits' - 5;
+        in
+        if bufBits >= 5 then
+          {
+            ret = ret + elemAt base32Alphabet (buf' / pow2 extraBits);
+            buf = mod buf' (pow2 extraBits);
+            bufBits = bufBits' - 5;
+          }
+        else
+          {
+            ret = ret;
+            buf = buf';
+            bufBits = bufBits';
+          };
+    in
+    hexString: (foldl' go initState (stringToCharacters hexString)).ret;
 
   # Systemd socket unit generator.
-  mkSocket = { desc, docs, stream, fdName }: {
-    Unit = {
-      Description = desc;
-      Documentation = docs;
-    };
+  mkSocket =
+    {
+      desc,
+      docs,
+      stream,
+      fdName,
+    }:
+    {
+      Unit = {
+        Description = desc;
+        Documentation = docs;
+      };
 
-    Socket = {
-      ListenStream = gpgconf "${stream}";
-      FileDescriptorName = "${fdName}";
-      Service = "gpg-agent.service";
-      SocketMode = "0600";
-      DirectoryMode = "0700";
-    };
+      Socket = {
+        ListenStream = gpgconf "${stream}";
+        FileDescriptorName = "${fdName}";
+        Service = "gpg-agent.service";
+        SocketMode = "0600";
+        DirectoryMode = "0700";
+      };
 
-    Install = { WantedBy = [ "sockets.target" ]; };
-  };
+      Install = {
+        WantedBy = [ "sockets.target" ];
+      };
+    };
 
   # Launchd agent socket generator.
   mkAgentSock = name: {
     SockType = "stream";
     SockPathName = gpgconf name;
-    SockPathMode =
-      384; # Property lists don't support octal literals (0600 = 384).
+    SockPathMode = 384; # Property lists don't support octal literals (0600 = 384).
   };
 
-in {
+in
+{
   meta.maintainers = [ maintainers.rycee ];
 
   imports = [
-    (mkRemovedOptionModule [ "services" "gpg-agent" "pinentryFlavor" ]
-      "Use services.gpg-agent.pinentryPackage instead")
+    (mkRemovedOptionModule [
+      "services"
+      "gpg-agent"
+      "pinentryFlavor"
+    ] "Use services.gpg-agent.pinentryPackage instead")
   ];
 
   options = {
@@ -266,22 +311,20 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
-      home.file."${homedir}/gpg-agent.conf".text = concatStringsSep "\n"
-        (optional (cfg.enableSshSupport) "enable-ssh-support"
-          ++ optional cfg.grabKeyboardAndMouse "grab"
-          ++ optional (!cfg.enableScDaemon) "disable-scdaemon"
-          ++ optional cfg.verbose "verbose"
-          ++ optional (cfg.defaultCacheTtl != null)
-          "default-cache-ttl ${toString cfg.defaultCacheTtl}"
-          ++ optional (cfg.defaultCacheTtlSsh != null)
-          "default-cache-ttl-ssh ${toString cfg.defaultCacheTtlSsh}"
-          ++ optional (cfg.maxCacheTtl != null)
-          "max-cache-ttl ${toString cfg.maxCacheTtl}"
-          ++ optional (cfg.maxCacheTtlSsh != null)
-          "max-cache-ttl-ssh ${toString cfg.maxCacheTtlSsh}"
-          ++ optional (cfg.pinentryPackage != null)
-          "pinentry-program ${lib.getExe cfg.pinentryPackage}"
-          ++ [ cfg.extraConfig ]);
+      home.file."${homedir}/gpg-agent.conf".text = concatStringsSep "\n" (
+        optional (cfg.enableSshSupport) "enable-ssh-support"
+        ++ optional cfg.grabKeyboardAndMouse "grab"
+        ++ optional (!cfg.enableScDaemon) "disable-scdaemon"
+        ++ optional cfg.verbose "verbose"
+        ++ optional (cfg.defaultCacheTtl != null) "default-cache-ttl ${toString cfg.defaultCacheTtl}"
+        ++ optional (
+          cfg.defaultCacheTtlSsh != null
+        ) "default-cache-ttl-ssh ${toString cfg.defaultCacheTtlSsh}"
+        ++ optional (cfg.maxCacheTtl != null) "max-cache-ttl ${toString cfg.maxCacheTtl}"
+        ++ optional (cfg.maxCacheTtlSsh != null) "max-cache-ttl-ssh ${toString cfg.maxCacheTtlSsh}"
+        ++ optional (cfg.pinentryPackage != null) "pinentry-program ${lib.getExe cfg.pinentryPackage}"
+        ++ [ cfg.extraConfig ]
+      );
 
       # Make sure we export GnuPG agent socket for SSH
       # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Examples.html#Agent-Examples
@@ -294,11 +337,9 @@ in {
 
       programs.bash.initExtra = mkIf cfg.enableBashIntegration gpgInitStr;
       programs.zsh.initExtra = mkIf cfg.enableZshIntegration gpgInitStr;
-      programs.fish.interactiveShellInit =
-        mkIf cfg.enableFishIntegration gpgFishInitStr;
+      programs.fish.interactiveShellInit = mkIf cfg.enableFishIntegration gpgFishInitStr;
 
-      programs.nushell.extraEnv =
-        mkIf cfg.enableNushellIntegration gpgNushellInitStr;
+      programs.nushell.extraEnv = mkIf cfg.enableNushellIntegration gpgNushellInitStr;
     }
 
     (mkIf (cfg.sshKeys != null) {
@@ -321,8 +362,7 @@ in {
           };
 
           Service = {
-            ExecStart = "${gpgPkg}/bin/gpg-agent --supervised"
-              + optionalString cfg.verbose " --verbose";
+            ExecStart = "${gpgPkg}/bin/gpg-agent --supervised" + optionalString cfg.verbose " --verbose";
             ExecReload = "${gpgPkg}/bin/gpgconf --reload gpg-agent";
             Environment = [ "GNUPGHOME=${homedir}" ];
           };
@@ -335,55 +375,67 @@ in {
           fdName = "std";
         };
 
-        systemd.user.sockets.gpg-agent-ssh = mkIf cfg.enableSshSupport
-          (mkSocket ({
-            desc = "GnuPG cryptographic agent (ssh-agent emulation)";
-            docs =
-              "man:gpg-agent(1) man:ssh-add(1) man:ssh-agent(1) man:ssh(1)";
-            stream = "S.gpg-agent.ssh";
-            fdName = "ssh";
-          }));
+        systemd.user.sockets.gpg-agent-ssh = mkIf cfg.enableSshSupport (mkSocket ({
+          desc = "GnuPG cryptographic agent (ssh-agent emulation)";
+          docs = "man:gpg-agent(1) man:ssh-add(1) man:ssh-agent(1) man:ssh(1)";
+          stream = "S.gpg-agent.ssh";
+          fdName = "ssh";
+        }));
 
-        systemd.user.sockets.gpg-agent-extra = mkIf cfg.enableExtraSocket
-          (mkSocket {
-            desc =
-              "GnuPG cryptographic agent and passphrase cache (restricted)";
-            docs = "man:gpg-agent(1) man:ssh(1)";
-            stream = "S.gpg-agent.extra";
-            fdName = "extra";
-          });
+        systemd.user.sockets.gpg-agent-extra = mkIf cfg.enableExtraSocket (mkSocket {
+          desc = "GnuPG cryptographic agent and passphrase cache (restricted)";
+          docs = "man:gpg-agent(1) man:ssh(1)";
+          stream = "S.gpg-agent.extra";
+          fdName = "extra";
+        });
       })
 
       (mkIf pkgs.stdenv.isDarwin {
         launchd.agents.gpg-agent = {
           enable = true;
           config = {
-            # macOS doesn't like the "--supervised" option
-            Program = toString (pkgs.writeScript "gpg-agent" ''
-              export GNUPGHOME=${homedir}
-              ${gpgPkg}/bin/gpgconf --kill gpg-agent
-              ${gpgPkg}/bin/gpgconf ${optionalString cfg.verbose "--verbose"} --launch gpg-agent
-            '');
-            KeepAlive = false;
+            EnvironmentVariables = {
+              GNUPGHOME = homedir;
+              GPG_TTY = "$(tty)";
+            };
+            ProgramArguments = [
+              "/bin/sh"
+              "-c"
+              "exec ${toString (
+                pkgs.writeShellScript "gpg-agent" ''
+                  export GNUPGHOME=${homedir}
+                  unset SSH_AGENT_PID
+                  if [ "''${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+                    export SSH_AUTH_SOCK="$(${gpgPkg}/bin/gpgconf --list-dirs agent-ssh-socket)"
+                  fi
+                  ${gpgPkg}/bin/gpg-agent ${optionalString cfg.verbose "--verbose"} \
+                  --homedir "${homedir}" --use-standard-socket --daemon
+                ''
+              )}"
+            ];
             RunAtLoad = cfg.enableSshSupport;
-            StandardOutPath = "${config.home.homeDirectory}/Library/Logs/GpgAgent/stdout";
-            StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/GpgAgent/stderr";
+            KeepAlive = false;
+            LowPriorityIO = false;
             Sockets = {
               Agent = mkAgentSock "S.gpg-agent";
               Ssh = mkIf cfg.enableSshSupport (mkAgentSock "S.gpg-agent.ssh");
-              Extra =
-                mkIf cfg.enableExtraSocket (mkAgentSock "S.gpg-agent.extra");
+              Extra = mkIf cfg.enableExtraSocket (mkAgentSock "S.gpg-agent.extra");
             };
           };
         };
 
-        # [re]load gpg-agent on home-manager activation
+        # ensure gpg-agent agent runs on home-manager activation
         home.activation = {
           gpg-agent =
-            let domain-target = "gui/$(id -u ${config.home.username})";
-            in ''
+            let
+              domain-target = "gui/$(id -u ${config.home.username})";
+            in
+            ''
+              export GPG_TTY=$(tty)
               /bin/launchctl bootout ${domain-target}/org.nix-community.home.gpg-agent || true
               /bin/launchctl bootstrap ${domain-target} ${config.home.homeDirectory}/Library/LaunchAgents/org.nix-community.home.gpg-agent.plist
+              # /bin/launchctl kickstart -k ${domain-target}/org.nix-community.home.gpg-agent
+              ${gpgPkg}/bin/gpgconf --kill gpg-agent
             '';
         };
       })
