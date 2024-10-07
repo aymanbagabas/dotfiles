@@ -130,7 +130,7 @@
           # Specify the preferences directory
           # Cannot be a nix store link
           # https://github.com/nix-community/home-manager/issues/2085
-          PrefsCustomFolder = "${config.users.users.${user}.home}/.dotfiles/users/${user}";
+          PrefsCustomFolder = "${config.users.users.${user}.home}/.dotfiles/modules";
           # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
         };
