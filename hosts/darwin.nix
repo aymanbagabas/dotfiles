@@ -90,8 +90,8 @@
         autohide-delay = 0.0;
         orientation = "bottom";
         persistent-apps = [
-          "/System/Cryptexes/App/System/Applications/Safari.app"
           "/System/Applications/Launchpad.app"
+          "/System/Cryptexes/App/System/Applications/Safari.app"
           "/System/Applications/Messages.app"
           "/System/Applications/Mail.app"
           "/System/Applications/Calendar.app"
