@@ -69,6 +69,11 @@
       "whatsapp"
       "xquartz"
     ];
+    masApps = {
+      "AdBlock Pro" = 1018301773;
+      "LanguageTool" = 1534275760;
+      "Vimari" = 1480933944;
+    };
   };
 
   # gpg-agent is handled by home-manager
