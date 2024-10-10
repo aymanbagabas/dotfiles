@@ -25,7 +25,7 @@ in
     ../../services
     ../autoupgrade.nix
     ../nixos.nix
-    ./containers.nix
+    ./containers
     ./disko-config.nix
     ./hardware-configuration.nix
   ];
