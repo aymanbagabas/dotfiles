@@ -22,13 +22,7 @@
   time.timeZone = "America/New_York";
 
   # Enable passwordless sudo
-  security.sudo.extraRules = [{
-    users = [ "${user}" ];
-    commands = [{
-      command = "ALL";
-      options = [ "NOPASSWD" ];
-    }];
-  }];
+  security.sudo.wheelNeedsPassword = false;
 
   # Enable basic programs.
   programs.neovim = {
