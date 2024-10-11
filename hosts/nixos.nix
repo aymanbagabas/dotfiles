@@ -1,4 +1,9 @@
-{ pkgs, user, hostname, ... }:
+{
+  pkgs,
+  user,
+  hostname,
+  ...
+}:
 
 {
   imports = [ ./shared.nix ];
@@ -37,6 +42,7 @@
     syntaxHighlighting.enable = true;
   };
 
+  programs.htop.enable = true;
   programs.less.enable = true;
 
   # Common services.
