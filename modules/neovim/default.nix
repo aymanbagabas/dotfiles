@@ -12,6 +12,7 @@
       # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
       # plugins from nixpkgs go in here.
       SchemaStore-nvim
+      avante-nvim
       barbecue-nvim
       bufferline-nvim
       clangd_extensions-nvim
