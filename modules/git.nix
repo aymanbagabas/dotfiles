@@ -1,7 +1,12 @@
 { config, pkgs, ... }:
 
 {
-  home.packages = with pkgs; [ gh git-crypt hub tig ];
+  home.packages = with pkgs; [
+    gh
+    git-crypt
+    hub
+    tig
+  ];
 
   # Alias git to hub
   programs.zsh.shellAliases.git = "hub";
@@ -52,8 +57,12 @@
       init.defaultBranch = "master";
       format.signOff = true;
       rerere.enabled = true;
-      github = { user = "aymanbagabas"; };
-      hub = { protocol = "ssh"; };
+      github = {
+        user = "aymanbagabas";
+      };
+      hub = {
+        protocol = "ssh";
+      };
       color = {
         ui = true;
         diff = {
@@ -79,7 +88,11 @@
           title-focus = "black blue bold";
         };
       };
-      url = { "git@github.com:" = { insteadOf = "https://github.com/"; }; };
+      url = {
+        "git@github.com:" = {
+          insteadOf = "https://github.com/";
+        };
+      };
     };
   };
 }
