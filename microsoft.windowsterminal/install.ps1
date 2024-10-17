@@ -5,4 +5,4 @@ if (!$DRY_RUN) {
 	New-Item -ItemType Directory -Force -Path "$dir" > $null
 }
 
-Link-File "$PSScriptRoot\settings.json" "$dir\settings.json"
+Copy-Item -Path "$PSScriptRoot\settings.json" -Destination "$dir\settings.json"

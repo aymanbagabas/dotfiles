@@ -28,7 +28,7 @@ if (Get-Command "go" -errorAction SilentlyContinue) {
 }
 
 # Exports
-$Env:KEYID = $(((Get-Content "$Env:APPDATA\gnupg\gpg.conf" | Select-String -Pattern "^default-key") -split " ")[1] | Invoke-Expression)
+$Env:KEYID = "593D6EEE7871708E329619322EBA00DFFCC63351"
 $Env:EDITOR = "nvim"
 
 # Aliases
