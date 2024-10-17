@@ -128,6 +128,8 @@
         NSAutomaticPeriodSubstitutionEnabled = false;
         NSAutomaticQuoteSubstitutionEnabled = false;
         NSAutomaticSpellingCorrectionEnabled = false;
+        AppleEnableMouseSwipeNavigateWithScrolls = true;
+        AppleEnableSwipeNavigateWithScrolls = true;
         "com.apple.mouse.tapBehavior" = 1;
       };
       CustomUserPreferences = {
