@@ -8,6 +8,11 @@
     tig
   ];
 
+  # Export GitHub token
+  home.sessionVariables = {
+    GITHUB_TOKEN = "$(${pkgs.gh}/bin/gh auth token)";
+  };
+
   # Alias git to hub
   programs.zsh.shellAliases.git = "hub";
 
