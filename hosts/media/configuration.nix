@@ -12,6 +12,7 @@ with pkgs.lib;
 
 let
   dataDir = "/mnt/data/services";
+  calibreLibrary = "/mnt/share/autopirate/Books";
   mkService = name: {
     enable = true;
     openFirewall = true;
@@ -99,13 +100,14 @@ in
   services.prowlarr = mkService "prowlarr";
   services.calibre-web = mkService "calibre-web" // {
     listen.ip = "0.0.0.0";
+    options.calibreLibrary = "${calibreLibrary}";
   };
   services.calibre-server = {
     enable = true;
     openFirewall = true;
     group = "wheel";
     user = "${user}";
-    libraries = [ "/mnt/share/autopirate/Books" ];
+    libraries = [ "${calibreLibrary}" ];
     extraFlags = [
       "--disable-use-bonjour" # Disable Bonjour because it interferes with Avahi
     ];
