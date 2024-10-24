@@ -6,7 +6,7 @@ let
 in {
   xdg.configFile = lib.mkIf (!isHeadless) {
     "ghostty/config".text = ''
-      term = "xterm-256color"
+      term = "xterm-ghostty"
       #term = "ghostty"
 
       font-family = "Inconsolata LGC"
