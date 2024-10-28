@@ -24,14 +24,14 @@
       cmp-nvim-lua # neovim lua API as completion source | https://github.com/hrsh7th/cmp-nvim-lua/
       cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
       cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
-      conform-nvim
+      conflict-marker-vim
       # copilot-cmp
+      conform-nvim
       copilot-lua
       dashboard-nvim
       dressing-nvim
       friendly-snippets
       fugitive-gitlab-vim
-      git-conflict-nvim
       gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
       hmts-nvim
       indent-blankline-nvim
