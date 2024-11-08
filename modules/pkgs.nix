@@ -15,7 +15,7 @@ in
     with pkgs;
     with pkgs.nodePackages_latest;
     [
-      _1password
+      _1password-cli
       age
       curl
       fd
