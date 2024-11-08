@@ -58,27 +58,40 @@
     # declare the cache useless. If you do, you will have
     # to compile LLVM, Zig and Ghostty itself on your machine,
     # which will take a very very long time.
-    ghostty = { url = "git+ssh://git@github.com/mitchellh/ghostty"; };
+    ghostty = {
+      url = "git+ssh://git@github.com/mitchellh/ghostty";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, darwin, nur, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      home-manager,
+      darwin,
+      nur,
+      ...
+    }:
     let
       overlays = [ nur.overlay ];
 
       mkSystem = import ./lib/mksystem.nix { inherit nixpkgs overlays inputs; };
 
       # Generate a list of systems based on their hostname
-      mkSystems = list:
-        builtins.listToAttrs (map (x: {
-          name = x.hostname;
-          value = mkSystem x;
-        }) list);
+      mkSystems =
+        list:
+        builtins.listToAttrs (
+          map (x: {
+            name = x.hostname;
+            value = mkSystem x;
+          }) list
+        );
 
       forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.platforms.unix;
-      nixpkgsFor =
-        forAllSystems (system: import nixpkgs { inherit system overlays; });
+      nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system overlays; });
 
-    in {
+    in
+    {
       nixosConfigurations = mkSystems [
         {
           hostname = "media";
@@ -108,9 +121,12 @@
         }
       ];
 
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgsFor.${system};
-        in {
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgsFor.${system};
+        in
+        {
           default = pkgs.mkShellNoCC {
             shellHook = ''
               # Use GitHub access tokens to avoid rate limiting
@@ -123,21 +139,21 @@
               '')
               (writeScriptBin "dot-update" ''
                 nix flake update
-                dot-apply
+                dot-apply "$@"
               '')
               (writeScriptBin "dot-sync" ''
                 dot-update
                 nix-collect-garbage -d
-                dot-apply
+                dot-apply "$@"
               '')
               (writeScriptBin "dot-apply" ''
                 case "$(uname -s)" in
                   Linux)
-                    sudo nixos-rebuild switch --flake .#$HOST
+                    sudo nixos-rebuild switch --flake .#$HOST "$@"
                     ;;
                   Darwin)
                     HOST=$(hostname | cut -f1 -d'.')
-                    nix run nix-darwin -- switch --flake .#$HOST
+                    nix run nix-darwin -- switch --flake .#$HOST "$@"
                     ;;
                   *)
                     echo "Unsupported OS"
@@ -147,6 +163,7 @@
               '')
             ];
           };
-        });
+        }
+      );
     };
 }
