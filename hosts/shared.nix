@@ -1,4 +1,9 @@
-{ pkgs, user, isDarwin, ... }:
+{
+  pkgs,
+  user,
+  isDarwin,
+  ...
+}:
 
 {
   # The user should already exist, but we need to set this up so Nix knows
@@ -19,8 +24,10 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    optimise = {
+      automatic = true;
+    };
     settings = {
-      auto-optimise-store = true;
       substituters = [
         "https://cache.nixos.org"
         "https://aymanbagabas.cachix.org"
@@ -31,7 +38,10 @@
         "aymanbagabas.cachix.org-1:4juS6J97CtV+S4TKmcNXp2hxVbaWFvsDrn/vl/fM2Gg="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
-      trusted-users = [ "root" "${user}" ];
+      trusted-users = [
+        "root"
+        "${user}"
+      ];
     };
     gc = {
       automatic = true;
@@ -40,10 +50,15 @@
   };
 
   # Allow unfree packages
-  nixpkgs = { config = import ../modules/nixpkgs-config.nix; };
+  nixpkgs = {
+    config = import ../modules/nixpkgs-config.nix;
+  };
 
   environment.pathsToLink = [ "/share/zsh" ];
-  environment.shells = with pkgs; [ bashInteractive zsh ];
+  environment.shells = with pkgs; [
+    bashInteractive
+    zsh
+  ];
   environment.systemPackages = with pkgs; [
     cachix
     coreutils
