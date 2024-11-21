@@ -14,19 +14,19 @@ in
 
   imports = [ ./gpg-auto-import.nix ];
 
-  programs.zsh.initExtra = mkIf (isDarwin && config.services.gpg-agent.enableSshSupport) ''
-        # use gpg-agent for ssh
-        # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Examples.html#Agent-Examples
-    	unset SSH_AGENT_PID
-    	if [ "''${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-          SSH_AUTH_SOCK="$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-ssh-socket)"
-          export SSH_AUTH_SOCK
-        fi
-        GPG_TTY="$(tty)"
-        export GPG_TTY
-    	${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
-        ${pkgs.gnupg}/bin/gpg-connect-agent updatestartuptty /bye > /dev/null
-  '';
+  # programs.zsh.initExtra = mkIf (isDarwin && config.services.gpg-agent.enableSshSupport) ''
+  #       # use gpg-agent for ssh
+  #       # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Examples.html#Agent-Examples
+  #   	unset SSH_AGENT_PID
+  #   	if [ "''${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  #         SSH_AUTH_SOCK="$(${pkgs.gnupg}/bin/gpgconf --list-dirs agent-ssh-socket)"
+  #         export SSH_AUTH_SOCK
+  #       fi
+  #       GPG_TTY="$(tty)"
+  #       export GPG_TTY
+  #   	${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
+  #       ${pkgs.gnupg}/bin/gpg-connect-agent updatestartuptty /bye > /dev/null
+  # '';
 
   programs.zsh.shellAliases = {
     gpg-reload-agent = "gpg-connect-agent reloadagent /bye";
