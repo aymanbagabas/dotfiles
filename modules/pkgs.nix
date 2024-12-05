@@ -33,7 +33,7 @@ in
       # Fonts
       inconsolata-lgc
       jetbrains-mono
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      nerd-fonts.symbols-only
 
       # Dev tools
       gum
