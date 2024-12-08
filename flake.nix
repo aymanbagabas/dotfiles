@@ -73,7 +73,7 @@
       ...
     }:
     let
-      overlays = [ nur.overlay ];
+      overlays = [ nur.overlays.default ];
 
       mkSystem = import ./lib/mksystem.nix { inherit nixpkgs overlays inputs; };
 
