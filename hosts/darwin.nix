@@ -20,12 +20,29 @@
     Minute = 0;
   }; # 0th day of every week
 
-  # We install Nix using a separate installer so we don't want nix-darwin
-  # to manage it for us. This tells nix-darwin to just use whatever is running.
+  # nix-darwin manages the nix-daemon for us. We don't need to start it
+  # manually. This is the recommended way to manage the daemon on darwin.
+  # Although it interferes with sops it seems like and we end up having to
+  # start the launchd service manually :/
+  # FIXME: This is super annoying. We probably want to have a custom activation
+  # script that starts the daemon and then starts sops.
   services.nix-daemon = {
     enable = true;
     enableSocketListener = true;
   };
+
+  # We install Nix using a separate installer so we don't want nix-darwin
+  # to manage it for us. This tells nix-darwin to just use whatever is running.
+  # nix.useDaemon = true;
+
+  # Enure that the nix-daemon is running on shell init. See the note above.
+  # programs.zsh.shellInit = ''
+  #   # Nix
+  #   if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  #     . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+  #   fi
+  #   # End Nix
+  # '';
 
   # zsh is the default shell on Mac and we want to make sure that we're
   # configuring the rc correctly with nix-darwin paths.
