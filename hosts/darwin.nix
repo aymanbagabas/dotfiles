@@ -48,16 +48,7 @@
   # configuring the rc correctly with nix-darwin paths.
   programs.zsh.enable = true;
 
-  # We don't need this workaround anymore since we're using nix-darwin socket
-  # listener to manage the daemon.
-  # programs.zsh.shellInit = ''
-  #   # Nix
-  #   if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  #     . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-  #   fi
-  #   # End Nix
-  # '';
-
+  # Homebrew configurations.
   homebrew = {
     enable = true;
     casks = [
