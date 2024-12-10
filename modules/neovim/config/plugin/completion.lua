@@ -47,6 +47,10 @@ local opts = {
         vim.defer_fn(function()
           vim.o.eventignore = origin
         end, 10)
+        -- vim.schedule(function()
+        --   -- We need to schedule this to close the completion menu after accepting the suggestion
+        --   cmp.abort()
+        -- end)
       else
         fallback()
       end
