@@ -37,6 +37,7 @@ in
 
       # Dev tools
       gum
+      mods
       nodejs
       terraform
       (pkgs.writeScriptBin "svu" ''
