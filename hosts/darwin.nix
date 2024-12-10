@@ -76,6 +76,7 @@
       "multitouch"
       "raycast"
       "rectangle"
+      "rio"
       "slack"
       "spotify"
       "tailscale"
