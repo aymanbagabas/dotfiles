@@ -6,6 +6,7 @@
     secrets = {
       smb-secrets = {
         sopsFile = "${dotfiles}/secrets/smb-secrets";
+        format = "binary";
         owner = "${user}";
         group = "wheel";
       };
