@@ -9,6 +9,22 @@
   ...
 }:
 
+let
+  fsOptions = [
+    # Prevent hanging on network split
+    "x-systemd.automount"
+    "noauto"
+    "x-systemd.idle-timeout=60"
+    "x-systemd.device-timeout=5s"
+    "x-systemd.mount-timeout=5s"
+    # Mount as user
+    "uid=1000" # user
+    "gid=1" # wheel
+    # Credentials need to be stored in a file
+    "credentials=${config.sops.secrets.smb-secrets.path}"
+    "rw"
+  ];
+in
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
@@ -38,38 +54,13 @@
   fileSystems."/mnt/share/backups" = {
     device = "//nas/backups";
     fsType = "cifs";
-    options = [
-      # Prevent hanging on network split
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=60"
-      "x-systemd.device-timeout=5s"
-      "x-systemd.mount-timeout=5s"
-      # Mount as user
-      "uid=1000" # user
-      "gid=1" # wheel
-      # Credentials need to be stored in a file
-      "credentials=${config.sops.secrets.smb-secrets.path}"
-      "rw"
-    ];
+    options = fsOptions;
   };
 
   fileSystems."/mnt/share/autopirate" = {
     device = "//nas/autopirate";
     fsType = "cifs";
-    options = [
-      # Prevent hanging on network split
-      "x-systemd.automount"
-      "noauto"
-      "x-systemd.idle-timeout=60"
-      "x-systemd.device-timeout=5s"
-      "x-systemd.mount-timeout=5s"
-      # Mount as user
-      "uid=1000" # user
-      "gid=1" # wheel
-      # Credentials need to be stored in a file
-      "credentials=${config.sops.secrets.smb-secrets.path}"
-      "rw"
+    options = fsOptions ++ [
       "nobrl" # Disable byte-range locks (required for Servarr)
     ];
   };
