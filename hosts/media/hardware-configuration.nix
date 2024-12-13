@@ -10,7 +10,10 @@
 }:
 
 {
-  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ./secrets.nix
+  ];
 
   boot.initrd.availableKernelModules = [
     "uhci_hcd"
