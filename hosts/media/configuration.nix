@@ -29,6 +29,7 @@ in
     ./containers
     ./disko-config.nix
     ./hardware-configuration.nix
+    ./secrets.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
