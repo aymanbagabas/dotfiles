@@ -103,11 +103,11 @@
         "zig": "zig"
       },
       "locked": {
-        "lastModified": 1734100236,
-        "narHash": "sha256-d1qhpfMJgFsOtBjvTy3CnbXSguG1Tojd34KvEwixYvI=",
+        "lastModified": 1734225091,
+        "narHash": "sha256-JJ8CXJMshD606vL8YGQ1k0UTZDGPS4kcgQhQ1FRQ04A=",
         "ref": "refs/heads/main",
-        "rev": "0d0d06e50a1a5c5074fa17f0f7c7852c7db5d6b0",
-        "revCount": 8259,
+        "rev": "de3674ff39dc22869737c5f80527e0199dd2b5c6",
+        "revCount": 8269,
         "type": "git",
         "url": "ssh://git@github.com/mitchellh/ghostty"
       },
@@ -207,11 +207,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1734103902,
-        "narHash": "sha256-mPndhPKkXqPOebkvG2Xjvk8WdqxcoQSCRdZU3n8UAdk=",
+        "lastModified": 1734227063,
+        "narHash": "sha256-Iwd1zqsFqyU5CvRn+nQB//MD/nZ7HsUHLJ2gch3aP/A=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "05648cc5d6081e934752de4a35632aedfdeeb37e",
+        "rev": "6ceca7c98b9df63423b8f381aaa6f6c062fb61c6",
         "type": "github"
       },
       "original": {
@@ -273,11 +273,11 @@
     "tinted-fzf": {
       "flake": false,
       "locked": {
-        "lastModified": 1731841451,
-        "narHash": "sha256-Hoj5ib7cOwuuRmOHJd1SyCeyBoMrNTsrqrWgN955zJM=",
+        "lastModified": 1734225876,
+        "narHash": "sha256-yEMwr2+rMev9YHtrY7qduNwX4gBIKSyX/HClqndu594=",
         "owner": "tinted-theming",
         "repo": "tinted-fzf",
-        "rev": "7646a7e697767271d3dd059bbd9c267163d030a3",
+        "rev": "6feaca09573a2af3cd2c4bd5b3270e4f65719fbc",
         "type": "github"
       },
       "original": {
@@ -289,11 +289,11 @@
     "tinted-shell": {
       "flake": false,
       "locked": {
-        "lastModified": 1729591404,
-        "narHash": "sha256-eyZKShUpeIAoxhVsHAm2eqYvMp5e15NtbVrjMWFqtF8=",
+        "lastModified": 1734227268,
+        "narHash": "sha256-yRFoqWanATVuxtNpw+cgORWY5MALnt131/yeCPPEk0I=",
         "owner": "tinted-theming",
         "repo": "tinted-shell",
-        "rev": "60c80f53cd3d97c25eb0580e40f0b9de84dac55f",
+        "rev": "839f96d22a5b3a702444b2b19513b2e751ff748a",
         "type": "github"
       },
       "original": {
