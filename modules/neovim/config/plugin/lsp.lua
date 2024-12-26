@@ -338,3 +338,5 @@ lspconfig.clangd.setup({
     clangdFileStatus = true,
   },
 })
+
+lspconfig.zls.setup({})

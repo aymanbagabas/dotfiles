@@ -125,6 +125,7 @@
         typescript-language-server
         vscode-langservers-extracted
         yaml-language-server
+        zls
       ];
 
     extraPython3Packages = ps: [ ps.python-lsp-server ];
