@@ -14,18 +14,11 @@
       SchemaStore-nvim
       avante-nvim
       barbecue-nvim
+      blink-cmp
+      blink-emoji-nvim
       bufferline-nvim
       clangd_extensions-nvim
-      cmp-buffer # current buffer as completion source | https://github.com/hrsh7th/cmp-buffer/
-      cmp-cmdline # cmp command line suggestions
-      cmp-cmdline-history # cmp command line history suggestions
-      cmp-emoji
-      cmp-nvim-lsp # LSP as completion source | https://github.com/hrsh7th/cmp-nvim-lsp/
-      cmp-nvim-lua # neovim lua API as completion source | https://github.com/hrsh7th/cmp-nvim-lua/
-      cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
-      cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
       conflict-marker-vim
-      # copilot-cmp
       conform-nvim
       copilot-lua
       dashboard-nvim
@@ -44,7 +37,6 @@
       neodev-nvim
       noice-nvim
       nui-nvim
-      nvim-cmp # https://github.com/hrsh7th/nvim-cmp
       nvim-colorizer-lua
       nvim-lspconfig
       nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic

@@ -16,13 +16,14 @@ local opts = {
     hide_during_completion = false,
     debounce = 75,
     keymap = {
-      -- Use nvim-cmp
-      accept = false, -- "<M-l>",
-      accept_word = false,
-      accept_line = false,
-      next = false, -- "<M-]>",
-      prev = false, -- "<M-[>",
-      dismiss = false, -- "<C-]>",
+      -- We integrate with blink.cmp to hide the menu
+      -- when suggestions are visible.
+      accept = "<Tab>",
+      accept_word = "<C-l>",
+      accept_line = "<C-S-l>",
+      next = "<C-k>",
+      prev = "<C-j>",
+      dismiss = "<C-e>",
     },
   },
   filetypes = {
@@ -42,3 +43,32 @@ local opts = {
 }
 
 require("copilot").setup(opts)
+
+-- Disable default keymaps
+-- vim.g.copilot_no_maps = true
+--
+-- vim.keymap.set("i", "<Tab>", 'copilot#Accept("")', {
+--   desc = "Accept Copilot suggestion",
+--   expr = true,
+--   replace_keycodes = false,
+-- })
+--
+-- vim.keymap.set("i", "<C-l>", "<Plug>(copilot-accept-word)", {
+--   desc = "Accept Copilot word",
+-- })
+--
+-- vim.keymap.set("i", "<C-S-l>", "<Plug>(copilot-accept-word)", {
+--   desc = "Accept Copilot line",
+-- })
+--
+-- vim.keymap.set("i", "<C-k>", "<Plug>(copilot-next)", {
+--   desc = "Show next Copilot suggestion",
+-- })
+--
+-- vim.keymap.set("i", "<C-j>", "<Plug>(copilot-previous)", {
+--   desc = "Show prev Copilot suggestion",
+-- })
+--
+-- vim.keymap.set("i", "<C-e>", "<Plug>(copilot-dismiss)", {
+--   desc = "Dismiss Copilot",
+-- })

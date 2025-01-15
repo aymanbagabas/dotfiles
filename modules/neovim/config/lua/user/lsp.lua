@@ -107,13 +107,7 @@ end
 ---Extends the object with capabilities provided by plugins.
 ---@return lsp.ClientCapabilities
 function M.make_client_capabilities()
-  local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-  local capabilities = vim.tbl_deep_extend(
-    "force",
-    {},
-    vim.lsp.protocol.make_client_capabilities(),
-    has_cmp and cmp_nvim_lsp.default_capabilities() or {}
-  )
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
 
   -- enable lsp file watch support
   capabilities = vim.tbl_extend("force", capabilities, {
@@ -124,7 +118,7 @@ function M.make_client_capabilities()
       },
     },
   })
-  return capabilities
+  return require("blink.cmp").get_lsp_capabilities(capabilities)
 end
 
 --- Set keymap
