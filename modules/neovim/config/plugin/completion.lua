@@ -26,7 +26,7 @@ require("blink.cmp").setup({
     nerd_font_variant = "mono",
     kind_icons = require("icons").kinds,
   },
-  signature = { enabled = true },
+  signature = { enabled = false },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "emoji" },
     cmdline = {},
