@@ -36,6 +36,8 @@ in
       nerd-fonts.symbols-only
 
       # Dev tools
+      awscli2
+      graphviz
       gum
       mods
       nodejs
