@@ -65,6 +65,7 @@
       "kitty"
       "microsoft-remote-desktop"
       "multitouch"
+      "openlens"
       "raycast"
       "rectangle"
       "rio"
