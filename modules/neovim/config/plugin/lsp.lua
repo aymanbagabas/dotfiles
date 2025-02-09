@@ -115,6 +115,15 @@ lspconfig.ltex.setup({
   capabilities = capabilities,
   filetypes = { "markdown", "text", "pandoc" },
   flags = { debounce_text_changes = 300 },
+  settings = {
+    ltex = {
+      enabled = true,
+      language = "en-US",
+      additionalRules = {
+        motherTongue = "ar",
+      },
+    },
+  },
 })
 
 lspconfig.rust_analyzer.setup({
