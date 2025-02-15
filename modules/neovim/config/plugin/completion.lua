@@ -29,16 +29,7 @@ require("blink.cmp").setup({
   signature = { enabled = false },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "emoji" },
-    cmdline = function()
-      local type = vim.fn.getcmdtype()
-      if type == "/" or type == "?" then
-        return { "buffer" }
-      end
-      if type == ":" then
-        return { "cmdline" }
-      end
-      return {}
-    end,
+    cmdline = {},
     providers = {
       lsp = {
         min_keyword_length = function(ctx)
