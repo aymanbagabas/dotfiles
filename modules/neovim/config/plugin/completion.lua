@@ -29,7 +29,16 @@ require("blink.cmp").setup({
   signature = { enabled = false },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "emoji" },
-    cmdline = {},
+    cmdline = function()
+      local type = vim.fn.getcmdtype()
+      if type == "/" or type == "?" then
+        return { "buffer" }
+      end
+      if type == ":" then
+        return { "cmdline" }
+      end
+      return {}
+    end,
     providers = {
       lsp = {
         min_keyword_length = function(ctx)
@@ -59,6 +68,16 @@ require("blink.cmp").setup({
   },
   completion = {
     accept = { auto_brackets = { enabled = true } },
+
+    keyword = {
+      range = "full",
+    },
+
+    trigger = {
+      show_on_insert_on_trigger_character = true,
+      show_on_trigger_character = true,
+      show_on_keyword = true,
+    },
 
     documentation = {
       auto_show = true,
