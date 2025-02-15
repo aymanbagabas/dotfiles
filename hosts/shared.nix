@@ -19,6 +19,7 @@
   };
 
   nix = {
+    enable = true;
     package = pkgs.nix;
     # We need to enable flakes
     extraOptions = ''
