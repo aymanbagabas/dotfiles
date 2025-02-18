@@ -27,9 +27,9 @@ require("blink.cmp").setup({
     kind_icons = require("icons").kinds,
   },
   signature = { enabled = false },
+  cmdline = { enabled = false },
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "emoji" },
-    cmdline = {},
     providers = {
       lsp = {
         min_keyword_length = function(ctx)
