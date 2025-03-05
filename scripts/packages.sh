@@ -64,6 +64,7 @@ darwin*)
 			cask "karabiner-elements"
 			cask "multitouch"
 			cask "font-inconsolata"
+			cask "font-input"
 			cask "font-symbols-only-nerd-font"
 
 			mas "Magnet", id: 441258766

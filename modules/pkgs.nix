@@ -32,6 +32,7 @@ in
 
       # Fonts
       inconsolata-lgc
+      input-fonts
       jetbrains-mono
       nerd-fonts.symbols-only
 
