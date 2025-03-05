@@ -27,6 +27,7 @@
       fugitive-gitlab-vim
       gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
       hmts-nvim
+      img-clip-nvim
       indent-blankline-nvim
       lspkind-nvim # vscode-like LSP pictograms | https://github.com/onsails/lspkind.nvim/
       lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
