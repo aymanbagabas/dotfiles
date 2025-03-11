@@ -42,17 +42,17 @@ in
       gum
       mods
       nodejs
-      terraform
       (pkgs.writeScriptBin "svu" ''
         #!/usr/bin/env bash
         root=$(git rev-parse --show-toplevel)
         if [ "$PWD" != "$root" ]; then
           prefix=$(echo -n "$PWD" | sed "s|$root/||g")
-          ${pkgs.svu}/bin/svu --prefix="$prefix/v" --pattern="$prefix/*" "$@"
+          ${pkgs.svu}/bin/svu --tag.prefix="$prefix/v" --tag.pattern="$prefix/*" "$@"
         else
           ${pkgs.svu}/bin/svu "$@"
         fi
       '')
+      terraform
       yarn
 
       # DevOps
