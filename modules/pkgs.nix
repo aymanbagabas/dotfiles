@@ -1,7 +1,6 @@
 {
   pkgs,
   dotfiles,
-  ghostty,
   isLinux,
   isHeadless,
   ...
@@ -61,10 +60,10 @@ in
     ++ (lib.optionals (!isHeadless && isLinux) [
       _1password-gui
       alacritty
-      discord
-      ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
+      #discord
+      ghostty
       kitty
-      slack
+      #slack
       spotify
       tailscale # We use Homebrew for macOS
       telegram-desktop
