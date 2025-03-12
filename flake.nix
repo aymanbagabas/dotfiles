@@ -119,6 +119,31 @@
           pkgs = nixpkgsFor.${system};
         in
         {
+          gpg = pkgs.mkShellNoCC {
+            buildInputs =
+              with pkgs;
+              [
+                gnupg
+              ]
+              ++ (if pkgs.stdenv.isDarwin then [ pinentry_mac ] else [ pinentry-all ])
+              ++ [
+                (writeScriptBin "dot-gpg-agent-config" ''
+                  cat <<EOF
+                  grab
+                  enable-ssh-support
+                  default-cache-ttl 31536000
+                  default-cache-ttl-ssh 31536000
+                  max-cache-ttl 31536000
+                  max-cache-ttl-ssh 31536000
+                  pinentry-program ${if pkgs.stdenv.isDarwin then pinentry_mac else pinentry-tty}/bin/${
+                    if pkgs.stdenv.isDarwin then "pinentry-mac" else "pinentry-tty"
+                  }
+                  verbose
+                  log-file $HOME/.gnupg/gpg-agent.log
+                  EOF
+                '')
+              ];
+          };
           default = pkgs.mkShellNoCC {
             shellHook = ''
               # Use GitHub access tokens to avoid rate limiting
