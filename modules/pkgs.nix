@@ -57,18 +57,23 @@ in
       # DevOps
       (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     ]
-    ++ (lib.optionals (!isHeadless && isLinux) [
-      _1password-gui
-      alacritty
-      discord
-      ghostty
-      kitty
-      slack
-      spotify
-      tailscale # We use Homebrew for macOS
-      telegram-desktop
-      wezterm
-    ]);
+    ++ (
+      lib.optionals (!isHeadless && isLinux) [
+        _1password-gui
+        alacritty
+        ghostty
+        kitty
+        spotify
+        tailscale # We use Homebrew for macOS
+        telegram-desktop
+        wezterm
+      ]
+      ++ (lib.optionals (!lib.strings.hasPrefix "aarch64" pkgs.system) [
+        # GUI apps that don't work on arm64
+        discord
+        slack
+      ])
+    );
 
   home.sessionVariables = {
     # tz timezone list
