@@ -53,14 +53,6 @@
       url = "git+ssh://git@github.com/aymanbagabas/dotfiles.local?shallow=1";
       flake = false;
     };
-
-    # WARNING: Do NOT pin the `nixpkgs` input, as that will
-    # declare the cache useless. If you do, you will have
-    # to compile LLVM, Zig and Ghostty itself on your machine,
-    # which will take a very very long time.
-    ghostty = {
-      url = "git+ssh://git@github.com/mitchellh/ghostty";
-    };
   };
 
   outputs =

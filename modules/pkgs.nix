@@ -1,7 +1,6 @@
 {
   pkgs,
   dotfiles,
-  ghostty,
   isLinux,
   isHeadless,
   ...
@@ -62,7 +61,7 @@ in
       _1password-gui
       alacritty
       discord
-      ghostty.packages.${lib.system}.default # Ghostty is only available on Linux
+      ghostty
       kitty
       slack
       spotify
