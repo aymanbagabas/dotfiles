@@ -61,7 +61,10 @@
       pull.rebase = false;
       init.defaultBranch = "master";
       format.signOff = true;
-      rerere.enabled = true;
+      rerere = {
+        enabled = true;
+        autoupdate = true;
+      };
       github = {
         user = "aymanbagabas";
       };
@@ -97,6 +100,38 @@
         "git@github.com:" = {
           insteadOf = "https://github.com/";
         };
+      };
+      column = {
+        ui = "auto";
+      };
+      branch = {
+        sort = "-committerdate";
+      };
+      tag = {
+        sort = "version:refname";
+      };
+      diff = {
+        algorithm = "histogram";
+        colorMoved = "plain";
+        renames = true;
+        mnemonicPrefix = true;
+      };
+      push = {
+        default = "simple";
+        autoSetupRemote = true;
+      };
+      fetch = {
+        prune = true;
+        pruneTags = true;
+        all = true;
+      };
+      help = {
+        autocorrect = "prompt";
+      };
+      rebase = {
+        autoStash = true;
+        autoSquash = true;
+        updateRefs = true;
       };
     };
   };
