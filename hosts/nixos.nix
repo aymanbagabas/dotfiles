@@ -22,6 +22,7 @@
   nix.gc.dates = "weekly";
 
   networking.hostName = hostname;
+  nixpkgs.config = import ../modules/nixpkgs-config.nix;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
