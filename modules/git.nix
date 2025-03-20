@@ -122,7 +122,6 @@
       };
       fetch = {
         prune = true;
-        pruneTags = true;
         all = true;
       };
       help = {
