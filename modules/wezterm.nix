@@ -9,7 +9,7 @@
     local config = wezterm.config_builder()
 
     config.color_scheme = "OneDark (base16)"
-    config.font = wezterm.font("Inconsolata LGC")
+    config.font = wezterm.font("JetBrains Mono")
 
     -- Enable Kitty keyboard
     config.enable_kitty_keyboard = true

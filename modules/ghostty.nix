@@ -3,21 +3,14 @@
 let
   lib = pkgs.lib;
   colors = import ./colors.nix;
-in {
+in
+{
   xdg.configFile = lib.mkIf (!isHeadless) {
     "ghostty/config".text = ''
       term = "xterm-ghostty"
       #term = "ghostty"
 
-      font-family = "Inconsolata LGC"
-      # font-style = "Regular"
-      # font-family-bold = "Inconsolata LGC"
-      # font-style-bold = "Bold"
-      # font-family-italic = "Inconsolata LGC"
-      # font-style-italic = "Italic"
-      # font-family-bold-italic = "Inconsolata LGC"
-      # font-style-bold-italic = "BoldItalic"
-
+      font-family = "JetBrains Mono"
       font-size = 12
       font-thicken = true
 

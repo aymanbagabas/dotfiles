@@ -1,15 +1,11 @@
 {
-  pkgs,
   isDarwin,
-  isLinux,
-  isHeadless,
   ...
 }:
 
 let
-  lib = pkgs.lib;
   colors = import ./colors.nix;
-  fontFamily = "Inconsolata LGC";
+  fontFamily = "JetBrains Mono";
 in
 {
   xdg.configFile."alacritty/alacritty.toml".text =

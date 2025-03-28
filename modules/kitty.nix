@@ -1,14 +1,16 @@
 { ... }:
 
-let colors = import ./colors.nix;
-in {
+let
+  colors = import ./colors.nix;
+in
+{
   xdg.configFile."kitty/kitty.conf".text = ''
     macos_option_as_alt left
 
-    font_family Inconsolata LGC
-    bold_font Inconsolata LGC Bold
-    italic_font Inconsolata LGC Italic
-    bold_italic_font Inconsolata LGC Bold Italic
+    font_family JetBrains Mono
+    bold_font JetBrains Mono Bold
+    italic_font JetBrains Mono Italic
+    bold_italic_font JetBrains Mono Bold Italic
 
     font_size 12.0
 
