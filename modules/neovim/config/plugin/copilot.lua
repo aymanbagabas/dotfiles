@@ -40,6 +40,10 @@ local opts = {
   --copilot_node_command = "node", -- Node version must be < 18
   --plugin_manager_path = vim.fn.stdpath("data") .. "/lazy",
   server_opts_overrides = {},
+  server = {
+    type = "binary",
+    custom_server_filepath = "$COPILOT_LSP_BIN", -- This is defined in neovim/default.nix
+  },
 }
 
 require("copilot").setup(opts)

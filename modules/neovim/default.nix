@@ -86,6 +86,7 @@
         actionlint
         bash-language-server
         clang-tools
+        copilot-language-server
         delve
         docker-compose-language-service
         dockerfile-language-server-nodejs
@@ -123,6 +124,14 @@
       ]);
 
     extraPython3Packages = ps: [ ps.python-lsp-server ];
+
+    # We need a way to tell copilot.lua where the copilot-language-server binary is.
+    extraWrapperArgs = [
+      "--suffix"
+      "COPILOT_LSP_BIN"
+      ":"
+      "${pkgs.copilot-language-server}/bin/copilot-language-server"
+    ];
   };
 
   xdg.configFile."nvim" = {

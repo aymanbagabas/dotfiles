@@ -27,6 +27,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Vim Plugins
+    copilot-lua = {
+      # url = "github:zbirenbaum/copilot.lua";
+      url = "github:aymanbagabas/copilot.lua/bin-path-no-download";
+      # url = "git+file:///Users/ayman/Source/zbirenbaum/copilot.lua";
+      flake = false;
+    };
+
     # Zsh Plugins
     tinted-shell = {
       url = "github:tinted-theming/tinted-shell";
@@ -65,7 +73,17 @@
       ...
     }:
     let
-      overlays = [ nur.overlays.default ];
+      overlays = [
+        nur.overlays.default
+        # This overlay overrides Vim plugins.
+        (self: super: {
+          vimPlugins = super.vimPlugins // {
+            copilot-lua = super.vimPlugins.copilot-lua.overrideAttrs (oldAttrs: {
+              src = inputs.copilot-lua;
+            });
+          };
+        })
+      ];
 
       mkSystem = import ./lib/mksystem.nix { inherit nixpkgs overlays inputs; };
 
