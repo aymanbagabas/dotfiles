@@ -1,4 +1,13 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  isDarwin,
+  ...
+}:
+
+let
+  lib = pkgs.lib;
+in
 {
   programs.neovim = {
     enable = true;
@@ -25,6 +34,7 @@
       dressing-nvim
       friendly-snippets
       fugitive-gitlab-vim
+      git-conflict-nvim
       gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
       hmts-nvim
       img-clip-nvim

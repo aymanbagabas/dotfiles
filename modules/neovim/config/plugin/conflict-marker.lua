@@ -1,9 +1,10 @@
 -- Disable default mappings
-vim.g.conflict_marker_enable_mappings = 0
+require("git-conflict").setup({
+  default_mappings = false,
+})
 
 -- Set up key mappings
-vim.keymap.set("n", "co", "<Plug>(conflict-marker-ourselves)")
-vim.keymap.set("n", "ct", "<Plug>(conflict-marker-themselves)")
-vim.keymap.set("n", "cn", "<Plug>(conflict-marker-none)")
-vim.keymap.set("n", "cb", "<Plug>(conflict-marker-both)")
-vim.keymap.set("n", "cB", "<Plug>(conflict-marker-both-rev)")
+vim.keymap.set("n", "co", "<Plug>(git-conflict-ours)")
+vim.keymap.set("n", "ct", "<Plug>(git-conflict-theirs)")
+vim.keymap.set("n", "cb", "<Plug>(git-conflict-both)")
+vim.keymap.set("n", "c0", "<Plug>(git-conflict-none)")
