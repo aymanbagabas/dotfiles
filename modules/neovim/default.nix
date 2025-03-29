@@ -22,7 +22,6 @@ in
       # plugins from nixpkgs go in here.
       SchemaStore-nvim
       avante-nvim
-      barbecue-nvim
       blink-cmp
       blink-emoji-nvim
       bufferline-nvim
@@ -32,6 +31,7 @@ in
       copilot-lua
       dashboard-nvim
       dressing-nvim
+      dropbar-nvim
       friendly-snippets
       fugitive-gitlab-vim
       git-conflict-nvim
