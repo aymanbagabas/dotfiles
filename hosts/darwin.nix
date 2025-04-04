@@ -138,26 +138,26 @@
           # Tell iTerm2 to use the custom preferences in the directory
           LoadPrefsFromCustomFolder = true;
         };
-        "com.apple.Safari" = {
-          IncludeInternalDebugMenu = true;
-          IncludeDevelopMenu = true;
-          WebKitDeveloperExtrasEnabledPreferenceKey = true;
-          ShowFullURLInSmartSearchField = true;
-          AutoOpenSafeDownloads = false;
-          HomePage = "";
-          AutoFillCreditCardData = false;
-          AutoFillFromAddressBook = false;
-          AutoFillMiscellaneousForms = false;
-          AutoFillPasswords = false;
-          "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
-          AlwaysRestoreSessionAtLaunch = 1;
-          ExcludePrivateWindowWhenRestoringSessionAtLaunch = 1;
-          ShowBackgroundImageInFavorites = 0;
-          ShowFrequentlyVisitedSites = 1;
-          ShowHighlightsInFavorites = 1;
-          ShowPrivacyReportInFavorites = 1;
-          ShowRecentlyClosedTabsPreferenceKey = 1;
-        };
+        # "com.apple.Safari" = {
+        #   IncludeInternalDebugMenu = true;
+        #   IncludeDevelopMenu = true;
+        #   WebKitDeveloperExtrasEnabledPreferenceKey = true;
+        #   ShowFullURLInSmartSearchField = true;
+        #   AutoOpenSafeDownloads = false;
+        #   HomePage = "";
+        #   AutoFillCreditCardData = false;
+        #   AutoFillFromAddressBook = false;
+        #   AutoFillMiscellaneousForms = false;
+        #   AutoFillPasswords = false;
+        #   "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" = true;
+        #   AlwaysRestoreSessionAtLaunch = 1;
+        #   ExcludePrivateWindowWhenRestoringSessionAtLaunch = 1;
+        #   ShowBackgroundImageInFavorites = 0;
+        #   ShowFrequentlyVisitedSites = 1;
+        #   ShowHighlightsInFavorites = 1;
+        #   ShowPrivacyReportInFavorites = 1;
+        #   ShowRecentlyClosedTabsPreferenceKey = 1;
+        # };
       };
     };
   };
