@@ -208,11 +208,6 @@ M.on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-  -- Attach navic
-  if client:supports_method(ms.textDocument_documentSymbol) then
-    -- require("nvim-navic").attach(client, bufnr)
-  end
-
   M.set_keymap(client, bufnr)
 
   -- Auto-refresh code lenses

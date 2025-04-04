@@ -1,6 +1,3 @@
-local navic = require("nvim-navic")
-navic.setup({})
-
 local function fg(name)
   return function()
     ---@type {foreground?:number}?

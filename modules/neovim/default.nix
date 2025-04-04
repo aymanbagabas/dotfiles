@@ -50,7 +50,6 @@ in
       nui-nvim
       nvim-colorizer-lua
       nvim-lspconfig
-      nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic
       nvim-notify
       nvim-snippets
       nvim-spectre
