@@ -19,6 +19,8 @@ let
 in
 {
   imports = [
+    ../autoupgrade.nix
+    ../nixos.nix
     # ./secrets.nix
     ./hardware-configuration.nix
     ./disko-config.nix
