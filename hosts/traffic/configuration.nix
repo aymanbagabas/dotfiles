@@ -92,6 +92,7 @@ in
             extraConfig = ''
               proxy_set_header X-Forwarded-Protocol $scheme;
               proxy_ssl_verify off;
+              client_max_body_size 4G;
             '';
           };
         };
