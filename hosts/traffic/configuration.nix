@@ -19,9 +19,18 @@ let
 in
 {
   imports = [
-    ../genericlxc/configuration.nix
-    ./secrets.nix
+    # ./secrets.nix
+    ./hardware-configuration.nix
+    ./disko-config.nix
   ];
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # Enable serial console display on serial=0.
+  boot.kernelParams = [ "console=ttyS0,115200n8" ];
 
   networking.firewall.allowedTCPPorts = [
     80

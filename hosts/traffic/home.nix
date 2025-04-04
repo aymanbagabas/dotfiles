@@ -1,5 +1,7 @@
-{ user, isDarwin, pkgs, ... }:
+{
+  ...
+}:
 
 {
-  imports = [ ../genericlxc/home.nix ];
+  imports = [ ../headless.nix ];
 }
