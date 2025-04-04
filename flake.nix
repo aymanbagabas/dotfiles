@@ -29,8 +29,8 @@
 
     # Vim Plugins
     copilot-lua = {
-      # url = "github:zbirenbaum/copilot.lua";
-      url = "github:aymanbagabas/copilot.lua/bin-path-no-download";
+      url = "github:zbirenbaum/copilot.lua";
+      # url = "github:aymanbagabas/copilot.lua/bin-path-no-download";
       # url = "git+file:///Users/ayman/Source/zbirenbaum/copilot.lua";
       flake = false;
     };
