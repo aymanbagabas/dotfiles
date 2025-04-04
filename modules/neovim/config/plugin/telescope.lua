@@ -86,13 +86,14 @@ end, { desc = "Selection (cwd)" })
 vim.keymap.set("n", "<leader>uC", function()
   builtin.colorscheme({ enable_preview = true })
 end, { desc = "Colorscheme with Preview" })
-vim.keymap.set("n", "<leader>ss", function()
+
+local documentSymbols = function()
   builtin.lsp_document_symbols({
     symbols = require("kind_filter").get(),
   })
-end, {
-  desc = "Goto Symbol",
-})
+end
+vim.keymap.set("n", "gO", documentSymbols, { desc = "Goto Symbol" })
+vim.keymap.set("n", "<leader>ss", documentSymbols, { desc = "Goto Symbol" })
 vim.keymap.set("n", "<leader>sS", function()
   builtin.lsp_dynamic_workspace_symbols({
     symbols = require("kind_filter").get(),

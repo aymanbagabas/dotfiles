@@ -39,7 +39,7 @@ function M.get_clients(opts)
     if opts and opts.method then
       ---@param client vim.lsp.Client
       ret = vim.tbl_filter(function(client)
-        return client.supports_method(opts.method, { bufnr = opts.bufnr })
+        return client:supports_method(opts.method, { bufnr = opts.bufnr })
       end, ret)
     end
   end
@@ -84,7 +84,7 @@ function M.on_rename(from, to, rename)
 
   local clients = M.get_clients()
   for _, client in ipairs(clients) do
-    if client.supports_method("workspace/willRenameFiles") then
+    if client:supports_method("workspace/willRenameFiles") then
       local resp = client.request_sync("workspace/willRenameFiles", changes, 1000, 0)
       if resp and resp.result ~= nil then
         vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
@@ -97,7 +97,7 @@ function M.on_rename(from, to, rename)
   end
 
   for _, client in ipairs(clients) do
-    if client.supports_method("workspace/didRenameFiles") then
+    if client:supports_method("workspace/didRenameFiles") then
       client.notify("workspace/didRenameFiles", changes)
     end
   end
@@ -143,38 +143,36 @@ M.set_keymap = function(client, bufnr)
   keymap("n", "<leader>li", "<cmd>LspInfo<cr>", { desc = "Lsp Info" })
   keymap("n", "<leader>lr", "<cmd>echo 'Restarting LSP...'<cr><cmd>LspRestart<cr>", { desc = "Restart LSP" })
 
-  if client.supports_method(ms.textDocument_definition) then
+  if client:supports_method(ms.textDocument_definition) then
     keymap("n", "gd", function()
       require("telescope.builtin").lsp_definitions({ reuse_win = true })
     end, { desc = "Goto Definition" })
   end
 
-  keymap("n", "gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
-  keymap("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
-  keymap("n", "gI", function()
+  keymap("n", "grr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
+  keymap("n", "grd", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
+  keymap("n", "gri", function()
     require("telescope.builtin").lsp_implementations({ reuse_win = true })
   end, { desc = "Goto Implementation" })
-  keymap("n", "gy", function()
+  keymap("n", "grD", function()
     require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
-  end, { desc = "Goto T[y]pe Definition" })
+  end, { desc = "Goto Type Definition" })
   keymap("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
 
-  if client.supports_method(ms.textDocument_signatureHelp) then
+  if client:supports_method(ms.textDocument_signatureHelp) then
     keymap("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature Help" })
-    keymap("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
+    keymap({ "i", "s" }, "<c-s>", vim.lsp.buf.signature_help, { desc = "Signature Help" })
   end
 
-  keymap("n", "]d", M.diagnostic_goto(true), { desc = "Next Diagnostic" })
-  keymap("n", "[d", M.diagnostic_goto(false), { desc = "Prev Diagnostic" })
   keymap("n", "]e", M.diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
   keymap("n", "[e", M.diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
   keymap("n", "]w", M.diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
   keymap("n", "[w", M.diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
-  keymap("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+  keymap("n", "grn", vim.lsp.buf.rename, { desc = "Rename" })
 
-  if client.supports_method(ms.textDocument_codeAction) then
-    keymap({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
-    keymap("n", "<leader>cA", function()
+  if client:supports_method(ms.textDocument_codeAction) then
+    keymap({ "n", "v" }, "gra", vim.lsp.buf.code_action, { desc = "Code Action" })
+    keymap("n", "grA", function()
       vim.lsp.buf.code_action({
         context = {
           only = {
@@ -186,16 +184,16 @@ M.set_keymap = function(client, bufnr)
     end, { desc = "Source Action" })
   end
 
-  if client.supports_method(ms.workspace_didRenameFiles) and client.supports_method(ms.workspace_willRenameFiles) then
-    keymap("n", "<leader>cR", rename_file, { desc = "Rename File" })
+  if client:supports_method(ms.workspace_didRenameFiles) and client:supports_method(ms.workspace_willRenameFiles) then
+    keymap("n", "grN", rename_file, { desc = "Rename File" })
   end
 
-  if client.supports_method(ms.textDocument_codeLens) then
-    keymap({ "n", "v" }, "<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" })
-    keymap("n", "<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
+  if client:supports_method(ms.textDocument_codeLens) then
+    keymap({ "n", "v" }, "grc", vim.lsp.codelens.run, { desc = "Run Codelens" })
+    keymap("n", "grC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
   end
 
-  if client.supports_method(ms.textDocument_inlayHint) then
+  if client:supports_method(ms.textDocument_inlayHint) then
     keymap("n", "<space>uh", function()
       local current_setting = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
       vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
@@ -211,8 +209,8 @@ M.on_attach = function(client, bufnr)
   vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
   -- Attach navic
-  if client.supports_method(ms.textDocument_documentSymbol) then
-    require("nvim-navic").attach(client, bufnr)
+  if client:supports_method(ms.textDocument_documentSymbol) then
+    -- require("nvim-navic").attach(client, bufnr)
   end
 
   M.set_keymap(client, bufnr)
@@ -235,7 +233,7 @@ M.on_attach = function(client, bufnr)
       if vim.bo[buffer].buftype == "nofile" then
         return
       end
-      if client.supports_method(ms.textDocument_codeLens) then
+      if client:supports_method(ms.textDocument_codeLens) then
         vim.lsp.codelens.refresh({ bufnr = buffer })
       end
     end,
@@ -266,13 +264,13 @@ M.setup = function()
 
       -- Enable inlay hints if option is set
       if vim.g.show_inlay_hint then
-        if client.supports_method(ms.textDocument_inlayHint) then
+        if client:supports_method(ms.textDocument_inlayHint) then
           vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
         end
       end
 
       -- Organize imports before save
-      if client.supports_method(ms.textDocument_codeAction) then
+      if client:supports_method(ms.textDocument_codeAction) then
         if client.name ~= "lua_ls" then
           vim.api.nvim_create_autocmd({ "BufWritePre" }, {
             buffer = bufnr,
@@ -307,7 +305,7 @@ M.setup = function()
               return
             end
 
-            if client.supports_method(ms.textDocument_codeLens) then
+            if client:supports_method(ms.textDocument_codeLens) then
               vim.lsp.codelens.clear(client.id, bufnr)
             end
           end,
