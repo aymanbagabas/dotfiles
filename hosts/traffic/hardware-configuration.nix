@@ -10,7 +10,7 @@
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-    # ./secrets.nix
+    ./secrets.nix
   ];
 
   boot.initrd.availableKernelModules = [
