@@ -62,9 +62,9 @@
   networking.useNetworkd = true;
 
   # Enable mDNS using systemd-networkd.
-  systemd.network.networks."*".networkConfig.MulticastDNS = true;
+  systemd.network.networks."mdns".networkConfig.MulticastDNS = true;
   # Ensue that the link is up before starting the service.
-  systemd.network.links."*".linkConfig.RequiredForOnline = true;
+  systemd.network.links."mdns".linkConfig.RequiredForOnline = true;
   # # Enable mDNS for systemd-resolved.
   services.resolved = {
     extraConfig = ''
