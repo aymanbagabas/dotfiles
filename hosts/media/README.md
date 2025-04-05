@@ -4,7 +4,9 @@ This host configurations bootstrap the _media_ QEMU virtual machine. This VM con
 
 ## Installation
 
-After booting up NixOS run the following:
+1. Set up and format the disk(s) using
+   [Disko](https://github.com/nix-community/disko/blob/master/docs/quickstart.md).
+2. Boot up NixOS run the following:
 
 ```sh
 sudo -i
