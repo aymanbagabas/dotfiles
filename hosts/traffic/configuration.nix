@@ -48,15 +48,14 @@ in
       email = "${email}";
       server = mkIf useStaging "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
-    certs."${mainDomain}" = {
+    certs."${altDomain}" = {
       group = "wheel";
-      domain = "${subMainDomain}";
+      domain = "*.${altDomain}";
       dnsProvider = dnsProvider;
       dnsPropagationCheck = true;
       extraDomainNames = [
+        "${subMainDomain}"
         "*.${subMainDomain}"
-        "${altDomain}"
-        "*.${altDomain}"
       ];
       environmentFile = "${config.sops.secrets.cert.path}";
     };
