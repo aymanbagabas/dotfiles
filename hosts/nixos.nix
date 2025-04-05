@@ -58,8 +58,14 @@
   };
   services.cron.enable = true;
 
-  # Enable mDNS.
+  # Use networkd instead of legacy script-based system.
+  networking.useNetworkd = true;
+
+  # Enable mDNS using systemd-networkd.
   systemd.network.networks."*".networkConfig.MulticastDNS = true;
+  # Ensue that the link is up before starting the service.
+  systemd.network.links."*".linkConfig.RequiredForOnline = true;
+  # # Enable mDNS for systemd-resolved.
   services.resolved = {
     extraConfig = ''
       MulticastDNS=yes
@@ -72,7 +78,4 @@
 
   # Open port 5353 for mDNS.
   networking.firewall.allowedUDPPorts = [ 5353 ];
-
-  # Use networkd.
-  networking.useNetworkd = true;
 }
