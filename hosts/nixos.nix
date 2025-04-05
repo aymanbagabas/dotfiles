@@ -58,6 +58,14 @@
   };
   services.cron.enable = true;
 
+  # Enable mDNS.
+  systemd.network.networks."*".networkConfig.MulticastDNS = true;
+  services.resolved = {
+    extraConfig = ''
+      MulticastDNS=yes
+    '';
+  };
+
   # Open port 5353 for mDNS.
   networking.firewall.allowedUDPPorts = [ 5353 ];
 }
