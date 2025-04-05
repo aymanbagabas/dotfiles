@@ -62,11 +62,4 @@
       MulticastDNS=yes
     '';
   };
-
-  # Restart Avahi on failure.
-  systemd.services.avahi-daemon = {
-    unitConfig.StartLimitIntervalSec = 30;
-    unitConfig.StartLimitBurst = 3;
-    serviceConfig.Restart = "on-failure";
-  };
 }
