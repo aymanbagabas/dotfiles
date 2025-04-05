@@ -72,4 +72,7 @@
 
   # Open port 5353 for mDNS.
   networking.firewall.allowedUDPPorts = [ 5353 ];
+
+  # Use networkd.
+  networking.useNetworkd = true;
 }
