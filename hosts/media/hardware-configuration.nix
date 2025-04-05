@@ -52,13 +52,13 @@ in
   swapDevices = [ { device = "/dev/vg1/swap"; } ];
 
   fileSystems."/mnt/share/backups" = {
-    device = "//nas/backups";
+    device = "//nas.local/backups";
     fsType = "cifs";
     options = fsOptions;
   };
 
   fileSystems."/mnt/share/autopirate" = {
-    device = "//nas/autopirate";
+    device = "//nas.local/autopirate";
     fsType = "cifs";
     options = fsOptions ++ [
       "nobrl" # Disable byte-range locks (required for Servarr)
