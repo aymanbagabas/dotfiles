@@ -5,6 +5,13 @@
   ...
 }:
 
+let
+  lib = pkgs.lib;
+  mdnsNetworkNames = [
+    "99-ethernet-default-dhcp"
+    "99-wireless-client-dhcp"
+  ];
+in
 {
   imports = [ ./shared.nix ];
 
@@ -62,20 +69,21 @@
   networking.useNetworkd = true;
 
   # Enable mDNS using systemd-networkd.
-  systemd.network.networks."mdns" = {
-    matchConfig = {
-      # Match all interfaces.
-      Name = "*";
-    };
-    networkConfig = {
-      # Ensue that the link is up before starting the service.
-      MulticastDNS = true;
-    };
-    linkConfig = {
-      # # Enable mDNS for systemd-resolved.
-      RequiredForOnline = true;
-    };
-  };
+  systemd.network.networks = builtins.listToAttrs (
+    builtins.map (x: {
+      name = x;
+      value = {
+        networkConfig = {
+          # Ensue that the link is up before starting the service.
+          MulticastDNS = true;
+        };
+        linkConfig = {
+          # Enable mDNS for systemd-resolved.
+          RequiredForOnline = true;
+        };
+      };
+    }) mdnsNetworkNames
+  );
   services.resolved = {
     extraConfig = ''
       MulticastDNS=yes
