@@ -79,6 +79,7 @@
   services.resolved = {
     extraConfig = ''
       MulticastDNS=yes
+      LLMNR=no
     '';
     domains = [
       "local"
