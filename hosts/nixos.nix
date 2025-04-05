@@ -64,6 +64,10 @@
     extraConfig = ''
       MulticastDNS=yes
     '';
+    domains = [
+      "local"
+    ];
+    enable = true;
   };
 
   # Open port 5353 for mDNS.
