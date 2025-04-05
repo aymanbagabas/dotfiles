@@ -48,12 +48,14 @@ in
       email = "${email}";
       server = mkIf useStaging "https://acme-staging-v02.api.letsencrypt.org/directory";
     };
-    certs."${altDomain}" = {
+    certs."${subMainDomain}" = {
       group = "wheel";
-      domain = "*.${altDomain}";
+      domain = "*.${subMainDomain}";
       dnsProvider = dnsProvider;
       dnsPropagationCheck = true;
       extraDomainNames = [
+        "${altDomain}"
+        "*.${altDomain}"
         "${subMainDomain}"
         "*.${subMainDomain}"
       ];
