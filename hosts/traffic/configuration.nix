@@ -34,6 +34,9 @@ in
   # Enable serial console display on serial=0.
   boot.kernelParams = [ "console=ttyS0,115200n8" ];
 
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
+
   networking.firewall.allowedTCPPorts = [
     80
     443
