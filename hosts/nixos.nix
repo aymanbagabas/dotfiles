@@ -57,9 +57,7 @@
     };
   };
   services.cron.enable = true;
-  services.resolved = {
-    extraConfig = ''
-      MulticastDNS=yes
-    '';
-  };
+
+  # Open port 5353 for mDNS.
+  networking.firewall.allowedUDPPorts = [ 5353 ];
 }
