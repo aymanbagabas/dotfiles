@@ -1,7 +1,12 @@
 # Taken from
 # https://raw.githubusercontent.com/xtruder/nix-profiles/master/home-manager/modules/gpg-import-keys.nix
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -14,7 +19,8 @@ let
 
   fileGPGKeys = filter (k: isPath k) cfg.keys;
 
-in {
+in
+{
   options.programs.gpg = {
     autoImport = {
       keyserver = mkOption {
@@ -37,25 +43,33 @@ in {
     systemd.user.services.gpg-import-keys = mkIf (cfg.keys != [ ]) {
       Unit = {
         Description = "Auto import gpg keys";
-        After = [ "gpg-agent.socket" ];
+        After = [
+          "gpg-agent.socket"
+          "network-online.target"
+        ];
       };
 
       Service = {
         Type = "oneshot";
-        ExecStart = toString (pkgs.writeScript "import-gpg-keys" ''
-          #! ${pkgs.runtimeShell} -el
-          ${optionalString (keyserverGPGKeys != [ ]) ''
-            ${pkgs.gnupg}/bin/gpg --keyserver ${cfg.keyserver} --recv-keys ${
-              concatStringsSep " " keyserverGPGKeys
-            }
-          ''}
-          ${optionalString (fileGPGKeys != [ ]) ''
-            ${pkgs.gnupg}/bin/gpg --import ${concatStringsSep " " fileGPGKeys}
-          ''}
-        '');
+        ExecStart = toString (
+          pkgs.writeScript "import-gpg-keys" ''
+            #! ${pkgs.runtimeShell} -el
+            ${optionalString (keyserverGPGKeys != [ ]) ''
+              ${pkgs.gnupg}/bin/gpg --keyserver ${cfg.keyserver} --recv-keys ${concatStringsSep " " keyserverGPGKeys}
+            ''}
+            ${optionalString (fileGPGKeys != [ ]) ''
+              ${pkgs.gnupg}/bin/gpg --import ${concatStringsSep " " fileGPGKeys}
+            ''}
+          ''
+        );
       };
 
-      Install = { WantedBy = [ "default.target" ]; };
+      Install = {
+        WantedBy = [
+          "default.target"
+          "network-online.target"
+        ];
+      };
     };
   };
 }
