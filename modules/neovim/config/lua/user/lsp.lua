@@ -29,24 +29,6 @@ local organize_imports = function(client, bufnr, timeoutms)
   end
 end
 
----@param opts? vim.lsp.get_clients.Filter
-function M.get_clients(opts)
-  local ret = {} ---@type vim.lsp.Client[]
-  if vim.lsp.get_clients then
-    ret = vim.lsp.get_clients(opts)
-  else
-    ---@diagnostic disable-next-line: deprecated
-    ret = vim.lsp.get_active_clients(opts)
-    if opts and opts.method then
-      ---@param client vim.lsp.Client
-      ret = vim.tbl_filter(function(client)
-        return client:supports_method(opts.method, { bufnr = opts.bufnr })
-      end, ret)
-    end
-  end
-  return opts and opts.filter and vim.tbl_filter(opts.filter, ret) or ret
-end
-
 local rename_file = function()
   local buf = vim.api.nvim_get_current_buf()
   local old = assert(Root.realpath(vim.api.nvim_buf_get_name(buf)))
@@ -83,10 +65,10 @@ function M.on_rename(from, to, rename)
     newUri = vim.uri_from_fname(to),
   } } }
 
-  local clients = M.get_clients()
+  local clients = vim.lsp.get_clients()
   for _, client in ipairs(clients) do
     if client:supports_method("workspace/willRenameFiles") then
-      local resp = client.request_sync("workspace/willRenameFiles", changes, 1000, 0)
+      local resp = client:request_sync("workspace/willRenameFiles", changes, 1000, 0)
       if resp and resp.result ~= nil then
         vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
       end
@@ -99,7 +81,7 @@ function M.on_rename(from, to, rename)
 
   for _, client in ipairs(clients) do
     if client:supports_method("workspace/didRenameFiles") then
-      client.notify("workspace/didRenameFiles", changes)
+      client:notify("workspace/didRenameFiles", changes)
     end
   end
 end
@@ -237,10 +219,12 @@ M.on_attach = function(client, bufnr)
 end
 
 function M.diagnostic_goto(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
   return function()
-    go({ severity = severity })
+    vim.diagnostic.jump({
+      count = next and 1 or -1,
+      severity = severity,
+    })
   end
 end
 
