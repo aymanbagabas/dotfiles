@@ -15,15 +15,16 @@ local Root = require("user.root")
 ---@param bufnr number Buffer number
 ---@param timeoutms number timeout in ms
 local organize_imports = function(client, bufnr, timeoutms)
-  local params = vim.lsp.util.make_range_params()
+  local enc = client.offset_encoding or "utf-16"
+  local win = vim.api.nvim_get_current_win()
+  local params = vim.lsp.util.make_range_params(win, enc)
   params.context = { only = { "source.organizeImports" } }
-  local result = client.request_sync(ms.textDocument_codeAction, params, timeoutms, bufnr) or {}
+  local result = client:request_sync(ms.textDocument_codeAction, params, timeoutms, bufnr) or {}
   for _, r in pairs(result.result or {}) do
     if r.edit then
-      local enc = client.offset_encoding or "utf-16"
       vim.lsp.util.apply_workspace_edit(r.edit, enc)
     elseif r.command and r.command.command then
-      vim.lsp.buf.execute_command(r.command)
+      client:exec_cmd(r.command, { bufnr = bufnr })
     end
   end
 end
