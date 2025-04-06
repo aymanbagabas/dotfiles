@@ -37,7 +37,7 @@
           # lvcreate
           swap = {
             # Logical Volume = "swap", /dev/vg1/swap
-            size = "4G";
+            size = "2G";
             content = {
               type = "swap";
             };
