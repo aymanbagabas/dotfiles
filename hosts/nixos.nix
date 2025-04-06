@@ -6,7 +6,6 @@
 }:
 
 let
-  lib = pkgs.lib;
   mdnsNetworkNames = [
     "99-ethernet-default-dhcp"
     "99-wireless-client-dhcp"
@@ -65,7 +64,7 @@ in
   };
   services.cron.enable = true;
 
-  # Enable Tailscale.
+  # Enable Tailscale. Run `tailscale up` to authenticate.
   services.tailscale.enable = true;
 
   # Use networkd instead of legacy script-based system.
@@ -77,11 +76,11 @@ in
       name = x;
       value = {
         networkConfig = {
-          # Ensue that the link is up before starting the service.
+          # Enable mDNS for systemd-resolved.
           MulticastDNS = true;
         };
         linkConfig = {
-          # Enable mDNS for systemd-resolved.
+          # Ensure that the network is up.
           RequiredForOnline = true;
         };
       };
@@ -93,6 +92,7 @@ in
       LLMNR=no
     '';
     domains = [
+      # Add .local to the list of search domains.
       "local"
     ];
     enable = true;
