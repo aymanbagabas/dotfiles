@@ -94,15 +94,15 @@ in
           };
       in
       {
-        "radarr.${altDomain}" = proxy "http://media.local:7878/";
-        "sonarr.${altDomain}" = proxy "http://media.local:8989/";
-        "prowlarr.${altDomain}" = proxy "http://media.local:9696/";
-        "readarr.${altDomain}" = proxy "http://media.local:8787/";
-        "books.${altDomain}" = proxy "http://media.local:8083/";
-        "convert.${altDomain}" = proxy "http://media.local:3000/";
+        "radarr.${altDomain}" = proxy "http://media:7878/";
+        "sonarr.${altDomain}" = proxy "http://media:8989/";
+        "prowlarr.${altDomain}" = proxy "http://media:9696/";
+        "readarr.${altDomain}" = proxy "http://media:8787/";
+        "books.${altDomain}" = proxy "http://media:8083/";
+        "convert.${altDomain}" = proxy "http://media:3000/";
         "nas.${altDomain}" = base {
           "/" = {
-            proxyPass = "https://nas.local:5001/";
+            proxyPass = "https://nas:5001/";
             # Skip the SSL verification for the NAS as it uses a self-signed certificate.
             extraConfig = ''
               proxy_set_header X-Forwarded-Protocol $scheme;
@@ -113,7 +113,7 @@ in
         };
         "plex.${altDomain}" = base {
           "/" = {
-            proxyPass = "http://media.local:32400/";
+            proxyPass = "http://media:32400/";
             extraConfig = ''
               proxy_set_header X-Forwarded-Protocol $scheme;
 
@@ -131,7 +131,7 @@ in
         };
         "jellyfin.${altDomain}" = base {
           "/" = {
-            proxyPass = "http://media.local:8096/";
+            proxyPass = "http://media:8096/";
             extraConfig = ''
               proxy_set_header X-Forwarded-Protocol $scheme;
 
@@ -140,7 +140,7 @@ in
             '';
           };
           "/socket" = {
-            proxyPass = "http://media.local:8096/";
+            proxyPass = "http://media:8096/";
             extraConfig = ''
               proxy_set_header Upgrade $http_upgrade;
               proxy_set_header Connection "upgrade";
