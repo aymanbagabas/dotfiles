@@ -65,6 +65,9 @@ in
   };
   services.cron.enable = true;
 
+  # Enable Tailscale.
+  services.tailscale.enable = true;
+
   # Use networkd instead of legacy script-based system.
   networking.useNetworkd = true;
 
