@@ -4,7 +4,6 @@
 {
   config,
   lib,
-  pkgs,
   modulesPath,
   ...
 }:
@@ -17,6 +16,8 @@ let
     "x-systemd.idle-timeout=60"
     "x-systemd.device-timeout=5s"
     "x-systemd.mount-timeout=5s"
+    # Wait for network online
+    "_netdev"
     # Mount as user
     "uid=1000" # user
     "gid=1" # wheel
