@@ -133,6 +133,14 @@ in
       ]);
 
     extraPython3Packages = ps: [ ps.python-lsp-server ];
+
+    # We need a way to tell copilot.lua where the copilot-language-server binary is.
+    extraWrapperArgs = [
+      "--suffix"
+      "COPILOT_LSP_BIN"
+      ":"
+      "${pkgs.copilot-language-server}/bin/copilot-language-server"
+    ];
   };
 
   xdg.configFile."nvim" = {
