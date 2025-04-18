@@ -7,20 +7,27 @@ require("conform").setup({
     lua = { "stylua" },
     markdown = { "prettier" },
     nix = { "nixpkgs_fmt" },
-    rust = { "rustfmt" },
     sh = { "shfmt" },
     sql = { "pg_format", "sql_formatter" },
     tf = { "terraform_fmt" },
     typescript = { "prettier" },
     yaml = { "prettier" },
-    zig = { "zigfmt" },
     ["_"] = { "trim_whitespace", "trim_newlines" },
   },
-  format_on_save = function()
+  format_on_save = function(bufnr)
     if not vim.g.autoformat or vim.b.autoformat == false then
       return
     end
-    return { lsp_fallback = true, timeout_ms = 500 }
+    -- Run LSP formatter if we only have whitespace and newline formatters.
+    local lsp_format = "last"
+    local formatters = require("conform").list_formatters(bufnr)
+    for _, f in ipairs(formatters) do
+      if f.name ~= "trim_whitespace" and f.name ~= "trim_newlines" then
+        lsp_format = "fallback"
+        break
+      end
+    end
+    return { lsp_format = lsp_format, timeout_ms = 500 }
   end,
 })
 
