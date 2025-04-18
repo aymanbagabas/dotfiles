@@ -44,8 +44,7 @@ local opts = {
     type = "binary",
     -- Home Manager Neovim wrapper exports the LSP path, we just need to
     -- specify the name of the binary.
-    -- custom_server_filepath = "copilot-language-server",
-    custom_server_filepath = "$COPILOT_LSP_BIN", -- This is defined in neovim/default.nix
+    custom_server_filepath = vim.fn.exepath("copilot-language-server"),
   },
 }
 
