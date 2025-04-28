@@ -1,9 +1,17 @@
-{ config, pkgs, tinted-shell, zsh-vim-mode, ... }:
+{
+  config,
+  pkgs,
+  tinted-shell,
+  zsh-vim-mode,
+  ...
+}:
 
 with pkgs.lib;
 
-let inherit (pkgs.stdenv) isLinux;
-in {
+let
+  inherit (pkgs.stdenv) isLinux;
+in
+{
   home.packages = with pkgs; [ pure-prompt ];
 
   programs.zsh = {
@@ -12,57 +20,61 @@ in {
     autosuggestion.enable = false;
     syntaxHighlighting.enable = true;
 
-    plugins = [
-      {
-        name = "pure-prompt";
-        file = "share/zsh/site-functions/async";
-        src = pkgs.pure-prompt;
-      }
-      {
-        name = "pure-prompt";
-        file = "share/zsh/site-functions/prompt_pure_setup";
-        src = pkgs.pure-prompt;
-      }
-      {
-        name = "omzl-key-bindings";
-        file = "share/oh-my-zsh/lib/key-bindings.zsh";
-        src = pkgs.oh-my-zsh;
-      }
-      {
-        name = "omzl-completion";
-        file = "share/oh-my-zsh/lib/completion.zsh";
-        src = pkgs.oh-my-zsh;
-      }
-      {
-        name = "omzl-theme-and-appearance";
-        file = "share/oh-my-zsh/lib/theme-and-appearance.zsh";
-        src = pkgs.oh-my-zsh;
-      }
-      {
-        name = "omzp-git";
-        file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
-        src = pkgs.oh-my-zsh;
-      }
-      {
-        name = "zsh-vim-mode";
-        file = "zsh-vim-mode.plugin.zsh";
-        src = zsh-vim-mode;
-      }
-      {
-        name = "zsh-completions";
-        file = "share/zsh-completions/zsh-completions.plugin.zsh";
-        src = pkgs.zsh-completions;
-      }
-      {
-        name = "tinted-shell";
-        file = "base16-shell.plugin.zsh";
-        src = tinted-shell;
-      }
-    ] ++ (optionals isLinux [{
-      name = "omzp-systemd";
-      file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
-      src = pkgs.oh-my-zsh;
-    }]);
+    plugins =
+      [
+        {
+          name = "pure-prompt";
+          file = "share/zsh/site-functions/async";
+          src = pkgs.pure-prompt;
+        }
+        {
+          name = "pure-prompt";
+          file = "share/zsh/site-functions/prompt_pure_setup";
+          src = pkgs.pure-prompt;
+        }
+        {
+          name = "omzl-key-bindings";
+          file = "share/oh-my-zsh/lib/key-bindings.zsh";
+          src = pkgs.oh-my-zsh;
+        }
+        {
+          name = "omzl-completion";
+          file = "share/oh-my-zsh/lib/completion.zsh";
+          src = pkgs.oh-my-zsh;
+        }
+        {
+          name = "omzl-theme-and-appearance";
+          file = "share/oh-my-zsh/lib/theme-and-appearance.zsh";
+          src = pkgs.oh-my-zsh;
+        }
+        {
+          name = "omzp-git";
+          file = "share/oh-my-zsh/plugins/git/git.plugin.zsh";
+          src = pkgs.oh-my-zsh;
+        }
+        {
+          name = "zsh-vim-mode";
+          file = "zsh-vim-mode.plugin.zsh";
+          src = zsh-vim-mode;
+        }
+        {
+          name = "zsh-completions";
+          file = "share/zsh-completions/zsh-completions.plugin.zsh";
+          src = pkgs.zsh-completions;
+        }
+        {
+          name = "tinted-shell";
+          file = "base16-shell.plugin.zsh";
+          src = tinted-shell;
+        }
+      ]
+      ++ (optionals isLinux [
+        {
+          name = "omzp-systemd";
+          file = "share/oh-my-zsh/plugins/systemd/systemd.plugin.zsh";
+          src = pkgs.oh-my-zsh;
+        }
+      ]);
 
     sessionVariables = {
       # Set the base16 theme (needs tinted-shell).
