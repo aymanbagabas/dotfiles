@@ -56,7 +56,7 @@ in
 
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-    pinentryPackage = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
+    pinentry.package = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
     defaultCacheTtlSsh = 31536000;
