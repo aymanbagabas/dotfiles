@@ -26,7 +26,6 @@ in
       blink-emoji-nvim
       bufferline-nvim
       clangd_extensions-nvim
-      conflict-marker-vim
       conform-nvim
       copilot-lua
       dashboard-nvim

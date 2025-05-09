@@ -14,6 +14,7 @@ require("conform").setup({
     yaml = { "prettier" },
     ["_"] = { "trim_whitespace", "trim_newlines" },
   },
+
   format_on_save = function(bufnr)
     if not vim.g.autoformat or vim.b.autoformat == false then
       return
