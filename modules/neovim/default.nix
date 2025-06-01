@@ -107,6 +107,7 @@ in
         gotests
         gotools
         hadolint
+        helm-ls
         impl
         ltex-ls
         lua-language-server
@@ -121,6 +122,7 @@ in
         shfmt
         stylua
         terraform-ls
+        tflint
         typescript-language-server
         vscode-langservers-extracted
         yaml-language-server
