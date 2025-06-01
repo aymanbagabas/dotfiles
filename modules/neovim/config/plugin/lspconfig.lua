@@ -106,6 +106,16 @@ lspconfig.yamlls.setup({
   },
 })
 
+lspconfig.helm_ls.setup({
+  settings = {
+    ["helm-ls"] = {
+      yamlls = {
+        path = "yaml-language-server",
+      },
+    },
+  },
+})
+
 lspconfig.bashls.setup({
   capabilities = capabilities,
   filetypes = { "sh", "zsh", "bash" },
@@ -349,3 +359,5 @@ lspconfig.clangd.setup({
 })
 
 lspconfig.zls.setup({})
+
+lspconfig.terraformls.setup({})

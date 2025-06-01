@@ -1,6 +1,9 @@
 require("conform").setup({
   formatters_by_ft = {
+    ["_"] = { "trim_whitespace", "trim_newlines" },
+    ["terraform-vars"] = { "terraform_fmt" },
     css = { "prettier" },
+    hcl = { "packer_fmt" },
     html = { "prettier" },
     javascript = { "prettier" },
     json = { "jq" },
@@ -9,10 +12,10 @@ require("conform").setup({
     nix = { "nixpkgs_fmt" },
     sh = { "shfmt" },
     sql = { "pg_format", "sql_formatter" },
+    terraform = { "terraform_fmt" },
     tf = { "terraform_fmt" },
     typescript = { "prettier" },
     yaml = { "prettier" },
-    ["_"] = { "trim_whitespace", "trim_newlines" },
   },
 
   format_on_save = function(bufnr)
