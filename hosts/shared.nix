@@ -2,6 +2,7 @@
   pkgs,
   user,
   isDarwin,
+  isLinux,
   ...
 }:
 
@@ -26,7 +27,7 @@
       experimental-features = nix-command flakes
     '';
     optimise = {
-      automatic = true;
+      automatic = isLinux;
     };
     settings = {
       substituters = [

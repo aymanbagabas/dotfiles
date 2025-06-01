@@ -12,6 +12,7 @@
   # nix-darwin system state version.
   # https://daiderd.com/nix-darwin/manual/index.html#opt-system.stateVersion
   system.stateVersion = 5;
+  system.primaryUser = user;
 
   # nix-darwin has an "interval" option instead of "dates".
   nix.gc.interval = {
@@ -50,6 +51,7 @@
       "iterm2"
       "karabiner-elements"
       "kitty"
+      "linear-linear"
       "microsoft-remote-desktop"
       "multitouch"
       "openlens"
