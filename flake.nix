@@ -184,11 +184,11 @@
               (writeScriptBin "dot-apply" ''
                 case "$(uname -s)" in
                   Linux)
-                    sudo nixos-rebuild switch --flake .#$HOST "$@"
+                    sudo -E nixos-rebuild switch --flake .#$HOST "$@"
                     ;;
                   Darwin)
                     HOST=$(hostname | cut -f1 -d'.')
-                    nix run nix-darwin -- switch --flake .#$HOST "$@"
+                    sudo -E nix run nix-darwin -- switch --flake .#$HOST "$@"
                     ;;
                   *)
                     echo "Unsupported OS"
