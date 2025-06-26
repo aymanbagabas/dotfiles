@@ -2,12 +2,6 @@ local ms = vim.lsp.protocol.Methods
 local userlsp = require("user.lsp")
 userlsp.setup()
 
--- Requires Nerd fonts
-for name, icon in pairs(require("icons").diagnostics) do
-  name = "DiagnosticSign" .. name
-  vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-end
-
 local float_config = {
   focusable = false,
   style = "minimal",
@@ -19,12 +13,32 @@ local float_config = {
 
 -- setup diagnostics
 vim.diagnostic.config({
+  -- Requires Nerd fonts
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = require("icons").diagnostics.Error,
+      [vim.diagnostic.severity.WARN] = require("icons").diagnostics.Warn,
+      [vim.diagnostic.severity.INFO] = require("icons").diagnostics.Info,
+      [vim.diagnostic.severity.HINT] = require("icons").diagnostics.Hint,
+    },
+    linehl = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.INFO] = "",
+      [vim.diagnostic.severity.HINT] = "",
+    },
+  },
   virtual_text = {
     spacing = 4,
     source = "if_many",
     prefix = "●",
   },
-  signs = true,
   update_in_insert = false,
   underline = true,
   severity_sort = true,
