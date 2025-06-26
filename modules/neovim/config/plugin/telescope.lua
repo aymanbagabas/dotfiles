@@ -31,6 +31,11 @@ local project_files_cwd = function()
   project_files({ cwd = false })
 end
 
+-- projects
+vim.keymap.set("n", "<leader>fp", function()
+  require("telescope").extensions.project.project()
+end, { desc = "Projects" })
+-- buffers
 vim.keymap.set(
   "n",
   "<leader>,",
@@ -181,4 +186,4 @@ telescope.setup({
 })
 
 telescope.load_extension("fzf")
-telescope.load_extension("projects")
+telescope.load_extension("project")

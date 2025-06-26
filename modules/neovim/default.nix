@@ -62,10 +62,10 @@ in
       nvim-web-devicons
       onedark-nvim
       plenary-nvim
-      project-nvim
       render-markdown-nvim
       telescope-fzf-native-nvim
       telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
+      telescope-project-nvim
       todo-comments-nvim
       trouble-nvim
       ts-comments-nvim
