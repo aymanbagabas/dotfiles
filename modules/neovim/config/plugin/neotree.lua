@@ -55,7 +55,7 @@ vim.list_extend(opts.event_handlers, {
 require("neo-tree").setup(opts)
 
 vim.keymap.set("n", "<leader>fe", function()
-  require("neo-tree.command").execute({ toggle = true, dir = require("project_nvim.project").get_project_root() })
+  require("neo-tree.command").execute({ toggle = true, dir = require("user.root").get_root() })
 end, { desc = "Explorer NeoTree (Root Dir)" })
 vim.keymap.set("n", "<leader>fE", function()
   require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
