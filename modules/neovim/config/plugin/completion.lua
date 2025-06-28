@@ -3,7 +3,8 @@ local suggestion = require("copilot.suggestion")
 require("blink.cmp").setup({
   keymap = {
     preset = "enter",
-    ["<C-y>"] = { "select_and_accept" },
+    ["<C-p>"] = { "insert_prev", "fallback_to_mappings" },
+    ["<C-n>"] = { "insert_next", "fallback_to_mappings" },
     ["<C-e>"] = {
       function(cmp)
         suggestion.dismiss() -- Dismiss copilot suggestions
@@ -59,6 +60,12 @@ require("blink.cmp").setup({
   },
   completion = {
     accept = { auto_brackets = { enabled = true } },
+    list = {
+      selection = {
+        preselect = false,
+        auto_insert = false,
+      },
+    },
 
     keyword = {
       range = "full",
