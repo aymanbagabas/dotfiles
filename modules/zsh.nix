@@ -100,45 +100,57 @@ in
     history.save = 10000;
     history.path = "${config.xdg.dataHome}/zsh/history";
 
-    initExtra = ''
-      # Fix reset RPS1
-      unset RPS1
+    initContent =
+      let
+        extraBeforeCompInit = mkOrder 550 ''
+          # Fixes https://github.com/nix-community/home-manager/issues/2562
+                 fpath+=("${config.home.profileDirectory}"/share/zsh/site-functions "${config.home.profileDirectory}"/share/zsh/$ZSH_VERSION/functions "${config.home.profileDirectory}"/share/zsh/vendor-completions)
+        '';
 
-      # Pass arguments to command if pattern matching fails
-      # This fixes using carrot (^) in git for example
-      # https://stackoverflow.com/a/16864766/10913628
-      setopt NO_NOMATCH
+        extra = ''
+          # Fix reset RPS1
+          unset RPS1
 
-      # reclaim Ctrl-S
-      stty stop undef
-      # reclaim Ctrl-Q
-      stty start undef
-      # Disable Software Flow Control (XON/XOFF flow control)
-      stty -ixon
+          # Pass arguments to command if pattern matching fails
+          # This fixes using carrot (^) in git for example
+          # https://stackoverflow.com/a/16864766/10913628
+          setopt NO_NOMATCH
 
-      # Display fortune
-      if [ -e "$(command -v fortune)" ]; then
-      	echo "" && fortune -s && echo ""
-      fi
+          # reclaim Ctrl-S
+          stty stop undef
+          # reclaim Ctrl-Q
+          stty start undef
+          # Disable Software Flow Control (XON/XOFF flow control)
+          stty -ixon
 
-      # Initial cursor style
-      echo -ne "\e[5 q" # blinking line
+          # Display fortune
+          if [ -e "$(command -v fortune)" ]; then
+          	echo "" && fortune -s && echo ""
+          fi
 
-      # Change cursor style on Vi mode change
-      reset_vim_prompt_widget() {
-      	echo -ne "\e[5 q" # blinking line
-      }
+          # Initial cursor style
+          echo -ne "\e[5 q" # blinking line
 
-      update_vim_prompt_widget() {
-      	case $KEYMAP in
-      	vicmd) echo -ne "\e[1 q" ;; # blinking block
-      	*) echo -ne "\e[5 q" ;;     # blinking line
-      	esac
-      }
+          # Change cursor style on Vi mode change
+          reset_vim_prompt_widget() {
+          	echo -ne "\e[5 q" # blinking line
+          }
 
-      add-zle-hook-widget zle-line-finish reset_vim_prompt_widget
-      add-zle-hook-widget zle-keymap-select update_vim_prompt_widget
-    '';
+          update_vim_prompt_widget() {
+          	case $KEYMAP in
+          	vicmd) echo -ne "\e[1 q" ;; # blinking block
+          	*) echo -ne "\e[5 q" ;;     # blinking line
+          	esac
+          }
+
+          add-zle-hook-widget zle-line-finish reset_vim_prompt_widget
+          add-zle-hook-widget zle-keymap-select update_vim_prompt_widget
+        '';
+      in
+      mkMerge [
+        extraBeforeCompInit
+        extra
+      ];
 
     profileExtra = ''
       # Set less colors
@@ -155,11 +167,6 @@ in
               # shellcheck disable=SC1091
               source "$HOME/.zprofile.local"
       fi
-    '';
-
-    # Fixes https://github.com/nix-community/home-manager/issues/2562
-    initExtraBeforeCompInit = ''
-      fpath+=("${config.home.profileDirectory}"/share/zsh/site-functions "${config.home.profileDirectory}"/share/zsh/$ZSH_VERSION/functions "${config.home.profileDirectory}"/share/zsh/vendor-completions)
     '';
   };
 }
