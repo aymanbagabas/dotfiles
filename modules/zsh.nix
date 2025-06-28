@@ -104,7 +104,7 @@ in
       let
         extraBeforeCompInit = mkOrder 550 ''
           # Fixes https://github.com/nix-community/home-manager/issues/2562
-                 fpath+=("${config.home.profileDirectory}"/share/zsh/site-functions "${config.home.profileDirectory}"/share/zsh/$ZSH_VERSION/functions "${config.home.profileDirectory}"/share/zsh/vendor-completions)
+          fpath+=("${config.home.profileDirectory}"/share/zsh/site-functions "${config.home.profileDirectory}"/share/zsh/$ZSH_VERSION/functions "${config.home.profileDirectory}"/share/zsh/vendor-completions)
         '';
 
         extra = ''

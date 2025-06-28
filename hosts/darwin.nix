@@ -34,6 +34,14 @@
   # configuring the rc correctly with nix-darwin paths.
   programs.zsh.enable = true;
 
+  # On macOS, we use nix-darwin GnuPG Agent instead of the home-manager one.
+  programs.gnupg = {
+    agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+  };
+
   # Homebrew configurations.
   homebrew = {
     enable = true;
