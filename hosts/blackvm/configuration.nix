@@ -101,12 +101,12 @@
       kdePackages.kate
       #  thunderbird
     ];
+    initialHashedPassword = "";
   };
 
   # Make initial login passwordless.
   # https://nixos.org/manual/nixos/stable/options#opt-users.users._name_.initialHashedPassword
   users.users.root.initialHashedPassword = "";
-  users.users.${user}.initialHashedPassword = "";
 
   # Enable automatic login for the user.
   services.displayManager.autoLogin.enable = true;
