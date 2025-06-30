@@ -63,12 +63,11 @@
         "narHash": "sha256-tkuLpLtJHoHIJDUdsRtM7ns6DvM/F28Pshdnoq1Fc5U=",
         "ref": "refs/heads/master",
         "rev": "a58e344f1eb4129d12e67e00f80b0c0103b7e99e",
-        "shallow": true,
+        "revCount": 43,
         "type": "git",
         "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
       },
       "original": {
-        "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
       }
