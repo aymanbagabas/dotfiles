@@ -61,7 +61,7 @@
   services.displayManager.lightdm.enable = true;
   services.displayManager.lightdm.greeter.enable = true;
   services.displayManager.defaultSession = "xfce";
-  services.desktopManager.xfce.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
