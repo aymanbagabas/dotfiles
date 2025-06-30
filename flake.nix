@@ -118,6 +118,10 @@
           system = "x86_64-linux";
           isHeadless = true;
         }
+        {
+          hostname = "blackvm";
+          system = "aarch64-linux";
+        }
       ];
 
       darwinConfigurations = mkSystems [

@@ -5,6 +5,6 @@
     sops-nix.homeManagerModules.sops
     ../modules/home.nix
     ../modules/pkgs.nix
-    ./common.nix
+    ../common.nix
   ];
 }
