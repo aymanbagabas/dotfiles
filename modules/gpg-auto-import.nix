@@ -26,7 +26,7 @@ in
       keyserver = mkOption {
         description = "Keyserver to imports keys from";
         type = types.str;
-        default = "pgp.mit.edu";
+        default = "keys.openpgp.org";
       };
 
       keys = mkOption {
