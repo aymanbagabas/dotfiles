@@ -115,7 +115,8 @@
   services.displayManager.autoLogin.user = "${user}";
 
   # Enable vmware video driver
-  services.xserver.videoDrivers = [ "vmware" ];
+  # NOTE: This won't work on aarch64.
+  #services.xserver.videoDrivers = [ "vmware" ];
 
   # Install firefox.
   programs.firefox.enable = true;
