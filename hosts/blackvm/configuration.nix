@@ -58,9 +58,9 @@
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
-  services.displayManager.lightdm.enable = true;
-  services.displayManager.lightdm.greeter.enable = true;
   services.displayManager.defaultSession = "xfce";
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm.greeter.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
 
   # Configure keymap in X11
