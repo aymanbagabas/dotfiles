@@ -1,6 +1,6 @@
 {
   disko.devices = {
-    disk.sda = {
+    disk.nvme0n1 = {
       type = "disk";
       device = "/dev/nvme0n1"; # Change this to your actual disk device
       content = {
