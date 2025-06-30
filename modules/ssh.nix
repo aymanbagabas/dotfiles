@@ -4,7 +4,10 @@
   programs.ssh = {
     enable = true;
     serverAliveInterval = 60;
-    includes = [ "~/.ssh/config.local" ];
+    includes = [
+      "~/.ssh/config.local"
+      "~/.ssh/my_config"
+    ];
     addKeysToAgent = "yes";
     matchBlocks = {
       "*" = {
@@ -23,5 +26,5 @@
     };
   };
 
-  home.file.".ssh/config.local".source = "${dotfiles}/ssh/config";
+  home.file.".ssh/my_config".source = "${dotfiles}/ssh/config";
 }
