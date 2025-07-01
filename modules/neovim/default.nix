@@ -29,7 +29,7 @@ in
       conform-nvim
       copilot-lua
       dashboard-nvim
-      dressing-nvim
+      # dressing-nvim
       dropbar-nvim
       friendly-snippets
       fugitive-gitlab-vim
@@ -63,6 +63,7 @@ in
       onedark-nvim
       plenary-nvim
       render-markdown-nvim
+      snacks-nvim
       telescope-fzf-native-nvim
       telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
       telescope-project-nvim

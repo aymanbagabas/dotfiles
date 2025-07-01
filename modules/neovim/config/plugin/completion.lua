@@ -62,7 +62,7 @@ require("blink.cmp").setup({
     accept = { auto_brackets = { enabled = true } },
     list = {
       selection = {
-        preselect = false,
+        preselect = true,
         auto_insert = false,
       },
     },

@@ -26,6 +26,7 @@ return {
   "noice",
   "notify",
   "quickfix",
+  "snacks_input",
   "spectre_panel",
   "startify",
   "symbols-outline",
