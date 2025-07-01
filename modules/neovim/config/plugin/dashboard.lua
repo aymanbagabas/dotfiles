@@ -22,7 +22,7 @@ local opts = {
       { action = "ene | startinsert",                 desc = " New file",        icon = " ", key = "n" },
       { action = "Telescope oldfiles",                desc = " Recent files",    icon = " ", key = "r" },
       { action = "Telescope live_grep",               desc = " Find text",       icon = " ", key = "g" },
-      { action = "Telescope projects",                desc = " Projects",        icon = " ", key = "p" },
+      { action = "Telescope project",                 desc = " Projects",        icon = " ", key = "p" },
       { action = "qa",                                desc = " Quit",            icon = " ", key = "q" },
     },
     footer = {
