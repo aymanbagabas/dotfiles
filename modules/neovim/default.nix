@@ -29,7 +29,6 @@ in
       conform-nvim
       copilot-lua
       dashboard-nvim
-      # dressing-nvim
       dropbar-nvim
       friendly-snippets
       fugitive-gitlab-vim
