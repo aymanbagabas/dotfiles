@@ -29,11 +29,16 @@
         sopsFile = "${dotfiles}/secrets/api.json";
         format = "json";
       };
+      npmjs_token = {
+        sopsFile = "${dotfiles}/secrets/npm.json";
+        format = "json";
+      };
     };
   };
 
   home.sessionVariables = {
     OPENAI_API_KEY = "$(cat ${config.sops.secrets.openai_api_key.path})";
     ANTHROPIC_API_KEY = "$(cat ${config.sops.secrets.anthropic_api_key.path})";
+    NPMJS_TOKEN = "$(cat ${config.sops.secrets.npmjs_token.path})";
   };
 }
