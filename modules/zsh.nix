@@ -84,16 +84,18 @@ in
       # Fix vi-mode timeout
       KEYTIMEOUT = "1";
 
-      # Disable vim-mode tracking
-      # Pure prompt handles this
-      VIM_MODE_TRACK_KEYMAP = "no";
-
-      # Disable vim-mode indicator
+      # zsh-vim-mode settings
       MODE_INDICATOR = "";
+      MODE_CURSOR_VIINS = "blinking bar";
+      MODE_CURSOR_REPLACE = "$MODE_CURSOR_VIINS";
+      MODE_CURSOR_VICMD = "block";
+      MODE_CURSOR_SEARCH = "steady underline";
+      MODE_CURSOR_VISUAL = "$MODE_CURSOR_VICMD steady bar";
+      MODE_CURSOR_VLINE = "$MODE_CURSOR_VISUAL";
 
       # pure prompt
       PURE_PROMPT_SYMBOL = "›";
-      PURE_PROMPT_VICMD_SYMBOL = "›";
+      PURE_PROMPT_VICMD_SYMBOL = "‹";
     };
 
     history.size = 10000;
@@ -108,9 +110,6 @@ in
         '';
 
         extra = ''
-          # Fix reset RPS1
-          unset RPS1
-
           # Pass arguments to command if pattern matching fails
           # This fixes using carrot (^) in git for example
           # https://stackoverflow.com/a/16864766/10913628
@@ -127,24 +126,6 @@ in
           if [ -e "$(command -v fortune)" ]; then
           	echo "" && fortune -s && echo ""
           fi
-
-          # Initial cursor style
-          echo -ne "\e[5 q" # blinking line
-
-          # Change cursor style on Vi mode change
-          reset_vim_prompt_widget() {
-          	echo -ne "\e[5 q" # blinking line
-          }
-
-          update_vim_prompt_widget() {
-          	case $KEYMAP in
-          	vicmd) echo -ne "\e[1 q" ;; # blinking block
-          	*) echo -ne "\e[5 q" ;;     # blinking line
-          	esac
-          }
-
-          add-zle-hook-widget zle-line-finish reset_vim_prompt_widget
-          add-zle-hook-widget zle-keymap-select update_vim_prompt_widget
         '';
       in
       mkMerge [
