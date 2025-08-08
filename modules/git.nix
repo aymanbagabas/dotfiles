@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 
+let
+  name = "Ayman Bagabas";
+  email = "ayman.bagabas@gmail.com";
+in
 {
   home.packages = with pkgs; [
     gh
@@ -20,8 +24,8 @@
     enable = true;
     package = pkgs.git; # install git tools
     lfs.enable = true; # install git-lfs
-    userName = "Ayman Bagabas";
-    userEmail = "ayman.bagabas@gmail.com";
+    userName = "${name}";
+    userEmail = "${email}";
     signing = {
       key = config.programs.gpg.settings.default-key;
       signByDefault = true;
@@ -130,6 +134,24 @@
       rebase = {
         autoStash = true;
         autoSquash = true;
+      };
+      # This uses git-credential-email from
+      # https://github.com/AdityaGarg8/git-credential-email
+      sendemail = {
+        smtpServer = "smtp.gmail.com";
+        smtpServerPort = "587";
+        smtpEncryption = "tls";
+        smtpUser = "${email}";
+        smtpAuth = "OAUTHBEARER";
+        from = "${name} <${email}>";
+      };
+      credential = {
+        "smtp://smtp.gmail.com:587" = {
+          helper = [
+            ""
+            "gmail"
+          ];
+        };
       };
     };
   };
