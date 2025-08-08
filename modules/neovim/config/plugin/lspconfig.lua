@@ -375,3 +375,5 @@ lspconfig.clangd.setup({
 lspconfig.zls.setup({})
 
 lspconfig.terraformls.setup({})
+
+lspconfig.jdtls.setup({})

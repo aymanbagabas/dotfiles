@@ -109,6 +109,7 @@ in
         hadolint
         helm-ls
         impl
+        jdt-language-server
         ltex-ls
         lua-language-server
         markdownlint-cli2
