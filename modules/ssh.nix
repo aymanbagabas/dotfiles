@@ -3,14 +3,15 @@
 {
   programs.ssh = {
     enable = true;
-    serverAliveInterval = 60;
+    enableDefaultConfig = false;
     includes = [
       "~/.ssh/config.local"
       "~/.ssh/my_config"
     ];
-    addKeysToAgent = "yes";
     matchBlocks = {
       "*" = {
+        serverAliveInterval = 60;
+        addKeysToAgent = "yes";
         identityFile = "~/.ssh/id";
         extraOptions = {
           UseKeyChain = "yes";
