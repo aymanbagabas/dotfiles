@@ -94,14 +94,14 @@ end, { desc = "Colorscheme with Preview" })
 
 local documentSymbols = function()
   builtin.lsp_document_symbols({
-    symbols = require("kind_filter").get(),
+    symbols = require("kind_filter").get(0),
   })
 end
 vim.keymap.set("n", "gO", documentSymbols, { desc = "Goto Symbol" })
 vim.keymap.set("n", "<leader>ss", documentSymbols, { desc = "Goto Symbol" })
 vim.keymap.set("n", "<leader>sS", function()
   builtin.lsp_dynamic_workspace_symbols({
-    symbols = require("kind_filter").get(),
+    symbols = require("kind_filter").get(0),
   })
 end, {
   desc = "Goto Symbol (Workspace)",

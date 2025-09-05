@@ -44,7 +44,7 @@ require("lualine").setup({
       {
         function()
           local c = vim.b.gitsigns_blame_line_dict
-          return require("gitsigns.util").expand_format("<author>, <author_time:%R>", c, false)
+          return require("gitsigns.util").expand_format("<author>, <author_time:%R>", c)
         end,
         cond = function()
           return package.loaded["gitsigns"] and vim.b.gitsigns_blame_line ~= nil

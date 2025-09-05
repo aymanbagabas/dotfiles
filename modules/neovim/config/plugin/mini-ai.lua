@@ -1,6 +1,3 @@
----@alias Mini.ai.loc {line:number, col:number}
----@alias Mini.ai.region {from:Mini.ai.loc, to:Mini.ai.loc}
-
 -- Mini.ai indent text object
 -- For "a", it will include the non-whitespace line surrounding the indent block.
 -- "a" is line-wise, "i" is character-wise.
