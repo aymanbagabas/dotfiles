@@ -118,8 +118,6 @@ M.set_keymap = function(client, bufnr)
     vim.keymap.set(modes, lhs, rhs, opts)
   end
 
-  keymap("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
-  keymap("n", "<leader>cl", vim.lsp.codelens.run, { desc = "CodeLens" })
   keymap("n", "<leader>xl", vim.diagnostic.setloclist, { desc = "Location List" })
   keymap("n", "<leader>xq", vim.diagnostic.setqflist, { desc = "Quickfix List" })
 

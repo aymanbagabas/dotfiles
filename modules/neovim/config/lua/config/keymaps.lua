@@ -65,7 +65,7 @@ local diagnostic_goto = function(next, severity)
   local go = next and 1 or -1
   severity = severity and vim.diagnostic.severity[severity] or nil
   return function()
-    vim.diagnostic.jump({ count = go, severity = severity })
+    vim.diagnostic.jump({ count = go, severity = severity, float = true })
   end
 end
 vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
