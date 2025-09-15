@@ -43,6 +43,9 @@ vim.diagnostic.config({
   underline = true,
   severity_sort = true,
   float = float_config,
+  jump = {
+    float = true,
+  },
 })
 
 vim.lsp.handlers[ms.textDocument_hover] = vim.lsp.with(vim.lsp.handlers.hover, float_config)
