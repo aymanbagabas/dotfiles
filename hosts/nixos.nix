@@ -17,6 +17,7 @@ in
   users.users.${user} = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
+    uid = 1000;
   };
 
   users.defaultUserShell = pkgs.zsh;
