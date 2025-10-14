@@ -6,6 +6,7 @@ in
 {
   xdg.configFile."kitty/kitty.conf".text = ''
     macos_option_as_alt left
+    macos_titlebar_color background
 
     font_family JetBrains Mono
     bold_font JetBrains Mono Bold
@@ -23,7 +24,7 @@ in
     map cmd+7 goto_tab 7
     map cmd+8 goto_tab 8
     map cmd+9 goto_tab 9
-    map cmd+0 goto_tab 0
+    map cmd+0 goto_tab 10
 
     tab_bar_edge top
     tab_bar_style separator
