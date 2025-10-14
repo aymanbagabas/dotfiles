@@ -3,6 +3,7 @@
   dotfiles,
   isLinux,
   isHeadless,
+  isDarwin,
   ...
 }:
 
@@ -57,6 +58,10 @@ in
       # DevOps
       (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     ]
+      ++ (lib.optionals isDarwin [
+        # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
+        (writeShellScriptBin "gsed" ''exec ${gnused}/bin/sed "$@"'')
+      ])
     ++ (
       lib.optionals (!isHeadless && isLinux) [
         _1password-gui

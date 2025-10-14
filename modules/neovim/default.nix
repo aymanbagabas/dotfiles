@@ -127,11 +127,7 @@ in
         vscode-langservers-extracted
         yaml-language-server
         zls
-      ]
-      ++ (lib.optionals isDarwin [
-        # Fixes nvim-spectre "gsed" error https://github.com/nvim-pack/nvim-spectre/issues/101
-        (writeShellScriptBin "gsed" ''exec ${gnused}/bin/sed "$@"'')
-      ]);
+      ];
 
     extraPython3Packages = ps: [ ps.python-lsp-server ];
   };
