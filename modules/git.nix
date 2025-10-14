@@ -54,6 +54,7 @@ in
       authors = "log --date='format:%Y' --pretty='format:%ad %an <%ae>'";
       graph = "log --graph --all --decorate --oneline";
       purge-tags = "!git tag -l | xargs git tag -d && git fetch -t";
+      wipeout = "!git branch | sed 's/^[*]* *//' | gum choose --no-limit --header 'Wipeout which branches?' | xargs git branch -D";
     };
     diff-highlight.enable = true;
     extraConfig = {
