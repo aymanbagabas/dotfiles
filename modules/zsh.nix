@@ -110,6 +110,15 @@ in
         '';
 
         extra = ''
+          # Load bashcompinit to enable Bash completion functions in Zsh
+          autoload -Uz bashcompinit
+          bashcompinit
+
+          ## Load aws_cli completion if installed
+          if [ -e "$(command -v aws_completer)" ]; then
+            complete -C "$(command -v aws_completer)" aws
+          fi
+
           # Pass arguments to command if pattern matching fails
           # This fixes using carrot (^) in git for example
           # https://stackoverflow.com/a/16864766/10913628
