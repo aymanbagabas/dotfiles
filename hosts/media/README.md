@@ -9,7 +9,7 @@ This host configurations bootstrap the _media_ QEMU virtual machine. This VM con
 
 ```sh
 sudo -i
-curl https://raw.githubusercontent.com/aymanbagabas/dotfiles/master/hosts/$HOST/disko-config.nix -o /tmp/disko-config.nix # Make sure to replace $HOST with the targeted host name.
+curl -L https://raw.githubusercontent.com/aymanbagabas/dotfiles/master/hosts/$HOST/disko-config.nix -o /tmp/disko-config.nix # Make sure to replace $HOST with the targeted host name.
 cd /tmp
 nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount disko-config.nix
 ```
