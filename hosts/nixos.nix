@@ -37,6 +37,11 @@ in
   # Enable passwordless sudo
   security.sudo.wheelNeedsPassword = false;
 
+  environment.systemPackages = with pkgs; [
+    pkgs.cifs-utils
+    (with nur.repos.aymanbagabas; shcopy)
+  ];
+
   # Enable basic programs.
   programs.neovim = {
     enable = true;
@@ -52,6 +57,7 @@ in
 
   programs.htop.enable = true;
   programs.less.enable = true;
+  programs.gnupg.enable = true;
 
   # Common services.
   services.openssh = {
