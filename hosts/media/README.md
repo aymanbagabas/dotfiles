@@ -4,22 +4,20 @@ This host configurations bootstrap the _media_ QEMU virtual machine. This VM con
 
 ## Installation
 
-1. Set up and format the disk(s) using
-   [Disko](https://github.com/nix-community/disko/blob/master/docs/quickstart.md):
+We use
+[Disko](https://github.com/nix-community/disko/blob/master/docs/quickstart.md)
+to set up the disk partitions and file systems. The configuration file is
+located at `hosts/media/disko-config.nix`.
+
+After booting up a live NixOS environment, run the following commands:
 
 ```sh
-sudo -i
-curl -L https://raw.githubusercontent.com/aymanbagabas/dotfiles/master/hosts/$HOST/disko-config.nix -o /tmp/disko-config.nix # Make sure to replace $HOST with the targeted host name.
+export HOST=media # Change this to the targeted host name.
+sudo -E curl -L https://raw.githubusercontent.com/aymanbagabas/dotfiles/master/hosts/$HOST/disko-config.nix -o /tmp/disko-config.nix
 cd /tmp
-nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount disko-config.nix
-```
-
-2. Boot up NixOS run the following:
-
-```sh
-sudo -i
+sudo -E nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount disko-config.nix
 nix-shell -p git nixVersions.latest # Remove if you want to use stable instead
-git clone https://github.com/aymanbagabas/dotfiles.git /mnt/etc/nixos
+sudo git clone https://github.com/aymanbagabas/dotfiles.git /mnt/etc/nixos
 cd /mnt/etc/nixos
-nixos-install --flake .#media --impure
+sudo -E nixos-install --flake .#$HOST --impure
 ```
