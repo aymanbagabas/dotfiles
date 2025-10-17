@@ -74,61 +74,6 @@ in
     };
   };
 
-  # enable vaapi on OS-level
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-vaapi-driver # previously vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-      intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
-      vpl-gpu-rt # QSV on 11th gen or newer
-      # intel-media-sdk # QSV up to 11th gen
-    ];
-  };
-
-  # services.jellyfin = mkService "jellyfin";
-  # services.plex = mkService "plex";
-  # services.tautulli = mkService "tautulli";
-  # services.sonarr = mkService "sonarr";
-  # services.readarr = mkService "readarr";
-  # services.radarr = mkService "radarr";
-  # services.bazarr = mkService "bazarr";
-  # services.prowlarr = mkService "prowlarr";
-  # services.calibre-web = mkService "calibre-web" // {
-  #   listen.ip = "0.0.0.0";
-  #   options.calibreLibrary = "${calibreLibrary}";
-  # };
-  # services.calibre-server = {
-  #   enable = true;
-  #   openFirewall = true;
-  #   group = "wheel";
-  #   user = "${user}";
-  #   libraries = [ "${calibreLibrary}" ];
-  #   extraFlags = [
-  #     "--disable-use-bonjour" # Disable Bonjour because it interferes with Avahi
-  #   ];
-  #   auth = {
-  #     enable = true;
-  #     userDb = "/mnt/data/services/calibre-server/users.sqlite";
-  #   };
-  # };
-
-  # Sonarr uses an EOL dotnet version, so we need to use the old runtime.
-  # TODO: Update Sonarr to use a newer version of dotnet.
-  # See https://github.com/Sonarr/Sonarr/pull/7443
-  # See https://github.com/NixOS/nixpkgs/issues/360592
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   "aspnetcore-runtime-6.0.36"
-  #   "aspnetcore-runtime-wrapped-6.0.36"
-  #   "dotnet-sdk-6.0.428"
-  #   "dotnet-sdk-wrapped-6.0.428"
-  # ];
-
   # Virtualisation using Docker
   virtualisation.docker.enable = true;
   virtualisation.docker.daemon.settings = {
