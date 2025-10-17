@@ -38,7 +38,8 @@ in
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
-    pkgs.cifs-utils
+    cifs-utils
+    gnupg
     (with nur.repos.aymanbagabas; shcopy)
   ];
 
@@ -57,7 +58,6 @@ in
 
   programs.htop.enable = true;
   programs.less.enable = true;
-  programs.gnupg.enable = true;
 
   # Common services.
   services.openssh = {
