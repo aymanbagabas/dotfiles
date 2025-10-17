@@ -45,11 +45,6 @@ in
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/mnt/data" = {
-    device = "/dev/disk/by-label/media-data";
-    fsType = "ext4";
-  };
-
   swapDevices = [ { device = "/dev/vg1/swap"; } ];
 
   fileSystems."/mnt/share/backups" = {
