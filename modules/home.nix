@@ -42,7 +42,7 @@ in
       ]);
 
       # My GPG key ID
-      KEYID = "${config.programs.gpg.settings.default-key}";
+      KEYID = "593D6EEE7871708E329619322EBA00DFFCC63351";
 
       # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
       TERMINFO_DIRS = "$TERMINFO_DIRS:$HOME/.local/share/terminfo";
