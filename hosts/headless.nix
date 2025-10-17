@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ../modules/home
     ../modules/scripts
     ../modules/tmux
   ];
