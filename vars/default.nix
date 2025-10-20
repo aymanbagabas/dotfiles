@@ -4,4 +4,7 @@
   pgp = {
     defaultKey = "593D6EEE7871708E329619322EBA00DFFCC63351";
   };
+  github = {
+    username = "aymanbagabas";
+  };
 }
