@@ -209,6 +209,7 @@
                 for p in ''${PLUGINS[@]}; do
                   echo "  { src = \"$p\" },"
                 done
+                echo "  { src = \"https://github.com/mason-org/mason.nvim\" },"
                 echo "})"
               '')
               (writeScriptBin "generate-gitconfig" ''
