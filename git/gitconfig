@@ -1,0 +1,110 @@
+[alias]
+	authors = "log --date='format:%Y' --pretty='format:%ad %an <%ae>'"
+	fixes = "log --pretty='format:Fixes: %h (%s)'"
+	graph = "log --graph --all --decorate --oneline"
+	purge-tags = "!git tag -l | xargs git tag -d && git fetch -t"
+	wipeout = "!git branch | sed 's/^[*]* *//' | gum choose --no-limit --header 'Wipeout which branches?' | xargs git branch -D"
+
+[branch]
+	sort = "-committerdate"
+
+[color]
+	ui = true
+
+[color "diff"]
+	frag = "magenta bold"
+	meta = "yellow"
+	new = "green bold"
+	old = "red bold"
+	whitespace = "red reverse"
+
+[color "diff-highlight"]
+	newHighlight = "green bold 22"
+	newNormal = "green bold"
+	oldHighlight = "red bold 52"
+	oldNormal = "red bold"
+
+[column]
+	ui = "auto"
+
+[commit]
+	gpgSign = false
+
+[core]
+	abbrev = 12
+	autocrlf = false
+	editor = "nvim"
+
+[credential "smtp://smtp.gmail.com:587"]
+	helper = ""
+	helper = "gmail"
+
+[diff]
+	algorithm = "histogram"
+	colorMoved = "plain"
+	mnemonicPrefix = true
+	renames = true
+
+[fetch]
+	all = true
+	prune = true
+
+[format]
+	signOff = true
+
+[github]
+	user = "aymanbagabas"
+
+[help]
+	autocorrect = "prompt"
+
+[hub]
+	protocol = "ssh"
+
+[init]
+	defaultBranch = "master"
+
+[pull]
+	rebase = false
+
+[push]
+	autoSetupRemote = true
+	default = "simple"
+
+[rebase]
+	autoSquash = true
+	autoStash = true
+
+[rerere]
+	autoupdate = true
+	enabled = true
+
+[sendemail]
+	from = "Ayman Bagabas <ayman.bagabas@gmail.com>"
+	smtpAuth = "OAUTHBEARER"
+	smtpEncryption = "tls"
+	smtpServer = "smtp.gmail.com"
+	smtpServerPort = "587"
+	smtpUser = "ayman.bagabas@gmail.com"
+
+[tag]
+	gpgSign = false
+	sort = "version:refname"
+
+[tig]
+	mouse = true
+	mouse-wheel-cursor = true
+
+[tig "color"]
+	cursor = "black green bold"
+	title-blur = "black blue"
+	title-focus = "black blue bold"
+
+[url "git@github.com:"]
+	insteadOf = "https://github.com/"
+
+[user]
+	email = "ayman.bagabas@gmail.com"
+	name = "Ayman Bagabas"
+	signingkey = "593D6EEE7871708E329619322EBA00DFFCC63351"
+
