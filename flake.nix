@@ -147,7 +147,7 @@
               [
                 gnupg
               ]
-              ++ (if pkgs.stdenv.isDarwin then [ pinentry_mac ] else [ pinentry-all ])
+              ++ (if pkgs.stdenv.isDarwin then [ pinentry_mac ] else [ pinentry-tty ])
               ++ [
                 (writeScriptBin "dot-gpg-agent-config" ''
                   cat <<EOF
