@@ -112,7 +112,7 @@ in
   # Create a systemd user oneshot service to create /run/user/$UID/gnupg
   # directory on boot right after login.
   systemd.user.services.create-gnupg-dir = let
-    uid = config.users.users."${user}".uid;
+    uid = builtins.toString config.users.users."${user}".uid;
   in {
     description = "Create /run/user/${uid}/gnupg directory on boot";
     after = [ "default.target" ];
