@@ -74,4 +74,5 @@ vim.pack.add({
   { src = "https://github.com/tpope/vim-vinegar" },
   { src = "https://github.com/folke/which-key.nvim" },
   { src = "https://github.com/folke/zen-mode.nvim" },
+  { src = "https://github.com/mason-org/mason.nvim" },
 })
