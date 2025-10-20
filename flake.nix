@@ -203,7 +203,7 @@
               (writeScriptBin "generate-nvim-plugins" ''
                 # This script outputs a list of Neovim plugin repository URLs
                 # based on the list defined in modules/neovim/plugins.nix.
-                PLUGINS=(${builtins.concatStringsSep " " (map (p: p.meta.homepage) (import ./modules/neovim/plugins.nix { inherit pkgs; })) })
+                PLUGINS=(${builtins.concatStringsSep " " (map (p: lib.removeSuffix "/" p.meta.homepage) (import ./modules/neovim/plugins.nix { inherit pkgs; })) })
 
                 echo "vim.pack.add({"
                 for p in ''${PLUGINS[@]}; do
