@@ -44,7 +44,7 @@ jobs:
           nix develop . --command generate-gpg-agent-conf > gnupg/gpg-agent.conf
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: update autogen configs"
           branch: master
