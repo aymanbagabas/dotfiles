@@ -1,11 +1,5 @@
-param(
-	[Parameter(HelpMessage = "Dry run")]
-	[switch]$DryRun,
-	[Parameter(HelpMessage = "Show this help message and exit")]
-	[switch]$Help,
-	[Parameter(HelpMessage = "Action to perform")]
-	[string]$Action = $null
-)
+# This script bootstraps a Windows development environment by installing
+# packages via winget and configuring dotfiles.
 
 # Exit if not running on Windows
 if ($ENV:OS -ne "Windows_NT" -and [System.Environment]::OSVersion.Platform -ne "Win32NT") {
@@ -13,107 +7,52 @@ if ($ENV:OS -ne "Windows_NT" -and [System.Environment]::OSVersion.Platform -ne "
 	exit 1
 }
 
-# Global variables
-Get-Content .vars | ForEach-Object { Invoke-Expression "`$$_" }
-$DRY_RUN = $false
+$PGKS = @(
+	"7zip.7zip",
+	"BurntSushi.ripgrep.MSVC",
+	"Git.Git",
+	"GnuPG.Gpg4win",
+	"Microsoft.PowerShell",
+	"Microsoft.VisualStudioCode",
+	"Microsoft.WindowsTerminal",
+	# "Neovim.Neovim",
+	"Neovim.Neovim.Nightly", # Use nightly until 0.12 is released
+	"Notepad++.Notepad++",
+	"eza-community.eza",
+	"junegunn.fzf",
+	"sharkdp.fd"
+)
 
-if ($Help) {
-	Show-Help
-	return
-}
-if ($DryRun) {
-	$DRY_RUN = $true
-}
+Write-Host "===== Installing packages..."
+winget.exe install $PGKS -e
 
-# Functions
+Write-Host "===== Done installing packages."
+Write-Host
 
-function Templatize {
-	param(
-		[Parameter(Mandatory = $true)]
-		[string]$TemplatePath
-	)
-	Get-Content "$TemplatePath" -Raw | ForEach-Object { $ExecutionContext.InvokeCommand.ExpandString($_) }
-}
+Write-Host "===== Bootstrapping dotfiles..."
+Write-Host
+Write-Host "===== Configuring Git..."
+Copy-Item "$PSScriptRoot\git\gitconfig" "$Env:HOME\.gitconfig" -Force
+Copy-Item "$PSScriptRoot\git\gitignore" "$Env:HOME\.gitignore" -Force
+git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
+git config --global gpg.program "C:/Program Files (x86)/GnuPG/bin/gpg.exe"
 
-function Insert-Line {
-	param(
-		[Parameter(Mandatory = $true)]
-		[string]$Pattern,
-		[Parameter(Mandatory = $true)]
-		[string]$Line,
-		[Parameter(Mandatory = $true)]
-		[string]$Path
-	)
-	Write-Host "Inserting line '$Line' into '$Path'"
-	if (!$DRY_RUN) {
-		if ((Get-Content "$Path" | Select-String -Pattern "$Pattern" -Quiet) -eq $false) {
-			Write-Output "$Line" | Out-File -Append "$Path"
-		}
-	}
-}
+Write-Host "===== Done configuring Git."
+Write-Host
 
-function Link-File {
-	param(
-		[Parameter(Mandatory = $true)]
-		[string]$Source,
-		[Parameter(Mandatory = $true)]
-		[string]$Destination
-	)
-	Write-Host "Linking $Source -> $Destination"
-	if (!$DRY_RUN) {
-		New-Item -ItemType Directory -Path (Split-Path $Destination -Parent) -Force > $null
-		New-Item -ItemType SymbolicLink -Path "$Destination" -Target "$Source" -Force > $null
-	}
-}
+Write-Host "===== Configuring Neovim..."
+New-Item -ItemType Directory -Path "$Env:LOCALAPPDATA\nvim" -Force > $null
+Copy-Item "$PSScriptRoot\neovim" "$Env:LOCALAPPDATA\nvim" -Recurse -Force
+Write-Host "===== Done configuring Neovim."
+Write-Host
 
-function Install {
-	if ($DRY_RUN) {
-		Write-Host "Dry run, won't install anything"
-	}
-	else {
-		Write-Host "Installing dotfiles..."
-	}
-
-	Write-Host
-	Get-ChildItem "$PSScriptRoot\*\install.ps1" | ForEach-Object {
-		Write-Host "===== Installing '$($_.Directory.BaseName)' dotfiles..."
-
-		& $_.FullName
-
-		Write-Host
-	}
-
-	Write-Host "Done installing dotfiles"
-}
-
-function Show-Help {
-	Write-Host "Usage: bootstrap.ps1 [-DryRun] [-Help] [-Action <action>]"
-	Write-Host "  -DryRun: Dry run"
-	Write-Host "  -Help: Show this help message"
-	Write-Host "  -Action: Action to perform"
-	Write-Host "    install: Install dotfiles"
-	Write-Host "    help: Show this help message and exit"
-	Get-ChildItem "$PSScriptRoot\scripts\*.ps1" | ForEach-Object { Write-Host "    $(($_).BaseName)" }
-}
-
-switch ($Action) {
-	"install" {
-		Install
-		return
-	}
-	"help" {
-		Show-Help
-		return
-	}
-	default {
-		$scripts = @((Get-ChildItem "$PSScriptRoot\scripts\*.ps1").BaseName)
-		for ($i = 0; $i -lt $scripts.Length; $i++) {
-			if ($Action -eq $scripts[$i]) {
-				& "$PSScriptRoot\scripts\$($scripts[$i])"
-				return
-			}
-		}
-		Show-Help
-		exit 1
-	}
-}
+Write-Host "===== Configuring GnuPG..."
+New-Item -ItemType Directory -Path "$Env:APPDATA\Roaming\gnupg" -Force > $null
+Copy-Item "$PSScriptRoot\gnupg\gpg-agent.conf" "$Env:APPDATA\gnupg\gpg-agent.conf" -Force
+Write-Host "\n" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
+Write-Host "enable-win32-openssh-support" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
+Write-Host "use-standard-socket" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
+# Run gpg-agent on startup
+Copy-Item -Path "$PSScriptRoot\gnupg\gpg-connect-agent.exe.lnk" -Destination "$Env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\gpg-connect-agent.exe.lnk"
+Write-Host "===== Done configuring GnuPG."
+Write-Host

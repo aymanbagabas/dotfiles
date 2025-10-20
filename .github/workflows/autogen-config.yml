@@ -34,10 +34,14 @@ jobs:
 
       - name: Generate git config
         run: |
-          rm -rf git
           mkdir -p git
           nix develop . --command generate-gitconfig > git/gitconfig
           nix develop . --command generate-gitignores > git/gitignore
+
+      - name: Generate gpg config
+        run: |
+          mkdir -p gnupg
+          nix develop . --command generate-gpg-agent-conf > gnupg/gpg-agent.conf
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4

@@ -59,17 +59,13 @@ in
 
     # For more info
     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-    pinentry.package = with pkgs; if isDarwin then pinentry_mac else pinentry-tty;
-    defaultCacheTtl = 31536000;
-    maxCacheTtl = 31536000;
-    defaultCacheTtlSsh = 31536000;
-    maxCacheTtlSsh = 31536000;
     enableZshIntegration = true;
     enableExtraSocket = true;
     enableScDaemon = true;
-    enableSshSupport = true;
     grabKeyboardAndMouse = true;
-    extraConfig = ''
+    extraConfig = (import ./gpg-agent-config.nix {
+      package = with pkgs; lib.meta.getExe (if isDarwin then pinentry_mac else pinentry-tty);
+    }) + ''
       #verbose
       log-file ${homedir}/gpg-agent.log
     '';

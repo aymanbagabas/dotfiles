@@ -226,6 +226,11 @@
                 ${builtins.concatStringsSep "\n" (import ./modules/gitignores.nix) + "\n"}
                 EOF
               '')
+              (writeScriptBin "generate-gpg-agent-conf" ''
+                cat <<EOF
+                ${import ./modules/gpg-agent-config.nix { }}
+                EOF
+              '')
             ];
           };
         }
