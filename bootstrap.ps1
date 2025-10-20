@@ -48,8 +48,8 @@ Write-Host
 
 Write-Host "===== Configuring GnuPG..."
 New-Item -ItemType Directory -Path "$Env:APPDATA\Roaming\gnupg" -Force > $null
-Copy-Item "$PSScriptRoot\gnupg\gpg-agent.conf" "$Env:APPDATA\gnupg\gpg-agent.conf" -Force
-"\n" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
+Copy-Item -Path "$PSScriptRoot\gnupg\gpg-agent.conf" -Destination "$Env:APPDATA\gnupg\gpg-agent.conf" -Force
+"`n" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
 "enable-win32-openssh-support" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
 "use-standard-socket" >> "$Env:APPDATA\gnupg\gpg-agent.conf"
 # Run gpg-agent on startup
