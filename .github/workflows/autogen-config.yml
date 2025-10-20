@@ -35,6 +35,7 @@ jobs:
       - name: Generate git config
         run: |
           rm -rf git
+          mkdir -p git
           nix develop . --command generate-gitconfig > git/gitconfig
           nix develop . --command generate-gitignores > git/gitignore
 
