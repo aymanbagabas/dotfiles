@@ -76,3 +76,5 @@ vim.pack.add({
   { src = "https://github.com/folke/zen-mode.nvim" },
   { src = "https://github.com/mason-org/mason.nvim" },
 })
+
+require('mason').setup()
