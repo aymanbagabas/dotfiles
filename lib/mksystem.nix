@@ -20,6 +20,7 @@ let
   systemFunc = if isDarwin then inputs.darwin.lib.darwinSystem else lib.nixosSystem;
   home-manager =
     if isDarwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
+  vars = import ../vars;
 in
 systemFunc rec {
   inherit system;
@@ -32,6 +33,7 @@ systemFunc rec {
       isDarwin
       isLinux
       isHeadless
+      vars
       ;
   };
   modules =

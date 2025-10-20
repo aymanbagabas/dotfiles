@@ -1,8 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vars, ... }:
 
 let
-  name = "Ayman Bagabas";
-  email = "ayman.bagabas@gmail.com";
+  name = vars.name;
+  email = vars.email;
 in
 {
   home.packages = with pkgs; [

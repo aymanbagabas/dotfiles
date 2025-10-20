@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, vars, ... }:
 
 let
   inherit (pkgs.lib)
@@ -8,7 +8,7 @@ let
   homedir = "${config.home.homeDirectory}/.gnupg";
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
-  defaultKey = "593D6EEE7871708E329619322EBA00DFFCC63351";
+  defaultKey = vars.pgp.defaultKey;
 
 in
 {
