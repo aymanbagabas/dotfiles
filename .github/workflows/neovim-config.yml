@@ -35,9 +35,9 @@ jobs:
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: update neovim plugins list"
+          commit_message: "chore: update neovim config"
           branch: master
-          file_pattern: "neovim/plugins.lua"
+          file_pattern: "neovim"
           author_name: "github-actions[bot]"
           author_email: "github-actions[bot]@users.noreply.github.com"
           commit_user_name: "github-actions[bot]"
