@@ -32,8 +32,8 @@ Write-Host
 Write-Host "===== Bootstrapping dotfiles..."
 Write-Host
 Write-Host "===== Configuring Git..."
-Copy-Item "$PSScriptRoot\git\gitconfig" "$Env:HOME\.gitconfig" -Force
-Copy-Item "$PSScriptRoot\git\gitignore" "$Env:HOME\.gitignore" -Force
+Copy-Item "$PSScriptRoot\git\gitconfig" "$Env:USERPROFILE\.gitconfig" -Force
+Copy-Item "$PSScriptRoot\git\gitignore" "$Env:USERPROFILE\.gitignore" -Force
 git config --global core.sshCommand "C:/Windows/System32/OpenSSH/ssh.exe"
 git config --global gpg.program "C:/Program Files (x86)/GnuPG/bin/gpg.exe"
 
