@@ -26,6 +26,7 @@ jobs:
 
       - name: Generate neovim plugins list
         run: |
+          mkdir -p neovim
           nix develop . --command generate-nvim-plugins > neovim/plugins.lua
 
       - name: Commit and push changes
