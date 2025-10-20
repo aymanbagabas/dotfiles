@@ -211,6 +211,21 @@
                 done
                 echo "})"
               '')
+              (writeScriptBin "generate-gitconfig" ''
+                # This script generates git configuration based on modules/gitconfig.nix
+                cat <<EOF
+                ${lib.generators.toGitINI (import ./modules/gitconfig.nix {
+                  vars = import ./vars/default.nix;
+                  signByDefault = false;
+                })}
+                EOF
+              '')
+              (writeScriptBin "generate-gitignores" ''
+                # This script generates gitignore patterns based on modules/gitignores.nix
+                cat <<EOF
+                ${builtins.concatStringsSep "\n" (import ./modules/gitignores.nix) + "\n"}
+                EOF
+              '')
             ];
           };
         }
