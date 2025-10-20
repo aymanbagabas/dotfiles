@@ -211,6 +211,8 @@
                 done
                 echo "  { src = \"https://github.com/mason-org/mason.nvim\" },"
                 echo "})"
+                echo
+                echo "require('mason').setup()"
               '')
               (writeScriptBin "generate-gitconfig" ''
                 # This script generates git configuration based on modules/gitconfig.nix
