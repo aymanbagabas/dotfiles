@@ -41,8 +41,9 @@ Write-Host "===== Done configuring Git."
 Write-Host
 
 Write-Host "===== Configuring Neovim..."
+Remove-Item -Recurse -Force "$Env:LOCALAPPDATA\nvim" -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Path "$Env:LOCALAPPDATA\nvim" -Force > $null
-Copy-Item "$PSScriptRoot\neovim" "$Env:LOCALAPPDATA\nvim" -Recurse -Force
+Copy-Item -Path "$PSScriptRoot\neovim\*" -Destination "$Env:LOCALAPPDATA\nvim" -Recurse -Force
 Write-Host "===== Done configuring Neovim."
 Write-Host
 
