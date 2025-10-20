@@ -44,9 +44,7 @@ jobs:
         with:
           commit_message: "chore: update autogen configs"
           branch: master
-          file_pattern: |
-            ./neovim
-            ./git
+          file_pattern: neovim git
           author_name: "github-actions[bot]"
           author_email: "github-actions[bot]@users.noreply.github.com"
           commit_user_name: "github-actions[bot]"
