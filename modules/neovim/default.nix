@@ -96,7 +96,7 @@ in
         copilot-language-server
         delve
         docker-compose-language-service
-        dockerfile-language-server-nodejs
+        dockerfile-language-server
         go-tools
         gofumpt
         golangci-lint
