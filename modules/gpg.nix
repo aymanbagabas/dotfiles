@@ -65,7 +65,7 @@ in
     grabKeyboardAndMouse = true;
     extraConfig = (import ./gpg-agent-config.nix {
       package = with pkgs; lib.meta.getExe (if isDarwin then pinentry_mac else pinentry-tty);
-    }) + ''
+    }) + "\n" + ''
       #verbose
       log-file ${homedir}/gpg-agent.log
     '';
