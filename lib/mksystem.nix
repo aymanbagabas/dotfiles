@@ -51,5 +51,6 @@ systemFunc rec {
     ++ (lib.optionals isLinux [
       inputs.disko.nixosModules.disko
       inputs.sops-nix.nixosModules.sops # Darwin doesn't support sops-nix yet
+      inputs.compose2nix.nixosModules.compose2nix
     ]);
 }

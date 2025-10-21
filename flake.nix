@@ -27,6 +27,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    compose2nix = {
+      url = "git+file:///home/ayman/Source/aksiksi/compose2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Vim Plugins
     copilot-lua = {
       url = "github:zbirenbaum/copilot.lua";

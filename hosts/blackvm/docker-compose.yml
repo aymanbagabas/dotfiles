@@ -1,0 +1,6 @@
+name: "myproject"
+
+networks:
+  something:
+    labels:
+      - "test-label=okay"
