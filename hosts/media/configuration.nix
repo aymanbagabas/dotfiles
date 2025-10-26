@@ -70,6 +70,14 @@ in
     }];
   };
 
+  hardware.graphics.enable = true;
+  hardware.graphics.extraPackages = with pkgs; [
+    intel-media-driver
+    intel-gpu-tools
+    vpl-gpu-rt
+    libvdpau-va-gl
+  ];
+
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
 
