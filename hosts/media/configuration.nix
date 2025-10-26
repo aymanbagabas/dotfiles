@@ -26,8 +26,8 @@ in
     ../../services
     ../autoupgrade.nix
     ../nixos.nix
-    ./containers
     ./disko-config.nix
+    ./docker-compose.nix
     ./hardware-configuration.nix
     ./secrets.nix
   ];
@@ -60,6 +60,15 @@ in
   system.stateVersion = "24.05"; # Did you read the comment?
 
   networking.hostName = hostname;
+
+  # Configure a static IP for the P2P Nas connection.
+  networking.interfaces."ens19" = {
+    useDHCP = false;
+    ipv4.addresses = [{
+      address = "10.1.1.3";
+      prefixLength = 24;
+    }];
+  };
 
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true; # enable copy and paste between host and guest

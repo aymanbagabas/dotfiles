@@ -1,0 +1,352 @@
+name: media
+
+services:
+  prowlarr:
+    image: ghcr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    hostname: prowlarr
+    restart: unless-stopped
+    ports:
+      - "9696:9696"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - prowlarr_data:/config
+
+  backup-prowlarr:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-prowlarr
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - prowlarr_data:/backup/prowlarr:ro
+      - /mnt/share/backups/services/prowlarr:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  sonarr:
+    image: ghcr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    hostname: sonarr
+    restart: unless-stopped
+    ports:
+      - "8989:8989"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - sonarr_data:/config
+      - /mnt/share/autopirate/Tv:/tv
+      - /mnt/share/autopirate/Etc/downloads:/downloads
+      - /mnt/share/autopirate/Etc/torrents:/data
+
+  backup-sonarr:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-sonarr
+    restart: unless-stopped
+    depends_on:
+      - sonarr
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - sonarr_data:/backup/sonarr:ro
+      - /mnt/share/backups/services/sonarr:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  bazarr:
+    image: ghcr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    hostname: bazarr
+    restart: unless-stopped
+    ports:
+      - "6767:6767"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - bazarr_data:/config
+      - /mnt/share/autopirate/Tv:/tv
+      - /mnt/share/autopirate/Movies:/movies
+
+  backup-bazarr:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-bazarr
+    restart: unless-stopped
+    depends_on:
+      - bazarr
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - bazarr_data:/backup/bazarr:ro
+      - /mnt/share/backups/services/bazarr:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  radarr:
+    image: ghcr.io/linuxserver/radarr:latest
+    container_name: radarr
+    hostname: radarr
+    restart: unless-stopped
+    ports:
+      - "7878:7878"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - radarr_data:/config
+      - /mnt/share/autopirate/Movies:/movies
+      - /mnt/share/autopirate/Etc/downloads:/downloads
+      - /mnt/share/autopirate/Etc/torrents:/data
+
+  backup-radarr:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-radarr
+    restart: unless-stopped
+    depends_on:
+      - radarr
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - radarr_data:/backup/radarr:ro
+      - /mnt/share/backups/services/radarr:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  readarr:
+    image: ghcr.io/hotio/readarr:latest
+    container_name: readarr
+    hostname: readarr
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - readarr_data:/config
+      - /mnt/share/autopirate/Books:/books
+      - /mnt/share/autopirate/Etc/downloads:/downloads
+      - /mnt/share/autopirate/Etc/torrents:/data
+
+  backup-readarr:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-readarr
+    restart: unless-stopped
+    depends_on:
+      - readarr
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - readarr_data:/backup/readarr:ro
+      - /mnt/share/backups/services/readarr:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  searcharr:
+    image: toddrob/searcharr
+    container_name: searcharr
+    hostname: searcharr
+    restart: unless-stopped
+    networks:
+      - services
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - searcharr_data:/app
+
+  backup-searcharr:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-searcharr
+    restart: unless-stopped
+    depends_on:
+      - searcharr
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - searcharr_data:/backup/searcharr:ro
+      - /mnt/share/backups/services/searcharr:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  calibre-web:
+    image: ghcr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    hostname: calibre-web
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - calibre_web_data:/config
+      - /mnt/share/autopirate/Books:/books
+
+  backup-calibre-web:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-calibre-web
+    restart: unless-stopped
+    depends_on:
+      - calibre-web
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - calibre_web_data:/backup/calibre-web:ro
+      - /mnt/share/backups/services/calibre-web:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  calibre-server:
+    image: ghcr.io/linuxserver/calibre:latest
+    container_name: calibre-server
+    hostname: calibre-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - calibre_server_data:/config
+      - /mnt/share/autopirate/Books:/books
+
+  backup-calibre-server:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-calibre-server
+    restart: unless-stopped
+    depends_on:
+      - calibre-server
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - calibre_server_data:/backup/calibre-server:ro
+      - /mnt/share/backups/services/calibre-server:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  plex:
+    image: ghcr.io/linuxserver/plex:latest
+    container_name: plex
+    hostname: plex
+    restart: unless-stopped
+    ports:
+      - "32400:32400"
+      - "3005:3005"
+      - "8324:8324"
+      - "32469:32469"
+      - "1900:1900/udp"
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+    networks:
+      - services
+    devices:
+      - "/dev/dri:/dev/dri"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK_SET=022
+      - PLEX_CLAIM=claim-TFbWN86ovmwzCsaD_oru
+      - ADVERTISE_IP=https://plex.ayman.ba:32400/
+      - VERSION=docker
+    volumes:
+      - plex_data:/config
+      - /mnt/share/autopirate/Tv:/tv
+      - /mnt/share/autopirate/Movies:/movies
+      - /mnt/share/autopirate/Music:/music
+
+  backup-plex:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-plex
+    restart: unless-stopped
+    depends_on:
+      - plex
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - plex_data:/backup/plex:ro
+      - /mnt/share/backups/services/plex:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  tautulli:
+    image: ghcr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    hostname: tautulli
+    restart: unless-stopped
+    ports:
+      - "8181:8181"
+    networks:
+      - services
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - tautulli_data:/config
+
+  backup-tautulli:
+    image: offen/docker-volume-backup:v2
+    container_name: backup-tautulli
+    restart: unless-stopped
+    depends_on:
+      - tautulli
+    environment:
+      - BACKUP_CRON_EXPRESSION=@monthly
+      - BACKUP_RETENTION_DAYS=90
+    volumes:
+      - tautulli_data:/backup/tautulli:ro
+      - /mnt/share/backups/services/tautulli:/archive
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  services:
+    external: true
+
+volumes:
+  prowlarr_data:
+  sonarr_data:
+  bazarr_data:
+  radarr_data:
+  readarr_data:
+  searcharr_data:
+  calibre_web_data:
+  calibre_server_data:
+  plex_data:
+  tautulli_data:
