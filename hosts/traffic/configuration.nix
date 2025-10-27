@@ -88,6 +88,7 @@ in
           inherit locations;
           forceSSL = true;
           enableACME = true;
+          acmeRoot = null;
         };
         proxy =
           url:
