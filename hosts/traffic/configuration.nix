@@ -57,12 +57,12 @@ in
     defaults = {
       email = "${email}";
       server = mkIf useStaging "https://acme-staging-v02.api.letsencrypt.org/directory";
-    };
-    certs."${subMainDomain}" = {
-      group = "wheel";
-      domain = "*.${subMainDomain}";
       dnsProvider = dnsProvider;
       dnsPropagationCheck = true;
+      group = "wheel";
+    };
+    certs."${subMainDomain}" = {
+      domain = "*.${subMainDomain}";
       extraDomainNames = [
         "${altDomain}"
         "*.${altDomain}"
