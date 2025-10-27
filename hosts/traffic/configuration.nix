@@ -75,7 +75,7 @@ in
 
   services.nginx = {
     enable = true;
-    user = "${user}";
+    user = "acme";
     group = "wheel";
     recommendedGzipSettings = true;
     recommendedOptimisation = true;
