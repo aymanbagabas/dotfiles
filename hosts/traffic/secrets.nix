@@ -7,7 +7,7 @@
       cert = {
         sopsFile = "${dotfiles}/secrets/cert.env";
         format = "dotenv";
-        owner = "${user}";
+        owner = "acme";
         group = "wheel";
       };
     };
