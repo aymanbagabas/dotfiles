@@ -60,6 +60,7 @@ in
       dnsProvider = dnsProvider;
       dnsPropagationCheck = true;
       group = "wheel";
+      environmentFile = "${config.sops.secrets.cert.path}";
     };
     certs."${subMainDomain}" = {
       domain = "*.${subMainDomain}";
@@ -69,7 +70,6 @@ in
         "${subMainDomain}"
         "*.${subMainDomain}"
       ];
-      environmentFile = "${config.sops.secrets.cert.path}";
     };
   };
 
