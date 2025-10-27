@@ -62,13 +62,10 @@ in
       group = "wheel";
       environmentFile = "${config.sops.secrets.cert.path}";
     };
-    certs."${subMainDomain}" = {
-      domain = "*.${subMainDomain}";
+    certs."${altDomain}" = {
+      domain = "*.${altDomain}";
       extraDomainNames = [
         "${altDomain}"
-        "*.${altDomain}"
-        "${subMainDomain}"
-        "*.${subMainDomain}"
       ];
     };
   };
