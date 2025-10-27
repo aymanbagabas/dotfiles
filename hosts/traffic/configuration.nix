@@ -16,6 +16,7 @@ let
   dnsProvider = builtins.readFile "${dotfiles}/vars/dns_provider";
 
   nas = "10.1.1.1"; # NAS IP address
+  media = "192.168.1.12"; # Media server IP address
   useStaging = false;
 in
 {
@@ -102,11 +103,11 @@ in
           };
       in
       {
-        "radarr.${altDomain}" = proxy "http://media:7878/";
-        "sonarr.${altDomain}" = proxy "http://media:8989/";
-        "prowlarr.${altDomain}" = proxy "http://media:9696/";
-        "readarr.${altDomain}" = proxy "http://media:8787/";
-        "books.${altDomain}" = proxy "http://media:8083/";
+        "radarr.${altDomain}" = proxy "http://${media}:7878/";
+        "sonarr.${altDomain}" = proxy "http://${media}:8989/";
+        "prowlarr.${altDomain}" = proxy "http://${media}:9696/";
+        "readarr.${altDomain}" = proxy "http://${media}:8787/";
+        "books.${altDomain}" = proxy "http://${media}:8083/";
         "nas.${altDomain}" = base {
           "/" = {
             proxyPass = "https://${nas}:5001/";
@@ -120,7 +121,7 @@ in
         };
         "plex.${altDomain}" = base {
           "/" = {
-            proxyPass = "http://media:32400/";
+            proxyPass = "http://${media}:32400/";
             extraConfig = ''
               proxy_set_header X-Forwarded-Protocol $scheme;
 
@@ -138,7 +139,7 @@ in
         };
         # "jellyfin.${altDomain}" = base {
         #   "/" = {
-        #     proxyPass = "http://media:8096/";
+        #     proxyPass = "http://${media}:8096/";
         #     extraConfig = ''
         #       proxy_set_header X-Forwarded-Protocol $scheme;
         #
@@ -147,7 +148,7 @@ in
         #     '';
         #   };
         #   "/socket" = {
-        #     proxyPass = "http://media:8096/";
+        #     proxyPass = "http://${media}:8096/";
         #     extraConfig = ''
         #       proxy_set_header Upgrade $http_upgrade;
         #       proxy_set_header Connection "upgrade";
