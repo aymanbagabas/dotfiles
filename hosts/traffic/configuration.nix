@@ -15,6 +15,7 @@ let
   altDomain = builtins.readFile "${dotfiles}/vars/alt_domain";
   dnsProvider = builtins.readFile "${dotfiles}/vars/dns_provider";
 
+  nas = "10.1.1.1"; # NAS IP address
   useStaging = false;
 in
 {
@@ -36,6 +37,15 @@ in
 
   services.qemuGuest.enable = true;
   services.spice-vdagentd.enable = true; # enable copy and paste between host and guest
+
+  # Configure a static IP for the P2P Nas connection.
+  networking.interfaces."ens19" = {
+    useDHCP = false;
+    ipv4.addresses = [{
+      address = "10.1.1.4";
+      prefixLength = 24;
+    }];
+  };
 
   networking.firewall.allowedTCPPorts = [
     80
@@ -99,10 +109,9 @@ in
         "prowlarr.${altDomain}" = proxy "http://media:9696/";
         "readarr.${altDomain}" = proxy "http://media:8787/";
         "books.${altDomain}" = proxy "http://media:8083/";
-        "convert.${altDomain}" = proxy "http://media:3000/";
         "nas.${altDomain}" = base {
           "/" = {
-            proxyPass = "https://nas:5001/";
+            proxyPass = "https://${nas}:5001/";
             # Skip the SSL verification for the NAS as it uses a self-signed certificate.
             extraConfig = ''
               proxy_set_header X-Forwarded-Protocol $scheme;
@@ -129,24 +138,24 @@ in
             '';
           };
         };
-        "jellyfin.${altDomain}" = base {
-          "/" = {
-            proxyPass = "http://media:8096/";
-            extraConfig = ''
-              proxy_set_header X-Forwarded-Protocol $scheme;
-
-              # Disable buffering when the nginx proxy gets very resource heavy upon streaming
-              proxy_buffering off;
-            '';
-          };
-          "/socket" = {
-            proxyPass = "http://media:8096/";
-            extraConfig = ''
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection "upgrade";
-            '';
-          };
-        };
+        # "jellyfin.${altDomain}" = base {
+        #   "/" = {
+        #     proxyPass = "http://media:8096/";
+        #     extraConfig = ''
+        #       proxy_set_header X-Forwarded-Protocol $scheme;
+        #
+        #       # Disable buffering when the nginx proxy gets very resource heavy upon streaming
+        #       proxy_buffering off;
+        #     '';
+        #   };
+        #   "/socket" = {
+        #     proxyPass = "http://media:8096/";
+        #     extraConfig = ''
+        #       proxy_set_header Upgrade $http_upgrade;
+        #       proxy_set_header Connection "upgrade";
+        #     '';
+        #   };
+        # };
         "${altDomain}" = base { "/".return = "301 http://${mainDomain}$request_uri"; };
       };
   };
