@@ -59,11 +59,11 @@
     "dotfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1761529653,
-        "narHash": "sha256-aSdvaCc86/9nNsqnAKw42GaPVH/8rbu5XK7iSWDGL3s=",
+        "lastModified": 1761605659,
+        "narHash": "sha256-VaV6jcLFBEaUWLoT0XzWKIuGzlisGEB9jiwjr7pswUE=",
         "ref": "refs/heads/master",
-        "rev": "8a1d9d715409c3182e4cfb9af11f75d75e37054f",
-        "revCount": 50,
+        "rev": "058ddcb58df422128e5ae73ceccd3d087cdd62c2",
+        "revCount": 51,
         "type": "git",
         "url": "ssh://git@github.com/aymanbagabas/dotfiles.local"
       },
