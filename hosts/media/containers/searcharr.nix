@@ -20,6 +20,11 @@ in {
         "--network-alias=searcharr"
         "--network=services"
     ];
+    dependsOn = [
+      "radarr"
+      "readarr"
+      "sonarr"
+    ];
   };
   systemd.services."docker-searcharr" = {
     serviceConfig = {
