@@ -304,48 +304,6 @@
       "docker-compose-media-root.target"
     ];
   };
-  virtualisation.oci-containers.containers."backup-searcharr" = {
-    image = "offen/docker-volume-backup:v2";
-    environment = {
-      "BACKUP_CRON_EXPRESSION" = "@monthly";
-      "BACKUP_RETENTION_DAYS" = "90";
-    };
-    volumes = [
-      "/mnt/share/backups/services/searcharr:/archive:rw"
-      "/var/run/docker.sock:/var/run/docker.sock:ro"
-      "media_searcharr_data:/backup/searcharr:ro"
-    ];
-    dependsOn = [
-      "searcharr"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--network-alias=backup-searcharr"
-      "--network=media_default"
-    ];
-  };
-  systemd.services."docker-backup-searcharr" = {
-    serviceConfig = {
-      Restart = lib.mkOverride 90 "always";
-      RestartMaxDelaySec = lib.mkOverride 90 "1m";
-      RestartSec = lib.mkOverride 90 "100ms";
-      RestartSteps = lib.mkOverride 90 9;
-    };
-    after = [
-      "docker-network-media_default.service"
-      "docker-volume-media_searcharr_data.service"
-    ];
-    requires = [
-      "docker-network-media_default.service"
-      "docker-volume-media_searcharr_data.service"
-    ];
-    partOf = [
-      "docker-compose-media-root.target"
-    ];
-    wantedBy = [
-      "docker-compose-media-root.target"
-    ];
-  };
   virtualisation.oci-containers.containers."backup-sonarr" = {
     image = "offen/docker-volume-backup:v2";
     environment = {
@@ -737,41 +695,6 @@
       "docker-compose-media-root.target"
     ];
   };
-  virtualisation.oci-containers.containers."searcharr" = {
-    image = "toddrob/searcharr";
-    environment = {
-      "TZ" = "America/New_York";
-    };
-    volumes = [
-      "media_searcharr_data:/app:rw"
-    ];
-    log-driver = "journald";
-    extraOptions = [
-      "--hostname=searcharr"
-      "--network-alias=searcharr"
-      "--network=services"
-    ];
-  };
-  systemd.services."docker-searcharr" = {
-    serviceConfig = {
-      Restart = lib.mkOverride 90 "always";
-      RestartMaxDelaySec = lib.mkOverride 90 "1m";
-      RestartSec = lib.mkOverride 90 "100ms";
-      RestartSteps = lib.mkOverride 90 9;
-    };
-    after = [
-      "docker-volume-media_searcharr_data.service"
-    ];
-    requires = [
-      "docker-volume-media_searcharr_data.service"
-    ];
-    partOf = [
-      "docker-compose-media-root.target"
-    ];
-    wantedBy = [
-      "docker-compose-media-root.target"
-    ];
-  };
   virtualisation.oci-containers.containers."sonarr" = {
     image = "ghcr.io/linuxserver/sonarr:latest";
     environment = {
@@ -983,18 +906,6 @@
     };
     script = ''
       docker volume inspect media_readarr_data || docker volume create media_readarr_data
-    '';
-    partOf = [ "docker-compose-media-root.target" ];
-    wantedBy = [ "docker-compose-media-root.target" ];
-  };
-  systemd.services."docker-volume-media_searcharr_data" = {
-    path = [ pkgs.docker ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      docker volume inspect media_searcharr_data || docker volume create media_searcharr_data
     '';
     partOf = [ "docker-compose-media-root.target" ];
     wantedBy = [ "docker-compose-media-root.target" ];

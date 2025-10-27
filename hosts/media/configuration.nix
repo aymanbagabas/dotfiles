@@ -26,8 +26,8 @@ in
     ../../services
     ../autoupgrade.nix
     ../nixos.nix
+    ./containers
     ./disko-config.nix
-    ./docker-compose.nix
     ./hardware-configuration.nix
     ./secrets.nix
   ];

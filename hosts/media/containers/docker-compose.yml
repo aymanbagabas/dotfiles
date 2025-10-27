@@ -162,32 +162,6 @@ services:
       - /mnt/share/backups/services/readarr:/archive
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  searcharr:
-    image: toddrob/searcharr
-    container_name: searcharr
-    hostname: searcharr
-    restart: unless-stopped
-    networks:
-      - services
-    environment:
-      - TZ=${TZ}
-    volumes:
-      - searcharr_data:/app
-
-  backup-searcharr:
-    image: offen/docker-volume-backup:v2
-    container_name: backup-searcharr
-    restart: unless-stopped
-    depends_on:
-      - searcharr
-    environment:
-      - BACKUP_CRON_EXPRESSION=@monthly
-      - BACKUP_RETENTION_DAYS=90
-    volumes:
-      - searcharr_data:/backup/searcharr:ro
-      - /mnt/share/backups/services/searcharr:/archive
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-
   calibre-web:
     image: ghcr.io/linuxserver/calibre-web:latest
     container_name: calibre-web
