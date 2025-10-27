@@ -19,14 +19,14 @@ in
 
   # Alias git to hub
   programs.zsh.shellAliases.git = "hub";
+  programs.diff-highlight.enable = true;
 
   programs.git = {
     enable = true;
     package = pkgs.git; # install git tools
     lfs.enable = true; # install git-lfs
     ignores = import ./gitignores.nix;
-    diff-highlight.enable = true;
-    extraConfig = (import ./gitconfig.nix {
+    settings = (import ./gitconfig.nix {
       inherit vars;
       signByDefault = true;
     });
