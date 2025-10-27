@@ -5,7 +5,7 @@ let
   lib = pkgs.lib;
 in {
   virtualisation.oci-containers.containers."searcharr" = {
-    image = "toddrob/searcharr";
+    image = "toddrob/searcharr:v3";
     environment = {
       "TZ" = "America/New_York";
     };
