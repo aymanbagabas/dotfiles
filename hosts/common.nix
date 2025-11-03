@@ -27,6 +27,7 @@ in
     ../modules/alacritty.nix
     ../modules/ghostty.nix
     ../modules/kitty.nix
+    ../modules/rio.nix
     ../modules/wezterm.nix
 
     ../modules/nixpkgs.nix
