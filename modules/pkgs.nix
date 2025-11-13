@@ -37,11 +37,6 @@ in
       nerd-fonts.symbols-only
 
       # Dev tools
-      awscli2
-      graphviz
-      gum
-      mods
-      nodejs
       (pkgs.writeScriptBin "svu" ''
         #!/usr/bin/env bash
         root=$(git rev-parse --show-toplevel)
@@ -52,6 +47,54 @@ in
           ${pkgs.svu}/bin/svu "$@"
         fi
       '')
+
+      actionlint
+      bash-language-server
+      cargo
+      clang-tools
+      copilot-language-server
+      delve
+      docker-compose-language-service
+      dockerfile-language-server
+      go-tools
+      gofumpt
+      golangci-lint
+      golangci-lint-langserver
+      gomodifytags
+      gopls
+      gotests
+      gotools
+      hadolint
+      helm-ls
+      impl
+      jdt-language-server
+      ltex-ls
+      lua-language-server
+      markdownlint-cli2
+      marksman
+      nil # nix LSP
+      nixfmt-rfc-style
+      prettier
+      python313Packages.python-lsp-server
+      revive
+      rust-analyzer
+      shellcheck
+      shfmt
+      stylua
+      terraform-ls
+      tflint
+      typescript-language-server
+      vscode-langservers-extracted
+      yaml-language-server
+      zls
+      awscli2
+      cmake
+      graphviz
+      gum
+      mods
+      nodejs
+      rustc
+      rustfmt
       terraform
       yarn
 
