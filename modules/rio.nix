@@ -10,6 +10,13 @@ in
 {
   xdg.configFile."rio/config.toml".text =
     ''
+      padding-x = 5
+      padding-y = [3, 3]
+
+      env-vars = ["TERM=rio"]
+
+      option-as-alt = "left"
+
       [colors]
       background = "${colors.primary.background}"
       foreground = "${colors.primary.foreground}"
@@ -37,8 +44,6 @@ in
       white = "${colors.bright.white}"
       yellow = "${colors.bright.yellow}"
 
-      env-vars = ["TERM=xterm-rio"]
-
       [fonts]
       size = 12
 
@@ -59,9 +64,6 @@ in
       [fonts.italic]
       family = "${fontFamily}"
       style = "Italic"
-
-      padding-x = 30
-      padding-y = [3, 3]
     ''
     + (
       if isDarwin then
@@ -70,8 +72,6 @@ in
           [window]
           decorations = "Transparent"
           macos-use-shadow = true
-
-          option_as_alt = "left"
         ''
       else
         ""
