@@ -20,7 +20,6 @@ in
       curl
       fd
       fortune
-      gnused
       htop
       jq
       p7zip
@@ -49,9 +48,11 @@ in
       '')
 
       actionlint
+      awscli2
       bash-language-server
       cargo
       clang-tools
+      cmake
       copilot-language-server
       delve
       docker-compose-language-service
@@ -64,6 +65,8 @@ in
       gopls
       gotests
       gotools
+      graphviz
+      gum
       hadolint
       helm-ls
       impl
@@ -72,31 +75,28 @@ in
       lua-language-server
       markdownlint-cli2
       marksman
+      mods
       nil # nix LSP
       nixfmt-rfc-style
+      nodejs
       prettier
       python313Packages.python-lsp-server
       revive
       rust-analyzer
+      rustc
+      rustfmt
       shellcheck
       shfmt
       stylua
+      templ
+      terraform
       terraform-ls
       tflint
       typescript-language-server
       vscode-langservers-extracted
       yaml-language-server
-      zls
-      awscli2
-      cmake
-      graphviz
-      gum
-      mods
-      nodejs
-      rustc
-      rustfmt
-      terraform
       yarn
+      zls
 
       # DevOps
       (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])

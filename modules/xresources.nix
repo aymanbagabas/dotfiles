@@ -12,5 +12,6 @@
     # ! Fix stupid backspace key sending ^H instead of ^?
     "XTerm.vt100.backarrowKey" = false;
     "XTerm.ttyModes" = "erase ^?";
+    "URxvt.font" = "-*-fixed-medium-r-s*--24-87-*-*-*-*-iso10???-1";
   };
 }
