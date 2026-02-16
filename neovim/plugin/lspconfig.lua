@@ -324,7 +324,6 @@ local lsps = {
   ["zls"] = {},
   ["terraformls"] = {},
   ["jdtls"] = {},
-  ["templ"] = {},
 }
 
 for lsp, config in pairs(lsps) do
