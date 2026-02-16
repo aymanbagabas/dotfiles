@@ -34,6 +34,7 @@ with pkgs.vimPlugins; [
   nvim-snippets
   nvim-spectre
   nvim-surround # https://github.com/kylechui/nvim-surround/
+  nvim-treesitter
   nvim-treesitter-context # nvim-treesitter-context
   nvim-treesitter-endwise
   nvim-treesitter-textobjects # https://github.com/nvim-treesitter/nvim-treesitter-textobjects/
@@ -49,6 +50,7 @@ with pkgs.vimPlugins; [
   telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
   telescope-project-nvim
   todo-comments-nvim
+  treesitter-modules-nvim
   trouble-nvim
   ts-comments-nvim
   undotree
