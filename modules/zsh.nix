@@ -19,6 +19,7 @@ in
     enableCompletion = true;
     autosuggestion.enable = false;
     syntaxHighlighting.enable = true;
+    dotDir = config.home.homeDirectory;
 
     plugins =
       [
