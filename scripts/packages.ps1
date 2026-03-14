@@ -7,8 +7,11 @@ $PGKS = @(
 	"Microsoft.PowerShell",
 	"Microsoft.VisualStudioCode",
 	"Microsoft.WindowsTerminal",
-	"Neovim.Neovim",
+	# "Neovim.Neovim",
+	"Neovim.Neovim.Nightly", # Use nightly until 0.12 is released
 	"Notepad++.Notepad++",
+	"OpenJS.NodeJS",
+	"cURL.cURL",
 	"eza-community.eza",
 	"junegunn.fzf",
 	"sharkdp.fd"

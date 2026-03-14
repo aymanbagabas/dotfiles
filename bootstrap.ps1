@@ -1,11 +1,12 @@
-# This script bootstraps a Windows development environment by installing
-# packages via winget and configuring dotfiles.
+# This script bootstraps a Windows development environment.
 
-# Exit if not running on Windows
-if ($ENV:OS -ne "Windows_NT" -and [System.Environment]::OSVersion.Platform -ne "Win32NT") {
-	Write-Host "This script is only supported on Windows"
-	exit 1
-}
+param(
+	[switch]$DryRun,
+	[switch]$Help,
+	[string]$Command
+)
+
+$DRY_RUN = $DryRun
 
 # Load .env variables
 $envFile = Join-Path $PSScriptRoot ".env"
@@ -25,43 +26,98 @@ function Templatize {
 	return $ExecutionContext.InvokeCommand.ExpandString($content)
 }
 
-$PGKS = @(
-	"7zip.7zip",
-	"BurntSushi.ripgrep.MSVC",
-	"Git.Git",
-	"GnuPG.Gpg4win",
-	"Microsoft.PowerShell",
-	"Microsoft.VisualStudioCode",
-	"Microsoft.WindowsTerminal",
-	# "Neovim.Neovim",
-	"Neovim.Neovim.Nightly", # Use nightly until 0.12 is released
-	"Notepad++.Notepad++",
-	"OpenJS.NodeJS",
-	"cURL.cURL",
-	"eza-community.eza",
-	"junegunn.fzf",
-	"sharkdp.fd"
-)
+function Link-File {
+	param([string]$From, [string]$To)
+	Write-Host "Linking '$From' to '$To'"
+	$dir = Split-Path $To -Parent
+	if (!(Test-Path $dir)) {
+		New-Item -ItemType Directory -Path $dir -Force > $null
+	}
+	if (!$DRY_RUN) {
+		New-Item -ItemType SymbolicLink -Path $To -Target $From -Force > $null
+	}
+}
 
-Write-Host "===== Installing packages..."
-winget.exe install $PGKS -e
+function Command-Exist {
+	param([string]$Cmd)
+	return !!(Get-Command $Cmd -ErrorAction SilentlyContinue)
+}
 
-Write-Host "===== Done installing packages."
-Write-Host
+function Require {
+	param([string]$Cmd)
+	if (!(Command-Exist $Cmd)) {
+		Write-Host "Command '$Cmd' not found"
+		exit 1
+	}
+}
 
-Write-Host "===== Bootstrapping dotfiles..."
-Write-Host
-Write-Host "===== Configuring Git..."
-. "$PSScriptRoot\git\install.ps1"
-Write-Host "===== Done configuring Git."
-Write-Host
+function _Install {
+	if (!$DRY_RUN) {
+		Write-Host "Installing/updating dotfiles..."
+	} else {
+		Write-Host "Dry run, not installing/updating dotfiles..."
+	}
+	Write-Host
 
-Write-Host "===== Configuring Neovim..."
-. "$PSScriptRoot\neovim\install.ps1"
-Write-Host "===== Done configuring Neovim."
-Write-Host
+	Get-ChildItem -Path $PSScriptRoot -Directory | ForEach-Object {
+		$install = Join-Path $_.FullName "install.ps1"
+		if (Test-Path $install) {
+			Write-Host "===== Installing $($_.Name) dotfiles..."
+			. $install
+			Write-Host
+		}
+	}
 
-Write-Host "===== Configuring GnuPG..."
-. "$PSScriptRoot\gnupg\install.ps1"
-Write-Host "===== Done configuring GnuPG."
-Write-Host
+	Write-Host "Done installing/updating dotfiles"
+	Write-Host
+}
+
+function _Usage {
+	Write-Host "Usage: bootstrap.ps1 [-DryRun] [-Help] [command]"
+	Write-Host
+	Write-Host "Commands:"
+	Write-Host "  install   Install dotfiles"
+	Write-Host "  help      Show this help message and exit"
+	$scriptsDir = Join-Path $PSScriptRoot "scripts"
+	if (Test-Path $scriptsDir) {
+		Get-ChildItem -Path $scriptsDir -Filter "*.ps1" | ForEach-Object {
+			Write-Host "  $($_.BaseName)"
+		}
+	}
+	Write-Host
+	Write-Host "Options:"
+	Write-Host "  -Help     Show this help message and exit"
+	Write-Host "  -DryRun   Dry run"
+}
+
+function _Main {
+	if ($Help) {
+		_Usage
+		exit 0
+	}
+
+	switch ($Command) {
+		"install" {
+			_Install
+		}
+		"help" {
+			_Usage
+		}
+		"" {
+			_Usage
+			exit 1
+		}
+		default {
+			$script = Join-Path $PSScriptRoot "scripts\$Command.ps1"
+			if (Test-Path $script) {
+				. $script
+				exit 0
+			}
+			Write-Host "Invalid command: $Command" -ForegroundColor Red
+			_Usage
+			exit 1
+		}
+	}
+}
+
+_Main
