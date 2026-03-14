@@ -53,7 +53,7 @@
 	signOff = true
 
 [github]
-	user = "aymanbagabas"
+	user = "$GITHUB_USER"
 
 [help]
 	autocorrect = "prompt"
@@ -80,12 +80,12 @@
 	enabled = true
 
 [sendemail]
-	from = "Ayman Bagabas <ayman.bagabas@gmail.com>"
+	from = "$NAME <$EMAIL>"
 	smtpAuth = "OAUTHBEARER"
 	smtpEncryption = "tls"
 	smtpServer = "smtp.gmail.com"
 	smtpServerPort = "587"
-	smtpUser = "ayman.bagabas@gmail.com"
+	smtpUser = "$EMAIL"
 
 [tag]
 	gpgSign = false
@@ -104,7 +104,7 @@
 	insteadOf = "https://github.com/"
 
 [user]
-	email = "ayman.bagabas@gmail.com"
-	name = "Ayman Bagabas"
-	signingkey = "593D6EEE7871708E329619322EBA00DFFCC63351"
+	email = "$EMAIL"
+	name = "$NAME"
+	signingkey = "$KEYID"
 
