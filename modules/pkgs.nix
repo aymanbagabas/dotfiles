@@ -20,6 +20,7 @@ in
       curl
       fd
       fortune
+      go-task
       htop
       jq
       p7zip
