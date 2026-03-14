@@ -1,0 +1,58 @@
+padding-x = 5
+padding-y = [3, 3]
+
+env-vars = ["TERM=rio"]
+
+option-as-alt = "left"
+
+[colors]
+background = "#282c34"
+foreground = "#abb2bf"
+cursor = "#abb2bf"
+vi-cursor = "#abb2bf"
+
+selection-foreground = "#282c34"
+selection-background = "#abb2bf"
+
+light-black = "#1e2127"
+light-blue = "#61afef"
+light-cyan = "#56b6c2"
+light-green = "#98c379"
+light-magenta = "#c678dd"
+light-red = "#e06c75"
+light-white = "#abb2bf"
+light-yellow = "#d19a66"
+
+black = "#5c6370"
+blue = "#61afef"
+cyan = "#56b6c2"
+green = "#98c379"
+magenta = "#c678dd"
+red = "#e06c75"
+white = "#ffffff"
+yellow = "#d19a66"
+
+[fonts]
+size = 12
+
+[fonts.regular]
+family = "JetBrains Mono"
+style = "Normal"
+
+[fonts.bold]
+family = "JetBrains Mono"
+style = "Normal"
+weight = 800
+
+[fonts.bold_italic]
+family = "JetBrains Mono"
+style = "Italic"
+weight = 800
+
+[fonts.italic]
+family = "JetBrains Mono"
+style = "Italic"
+
+[window]
+decorations = "Transparent"
+macos-use-shadow = true
