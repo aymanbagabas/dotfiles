@@ -1,0 +1,48 @@
+# ── PATH ──────────────────────────────────────────────────────────────────────
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+export PATH="$HOME/.npm-global/bin:$PATH"
+export PATH="$HOME/.go/bin:$PATH"
+export PATH="$HOME/.bin:$PATH"
+
+# ── Locale ────────────────────────────────────────────────────────────────────
+
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+
+# ── General ───────────────────────────────────────────────────────────────────
+
+export PROJECTS="$HOME/Source"
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# ── GPG ───────────────────────────────────────────────────────────────────────
+
+export GPG_TTY="$(tty)"
+
+# ── Less ──────────────────────────────────────────────────────────────────────
+
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;32m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;33m'
+
+# ── Terminfo ──────────────────────────────────────────────────────────────────
+
+export TERMINFO_DIRS="$TERMINFO_DIRS:$HOME/.local/share/terminfo"
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+
+if [[ "$OSTYPE" == darwin* ]]; then
+	export LSCOLORS="exfxcxdxbxegedabagacad"
+	export CLICOLOR="1"
+fi
+
+# ── Local overrides ───────────────────────────────────────────────────────────
+
+if [ -f "$HOME/.zprofile.local" ]; then
+	source "$HOME/.zprofile.local"
+fi

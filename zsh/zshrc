@@ -1,0 +1,124 @@
+# zinit installation
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [ ! -d "$ZINIT_HOME" ]; then
+	mkdir -p "$(dirname "$ZINIT_HOME")"
+	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "$ZINIT_HOME/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# ── Prompt ────────────────────────────────────────────────────────────────────
+
+zinit ice lucid wait'!'
+zinit light sindresorhus/pure
+
+# ── Oh-My-Zsh libs ────────────────────────────────────────────────────────────
+
+zinit snippet OMZ::lib/key-bindings.zsh
+zinit snippet OMZ::lib/completion.zsh
+zinit snippet OMZ::lib/theme-and-appearance.zsh
+
+# ── Oh-My-Zsh plugins ─────────────────────────────────────────────────────────
+
+zinit snippet OMZ::plugins/git/git.plugin.zsh
+
+# ── Plugins ───────────────────────────────────────────────────────────────────
+
+zinit ice lucid wait blockf
+zinit light zsh-users/zsh-completions
+
+zinit ice lucid wait
+zinit light zsh-users/zsh-syntax-highlighting
+
+zinit ice lucid wait
+zinit light jeffreytse/zsh-vi-mode
+
+zinit ice lucid wait
+zinit light tinted-theming/tinted-shell
+
+# ── Completions ───────────────────────────────────────────────────────────────
+
+autoload -Uz compinit bashcompinit
+compinit
+bashcompinit
+
+# AWS CLI completion
+if [ -e "$(command -v aws_completer)" ]; then
+	complete -C "$(command -v aws_completer)" aws
+fi
+
+# ── Tool integrations ─────────────────────────────────────────────────────────
+
+# fzf
+if command -v fzf >/dev/null 2>&1; then
+	source <(fzf --zsh)
+	export FZF_DEFAULT_COMMAND="rg --files --hidden --no-ignore-vcs --glob '!.git/*'"
+fi
+
+# zoxide (replaces cd)
+if command -v zoxide >/dev/null 2>&1; then
+	eval "$(zoxide init zsh --no-cmd)"
+	function z() { __zoxide_z "$@" }
+	alias cd="z"
+fi
+
+# direnv
+if command -v direnv >/dev/null 2>&1; then
+	eval "$(direnv hook zsh)"
+fi
+
+# eza (replaces ls)
+if command -v eza >/dev/null 2>&1; then
+	alias ls="eza"
+	alias ll="eza -l"
+	alias la="eza -la"
+	alias lt="eza --tree"
+fi
+
+# ── Environment ───────────────────────────────────────────────────────────────
+
+export BASE16_THEME="onedark"
+export BASE24_THEME="one-dark"
+
+export KEYTIMEOUT=1
+
+# zsh-vi-mode settings
+export MODE_INDICATOR=""
+export MODE_CURSOR_VIINS="blinking bar"
+export MODE_CURSOR_REPLACE="$MODE_CURSOR_VIINS"
+export MODE_CURSOR_VICMD="block"
+export MODE_CURSOR_SEARCH="steady underline"
+export MODE_CURSOR_VISUAL="$MODE_CURSOR_VICMD steady bar"
+export MODE_CURSOR_VLINE="$MODE_CURSOR_VISUAL"
+
+# pure prompt symbols
+export PURE_PROMPT_SYMBOL="›"
+export PURE_PROMPT_VICMD_SYMBOL="‹"
+
+# less
+export PAGER="less"
+export LESS="-R --mouse --wheel-lines=3"
+
+# ── History ───────────────────────────────────────────────────────────────────
+
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/history"
+mkdir -p "$(dirname "$HISTFILE")"
+
+# ── Options ───────────────────────────────────────────────────────────────────
+
+# Allow ^ in git without glob matching
+setopt NO_NOMATCH
+
+# Reclaim Ctrl-S and Ctrl-Q
+stty stop undef
+stty start undef
+stty -ixon
+
+# ── Local overrides ───────────────────────────────────────────────────────────
+
+if [ -f "$HOME/.zshrc.local" ]; then
+	source "$HOME/.zshrc.local"
+fi
