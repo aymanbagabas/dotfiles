@@ -3,11 +3,6 @@
 # Exit on error
 set -e
 
-# Source global variables
-if [ -f ".vars" ]; then
-	. ./.vars
-fi
-
 # see: https://stackoverflow.com/questions/3572030/bash-script-absolute-path-with-os-x#comment64141768_3572030
 function abspath() {
 	cd "$(dirname -- "$1")"
@@ -16,6 +11,11 @@ function abspath() {
 
 DOTFILES=$(abspath "$(dirname -- "$0")")
 DRY_RUN=false
+
+# Source global variables
+if [ -f "$DOTFILES/.env" ]; then
+	. "$DOTFILES/.env"
+fi
 
 function templatize() {
 	local template
