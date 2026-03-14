@@ -4,6 +4,10 @@ require("config.keymaps")
 require("user.autocommands")
 require("user.lsp")
 
+-- Add local plugin rtp path.
+vim.opt.runtimepath:append("~/.local/share/nvim/site/pack/*/start/*")
+vim.opt.runtimepath:append("~/.local/share/nvim/site/plugin/*")
+
 vim.pack.add({
   { src = "https://github.com/b0o/SchemaStore.nvim" },
   { src = "https://github.com/yetone/avante.nvim" },
