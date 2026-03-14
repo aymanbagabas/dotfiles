@@ -15,6 +15,7 @@ permissions:
 
 jobs:
   generate-and-commit:
+    if: false # disabled for now, we're slowly migrating away from nix
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
