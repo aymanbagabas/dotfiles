@@ -1,1 +1,1 @@
-Copy-Item "$PSScriptRoot\wezterm.lua" "$Env:USERPROFILE\.wezterm.lua" -Force
+Link-File "$PSScriptRoot\wezterm.lua" "$Env:USERPROFILE\.wezterm.lua"
