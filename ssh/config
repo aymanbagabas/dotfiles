@@ -1,0 +1,13 @@
+Include ~/.ssh/config.local
+Include ~/.ssh/my_config
+
+Host *
+  ServerAliveInterval 60
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id
+  IgnoreUnknown UseKeychain
+  UseKeychain yes
+
+Host localhost
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
