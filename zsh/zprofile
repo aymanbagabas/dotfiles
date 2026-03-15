@@ -16,6 +16,14 @@ export PROJECTS="$HOME/Source"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
+# ── Go ────────────────────────────────────────────────────────────────────────
+
+export GOPATH="$HOME/.go"
+
+# ── Node ──────────────────────────────────────────────────────────────────────
+
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+
 # ── GPG ───────────────────────────────────────────────────────────────────────
 
 export GPG_TTY="$(tty)"
