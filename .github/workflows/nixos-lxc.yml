@@ -63,7 +63,7 @@ jobs:
 
       # Create a GitHub release and attach the generated container template.
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: ${{ github.event_name == 'push' }}
         with:
           name: ${{ env.TAG_NAME }}-genericlxc
