@@ -34,7 +34,9 @@ function Link-File {
 		New-Item -ItemType Directory -Path $dir -Force > $null
 	}
 	if (!$DRY_RUN) {
-		New-Item -ItemType SymbolicLink -Path $To -Target $From -Force > $null
+		# SymbolicLink needs admin privilages. Use Copy-Item for now.
+		# New-Item -ItemType SymbolicLink -Path $To -Target $From -Force > $null
+		Copy-Item -Destination $To -Path $From -Force > $null
 	}
 }
 
