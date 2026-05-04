@@ -5,6 +5,7 @@ $PKGS = @(
 	"Git.Git",
 	"GnuPG.Gpg4win",
 	"Kitware.CMake",
+	"Rustlang.Rustup",
 	"mbuilov.sed",
 	"Microsoft.PowerShell",
 	@{
