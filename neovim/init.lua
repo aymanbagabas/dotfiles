@@ -11,6 +11,7 @@ vim.opt.runtimepath:append("~/.local/share/nvim/site/plugin/*")
 vim.pack.add({
   { src = "https://github.com/b0o/SchemaStore.nvim" },
   { src = "https://github.com/yetone/avante.nvim" },
+  { src = "https://github.com/saghen/blink.lib" },
   { src = "https://github.com/saghen/blink.cmp" },
   { src = "https://github.com/moyiz/blink-emoji.nvim" },
   { src = "https://github.com/akinsho/bufferline.nvim" },

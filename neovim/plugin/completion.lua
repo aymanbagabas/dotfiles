@@ -1,6 +1,9 @@
 local suggestion = require("copilot.suggestion")
+local cmp = require("blink.cmp")
 
-require("blink.cmp").setup({
+cmp.build():wait(60000)
+
+cmp.setup({
   keymap = {
     preset = "enter",
     ["<C-p>"] = { "insert_prev", "fallback_to_mappings" },
@@ -53,7 +56,7 @@ require("blink.cmp").setup({
       emoji = {
         module = "blink-emoji",
         name = "Emoji",
-        score_offset = 15, -- Tune by preference
+        score_offset = 15,        -- Tune by preference
         opts = { insert = true }, -- Insert emoji (default) or complete its name
       },
     },
