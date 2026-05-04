@@ -1,5 +1,6 @@
 require("config.options")
 require("config.keymaps")
+local pack = require("user.pack")
 
 require("user.autocommands")
 require("user.lsp")
@@ -7,6 +8,8 @@ require("user.lsp")
 -- Add local plugin rtp path.
 vim.opt.runtimepath:append("~/.local/share/nvim/site/pack/*/start/*")
 vim.opt.runtimepath:append("~/.local/share/nvim/site/plugin/*")
+
+pack.setup_hooks()
 
 vim.pack.add({
   { src = "https://github.com/b0o/SchemaStore.nvim" },
@@ -18,7 +21,6 @@ vim.pack.add({
   { src = "https://git.sr.ht/~p00f/clangd_extensions.nvim" },
   { src = "https://github.com/stevearc/conform.nvim" },
   { src = "https://github.com/zbirenbaum/copilot.lua" },
-  { src = "https://github.com/nvimdev/dashboard-nvim" },
   { src = "https://github.com/Bekaboo/dropbar.nvim" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
   { src = "https://github.com/shumphrey/fugitive-gitlab.vim" },
@@ -29,36 +31,31 @@ vim.pack.add({
   { src = "https://github.com/lukas-reineke/indent-blankline.nvim" },
   { src = "https://github.com/onsails/lspkind.nvim" },
   { src = "https://github.com/nvim-lualine/lualine.nvim" },
-  { src = "https://github.com/iamcco/markdown-preview.nvim" },
+  { src = "https://github.com/folke/lazydev.nvim" },
   { src = "https://github.com/nvim-mini/mini.nvim" },
+  { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/nvim-neo-tree/neo-tree.nvim" },
   { src = "https://github.com/folke/neoconf.nvim" },
-  { src = "https://github.com/folke/neodev.nvim" },
   { src = "https://github.com/folke/noice.nvim" },
   { src = "https://github.com/MunifTanjim/nui.nvim" },
   { src = "https://github.com/catgoose/nvim-colorizer.lua" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/rcarriga/nvim-notify" },
-  { src = "https://github.com/garymjr/nvim-snippets" },
   { src = "https://github.com/nvim-pack/nvim-spectre" },
-  { src = "https://github.com/kylechui/nvim-surround" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-context" },
   { src = "https://github.com/RRethy/nvim-treesitter-endwise" },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
   { src = "https://github.com/windwp/nvim-ts-autotag" },
-  { src = "https://github.com/joosepalviste/nvim-ts-context-commentstring" },
   { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   { src = "https://github.com/navarasu/onedark.nvim" },
-  { src = "http://github.com/nvim-lua/plenary.nvim" },
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
   { src = "https://github.com/folke/snacks.nvim" },
   { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
   { src = "https://github.com/nvim-telescope/telescope-project.nvim" },
   { src = "https://github.com/folke/todo-comments.nvim" },
-  { src = "https://github.com/MeanderingProgrammer/treesitter-modules.nvim" },
   { src = "https://github.com/folke/trouble.nvim" },
   { src = "https://github.com/folke/ts-comments.nvim" },
   { src = "https://github.com/mbbill/undotree" },
@@ -74,10 +71,10 @@ vim.pack.add({
   { src = "https://github.com/dstein64/vim-startuptime" },
   { src = "https://github.com/christoomey/vim-tmux-navigator" },
   { src = "https://github.com/tpope/vim-unimpaired" },
-  { src = "https://github.com/tpope/vim-vinegar" },
   { src = "https://github.com/folke/which-key.nvim" },
   { src = "https://github.com/folke/zen-mode.nvim" },
   { src = "https://github.com/mason-org/mason.nvim" },
+  { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
 })
 
-require('mason').setup()
+pack.ensure_telescope_fzf_native()

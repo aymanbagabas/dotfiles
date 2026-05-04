@@ -12,7 +12,7 @@ require("lualine").setup({
   options = {
     theme = "auto",
     globalstatus = true,
-    disabled_filetypes = { statusline = { "dashboard", "alpha" } },
+    disabled_filetypes = { statusline = { "ministarter", "alpha" } },
     -- Disable sections and component separators
     component_separators = "│",
     section_separators = "",

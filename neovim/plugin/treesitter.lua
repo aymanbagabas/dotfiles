@@ -1,34 +1,60 @@
-vim.g.skip_ts_context_comment_string_module = true
+local languages = {
+  "bash",
+  "c",
+  "cpp",
+  "css",
+  "dockerfile",
+  "go",
+  "gomod",
+  "gosum",
+  "gotmpl",
+  "helm",
+  "html",
+  "javascript",
+  "jsdoc",
+  "json",
+  "jsonc",
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "nix",
+  "printf",
+  "query",
+  "regex",
+  "rust",
+  "sql",
+  "terraform",
+  "toml",
+  "tsx",
+  "typescript",
+  "vim",
+  "vimdoc",
+  "xml",
+  "yaml",
+  "zig",
+}
 
-require("treesitter-modules").setup({
-  highlight = {
-    enable = true,
-    -- disable = function(_, buf)
-    --   local max_filesize = 100 * 1024 -- 100 KiB
-    --   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-    --   if ok and stats and stats.size > max_filesize then
-    --     return true
-    --   end
-    -- end,
-  },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<C-space>",
-      node_incremental = "<C-space>",
-      scope_incremental = false,
-      node_decremental = "<bs>",
-    },
-  },
+require("nvim-treesitter").install(languages)
+
+local ts_group = vim.api.nvim_create_augroup("treesitter.setup", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = ts_group,
+  callback = function(args)
+    local filetype = args.match
+    local language = vim.treesitter.language.get_lang(filetype) or filetype
+    if not vim.treesitter.language.add(language) then
+      return
+    end
+
+    vim.treesitter.start(args.buf, language)
+    vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    vim.wo.foldmethod = "expr"
+    vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+  end,
 })
 
 require("treesitter-context").setup({
   max_lines = 3,
-})
-
-require("ts_context_commentstring").setup({
-  -- Needed to set up custom configuration with mini.comment
-  enable_autocmd = false,
 })
 
 require("nvim-ts-autotag").setup()
@@ -111,6 +137,5 @@ vim.keymap.set({ "n", "x", "o" }, "[d", function()
   require("nvim-treesitter-textobjects.move").goto_previous("@conditional.outer", "textobjects")
 end)
 
--- Tree-sitter based folding
--- vim.opt.foldmethod = 'expr'
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.keymap.set({ "n", "x" }, "<C-space>", "an", { remap = true, desc = "Increment Selection" })
+vim.keymap.set({ "n", "x" }, "<BS>", "in", { remap = true, desc = "Decrement Selection" })
