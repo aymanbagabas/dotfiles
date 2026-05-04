@@ -185,14 +185,18 @@ telescope.setup({
   },
 })
 
-local ok, err = pcall(telescope.load_extension, "fzf")
-if not ok then
-  vim.schedule(function()
-    vim.notify(
-      "telescope-fzf-native.nvim is not available yet. vim.pack will try to build it automatically.\n" .. err,
-      vim.log.levels.WARN,
-      { title = "Telescope" }
-    )
-  end)
+local fzf_lib = vim.fs.joinpath(
+  vim.fn.stdpath("data"),
+  "site",
+  "pack",
+  "core",
+  "opt",
+  "telescope-fzf-native.nvim",
+  "build",
+  vim.fn.has("win32") == 1 and "libfzf.dll" or "libfzf.so"
+)
+
+if vim.uv.fs_stat(fzf_lib) then
+  pcall(telescope.load_extension, "fzf")
 end
 telescope.load_extension("project")

@@ -1,6 +1,7 @@
 local M = {}
 
 local telescope_fzf_name = "telescope-fzf-native.nvim"
+local blink_cmp_name = "blink.cmp"
 
 local function is_windows()
   return vim.fn.has("win32") == 1
@@ -99,7 +100,34 @@ function M.ensure_telescope_fzf_native()
     return true
   end
 
-  return M.build_telescope_fzf_native(plugin.path, { silent_success = true })
+  return false
+end
+
+function M.build_blink_cmp(path, opts)
+  opts = opts or {}
+
+  if not package.loaded["blink.cmp"] then
+    pcall(vim.cmd.packadd, "blink.lib")
+    pcall(vim.cmd.packadd, blink_cmp_name)
+  end
+
+  local ok_cmp, cmp = pcall(require, "blink.cmp")
+  if not ok_cmp or type(cmp.build) ~= "function" then
+    return false
+  end
+
+  local ok, err = pcall(function()
+    cmp.build():wait(60000)
+  end)
+
+  if not ok and not opts.silent_failure then
+    notify(
+      ("Failed to build blink.cmp via cmp.build(): %s"):format(tostring(err)),
+      vim.log.levels.ERROR
+    )
+  end
+
+  return ok
 end
 
 function M.setup_hooks()
@@ -116,6 +144,15 @@ function M.setup_hooks()
       end
 
       if data.spec.name ~= telescope_fzf_name then
+        if data.spec.name ~= blink_cmp_name then
+          return
+        end
+
+        if data.kind ~= "install" and data.kind ~= "update" then
+          return
+        end
+
+        M.build_blink_cmp(data.path, { silent_failure = true })
         return
       end
 

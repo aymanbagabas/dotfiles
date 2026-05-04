@@ -78,3 +78,4 @@ vim.pack.add({
 })
 
 pack.ensure_telescope_fzf_native()
+pack.build_blink_cmp(vim.pack.get({ "blink.cmp" }, { info = false })[1].path, { silent_failure = true })

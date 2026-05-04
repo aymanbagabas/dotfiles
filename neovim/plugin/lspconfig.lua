@@ -44,12 +44,23 @@ vim.diagnostic.config({
   severity_sort = true,
   float = float_config,
   jump = {
-    float = true,
+    on_jump = function(diagnostic, bufnr)
+      if not diagnostic then
+        return
+      end
+
+      vim.diagnostic.open_float(bufnr, vim.tbl_extend("keep", { scope = "line" }, float_config))
+    end,
   },
 })
 
-vim.lsp.handlers[ms.textDocument_hover] = vim.lsp.with(vim.lsp.handlers.hover, float_config)
-vim.lsp.handlers[ms.textDocument_signatureHelp] = vim.lsp.with(vim.lsp.handlers.signature_help, float_config)
+vim.lsp.handlers[ms.textDocument_hover] = function(err, result, ctx, config)
+  return vim.lsp.handlers.hover(err, result, ctx, vim.tbl_deep_extend("force", float_config, config or {}))
+end
+
+vim.lsp.handlers[ms.textDocument_signatureHelp] = function(err, result, ctx, config)
+  return vim.lsp.handlers.signature_help(err, result, ctx, vim.tbl_deep_extend("force", float_config, config or {}))
+end
 
 -- neoconf must come before lspconfig
 require("neoconf").setup({})
