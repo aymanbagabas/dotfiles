@@ -1,10 +1,16 @@
 
-$PGKS = @(
+$PKGS = @(
 	"7zip.7zip",
 	"BurntSushi.ripgrep.MSVC",
 	"Git.Git",
 	"GnuPG.Gpg4win",
+	"Kitware.CMake",
+	"mbuilov.sed",
 	"Microsoft.PowerShell",
+	@{
+		Id = "Microsoft.VisualStudio.2022.BuildTools"
+		Override = "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+	},
 	"Microsoft.VisualStudioCode",
 	"Microsoft.WindowsTerminal",
 	# "Neovim.Neovim",
@@ -18,6 +24,24 @@ $PGKS = @(
 )
 
 Write-Host "Installing packages..."
-if (!$DRY_RUN) {
-	winget.exe install $PGKS -e
+foreach ($pkg in $PKGS) {
+	$id = if ($pkg -is [string]) { $pkg } else { $pkg.Id }
+	$args = @(
+		"install",
+		"--id", $id,
+		"-e",
+		"--accept-package-agreements",
+		"--accept-source-agreements"
+	)
+
+	if ($pkg -isnot [string] -and $pkg.Override) {
+		$args += @("--override", $pkg.Override)
+	}
+
+	if ($DRY_RUN) {
+		Write-Host ("winget.exe " + ($args -join " "))
+		continue
+	}
+
+	& winget.exe @args
 }
