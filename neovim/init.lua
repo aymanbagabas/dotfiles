@@ -10,7 +10,10 @@ vim.opt.runtimepath:append("~/.local/share/nvim/site/plugin/*")
 
 vim.pack.add({
   { src = "https://github.com/b0o/SchemaStore.nvim" },
-  { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
+  {
+    src = "https://github.com/saghen/blink.cmp",
+    version = vim.version.range("1.*"),
+  },
   { src = "https://github.com/moyiz/blink-emoji.nvim" },
   { src = "https://github.com/akinsho/bufferline.nvim" },
   { src = "https://git.sr.ht/~p00f/clangd_extensions.nvim" },
@@ -37,10 +40,16 @@ vim.pack.add({
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/rcarriga/nvim-notify" },
   { src = "https://github.com/nvim-pack/nvim-spectre" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+  {
+    src = "https://github.com/nvim-treesitter/nvim-treesitter",
+    version = "main",
+  },
   { src = "https://github.com/nvim-treesitter/nvim-treesitter-context" },
   { src = "https://github.com/RRethy/nvim-treesitter-endwise" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects" },
+  {
+    src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+    version = "main",
+  },
   { src = "https://github.com/windwp/nvim-ts-autotag" },
   { src = "https://github.com/nvim-tree/nvim-web-devicons" },
   { src = "https://github.com/navarasu/onedark.nvim" },
