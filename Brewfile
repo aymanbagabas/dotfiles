@@ -21,6 +21,7 @@ brew "gnupg"
 brew "go"
 brew "go-task"
 brew "graphviz"
+brew "gsed"
 brew "gum"
 brew "htop"
 brew "hub"
@@ -32,21 +33,17 @@ brew "neovim"
 brew "pinentry-mac"
 brew "protobuf"
 brew "ripgrep"
-brew "gsed"
+brew "rustup"
 brew "svu"
+brew "tig"
 brew "tmux"
+brew "tree-sitter-cli"
 brew "tz"
 brew "wget"
 brew "zoxide"
 brew "zsh"
+
 brew "adityagarg8/git-credential-email/git-credential-gmail"
-
-# ── Dev tools ─────────────────────────────────────────────────────────────────
-
-brew "node"
-brew "rustup"
-brew "tree-sitter-cli"
-brew "yarn"
 
 # ── Casks ─────────────────────────────────────────────────────────────────────
 
