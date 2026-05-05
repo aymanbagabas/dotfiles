@@ -31,6 +31,7 @@ function link_file() {
 	local from
 	from=$(abspath "${BASH_SOURCE[1]}")/$1
 	local to=$2
+	local current_target
 	printf "Linking '%s' to '%s'\n" "$from" "$to"
 
 	if [ ! -d "$(dirname -- "$to")" ]; then
@@ -38,7 +39,23 @@ function link_file() {
 	fi
 
 	if ! $DRY_RUN; then
-		ln -sf "$from" "$to"
+		if [ -L "$to" ]; then
+			current_target=$(readlink "$to" 2>/dev/null || true)
+			if [ "$current_target" = "$from" ]; then
+				return 0
+			fi
+			rm -f "$to"
+		elif [ -d "$to" ]; then
+			if [ -n "$(ls -A "$to" 2>/dev/null)" ]; then
+				printf "Refusing to replace non-empty directory '%s'\n" "$to" >&2
+				return 1
+			fi
+			rmdir "$to"
+		elif [ -e "$to" ]; then
+			printf "Refusing to replace existing file '%s'\n" "$to" >&2
+			return 1
+		fi
+		ln -s "$from" "$to"
 	fi
 }
 
