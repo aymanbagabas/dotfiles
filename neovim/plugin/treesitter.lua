@@ -34,6 +34,8 @@ local languages = {
   "zig",
 }
 
+local treesitter = require("nvim-treesitter")
+
 local has_compiler = false
 for _, executable in ipairs({ "cc", "gcc", "clang", "cl", "zig" }) do
   if vim.fn.executable(executable) == 1 then
@@ -42,17 +44,18 @@ for _, executable in ipairs({ "cc", "gcc", "clang", "cl", "zig" }) do
   end
 end
 
-require("nvim-treesitter.configs").setup({
-  ensure_installed = has_compiler and languages or {},
-  auto_install = false,
-  autotag = {
-    enable = true,
-  },
-  textobjects = {
-    move = {
-      enable = true,
-      set_jumps = true,
-    },
+treesitter.setup({
+  install_dir = vim.fn.stdpath("data") .. "/site",
+})
+
+if has_compiler and vim.fn.executable("tree-sitter") == 1 then
+  treesitter.install(languages)
+end
+
+require("nvim-ts-autotag").setup()
+require("nvim-treesitter-textobjects").setup({
+  move = {
+    set_jumps = true,
   },
 })
 
