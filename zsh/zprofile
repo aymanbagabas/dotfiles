@@ -22,11 +22,16 @@ export GOPATH="$HOME/.go"
 
 # ── Rust ──────────────────────────────────────────────────────────────────────
 
-. "$HOME/.cargo/env" || true
+if [ -f "$HOME/.cargo/env" ]; then
+	source "$HOME/.cargo/env"
+fi
 
 # ── Node ──────────────────────────────────────────────────────────────────────
 
-export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+export NVM_DIR=$HOME/.nvm
+export NVM_COMPLETION=true
+export NVM_LAZY_LOAD=true
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=('vim' 'nvim')
 
 # ── GPG ───────────────────────────────────────────────────────────────────────
 
@@ -58,3 +63,5 @@ fi
 if [ -f "$HOME/.zprofile.local" ]; then
 	source "$HOME/.zprofile.local"
 fi
+
+# vim:ft=sh

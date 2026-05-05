@@ -6,7 +6,7 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 source "$ZINIT_HOME/zinit.zsh"
 autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+((${+_comps})) && _comps[zinit]=_zinit
 
 # ── Prompt ────────────────────────────────────────────────────────────────────
 
@@ -37,6 +37,9 @@ zinit light jeffreytse/zsh-vi-mode
 zinit ice lucid wait
 zinit light tinted-theming/tinted-shell
 
+zinit ice lucid wait
+zinit light lukechilds/zsh-nvm
+
 # ── Completions ───────────────────────────────────────────────────────────────
 
 autoload -Uz compinit bashcompinit
@@ -59,7 +62,7 @@ fi
 # zoxide (replaces cd)
 if command -v zoxide >/dev/null 2>&1; then
 	eval "$(zoxide init zsh --no-cmd)"
-	function z() { __zoxide_z "$@" }
+	function z() { __zoxide_z "$@"; }
 	alias cd="z"
 fi
 
