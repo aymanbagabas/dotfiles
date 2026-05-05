@@ -1,0 +1,7 @@
+#!/bin/bash
+# https://gist.github.com/chrisswanda/76c7af3bc0d8c42618216aa5ad8b1371
+
+ssh_keys=$(gpg-connect-agent 'keyinfo --ssh-list' /bye | awk '{print $3}')
+for key in $ssh_keys; do gpg-connect-agent "delete_key --force $key" /bye; done
+# Verifying that all SSH keys are not cached anymore by gpg-agent
+ssh-add -l

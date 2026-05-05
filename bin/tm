@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Based on https://github.com/meowgorithm/dotfiles/blob/master/modules/home/scripts/tm
+
+if [[ "$*" == "" ]]; then
+    echo "Usage: $(basename "$0") session-name"
+    exit 1
+fi
+
+# Create session if it doesn't exist
+if ! (tmux has-session -t "$*" 2>/dev/null); then
+    tmux new-session -d -s "$*"
+fi
+
+tmux attach-session -t "$*"

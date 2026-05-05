@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# This script lists all files that have been modified in the current git diff
+# and allows you to choose one to view the diff of.
+
+# Exit on error
+set -e
+
+FILES=$(git diff --stat | head -n-1 | cut -d' ' -f2)
+
+choose() {
+  FILE=$(echo "$FILES" | gum choose)
+
+  if [ -z "$FILE" ]; then
+    echo "No file selected"
+    exit 1
+  fi
+
+  git diff -- "$FILE"
+}
+
+while true; do
+  choose
+done
