@@ -1,6 +1,5 @@
 require("config.options")
 require("config.keymaps")
-local pack = require("user.pack")
 
 require("user.autocommands")
 require("user.lsp")
@@ -9,11 +8,8 @@ require("user.lsp")
 vim.opt.runtimepath:append("~/.local/share/nvim/site/pack/*/start/*")
 vim.opt.runtimepath:append("~/.local/share/nvim/site/plugin/*")
 
-pack.setup_hooks()
-
 vim.pack.add({
   { src = "https://github.com/b0o/SchemaStore.nvim" },
-  { src = "https://github.com/yetone/avante.nvim" },
   { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
   { src = "https://github.com/moyiz/blink-emoji.nvim" },
   { src = "https://github.com/akinsho/bufferline.nvim" },
@@ -27,7 +23,6 @@ vim.pack.add({
   { src = "https://github.com/akinsho/git-conflict.nvim" },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
   { src = "https://github.com/calops/hmts.nvim" },
-  { src = "https://github.com/HakonHarnes/img-clip.nvim" },
   { src = "https://github.com/lukas-reineke/indent-blankline.nvim" },
   { src = "https://github.com/onsails/lspkind.nvim" },
   { src = "https://github.com/nvim-lualine/lualine.nvim" },
@@ -52,7 +47,6 @@ vim.pack.add({
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
   { src = "https://github.com/folke/snacks.nvim" },
-  { src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
   { src = "https://github.com/nvim-telescope/telescope-project.nvim" },
   { src = "https://github.com/folke/todo-comments.nvim" },
@@ -76,5 +70,3 @@ vim.pack.add({
   { src = "https://github.com/mason-org/mason.nvim" },
   { src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" },
 })
-
-pack.ensure_telescope_fzf_native()

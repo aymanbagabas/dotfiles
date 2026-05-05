@@ -175,28 +175,5 @@ telescope.setup({
       },
     },
   },
-  extensions = {
-    fzf = {
-      fuzzy = true,
-      override_generic_sorter = false,
-      override_file_sorter = true,
-      case_mode = "smart_case",
-    },
-  },
 })
-
-local fzf_lib = vim.fs.joinpath(
-  vim.fn.stdpath("data"),
-  "site",
-  "pack",
-  "core",
-  "opt",
-  "telescope-fzf-native.nvim",
-  "build",
-  vim.fn.has("win32") == 1 and "libfzf.dll" or "libfzf.so"
-)
-
-if vim.uv.fs_stat(fzf_lib) then
-  pcall(telescope.load_extension, "fzf")
-end
 telescope.load_extension("project")
