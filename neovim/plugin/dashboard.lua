@@ -16,6 +16,7 @@ local opts = {
   },
   config = {
     header = logo,
+    vertical_center = true,
     -- stylua: ignore
     center = {
       { action = "Telescope find_files",              desc = " Find file",       icon = " ", key = "f" },
