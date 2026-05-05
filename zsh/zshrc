@@ -117,6 +117,11 @@ stty stop undef
 stty start undef
 stty -ixon
 
+# Display fortune
+if command -v fortune >/dev/null 2>&1; then
+	echo "" && fortune -s && echo ""
+fi
+
 # ── Local overrides ───────────────────────────────────────────────────────────
 
 if [ -f "$HOME/.zshrc.local" ]; then
