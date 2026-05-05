@@ -4,7 +4,6 @@ Include ~/.ssh/my_config
 Host *
   ServerAliveInterval 60
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/id
   IgnoreUnknown UseKeychain
   UseKeychain yes
 
