@@ -11,4 +11,4 @@ if ! command_exist brew; then
 fi
 
 echo "Installing packages via Brewfile..."
-$DRY_RUN || brew bundle --no-lock --file="$DOTFILES/Brewfile"
+$DRY_RUN || brew bundle --file="$DOTFILES/Brewfile"
