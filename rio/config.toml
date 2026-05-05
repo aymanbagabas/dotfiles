@@ -37,21 +37,19 @@ size = 12
 
 [fonts.regular]
 family = "JetBrains Mono"
-style = "Normal"
+style = "Medium"
 
 [fonts.bold]
 family = "JetBrains Mono"
-style = "Normal"
-weight = 800
+style = "Bold"
 
 [fonts.bold_italic]
 family = "JetBrains Mono"
-style = "Italic"
-weight = 800
+style = "Bold Italic"
 
 [fonts.italic]
 family = "JetBrains Mono"
-style = "Italic"
+style = "Medium Italic"
 
 [window]
 decorations = "Transparent"
