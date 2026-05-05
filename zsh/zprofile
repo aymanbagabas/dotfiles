@@ -20,6 +20,10 @@ export VISUAL="nvim"
 
 export GOPATH="$HOME/.go"
 
+# ── Rust ──────────────────────────────────────────────────────────────────────
+
+. "$HOME/.cargo/env" || true
+
 # ── Node ──────────────────────────────────────────────────────────────────────
 
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
