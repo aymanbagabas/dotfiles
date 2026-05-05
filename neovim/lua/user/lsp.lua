@@ -121,8 +121,8 @@ M.set_keymap = function(client, bufnr)
   keymap("n", "<leader>xl", vim.diagnostic.setloclist, { desc = "Location List" })
   keymap("n", "<leader>xq", vim.diagnostic.setqflist, { desc = "Quickfix List" })
 
-  keymap("n", "<leader>li", "<cmd>LspInfo<cr>", { desc = "Lsp Info" })
-  keymap("n", "<leader>lr", "<cmd>echo 'Restarting LSP...'<cr><cmd>LspRestart<cr>", { desc = "Restart LSP" })
+  keymap("n", "<leader>li", "<cmd>checkhealth vim.lsp<cr>", { desc = "Lsp Info" })
+  keymap("n", "<leader>lr", "<cmd>echo 'Restarting LSP...'<cr><cmd>lsp restart<cr>", { desc = "Restart LSP" })
 
   if client:supports_method(ms.textDocument_definition) then
     keymap("n", "gd", function()
@@ -171,7 +171,9 @@ M.set_keymap = function(client, bufnr)
 
   if client:supports_method(ms.textDocument_codeLens) then
     keymap({ "n", "v" }, "grc", vim.lsp.codelens.run, { desc = "Run Codelens" })
-    keymap("n", "grC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
+    keymap("n", "grC", function()
+      vim.lsp.codelens.enable(true)
+    end, { desc = "Refresh & Display Codelens" })
   end
 
   if client:supports_method(ms.textDocument_inlayHint) then
@@ -264,7 +266,7 @@ M.setup = function()
             end
 
             if client:supports_method(ms.textDocument_codeLens) then
-              vim.lsp.codelens.clear(client.id, bufnr)
+              vim.lsp.codelens.enable(false)
             end
           end,
         })
