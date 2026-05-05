@@ -23,7 +23,6 @@ return {
   "neo-tree",
   "neogitstatus",
   "netrw",
-  "noice",
   "notify",
   "oil",
   "quickfix",

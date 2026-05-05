@@ -34,8 +34,6 @@ vim.pack.add({
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/nvim-neo-tree/neo-tree.nvim" },
   { src = "https://github.com/folke/neoconf.nvim" },
-  { src = "https://github.com/folke/noice.nvim" },
-  { src = "https://github.com/MunifTanjim/nui.nvim" },
   { src = "https://github.com/catgoose/nvim-colorizer.lua" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/rcarriga/nvim-notify" },
