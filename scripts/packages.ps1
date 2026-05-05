@@ -21,7 +21,8 @@ $PKGS = @(
 	"cURL.cURL",
 	"eza-community.eza",
 	"junegunn.fzf",
-	"sharkdp.fd"
+	"sharkdp.fd",
+	"tree-sitter.tree-sitter-cli"
 )
 
 Write-Host "Installing packages..."
