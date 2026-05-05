@@ -2,3 +2,4 @@ nvim/lua/config/local.lua
 result
 .direnv
 .crush
+.env
