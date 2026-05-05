@@ -14,13 +14,13 @@ pack.setup_hooks()
 vim.pack.add({
   { src = "https://github.com/b0o/SchemaStore.nvim" },
   { src = "https://github.com/yetone/avante.nvim" },
-  { src = "https://github.com/saghen/blink.lib" },
-  { src = "https://github.com/saghen/blink.cmp" },
+  { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
   { src = "https://github.com/moyiz/blink-emoji.nvim" },
   { src = "https://github.com/akinsho/bufferline.nvim" },
   { src = "https://git.sr.ht/~p00f/clangd_extensions.nvim" },
   { src = "https://github.com/stevearc/conform.nvim" },
   { src = "https://github.com/zbirenbaum/copilot.lua" },
+  { src = "https://github.com/nvimdev/dashboard-nvim" },
   { src = "https://github.com/Bekaboo/dropbar.nvim" },
   { src = "https://github.com/rafamadriz/friendly-snippets" },
   { src = "https://github.com/shumphrey/fugitive-gitlab.vim" },
@@ -78,4 +78,3 @@ vim.pack.add({
 })
 
 pack.ensure_telescope_fzf_native()
-pack.build_blink_cmp(vim.pack.get({ "blink.cmp" }, { info = false })[1].path, { silent_failure = true })

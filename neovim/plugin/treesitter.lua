@@ -34,7 +34,27 @@ local languages = {
   "zig",
 }
 
-require("nvim-treesitter").install(languages)
+local has_compiler = false
+for _, executable in ipairs({ "cc", "gcc", "clang", "cl", "zig" }) do
+  if vim.fn.executable(executable) == 1 then
+    has_compiler = true
+    break
+  end
+end
+
+require("nvim-treesitter.configs").setup({
+  ensure_installed = has_compiler and languages or {},
+  auto_install = false,
+  autotag = {
+    enable = true,
+  },
+  textobjects = {
+    move = {
+      enable = true,
+      set_jumps = true,
+    },
+  },
+})
 
 local ts_group = vim.api.nvim_create_augroup("treesitter.setup", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
@@ -55,14 +75,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
 require("treesitter-context").setup({
   max_lines = 3,
-})
-
-require("nvim-ts-autotag").setup()
-
-require("nvim-treesitter-textobjects").setup({
-  move = {
-    -- set_jumps = true, -- whether to set jumps in the jumplist
-  },
 })
 
 vim.keymap.set({ "n", "x", "o" }, "]m", function()

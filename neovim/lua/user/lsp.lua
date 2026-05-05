@@ -191,29 +191,9 @@ M.on_attach = function(client, bufnr)
 
   M.set_keymap(client, bufnr)
 
-  -- Auto-refresh code lenses
-  vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-    buffer = bufnr,
-    group = vim.api.nvim_create_augroup("LspCodeLensReferesh", { clear = true }),
-    callback = function(args)
-      local buffer = args.buf or bufnr
-      -- don't trigger on invalid buffers
-      if not vim.api.nvim_buf_is_valid(buffer) then
-        return
-      end
-      -- don't trigger on non-listed buffers
-      if not vim.bo[buffer].buflisted then
-        return
-      end
-      -- don't trigger on nofile buffers
-      if vim.bo[buffer].buftype == "nofile" then
-        return
-      end
-      if client:supports_method(ms.textDocument_codeLens) then
-        vim.lsp.codelens.refresh({ bufnr = buffer })
-      end
-    end,
-  })
+  if client:supports_method(ms.textDocument_codeLens) then
+    vim.lsp.codelens.enable(true, { bufnr = bufnr })
+  end
 end
 
 function M.diagnostic_goto(next, severity)

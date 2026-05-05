@@ -11,7 +11,7 @@ return {
   "dap-terminal",
   "dapui_console",
   "dapui_hover",
-  "ministarter",
+  "dashboard",
   "dirvish",
   "fugitive",
   "gitcommit",

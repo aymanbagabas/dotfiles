@@ -1,3 +1,16 @@
+local data_path = vim.fn.stdpath("data")
+local copilot_server = vim.fs.joinpath(
+  data_path,
+  "mason",
+  "packages",
+  "copilot-language-server",
+  "node_modules",
+  "@github",
+  "copilot-language-server",
+  "dist",
+  "language-server.js"
+)
+
 local opts = {
   panel = {
     enabled = true,
@@ -41,10 +54,8 @@ local opts = {
   --plugin_manager_path = vim.fn.stdpath("data") .. "/lazy",
   server_opts_overrides = {},
   server = {
-    type = "binary",
-    -- Home Manager Neovim wrapper exports the LSP path, we just need to
-    -- specify the name of the binary.
-    custom_server_filepath = vim.fn.exepath("copilot-language-server"),
+    type = "nodejs",
+    custom_server_filepath = vim.fn.filereadable(copilot_server) == 1 and copilot_server or nil,
   },
 }
 

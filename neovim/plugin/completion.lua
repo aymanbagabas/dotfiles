@@ -33,15 +33,17 @@ cmp.setup({
   },
   signature = { enabled = false },
   cmdline = { enabled = false },
-   sources = {
-     default = { "lsp", "path", "snippets", "buffer", "emoji" },
-     per_filetype = {
-       lua = { inherit_defaults = true, "lazydev" },
-     },
-     providers = {
-       lsp = {
-         min_keyword_length = function(ctx)
-           -- Always show this provider when trigger is manual
+  sources = {
+    default = { "lsp", "path", "snippets", "buffer" },
+    per_filetype = {
+      lua = { inherit_defaults = true, "lazydev" },
+      gitcommit = { inherit_defaults = true, "emoji" },
+      markdown = { inherit_defaults = true, "emoji" },
+    },
+    providers = {
+      lsp = {
+        min_keyword_length = function(ctx)
+          -- Always show this provider when trigger is manual
           -- i.e. <C-space> is pressed.
           return ctx.trigger.kind == "manual" and 0 or 1
         end,
@@ -57,19 +59,19 @@ cmp.setup({
         min_keyword_length = 5,
         max_items = 5,
       },
-       emoji = {
-         module = "blink-emoji",
-         name = "Emoji",
-         score_offset = 15,        -- Tune by preference
-         opts = { insert = true }, -- Insert emoji (default) or complete its name
-       },
-       lazydev = {
-         name = "LazyDev",
-         module = "lazydev.integrations.blink",
-         score_offset = 100,
-       },
-     },
-   },
+      emoji = {
+        module = "blink-emoji",
+        name = "Emoji",
+        score_offset = 15, -- Tune by preference
+        opts = { insert = true }, -- Insert emoji (default) or complete its name
+      },
+      lazydev = {
+        name = "LazyDev",
+        module = "lazydev.integrations.blink",
+        score_offset = 100,
+      },
+    },
+  },
   completion = {
     accept = { auto_brackets = { enabled = true } },
     list = {
