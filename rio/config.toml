@@ -11,6 +11,11 @@ foreground = "#abb2bf"
 cursor = "#abb2bf"
 vi-cursor = "#abb2bf"
 
+tabs = "#abb2bf"
+tabs-active = "#ffffff"
+bar = "#abb2bf"
+split = "#abb2bf"
+
 selection-foreground = "#282c34"
 selection-background = "#abb2bf"
 
