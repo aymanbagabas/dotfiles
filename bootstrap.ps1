@@ -7,6 +7,7 @@ param(
 )
 
 $DRY_RUN = $DryRun
+$Global:DRY_RUN = $DRY_RUN
 
 # Load .env variables
 $envFile = Join-Path $PSScriptRoot ".env"
