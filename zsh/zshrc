@@ -37,7 +37,7 @@ zinit ice lucid wait
 zinit light zsh-users/zsh-syntax-highlighting
 
 zinit ice lucid wait
-zinit light jeffreytse/zsh-vi-mode
+zinit light softmoth/zsh-vim-mode
 
 zinit ice lucid wait
 zinit light tinted-theming/tinted-shell
