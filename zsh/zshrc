@@ -86,7 +86,7 @@ fi
 
 # ── Aliases ───────────────────────────────────────────────────────────────────
 
-(( $+commands[hub] )) && alias git="hub"
+(($+commands[hub])) && alias git="hub"
 alias vi="nvim"
 alias vim="nvim"
 
@@ -139,5 +139,7 @@ fi
 # ── Local overrides ───────────────────────────────────────────────────────────
 
 for file in "$HOME/.zshrc.post.local" "$HOME/.zshrc.local"; do
-	[ -f "$file" ] && source "$file"
+	if [ -f "$file" ]; then
+		source "$file"
+	fi
 done
