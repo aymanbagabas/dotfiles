@@ -65,7 +65,7 @@ function insert_line() {
 	local file=$3
 	printf "Inserting '%s' into '%s'\n" "$line" "$file"
 	if ! $DRY_RUN; then
-		grep -q "$query" "$file" || echo "$line" >>"$file"
+		grep -q "$query" "$file" 2>/dev/null || echo "$line" >>"$file"
 	fi
 }
 
