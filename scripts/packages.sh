@@ -1,14 +1,18 @@
 #!/bin/bash
 
-if ! xcode-select --version >/dev/null 2>&1; then
-	echo "Installing Xcode command line tools..."
-	$DRY_RUN || xcode-select --install
-fi
+case "$OSTYPE" in
+darwin*)
+	if ! xcode-select --version >/dev/null 2>&1; then
+		echo "Installing Xcode command line tools..."
+		$DRY_RUN || xcode-select --install
+	fi
 
-if ! command_exist brew; then
-	echo "Installing Homebrew..."
-	$DRY_RUN || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
+	if ! command_exist brew; then
+		echo "Installing Homebrew..."
+		$DRY_RUN || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	fi
 
-echo "Installing packages via Brewfile..."
-$DRY_RUN || brew bundle --file="$DOTFILES/Brewfile"
+	echo "Installing packages via Brewfile..."
+	$DRY_RUN || brew bundle --file="$DOTFILES/Brewfile"
+	;;
+esac
