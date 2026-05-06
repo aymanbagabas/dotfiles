@@ -1,3 +1,8 @@
+# Pre local overrides
+if [ -f "$HOME/.zshrc.pre.local" ]; then
+	source "$HOME/.zshrc.pre.local"
+fi
+
 # zinit installation
 ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
 if [ ! -d "$ZINIT_HOME" ]; then
@@ -133,6 +138,6 @@ fi
 
 # ── Local overrides ───────────────────────────────────────────────────────────
 
-if [ -f "$HOME/.zshrc.local" ]; then
-	source "$HOME/.zshrc.local"
-fi
+for file in "$HOME/.zshrc.post.local" "$HOME/.zshrc.local"; do
+	[ -f "$file" ] && source "$file"
+done

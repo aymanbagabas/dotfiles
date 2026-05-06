@@ -67,8 +67,8 @@ EOF
 		echo "Installed ~/.local/bin/wsl-ssh-agent-relay"
 	fi
 
-	# Add sourcing to .zshrc.local for WSL SSH agent support
-	ZSHRC_LOCAL="$HOME/.zshrc.local"
+	# Add sourcing to .zshrc.pre.local for WSL SSH agent support
+	ZSHRC_LOCAL="$HOME/.zshrc.pre.local"
 	if ! $DRY_RUN; then
 		insert_line "wsl-ssh-agent-relay" '. "$HOME/.local/bin/wsl-ssh-agent-relay"' "$ZSHRC_LOCAL"
 	fi
