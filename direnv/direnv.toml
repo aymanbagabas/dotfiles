@@ -1,0 +1,9 @@
+[global]
+load_dotenv = true
+
+[whitelist]
+prefix = [
+	"~/.dotfiles",
+	"~/Source/aymanbagabas",
+	"~/Source/charmbracelet",
+]
