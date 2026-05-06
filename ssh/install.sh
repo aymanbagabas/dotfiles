@@ -9,11 +9,8 @@ link_file config ~/.ssh/config
 
 if [ -n "$WSL_DISTRO_NAME" ]; then
 	if ! command_exist socat; then
-		if ! $DRY_RUN; then
-			echo "Installing socat..."
-			sudo apt-get update -qq
-			sudo apt-get install -y socat
-		fi
+		echo "ERROR: socat is not installed. Please install it using your distro's package manager." >&2
+		return 1
 	fi
 
 	# Discover npiperelay.exe path from Windows
