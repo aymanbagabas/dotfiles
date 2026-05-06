@@ -9,7 +9,7 @@ case "$SHELL" in
 	;;
 *)
 	if command_exist zsh; then
-		ZSH_PATH="$(command -v zsh)"
+		ZSH_PATH="$(grep '/zsh$' /etc/shells 2>/dev/null | tail -1 || command -v zsh)"
 		echo "Current shell is $SHELL. Change to zsh?"
 		printf "Run 'chsh -s %s'? [y/N] " "$ZSH_PATH"
 		if ! $DRY_RUN; then
