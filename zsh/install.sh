@@ -18,6 +18,8 @@ case "$SHELL" in
 				chsh -s "$ZSH_PATH"
 			fi
 		fi
+	else
+		echo "Warning: zsh is not installed. Install it and re-run to set as default shell."
 	fi
 	;;
 esac
