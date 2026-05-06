@@ -11,13 +11,15 @@ $Global:DRY_RUN = $DRY_RUN
 
 # Load .env variables
 $envFile = Join-Path $PSScriptRoot ".env"
-if (Test-Path $envFile) {
-	Get-Content $envFile | ForEach-Object {
-		if ($_ -match '^\s*([^#][^=]*)=(.*)$') {
-			$key = $Matches[1].Trim()
-			$value = $Matches[2].Trim().Trim('"').Trim("'")
-			Set-Variable -Name $key -Value $value -Scope Script
-		}
+if (!(Test-Path $envFile)) {
+	Write-Error "Error: .env file not found. Copy .env.example to .env to get started."
+	exit 1
+}
+Get-Content $envFile | ForEach-Object {
+	if ($_ -match '^\s*([^#][^=]*)=(.*)$') {
+		$key = $Matches[1].Trim()
+		$value = $Matches[2].Trim().Trim('"').Trim("'")
+		Set-Variable -Name $key -Value $value -Scope Script
 	}
 }
 

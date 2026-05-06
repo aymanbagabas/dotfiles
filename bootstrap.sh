@@ -13,9 +13,11 @@ DOTFILES=$(abspath "$(dirname -- "$0")")
 DRY_RUN=false
 
 # Source global variables
-if [ -f "$DOTFILES/.env" ]; then
-	. "$DOTFILES/.env"
+if [ ! -f "$DOTFILES/.env" ]; then
+	echo "Error: .env file not found. Copy .env.example to .env to get started." >&2
+	exit 1
 fi
+. "$DOTFILES/.env"
 
 function templatize() {
 	local template
