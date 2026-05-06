@@ -1,4 +1,4 @@
-# Configure WSL 2 with Debian on Windows.
+# Configure WSL 2 with Fedora on Windows.
 
 $isAdmin = ([Security.Principal.WindowsPrincipal] `
 	[Security.Principal.WindowsIdentity]::GetCurrent()
@@ -51,20 +51,20 @@ if (!$DRY_RUN) {
 	wsl.exe --set-default-version 2
 }
 
-# Install Debian if not already installed
+# Install Fedora if not already installed
 if (!$DRY_RUN) {
 	$installed = wsl.exe --list --quiet 2>$null |
 		ForEach-Object { $_.Trim().Trim([char]0) } |
 		Where-Object { $_ }
 
-	if ($installed -notcontains "Debian") {
-		Write-Host "Installing Debian..."
-		wsl.exe --install -d Debian --no-launch
+	if ($installed -notcontains "FedoraLinux-44") {
+		Write-Host "Installing Fedora..."
+		wsl.exe --install -d FedoraLinux-44 --no-launch
 	} else {
-		Write-Host "Debian already installed."
+		Write-Host "Fedora already installed."
 	}
 
-	# Set Debian as default distro
-	Write-Host "Setting Debian as default WSL distro..."
-	wsl.exe --set-default Debian
+	# Set Fedora as default distro
+	Write-Host "Setting Fedora as default WSL distro..."
+	wsl.exe --set-default FedoraLinux-44
 }
