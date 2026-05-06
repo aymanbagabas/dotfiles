@@ -86,7 +86,7 @@ fi
 
 # ── Aliases ───────────────────────────────────────────────────────────────────
 
-alias git="hub"
+(( $+commands[hub] )) && alias git="hub"
 alias vi="nvim"
 alias vim="nvim"
 
