@@ -16,7 +16,6 @@ local ensure_installed = {
   "ltex-ls",
   "lua-language-server",
   "nil",
-  "nixfmt",
   "pgformatter",
   "prettier",
   "rust-analyzer",
