@@ -89,6 +89,7 @@ fi
 (($+commands[hub])) && alias git="hub"
 alias vi="nvim"
 alias vim="nvim"
+(($+commands[copilot])) && alias cop="copilot --yolo"
 
 # ── Environment ───────────────────────────────────────────────────────────────
 
