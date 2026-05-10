@@ -15,7 +15,6 @@ local ensure_installed = {
   "json-lsp",
   "ltex-ls",
   "lua-language-server",
-  "nil",
   "pgformatter",
   "prettier",
   "rust-analyzer",
