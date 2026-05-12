@@ -27,6 +27,7 @@ zinit snippet OMZ::lib/theme-and-appearance.zsh
 # ── Oh-My-Zsh plugins ─────────────────────────────────────────────────────────
 
 zinit snippet OMZ::plugins/git/git.plugin.zsh
+zinit snippet OMZ::plugins/aws/aws.plugin.zsh
 
 # ── Plugins ───────────────────────────────────────────────────────────────────
 
@@ -47,14 +48,13 @@ zinit light lukechilds/zsh-nvm
 
 # ── Completions ───────────────────────────────────────────────────────────────
 
+if command -v brew >/dev/null 2>&1; then
+	fpath=($fpath $(brew --prefix)/share/zsh/site-functions)
+fi
+
 autoload -Uz compinit bashcompinit
 compinit
 bashcompinit
-
-# AWS CLI completion
-if [ -e "$(command -v aws_completer)" ]; then
-	complete -C "$(command -v aws_completer)" aws
-fi
 
 # ── Tool integrations ─────────────────────────────────────────────────────────
 
