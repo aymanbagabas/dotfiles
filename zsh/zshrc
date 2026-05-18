@@ -43,9 +43,6 @@ zinit light softmoth/zsh-vim-mode
 zinit ice lucid wait
 zinit light tinted-theming/tinted-shell
 
-zinit ice lucid wait
-zinit light lukechilds/zsh-nvm
-
 # ── Completions ───────────────────────────────────────────────────────────────
 
 if command -v brew >/dev/null 2>&1; then
@@ -74,6 +71,11 @@ fi
 # direnv
 if command -v direnv >/dev/null 2>&1; then
 	eval "$(direnv hook zsh)"
+fi
+
+# fnm (Node.js version manager)
+if command -v fnm >/dev/null 2>&1; then
+	eval "$(fnm env --use-on-cd --shell zsh)"
 fi
 
 # eza (replaces ls)

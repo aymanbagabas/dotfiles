@@ -27,13 +27,6 @@ if [ -f "$HOME/.cargo/env" ]; then
 	source "$HOME/.cargo/env"
 fi
 
-# ── Node ──────────────────────────────────────────────────────────────────────
-
-export NVM_DIR=$HOME/.nvm
-export NVM_COMPLETION=true
-export NVM_LAZY_LOAD=true
-export NVM_LAZY_LOAD_EXTRA_COMMANDS=('vim' 'nvim')
-
 # ── GPG ───────────────────────────────────────────────────────────────────────
 
 export GPG_TTY="$(tty)"
