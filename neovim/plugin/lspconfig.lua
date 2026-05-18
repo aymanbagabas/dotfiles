@@ -157,6 +157,17 @@ local lsps = {
   },
   ["rust_analyzer"] = {
     capabilities = capabilities,
+    settings = {
+      ["rust-analyzer"] = {
+        -- Use a separate target dir so rust-analyzer's cargo invocations
+        -- don't race with terminal `cargo build`/`check`, which causes
+        -- "inotify: Couldn't watch new directory ..." errors as ephemeral
+        -- rmeta* dirs under target/debug/examples are created/destroyed.
+        cargo = {
+          targetDir = true,
+        },
+      },
+    },
   },
   ["gopls"] = {
     capabilities = capabilities,
