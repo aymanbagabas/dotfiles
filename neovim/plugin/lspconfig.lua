@@ -159,12 +159,17 @@ local lsps = {
     capabilities = capabilities,
     settings = {
       ["rust-analyzer"] = {
-        -- Use a separate target dir so rust-analyzer's cargo invocations
-        -- don't race with terminal `cargo build`/`check`, which causes
-        -- "inotify: Couldn't watch new directory ..." errors as ephemeral
-        -- rmeta* dirs under target/debug/examples are created/destroyed.
         cargo = {
+          -- Use a separate target dir so cargo invocations don't race with
+          -- terminal `cargo build`/`check`.
           targetDir = true,
+        },
+        files = {
+          -- Use the server's native file watcher instead of client-side
+          -- (didChangeWatchedFiles). The server watcher properly ignores
+          -- target/ and avoids "inotify: Couldn't watch new directory ..."
+          -- errors when ephemeral rmeta* dirs are created/destroyed.
+          watcher = "server",
         },
       },
     },
