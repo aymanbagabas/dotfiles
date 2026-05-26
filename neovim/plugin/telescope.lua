@@ -1,5 +1,6 @@
 local telescope = require("telescope")
 local actions = require("telescope.actions")
+local lga_actions = require("telescope-live-grep-args.actions")
 
 local builtin = require("telescope.builtin")
 
@@ -42,7 +43,9 @@ vim.keymap.set(
   "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
   { desc = "Switch Buffer" }
 )
-vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Grep (Root Dir)" })
+vim.keymap.set("n", "<leader>/", function()
+  telescope.extensions.live_grep_args.live_grep_args()
+end, { desc = "Grep (Root Dir)" })
 vim.keymap.set("n", "<leader>:", "<cmd>Telescope command_history<cr>", { desc = "Command History" })
 vim.keymap.set("n", "<leader><space>", project_files, { desc = "Find Files (Root Dir)" })
 -- find
@@ -65,9 +68,11 @@ vim.keymap.set("n", "<leader>sc", "<cmd>Telescope command_history<cr>", { desc =
 vim.keymap.set("n", "<leader>sC", "<cmd>Telescope commands<cr>", { desc = "Commands" })
 vim.keymap.set("n", "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document Diagnostics" })
 vim.keymap.set("n", "<leader>sD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace Diagnostics" })
-vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Grep (Root Dir)" })
+vim.keymap.set("n", "<leader>sg", function()
+  telescope.extensions.live_grep_args.live_grep_args()
+end, { desc = "Grep (Root Dir)" })
 vim.keymap.set("n", "<leader>sG", function()
-  builtin.live_grep({ cwd = false })
+  telescope.extensions.live_grep_args.live_grep_args({ cwd = false })
 end, { desc = "Grep (cwd)" })
 vim.keymap.set("n", "<leader>sh", "<cmd>Telescope help_tags<cr>", { desc = "Help Pages" })
 vim.keymap.set("n", "<leader>sH", "<cmd>Telescope highlights<cr>", { desc = "Search Highlight Groups" })
@@ -175,5 +180,17 @@ telescope.setup({
       },
     },
   },
+  extensions = {
+    live_grep_args = {
+      auto_quoting = true,
+      mappings = {
+        i = {
+          ["<C-k>"] = lga_actions.quote_prompt(),
+          ["<C-space>"] = lga_actions.to_fuzzy_refine,
+        },
+      },
+    },
+  },
 })
 telescope.load_extension("project")
+telescope.load_extension("live_grep_args")

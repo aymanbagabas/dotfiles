@@ -203,6 +203,10 @@
       "rev": "6fea601bd2b694c6f2ae08a6c6fab14930c60e2c",
       "src": "git@github.com:nvim-telescope/telescope-fzf-native.nvim"
     },
+    "telescope-live-grep-args.nvim": {
+      "rev": "53e9df55b3651dd7cf77e172f1e8c9a17407acca",
+      "src": "https://github.com/nvim-telescope/telescope-live-grep-args.nvim"
+    },
     "telescope-project.nvim": {
       "rev": "8e11df94419e444601c09828dadf70890484e443",
       "src": "https://github.com/nvim-telescope/telescope-project.nvim"
