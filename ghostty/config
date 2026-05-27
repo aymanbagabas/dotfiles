@@ -49,4 +49,7 @@ palette = 15=#ffffff
 macos-option-as-alt = true
 macos-titlebar-style = "tabs"
 
+window-width = 80
+window-height = 24
+
 # vim:ft=config
