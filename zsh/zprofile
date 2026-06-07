@@ -31,6 +31,11 @@ fi
 
 export GPG_TTY="$(tty)"
 
+if command -v git >/dev/null 2>&1; then
+	KEYID="$(git config --global --get user.signingkey 2>/dev/null)"
+	[ -n "$KEYID" ] && export KEYID || unset KEYID
+fi
+
 # ── Less ──────────────────────────────────────────────────────────────────────
 
 export LESS_TERMCAP_mb=$'\E[01;31m'
