@@ -160,6 +160,8 @@ local lsps = {
     settings = {
       ["rust-analyzer"] = {
         cargo = {
+          -- Enable all features
+          allFeatures = true,
           -- Use a separate target dir so cargo invocations don't race with
           -- terminal `cargo build`/`check`.
           targetDir = true,
