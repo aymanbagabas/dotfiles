@@ -30,6 +30,7 @@ vim.pack.add({
   { src = "https://github.com/onsails/lspkind.nvim" },
   { src = "https://github.com/nvim-lualine/lualine.nvim" },
   { src = "https://github.com/folke/lazydev.nvim" },
+  { src = "https://github.com/brianhuster/live-preview.nvim" },
   { src = "https://github.com/nvim-mini/mini.nvim" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/nvim-neo-tree/neo-tree.nvim" },
