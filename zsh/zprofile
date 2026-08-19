@@ -63,4 +63,9 @@ if [ -f "$HOME/.zprofile.local" ]; then
 	source "$HOME/.zprofile.local"
 fi
 
+# ── AI Agents ─────────────────────────────────────────────────────────────────
+
+alias claude='ANTHROPIC_AUTH_TOKEN="$(gh auth token)" ANTHROPIC_BASE_URL=https://api.githubcopilot.com claude '
+alias codex='GITHUB_TOKEN="$(gh auth token)" codex '
+
 # vim:ft=sh

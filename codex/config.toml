@@ -1,0 +1,14 @@
+model_provider = "copilot-api"
+
+[model_providers.copilot-api]
+name = "Copilot API"
+base_url = "https://api.githubcopilot.com/v1"
+env_key = "GITHUB_TOKEN"
+wire_api = "responses"
+http_headers = { "Copilot-Integration-Id" = "vscode-chat" }
+
+[projects."/Users/ayman"]
+trust_level = "trusted"
+
+[tui.model_availability_nux]
+"gpt-5.6-sol" = 3
