@@ -18,6 +18,14 @@
 - [Conventional Commits](https://www.conventionalcommits.org/) with scope when applicable (e.g., `fix(git): ...`, `feat(fish): ...`).
 - One logical change per commit.
 - Commits signed off (`-s` flag) — configured in gitconfig.
+- **Never invent an identity. Read it from gitconfig.** The author name and email
+  come from `git config user.name` and `git config user.email`; the GitHub
+  username comes from `git config github.user`. Never guess, never construct a
+  `@users.noreply.github.com` address, and never pass `-c user.email=…` or
+  `-c user.name=…` to override them — in a fresh repo git already inherits the
+  global config, so just commit. A guessed address silently attributes the work
+  to whichever GitHub account happens to own it.
+- **No Copilot attribution in commits.** Never add `Co-authored-by: Copilot <...>` or `Copilot-Session: <id>` trailers, even when the tooling asks for them by default.
 - **Don't commit speculative or exploratory work unless explicitly asked.** When the user says "yes" to a suggested change, treat it as approval for the change — not for committing or pushing. Wait for an explicit "commit" before creating commits.
 
 ## Git Workflow
