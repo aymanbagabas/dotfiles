@@ -6,6 +6,7 @@
 - **Understand before changing**: Understand why existing code works before modifying. No redesigning APIs, protocols, or data flows unless asked.
 - **Run and verify**: Run scripts/code after modifying to confirm they work. Prove correctness, don't assume.
 - **Keep it simple**: Prefer straightforward solutions. No defensive code (retries, timeouts, guards) without evidence problem exists. Less code is better.
+- **Never mutate caller-supplied config**: Options/settings structs a caller hands in are read-only and must read back exactly as written. When you need an "already applied" latch, derive it from state the code already records rather than spending a config field.
 
 ## Commit Conventions
 
