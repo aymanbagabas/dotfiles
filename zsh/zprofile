@@ -5,6 +5,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bun/bin:$PATH"
 
 # ── Locale ────────────────────────────────────────────────────────────────────
 
@@ -26,6 +27,10 @@ export GOPATH="$HOME/.go"
 if [ -f "$HOME/.cargo/env" ]; then
 	source "$HOME/.cargo/env"
 fi
+
+# ── Bun ───────────────────────────────────────────────────────────────────────
+
+export BUN_INSTALL="$HOME/.bun"
 
 # ── GPG ───────────────────────────────────────────────────────────────────────
 
