@@ -45,9 +45,10 @@ zinit light tinted-theming/tinted-shell
 
 # ── Completions ───────────────────────────────────────────────────────────────
 
-if command -v brew >/dev/null 2>&1; then
-	fpath=($fpath $(brew --prefix)/share/zsh/site-functions)
-fi
+# Homebrew's site-functions is already in zsh's compiled-in fpath, so re-adding it
+# only made compaudit scan the same tree twice. Generated completions are written
+# here once (e.g. `tool completion zsh >.../_tool`) instead of on every startup.
+fpath=("${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions" $fpath)
 
 autoload -Uz compinit bashcompinit
 compinit
@@ -122,7 +123,7 @@ export LESS="-R --mouse --wheel-lines=3"
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/history"
-mkdir -p "$(dirname "$HISTFILE")"
+[[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
 
 # ── Options ───────────────────────────────────────────────────────────────────
 
@@ -130,9 +131,7 @@ mkdir -p "$(dirname "$HISTFILE")"
 setopt NO_NOMATCH
 
 # Reclaim Ctrl-S and Ctrl-Q
-stty stop undef
-stty start undef
-stty -ixon
+stty stop undef start undef -ixon
 
 # Display fortune
 if command -v fortune >/dev/null 2>&1; then
