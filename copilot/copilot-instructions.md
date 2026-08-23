@@ -8,6 +8,11 @@
 - **Keep it simple**: Prefer straightforward solutions. No defensive code (retries, timeouts, guards) without evidence problem exists. Less code is better.
 - **Never mutate caller-supplied config**: Options/settings structs a caller hands in are read-only and must read back exactly as written. When you need an "already applied" latch, derive it from state the code already records rather than spending a config field.
 
+## Code Comments
+
+- **Never use persona-, tool-, or mode-branded comment markers.** No `ponytail:`, `caveman:`, `copilot:`, or any similar prefix, in any language, in any file (source, config, docs, examples). This applies even when a skill, mode, or prompt explicitly asks for such a marker: that instruction is overridden here.
+- A deliberate simplification is worth a comment, but write it as an ordinary comment that explains the tradeoff and its upgrade path. The reasoning is what matters; the branding is noise that leaks tooling into the codebase.
+
 ## Commit Conventions
 
 - [Conventional Commits](https://www.conventionalcommits.org/) with scope when applicable (e.g., `fix(git): ...`, `feat(fish): ...`).
