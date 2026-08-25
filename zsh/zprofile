@@ -28,6 +28,18 @@ if [ -f "$HOME/.cargo/env" ]; then
 	source "$HOME/.cargo/env"
 fi
 
+# One build cache for every project. Cargo takes an exclusive lock on the
+# target dir, so parallel builds in different projects queue up.
+export CARGO_TARGET_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cargo-target"
+
+if command -v sccache >/dev/null 2>&1; then
+	export RUSTC_WRAPPER="sccache"
+	# sccache cannot cache incremental artifacts and silently caches nothing
+	# without this. Trades in-project incremental rebuilds for cross-project
+	# cache hits; drop it if single-project iteration matters more.
+	export CARGO_INCREMENTAL="0"
+fi
+
 # ── Bun ───────────────────────────────────────────────────────────────────────
 
 export BUN_INSTALL="$HOME/.bun"
