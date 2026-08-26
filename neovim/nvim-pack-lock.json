@@ -97,10 +97,6 @@
       "rev": "e87f70ccf9472ba20f6196a1a6ee16c41b5f9f71",
       "src": "https://github.com/folke/neoconf.nvim"
     },
-    "noice.nvim": {
-      "rev": "7bfd942445fb63089b59f97ca487d605e715f155",
-      "src": "https://github.com/folke/noice.nvim"
-    },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
       "src": "https://github.com/MunifTanjim/nui.nvim"
