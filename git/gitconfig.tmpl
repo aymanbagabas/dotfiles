@@ -42,6 +42,9 @@
 	mnemonicPrefix = true
 	renames = true
 
+[drift]
+	theme = "onedark"
+
 [fetch]
 	all = true
 	prune = true
@@ -60,6 +63,9 @@
 
 [init]
 	defaultBranch = "master"
+
+[pager]
+	diff = "command -v drift >/dev/null 2>&1 && exec drift || exec less"
 
 [pull]
 	rebase = false
