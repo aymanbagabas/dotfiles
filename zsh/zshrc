@@ -45,10 +45,33 @@ zinit light tinted-theming/tinted-shell
 
 # ── Completions ───────────────────────────────────────────────────────────────
 
-# Homebrew's site-functions is already in zsh's compiled-in fpath, so re-adding it
-# only made compaudit scan the same tree twice. Generated completions are written
-# here once (e.g. `tool completion zsh >.../_tool`) instead of on every startup.
-fpath=("${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions" $fpath)
+# Homebrew's completions live under its prefix, which varies by platform and
+# architecture (/opt/homebrew, /usr/local, /home/linuxbrew/.linuxbrew, or a
+# custom one) -- that is what `brew --prefix` was for. Use HOMEBREW_PREFIX when
+# `brew shellenv` has run, else take it from brew's own path; $commands is a
+# hash lookup, so neither costs a subshell. On Linux and Intel macOS the brew in
+# $PREFIX/bin is a symlink into $PREFIX/Homebrew, but zsh records the
+# unresolved path, so :h:h still yields the prefix. Only Homebrew's own zsh has
+# this directory compiled into fpath and the login shell here is /bin/zsh, so it
+# has to be added explicitly.
+brew_site_functions=()
+(($+commands[brew])) &&
+	brew_site_functions=(${HOMEBREW_PREFIX:-${commands[brew]:h:h}}/share/zsh/site-functions(N))
+
+# Homebrew goes last so zsh's native _git wins. Homebrew's _git is a thin
+# wrapper around git's *bash* completion and needs the git-completion.bash that
+# sits beside it in the keg; if that sibling is ever missing (a stale _git left
+# behind by an unlinked keg, say) the wrapper still shadows the native one and
+# every git completion dies with "command not found: __git_aliased_command".
+# The native _git is also the richer of the two. Generated completions are
+# written to the user directory once (e.g. `tool completion zsh >.../_tool`)
+# instead of on every startup, and win over both.
+fpath=(
+	"${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions"
+	$fpath
+	$brew_site_functions
+)
+unset brew_site_functions
 
 autoload -Uz compinit bashcompinit
 compinit
