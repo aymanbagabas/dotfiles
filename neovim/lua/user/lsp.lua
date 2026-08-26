@@ -172,7 +172,7 @@ M.set_keymap = function(client, bufnr)
   if client:supports_method(ms.textDocument_codeLens) then
     keymap({ "n", "v" }, "grc", vim.lsp.codelens.run, { desc = "Run Codelens" })
     keymap("n", "grC", function()
-      vim.lsp.codelens.enable(true)
+      vim.lsp.codelens.enable(true, { bufnr = bufnr })
     end, { desc = "Refresh & Display Codelens" })
   end
 
@@ -241,36 +241,6 @@ M.setup = function()
           })
         end
       end
-
-      vim.schedule(function()
-        -- don't trigger on invalid buffers
-        if not vim.api.nvim_buf_is_valid(bufnr) then
-          return
-        end
-        -- don't trigger on non-listed buffers
-        if not vim.bo[bufnr].buflisted then
-          return
-        end
-        -- don't trigger on nofile buffers
-        if vim.bo[bufnr].buftype == "nofile" then
-          return
-        end
-
-        vim.api.nvim_create_autocmd("LspDetach", {
-          buffer = bufnr,
-          group = vim.api.nvim_create_augroup("LspDetachGroup_" .. bufnr, { clear = true }),
-          callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            if client == nil then
-              return
-            end
-
-            if client:supports_method(ms.textDocument_codeLens) then
-              vim.lsp.codelens.enable(false)
-            end
-          end,
-        })
-      end)
     end,
   })
 end
