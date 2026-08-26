@@ -75,6 +75,9 @@ vim.keymap.set("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning
 
 -- stylua: ignore start
 
+-- quit every window, filling the gap left by ZZ/ZQ closing only the current one
+vim.keymap.set("n", "ZA", "<cmd>qa<cr>", { desc = "Quit All" })
+
 -- highlights under cursor
 vim.keymap.set("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 
