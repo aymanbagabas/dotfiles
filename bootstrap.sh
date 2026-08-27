@@ -88,36 +88,36 @@ function _install() {
 	fi
 	echo
 
+	# Platform-specific installers run before the general ones so they can put
+	# anything in place that install.sh then depends on.
+	case "$OSTYPE" in
+	darwin*)
+		local os=darwin
+		;;
+	linux*)
+		local os=linux
+		;;
+	*)
+		local os=""
+		;;
+	esac
+
 	for src in "$DOTFILES"/*/; do
 		local src=${src%*/}
-		local install="$src/install.sh"
-		if [ -f "$install" ]; then
-			echo "===== Installing" "$src" "dotfiles..."
+
+		if [ -n "$os" ] && [ -f "$src/install_$os.sh" ]; then
+			echo "===== Installing" "$src" "dotfiles for $os..."
 			# shellcheck source=/dev/null
-			. "$install"
+			. "$src/install_$os.sh"
 			echo
 		fi
 
-		case "$OSTYPE" in
-		darwin*)
-			local install="$src/install_darwin.sh"
-			if [ -f "$install" ]; then
-				echo "===== Installing" "$src" "dotfiles for darwin..."
-				# shellcheck source=/dev/null
-				. "$install"
-				echo
-			fi
-			;;
-		linux*)
-			local install="$src/install_linux.sh"
-			if [ -f "$install" ]; then
-				echo "===== Installing" "$src" "dotfiles for linux..."
-				# shellcheck source=/dev/null
-				. "$install"
-				echo
-			fi
-			;;
-		esac
+		if [ -f "$src/install.sh" ]; then
+			echo "===== Installing" "$src" "dotfiles..."
+			# shellcheck source=/dev/null
+			. "$src/install.sh"
+			echo
+		fi
 	done
 
 	echo "Done installing/updating dotfiles"
