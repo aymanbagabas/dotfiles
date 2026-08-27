@@ -1,0 +1,9 @@
+#!/bin/sh
+# GNU sed. Homebrew installs it as gsed so it does not shadow the BSD sed macOS
+# ships. Only installed on macOS; if gsed is missing, fall back to that BSD sed
+# rather than leaving the command broken.
+if command -v gsed >/dev/null 2>&1; then
+	exec gsed "$@"
+fi
+
+exec /usr/bin/sed "$@"

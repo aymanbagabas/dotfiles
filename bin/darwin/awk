@@ -1,0 +1,9 @@
+#!/bin/sh
+# GNU awk. Homebrew installs it as gawk so it does not shadow the BSD awk macOS
+# ships. Only installed on macOS; if gawk is missing, fall back to that BSD awk
+# rather than leaving the command broken.
+if command -v gawk >/dev/null 2>&1; then
+	exec gawk "$@"
+fi
+
+exec /usr/bin/awk "$@"
