@@ -57,6 +57,7 @@ vim.pack.add({
   { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
   { src = "https://github.com/folke/snacks.nvim" },
+  { src = "https://github.com/trixnz/sops.nvim" },
   { src = "https://github.com/nvim-telescope/telescope.nvim" },
   { src = "https://github.com/nvim-telescope/telescope-live-grep-args.nvim" },
   { src = "https://github.com/nvim-telescope/telescope-project.nvim" },

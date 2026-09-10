@@ -167,6 +167,14 @@
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim"
     },
+    "sops.nvim": {
+      "rev": "4de0cb71746d7a6de6311c85bc39873e56bcefc7",
+      "src": "https://github.com/trixnz/sops.nvim"
+    },
+    "sops.nvim.off": {
+      "rev": "4de0cb71746d7a6de6311c85bc39873e56bcefc7",
+      "src": "https://github.com/trixnz/sops.nvim"
+    },
     "telescope-live-grep-args.nvim": {
       "rev": "53e9df55b3651dd7cf77e172f1e8c9a17407acca",
       "src": "https://github.com/nvim-telescope/telescope-live-grep-args.nvim"
