@@ -29,6 +29,48 @@ local organize_imports = function(client, bufnr, timeoutms)
   end
 end
 
+--- Show the expansion of the macro under the cursor in a scratch buffer.
+--- rust-analyzer serves this through a request outside the LSP specification,
+--- so no capability advertises it.
+---@param client vim.lsp.Client
+---@param bufnr integer
+local expand_macro = function(client, bufnr)
+  local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+
+  client:request("rust-analyzer/expandMacro", params, function(err, result)
+    if err then
+      vim.notify("Expand macro: " .. err.message, vim.log.levels.ERROR)
+      return
+    end
+    if not result or not result.expansion then
+      vim.notify("No macro under the cursor", vim.log.levels.WARN)
+      return
+    end
+
+    local lines = vim.split(result.expansion, "\n")
+
+    local float_buf = vim.lsp.util.open_floating_preview(lines, "rust", {
+      border = "rounded",
+      title = result.name,
+      title_pos = "center",
+      wrap = false,
+      max_width = math.floor(vim.o.columns * 0.8),
+      max_height = math.floor(vim.o.lines * 0.8),
+      -- The default closes the window on the next cursor move, which is too
+      -- eager to read an expansion. Press the mapping again to enter the
+      -- window, then q to close it.
+      close_events = { "BufHidden" },
+      focus_id = "rust_expand_macro",
+      focus = true,
+    })
+
+    -- open_floating_preview only sets 'syntax'. Start treesitter directly,
+    -- because setting 'filetype' would run the FileType autocmds and attach a
+    -- second language server to this scratch buffer.
+    pcall(vim.treesitter.start, float_buf, "rust")
+  end, bufnr)
+end
+
 local rename_file = function()
   local buf = vim.api.nvim_get_current_buf()
   local old = assert(Root.realpath(vim.api.nvim_buf_get_name(buf)))
@@ -181,6 +223,12 @@ M.set_keymap = function(client, bufnr)
       local current_setting = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
       vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
     end, { desc = "Toggle Inlay Hints" })
+  end
+
+  if client.name == "rust_analyzer" then
+    keymap("n", "grm", function()
+      expand_macro(client, bufnr)
+    end, { desc = "Expand Macro" })
   end
 end
 
