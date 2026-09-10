@@ -20,6 +20,12 @@ Do not apply these rules to quoted material. Code, commands, file paths, identif
 
 The standard also has a dictionary of about 900 approved words. That list is not available here, so obey the writing rules and use simple words.
 
+## Language
+
+Use American English in everything you write: answers, code comments, commit messages, and documentation. Write "color", "behavior", "gray", "initialize", "analyze", and "license", not "colour", "behaviour", "grey", "initialise", "analyse", or "licence".
+
+Keep the original spelling when you quote something or refer to something that already exists. An identifier, an API name, a command flag, a file path, a dependency name, and quoted output all stay exactly as they are, even when they use British spelling.
+
 ## General Principles
 
 - **Verify before fixing**: Confirm bug is triggerable by user before fixing. No fixes for theoretical issues in unreachable code paths.
