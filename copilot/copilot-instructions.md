@@ -1,11 +1,32 @@
 # Copilot Instructions
 
+## Answers
+
+Write answers in [ASD-STE100 Simplified Technical English](https://en.wikipedia.org/wiki/Simplified_Technical_English). Obey these rules:
+
+- Give one meaning to each word. Use each word as one part of speech.
+- Write short sentences. Use a maximum of 20 words in an instruction, and 25 words in a description.
+- Write one instruction in each sentence.
+- Write about one topic in each paragraph. Write a maximum of six sentences in a paragraph.
+- Use the active voice. In a description, use the passive voice only if the agent is unknown.
+- Use the simple tenses. Do not use complex verb forms.
+- Use the "-ing" form only in a technical noun or as part of one.
+- Do not write a noun group of more than three words.
+- Keep the articles, the subjects, and the verbs. Do not remove them to make the text short.
+- Use a vertical list if the text is complex.
+- Start a warning with the command or with the condition.
+
+Do not apply these rules to quoted material. Code, commands, file paths, identifiers, error messages, and commit messages stay the same.
+
+The standard also has a dictionary of about 900 approved words. That list is not available here, so obey the writing rules and use simple words.
+
 ## General Principles
 
 - **Verify before fixing**: Confirm bug is triggerable by user before fixing. No fixes for theoretical issues in unreachable code paths.
 - **Understand before changing**: Understand why existing code works before modifying. No redesigning APIs, protocols, or data flows unless asked.
 - **Run and verify**: Run scripts/code after modifying to confirm they work. Prove correctness, don't assume.
 - **Keep it simple**: Prefer straightforward solutions. No defensive code (retries, timeouts, guards) without evidence problem exists. Less code is better.
+- **Every feature gets an example**: A new feature is not done until an example shows it. Add a new example, or extend one that already exists. A feature that only tests prove is a feature nobody can see. Run the example and confirm the new behavior appears in its output.
 - **Never mutate caller-supplied config**: Options/settings structs a caller hands in are read-only and must read back exactly as written. When you need an "already applied" latch, derive it from state the code already records rather than spending a config field.
 
 ## Code Comments
