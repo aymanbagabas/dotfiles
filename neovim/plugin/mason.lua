@@ -17,7 +17,6 @@ local ensure_installed = {
   "lua-language-server",
   "pgformatter",
   "prettier",
-  "rust-analyzer",
   "shfmt",
   "stylua",
   "terraform-ls",
