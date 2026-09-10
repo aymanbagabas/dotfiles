@@ -6,7 +6,11 @@ export PATH="$HOME/.go/bin:$PATH"
 export PATH="$HOME/.bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
-export PATH="$HOME/.docker/bin:$PATH"
+
+# Docker Desktop also links these into /usr/local/bin, so this is only a
+# fallback for when it is set not to. Append rather than prepend: the directory
+# ships a kubectl, and a real one installed later should win over it.
+export PATH="$PATH:$HOME/.docker/bin"
 
 # ── Locale ────────────────────────────────────────────────────────────────────
 
