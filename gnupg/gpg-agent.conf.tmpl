@@ -1,0 +1,11 @@
+# Generated from gnupg/gpg-agent.conf.tmpl. Do not edit here.
+
+# Keep an unlocked key usable for a long time. The agent still forgets it when
+# the agent stops.
+default-cache-ttl 60480000
+max-cache-ttl 60480000
+
+# macOS only: pinentry-mac gives a GUI prompt, so PIN entry works from editors
+# and from non-interactive shells. gnupg/install_darwin.sh finds the program,
+# and this line is empty on the other systems.
+${GPG_PINENTRY_PROGRAM:+pinentry-program $GPG_PINENTRY_PROGRAM}
