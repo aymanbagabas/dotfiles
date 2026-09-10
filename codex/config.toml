@@ -12,3 +12,6 @@ trust_level = "trusted"
 
 [tui.model_availability_nux]
 "gpt-5.6-sol" = 3
+
+[features]
+hooks = true
