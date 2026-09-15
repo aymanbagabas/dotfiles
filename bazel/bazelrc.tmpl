@@ -1,0 +1,31 @@
+# Generated from bazel/bazelrc.tmpl by the dotfiles bootstrap. Do not edit.
+#
+# Bazel derives its output base from the workspace *path*, so every worktree and
+# every clone gets its own server and its own bazel-out. That isolation is
+# wanted, but without a shared cache a fresh worktree rebuilds everything even
+# when a sibling worktree at the same commit built it minutes ago.
+#
+# The disk cache is what the worktrees share. Entries are keyed by a digest over
+# the action command line, its input contents, and the platform, so one cache
+# serves every repository on the machine without collisions. Partitioning it per
+# repository would only buy N separate size budgets, which is no ceiling at all.
+#
+# Bazel does not expand ~ or environment variables in an rc file, so this file
+# is templated rather than linked.
+
+build --disk_cache=$HOME/.cache/bazel-disk
+
+# Bazel never evicts from a disk cache unless a GC policy is set, and every
+# checkout on the machine writes to this one. Collection runs in the background
+# once a server goes idle, so it stays off the critical path.
+build --experimental_disk_cache_gc_max_size=100G
+build --experimental_disk_cache_gc_max_age=30d
+
+# The repository cache holds the external archives Bazel downloads. It already
+# defaults to a single per-user directory under the output user root, so every
+# workspace shares it and no flag is needed here.
+
+# Read order is system rc, then workspace rc, then this file, and the last line
+# wins for a single-valued flag. A repository that generates its own
+# --disk_cache is therefore overridden by the setting above, which is the
+# point: one cache for the whole machine.

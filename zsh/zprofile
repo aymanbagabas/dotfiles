@@ -37,6 +37,22 @@ fi
 # target dir, so parallel builds in different projects queue up.
 export CARGO_TARGET_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cargo-target"
 
+# ── Node ──────────────────────────────────────────────────────────────────────
+
+# pnpm keeps one content-addressed store and hard-links packages from it into
+# each `node_modules`, so many worktrees of one repository cost a single copy.
+# The store lives under this directory and must stay on the same filesystem as
+# the checkouts, or pnpm copies instead of links.
+export PNPM_HOME="$HOME/.local/share/pnpm"
+
+# ── Bazel ─────────────────────────────────────────────────────────────────────
+
+# Bazel keys its output base on the workspace path, so every worktree gets its
+# own `bazel-out` and rebuilds from scratch. The disk cache in ~/.bazelrc is
+# what they share. This variable points the copilot-agent-runtime wrapper, which
+# generates its own cache setting, at that same directory.
+export COPILOT_BAZEL_DISK_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/bazel-disk"
+
 # ── Bun ───────────────────────────────────────────────────────────────────────
 
 export BUN_INSTALL="$HOME/.bun"
