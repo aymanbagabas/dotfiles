@@ -42,7 +42,10 @@ Keep the original spelling when you quote something or refer to something that a
 
 ## Commit Conventions
 
-- [Conventional Commits](https://www.conventionalcommits.org/) with scope when applicable (e.g., `fix(git): ...`, `feat(fish): ...`).
+- **Match the repository's own style. Look before you write.** Read the recent history first: `git log --no-merges -n 30 --format='%s'` shows the subject form, and `git log -n 10` shows whether bodies wrap, how they explain a change, and which trailers appear. Copy what you find.
+- **Read the contributor documents too.** Check `CONTRIBUTING.md`, `AGENTS.md`, and `.github/`, then `git config --get commit.template`, then a commitlint config (`.commitlintrc*`, `commitlint.config.*`, or a `commitlint` key in `package.json`). A documented rule beats a pattern you inferred.
+- **Use [Conventional Commits](https://www.conventionalcommits.org/) only as the fallback**, with a scope when one applies (`fix(git): ...`, `feat(fish): ...`). Choose it when the history shows no consistent style and no document states one. Never impose it on a repository that writes commits another way. A common form is a bare area prefix, `area: lowercase description`, which carries a scope but no type.
+- **Find the pull request style as well.** `gh pr list --state merged --limit 20 --json title,body` shows how titles and bodies are written, and whether the title repeats the commit subject. Honor `.github/PULL_REQUEST_TEMPLATE.md` when it exists, and fill its sections rather than replacing them.
 - One logical change per commit.
 - Commits signed off (`-s` flag) — configured in gitconfig.
 - **Never invent an identity. Read it from gitconfig.** The author name and email
