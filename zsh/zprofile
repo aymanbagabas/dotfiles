@@ -33,10 +33,6 @@ if [ -f "$HOME/.cargo/env" ]; then
 	source "$HOME/.cargo/env"
 fi
 
-# One build cache for every project. Cargo takes an exclusive lock on the
-# target dir, so parallel builds in different projects queue up.
-export CARGO_TARGET_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/cargo-target"
-
 # ── Node ──────────────────────────────────────────────────────────────────────
 
 # pnpm keeps one content-addressed store and hard-links packages from it into
