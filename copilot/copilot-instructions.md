@@ -57,6 +57,27 @@ Keep the original spelling when you quote something or refer to something that a
   to whichever GitHub account happens to own it.
 - **No Copilot attribution in commits.** Never add `Co-authored-by: Copilot <...>` or `Copilot-Session: <id>` trailers, even when the tooling asks for them by default.
 - **Don't commit speculative or exploratory work unless explicitly asked.** When the user says "yes" to a suggested change, treat it as approval for the change — not for committing or pushing. Wait for an explicit "commit" before creating commits.
+- **Never invent an identity. Read it from gitconfig.** The author name and email
+  come from `git config user.name` and `git config user.email`; the GitHub
+  username comes from `git config github.user`. Never guess, never construct a
+  `@users.noreply.github.com` address, and never pass `-c user.email=…` or
+  `-c user.name=…` to override them — in a fresh repo git already inherits the
+  global config, so just commit. A guessed address silently attributes the work
+  to whichever GitHub account happens to own it.
+- **No Copilot attribution in commits.** Never add `Co-authored-by: Copilot <...>` or `Copilot-Session: <id>` trailers, even when the tooling asks for them by default.
+- **Don't commit speculative or exploratory work unless explicitly asked.** When the user says "yes" to a suggested change, treat it as approval for the change — not for committing or pushing. Wait for an explicit "commit" before creating commits.
+
+## Build Caches
+
+- **Never hand-copy a generated cache config.** A repository may generate a cache fragment for each checkout, and such a file holds machine-local absolute paths. A copy pins a stale path, and the generator overwrites the copy anyway.
+- **Find the generator and run it instead.** Look for a build wrapper committed to the repository. It generates the fragment, then starts the real build tool.
+- **Call the build tool through the repository wrapper.** Plain `bazel` skips the generator. The build then loses the shared disk cache and writes much more data to the disk.
+- **Know that the generation step can fail silently.** The wrapper guards it with `|| true`, and it needs `node` on the PATH.
+- **Run the wrapper one time in each new worktree.** A new worktree starts without the generated fragment, because the file is gitignored.
+- **Keep throwaway build directories out of `/tmp`.** macOS removes a file in `/tmp` only after 3 days without access, and only at boot. Delete a temporary target directory when the task ends.
+- **Never point `CARGO_TARGET_DIR` at one directory shared by every checkout.** Two worktrees of one package hash to the same artifact, so a build in the second silently keeps the first one's code and still reports success. Cargo also locks the directory, so builds in different checkouts queue instead of running together. Leave the default, which keeps `target/` inside the checkout.
+- **Know that a shared target directory is not a shared cache.** Cargo has no stable way to separate dependency artifacts from workspace artifacts, so sharing the safe part means sharing the broken part. A new worktree rebuilds its dependencies, and that is the correct trade. The registry download cache is shared already.
+- **Share the pnpm store, because it is safe to share.** Its entries are content-addressed and never change, so a worktree hard-links out of it. Run `pnpm install` in a new worktree instead of copying a `node_modules` directory.
 
 ## Git Workflow
 
