@@ -1,0 +1,368 @@
+#!/usr/bin/env bash
+# List the issues and PRs that have changes you did not see. Run it with --help
+# for the commands, options, and examples.
+
+set -euo pipefail
+
+# gh runs an extension with GH_EXTENSION set, and GH_PATH holds the path of gh.
+# The messages name the command the way the user types it.
+name=gh-notifs
+if [[ -n ${GH_EXTENSION:-} ]]; then
+	name="gh notifs"
+fi
+gh=${GH_PATH:-gh}
+
+help() {
+	sed "s/gh-notifs/$name/g" <<'EOF'
+Usage: gh-notifs [options] [command]
+
+List the issues and PRs that have changes you did not see, newest first. In a
+GitHub repository, it lists only that repository. In other directories, it
+lists all repositories. Use the filters to select the items, for example the
+items that you opened.
+
+Commands:
+  (none)        Choose items in fzf, with a preview, and open them in the browser
+  list          Print the list; on a terminal, show it in $PAGER
+  open          Open in the browser the PR or issue of each line on stdin
+  preview REF   Print the page of a PR or issue; REF is [owner/repo#]number
+  watch         Show the newest items on the full screen, and refresh them
+
+Options:
+  -n N               Show at most N items (default 100)
+  -A, --all          Also show the items that you read
+  -i, --interval S   Refresh watch every S seconds (default 60)
+  --ansi             Print for a terminal also in a pipe: ages, links, and colors
+  --color[=WHEN]     Use colors and text styles in the list and in the fzf
+                     theme. WHEN is auto, always, or never (default auto). auto
+                     uses them only for a terminal, and only if NO_COLOR is not
+                     set. --color alone means always.
+  -h, --help         Show this help
+
+Filters:
+  With several filters, an item must match all of them.
+  --me                 Items that you opened (author:@me)
+  --assigned           Items that are assigned to you (assignee:@me)
+  --mentioned          Items that mention you (mentions:@me)
+  --commented          Items that you commented on (commenter:@me)
+  --involved           Items that involve you in one of these four ways
+                       (involves:@me)
+  --review-requested   PRs that request your review, directly or from a team
+                       (review-requested:@me)
+
+Output of list, one line for each item, with 8 tab-separated fields:
+  1. • if you did not read the item, else empty
+  2. Time: an age such as "3h ago" on a terminal, else the ISO 8601 update time
+  3. Type: PR or issue
+  4. State: open, draft, merged, or closed
+  5. owner/repo#number
+  6. Title
+  7. Author: the login of the person who opened the item
+  8. Notification type: author, assigned, review requested, or other. With
+     the --mentioned, --commented, or --involved filter, it is mentioned,
+     commented, or involved instead of other.
+  On a terminal, fields 5 and 6 are OSC 8 links to the item, and the fields
+  have colors and text styles (see --color).
+
+Keys:
+  fzf     enter open, ctrl-/ preview, ctrl-d/u half page, ctrl-f/b page, esc quit
+  watch   q or ctrl-c quit
+
+Environment:
+  NO_COLOR   If it is set and not empty, use no colors or text styles
+             (--color=always overrides it)
+  PAGER      The pager for list on a terminal (default less)
+  BROWSER    The browser that gh browse uses for open
+
+Examples:
+  gh-notifs
+      Choose items in fzf, and open them.
+  gh-notifs --me
+      Choose only from the items that you opened.
+  gh-notifs list --review-requested -n 10
+      Print the 10 newest PRs that request your review and that you did not read.
+  gh-notifs -A -n 20
+      Choose from the 20 most recently updated items, read or not.
+  gh-notifs list -n 5
+      Print the 5 newest items that you did not read.
+  gh-notifs list -A | awk -F'\t' '$1'
+      From a list that includes read items, print only the unread ones.
+  gh-notifs list | gum choose | gh-notifs open
+  gh-notifs list | gum filter | gh-notifs open
+  gh-notifs list | fzf | gh-notifs open
+      Choose items with a different picker, and open them.
+  gh-notifs list --ansi | fzf --ansi | gh-notifs open
+      The same, with ages, links, and colors in the picker.
+  gh-notifs list --color=never
+      Print the list with no colors or text styles.
+  echo owner/repo#123 | gh-notifs open
+      Open a PR or issue by its reference.
+  gh-notifs preview 123
+  gh-notifs preview owner/repo#123
+      Print the page of #123 in this repository, or in owner/repo.
+  gh-notifs watch -i 30
+      Show the newest items on the full screen, and refresh them every 30 seconds.
+EOF
+}
+
+usage() {
+	help >&2
+	exit 2
+}
+
+# Print at most $1 items. If $2 is empty, print only the items that you did not
+# read. If $3 is not empty, print for a person: the time as an age, and OSC 8
+# links. Else print plain text with the ISO 8601 time. If $4 is not empty, add
+# colors and text styles. $5 holds the filter options, such as "--me --assigned",
+# and an item must match the search qualifiers of all of them.
+list() {
+	local limit=$1 first=100 cursor="" page lines flag q="sort:updated-desc" why=other
+	# shellcheck disable=2086
+	for flag in $5; do
+		case $flag in
+		--me) q="author:@me $q" ;;
+		--assigned) q="assignee:@me $q" ;;
+		--mentioned) q="mentions:@me $q" why=mentioned ;;
+		--commented) q="commenter:@me $q" why=commented ;;
+		--involved) q="involves:@me $q" why=involved ;;
+		--review-requested) q="review-requested:@me $q" ;;
+		esac
+	done
+	if [[ $(git remote -v 2>/dev/null) == *github.com* ]]; then
+		q="repo:{owner}/{repo} $q"
+	fi
+	# The search cannot filter on the read state. So with -A, ask for the limit,
+	# and else get pages of 100, the maximum, until there are enough unread items.
+	if [[ -n $2 && $limit -lt 100 ]]; then
+		first=$limit
+	fi
+	while ((limit > 0)); do
+		page=$(ALL=$2 HUMAN=$3 COLOR=$4 WHY=$why "$gh" api graphql -F q="$q" -F first="$first" \
+			${cursor:+-f after="$cursor"} -f query='
+        query($q: String!, $first: Int!, $after: String) {
+            viewer { login }
+            search(query: $q, type: ISSUE, first: $first, after: $after) {
+                pageInfo { hasNextPage endCursor }
+                nodes {
+                    __typename
+                    ... on Issue {
+                        number title url state updatedAt isReadByViewer viewerDidAuthor
+                        author { login } repository { nameWithOwner } assignees(first: 10) { nodes { login } }
+                    }
+                    ... on PullRequest {
+                        number title url state isDraft updatedAt isReadByViewer viewerDidAuthor
+                        author { login } repository { nameWithOwner } assignees(first: 10) { nodes { login } }
+                        viewerLatestReviewRequest { id }
+                    }
+                }
+            }
+        }' --jq '
+        def ago: (now - fromdate) as $s
+            | if $s < 3600 then "\($s / 60 | floor)m ago"
+              elif $s < 86400 then "\($s / 3600 | floor)h ago"
+              else "\($s / 86400 | floor)d ago" end;
+        def osc8($id; $url):
+            if env.HUMAN != "" then "\u001b]8;id=\($id);\($url)\u0007\(.)\u001b]8;;\u0007" else . end;
+        def sgr($code): if env.COLOR != "" then "\u001b[\($code)m\(.)\u001b[0m" else . end;
+        {"PR open": 32, "PR draft": 90, "PR merged": 35, "PR closed": 31,
+         "issue open": 32, "issue closed": 35} as $colors
+        | .data.viewer.login as $me
+        | .data.search
+        | (.pageInfo | if .hasNextPage then .endCursor else "" end),
+          (.nodes[] | select(env.ALL != "" or (.isReadByViewer | not))
+            | .number as $n | .url as $url | .isReadByViewer as $read
+            | (if .__typename == "PullRequest" then "PR" else "issue" end) as $type
+            | (if .isDraft and .state == "OPEN" then "draft" else .state | ascii_downcase end) as $state
+            | (if .viewerDidAuthor then "author"
+               elif any(.assignees.nodes[]; .login == $me) then "assigned"
+               elif .viewerLatestReviewRequest then "review requested"
+               else env.WHY end) as $why
+            | [(if $read then "" else "•" | sgr("1;34") end),
+               (if env.HUMAN != "" then .updatedAt | ago else .updatedAt end | sgr(2)),
+               ($type | sgr(2)),
+               ($state | sgr($colors["\($type) \($state)"])),
+               ("\(.repository.nameWithOwner)#\($n)" | sgr(2) | osc8($n; $url)),
+               (.title | if $read then . else sgr(1) end | osc8($n; $url)),
+               (.author.login // "ghost" | sgr(2)),
+               ($why | sgr(2))]
+            | @tsv)') || return
+		# The first line is the cursor of the next page, or empty on the last page.
+		{
+			read -r cursor
+			mapfile -t lines
+		} <<<"$page"
+		if ((${#lines[@]})); then
+			printf '%s\n' "${lines[@]:0:limit}"
+		fi
+		limit=$((limit - ${#lines[@]}))
+		[[ -n $cursor ]] || break
+	done
+}
+
+# Print 1 if the output gets colors and text styles. $1 is the --color value
+# (auto, always, or never), and $2 is not empty if the output is for a person.
+use_color() {
+	if [[ $1 == always || ($1 == auto && -n $2 && -z ${NO_COLOR:-}) ]]; then
+		echo 1
+	fi
+}
+
+open_lines() {
+	local line
+	while IFS= read -r line; do
+		if [[ $line =~ ([[:alnum:]_.-]+/[[:alnum:]_.-]+)#([0-9]+) ]]; then
+			"$gh" browse -R "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}"
+		fi
+	done
+}
+
+# A number alone does not tell a PR from an issue. gh pr view fails fast for an
+# issue, so try it first. In fzf, GH_FORCE_TTY formats the page for the pane.
+preview() {
+	local repo=() n
+	if [[ $1 =~ ([[:alnum:]_.-]+/[[:alnum:]_.-]+)#([0-9]+) ]]; then
+		repo=(-R "${BASH_REMATCH[1]}")
+		n=${BASH_REMATCH[2]}
+	elif [[ $1 =~ ^#?([0-9]+)$ ]]; then
+		n=${BASH_REMATCH[1]}
+	else
+		printf 'usage: %s preview [owner/repo#]number\n' "$name" >&2
+		exit 2
+	fi
+	if [[ -n ${FZF_PREVIEW_COLUMNS:-} ]]; then
+		export GH_FORCE_TTY=$FZF_PREVIEW_COLUMNS GH_PAGER=cat
+	fi
+	"$gh" pr view "${repo[@]}" "$n" 2>/dev/null || "$gh" issue view "${repo[@]}" "$n"
+}
+
+# Refresh every $1 seconds. $2, $3, and $5 are the options of list, and $4 is
+# the --color value. If a refresh fails, the old list stays on the screen until
+# the next refresh.
+watch_list() {
+	local seconds=$1 limit=$2 all=$3 color=$4 flags=$5 out rows key saved lines deadline
+	if [ ! -t 1 ]; then
+		printf '%s watch: stdout is not a terminal\n' "$name" >&2
+		exit 1
+	fi
+	# Use the alternate screen and raw input, like a pager, and restore both on
+	# exit. In raw mode, Ctrl+C sends no signal, so it is read as a key. opost
+	# keeps the change of LF to CR LF on output.
+	saved=$(stty -g </dev/tty)
+	trap 'stty "$saved" < /dev/tty; tput cnorm; tput smam; tput rmcup' EXIT
+	trap 'exit 130' INT TERM
+	# On a resize, run the script again, so that it reads the new height. exec
+	# does not run the EXIT trap, so restore the terminal settings first.
+	trap 'stty "$saved" < /dev/tty; exec "$0" watch -i "$seconds" -n "$limit" ${all:+-A} $flags --color="$color"' WINCH
+	# Hide the cursor, and cut long lines at the edge so each item uses one row.
+	tput smcup
+	tput civis
+	tput rmam
+	stty raw -echo opost </dev/tty
+	while :; do
+		if out=$(list "$limit" "$all" 1 "$(use_color "$color" 1)" "$flags"); then
+			read -r rows _ < <(stty size </dev/tty)
+			mapfile -t lines <<<"$out"
+			clear
+			# Put a newline only between lines, so that the last row does not scroll.
+			printf '%s' "${lines[0]}"
+			printf '\n%s' "${lines[@]:1:rows-1}"
+		fi
+		# Wait until the next refresh, and ignore all keys except q and Ctrl+C.
+		deadline=$((SECONDS + seconds))
+		while ((SECONDS < deadline)); do
+			read -rsn1 -t $((deadline - SECONDS)) key </dev/tty || continue
+			[[ $key == q ]] && exit 0
+			[[ $key == $'\x03' ]] && exit 130
+		done
+	done
+}
+
+limit=100
+all=""
+flags=""
+interval=60
+ansi=""
+color=auto
+args=()
+while (($#)); do
+	case $1 in
+	-n)
+		[[ ${2:-} =~ ^[1-9][0-9]*$ ]] || usage
+		limit=$2
+		shift 2
+		;;
+	-A | --all)
+		all=1
+		shift
+		;;
+	--me | --assigned | --mentioned | --commented | --involved | --review-requested)
+		flags+=" $1"
+		shift
+		;;
+	-i | --interval)
+		[[ ${2:-} =~ ^[1-9][0-9]*$ ]] || usage
+		interval=$2
+		shift 2
+		;;
+	--ansi)
+		ansi=1
+		shift
+		;;
+	--color)
+		color=always
+		shift
+		;;
+	--color=*)
+		color=${1#--color=}
+		[[ $color =~ ^(auto|always|never)$ ]] || usage
+		shift
+		;;
+	-h | --help)
+		help
+		exit 0
+		;;
+	-*) usage ;;
+	*)
+		args+=("$1")
+		shift
+		;;
+	esac
+done
+set -- "${args[@]}"
+
+case ${1:-} in
+"")
+	# GitHub colors from the 16 terminal colors, or no colors.
+	theme=bw
+	if [[ -n $(use_color "$color" 1) ]]; then
+		theme=16,fg:-1,bg:-1,hl:blue,fg+:-1:bold,bg+:-1,hl+:bright-blue:bold,gutter:-1,query:-1
+		theme+=,prompt:blue,pointer:blue,marker:green,spinner:blue,label:blue
+		theme+=,info:bright-black,border:bright-black,separator:bright-black
+		theme+=,scrollbar:bright-black,header:bright-black,footer:bright-black
+	fi
+	# fzf runs the list itself, so it stops the list when you exit early. With
+	# a terminal on stdin, fzf would first list the files of the directory.
+	fzf --color="$theme" --reverse --ansi --bind "start:reload:\"$0\" list --ansi --color=$color -n $limit ${all:+-A}$flags" \
+		--delimiter '\t' --preview "\"$0\" preview {5}" --preview-window down \
+		--footer 'enter open · ctrl-/ preview · ctrl-d/u half page · ctrl-f/b page · esc quit' \
+		--bind 'ctrl-/:toggle-preview,ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up' \
+		--bind 'ctrl-f:preview-page-down,ctrl-b:preview-page-up' </dev/null | open_lines
+	;;
+list)
+	# Like git and gh, use the pager on a terminal. PAGER can hold options,
+	# so it is not quoted.
+	if [ -t 1 ]; then
+		# shellcheck disable=2086
+		list "$limit" "$all" 1 "$(use_color "$color" 1)" "$flags" | ${PAGER:-less}
+	else
+		list "$limit" "$all" "$ansi" "$(use_color "$color" "$ansi")" "$flags"
+	fi
+	;;
+open) open_lines ;;
+preview) preview "${2:-}" ;;
+watch)
+	(($# == 1)) || usage
+	watch_list "$interval" "$limit" "$all" "$color" "$flags"
+	;;
+*) usage ;;
+esac
