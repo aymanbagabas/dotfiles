@@ -116,7 +116,7 @@ usage() {
 # colors and text styles. $5 holds the filter options, such as "--me --assigned",
 # and an item must match the search qualifiers of all of them.
 list() {
-	local limit=$1 first=100 cursor="" page lines flag q="sort:updated-desc" why=other
+	local limit=$1 first=100 cursor="" page lines line flag q="sort:updated-desc" why=other
 	# shellcheck disable=2086
 	for flag in $5; do
 		case $flag in
@@ -187,9 +187,13 @@ list() {
                ($why | sgr(2))]
             | @tsv)') || return
 		# The first line is the cursor of the next page, or empty on the last page.
+		# The bash of macOS is 3.2, which has no mapfile.
+		lines=()
 		{
 			read -r cursor
-			mapfile -t lines
+			while IFS= read -r line; do
+				lines+=("$line")
+			done
 		} <<<"$page"
 		if ((${#lines[@]})); then
 			printf '%s\n' "${lines[@]:0:limit}"
@@ -219,9 +223,9 @@ open_lines() {
 # A number alone does not tell a PR from an issue. gh pr view fails fast for an
 # issue, so try it first. In fzf, GH_FORCE_TTY formats the page for the pane.
 preview() {
-	local repo=() n
+	local repo="" n
 	if [[ $1 =~ ([[:alnum:]_.-]+/[[:alnum:]_.-]+)#([0-9]+) ]]; then
-		repo=(-R "${BASH_REMATCH[1]}")
+		repo=${BASH_REMATCH[1]}
 		n=${BASH_REMATCH[2]}
 	elif [[ $1 =~ ^#?([0-9]+)$ ]]; then
 		n=${BASH_REMATCH[1]}
@@ -232,14 +236,14 @@ preview() {
 	if [[ -n ${FZF_PREVIEW_COLUMNS:-} ]]; then
 		export GH_FORCE_TTY=$FZF_PREVIEW_COLUMNS GH_PAGER=cat
 	fi
-	"$gh" pr view "${repo[@]}" "$n" 2>/dev/null || "$gh" issue view "${repo[@]}" "$n"
+	"$gh" pr view ${repo:+-R "$repo"} "$n" 2>/dev/null || "$gh" issue view ${repo:+-R "$repo"} "$n"
 }
 
 # Refresh every $1 seconds. $2, $3, and $5 are the options of list, and $4 is
 # the --color value. If a refresh fails, the old list stays on the screen until
 # the next refresh.
 watch_list() {
-	local seconds=$1 limit=$2 all=$3 color=$4 flags=$5 out rows key saved lines deadline
+	local seconds=$1 limit=$2 all=$3 color=$4 flags=$5 out rows key saved lines line deadline resized=""
 	if [ ! -t 1 ]; then
 		printf '%s watch: stdout is not a terminal\n' "$name" >&2
 		exit 1
@@ -250,9 +254,7 @@ watch_list() {
 	saved=$(stty -g </dev/tty)
 	trap 'stty "$saved" < /dev/tty; tput cnorm; tput smam; tput rmcup' EXIT
 	trap 'exit 130' INT TERM
-	# On a resize, run the script again, so that it reads the new height. exec
-	# does not run the EXIT trap, so restore the terminal settings first.
-	trap 'stty "$saved" < /dev/tty; exec "$0" watch -i "$seconds" -n "$limit" ${all:+-A} $flags --color="$color"' WINCH
+	trap 'resized=1' WINCH
 	# Hide the cursor, and cut long lines at the edge so each item uses one row.
 	tput smcup
 	tput civis
@@ -261,16 +263,29 @@ watch_list() {
 	while :; do
 		if out=$(list "$limit" "$all" 1 "$(use_color "$color" 1)" "$flags"); then
 			read -r rows _ < <(stty size </dev/tty)
-			mapfile -t lines <<<"$out"
+			lines=()
+			while IFS= read -r line; do
+				lines+=("$line")
+			done <<<"$out"
 			clear
 			# Put a newline only between lines, so that the last row does not scroll.
 			printf '%s' "${lines[0]}"
 			printf '\n%s' "${lines[@]:1:rows-1}"
 		fi
-		# Wait until the next refresh, and ignore all keys except q and Ctrl+C.
+		# Wait until the next refresh, and ignore all keys except q and Ctrl+C. A
+		# signal does not end read, so read for 1 second at a time to see a resize.
 		deadline=$((SECONDS + seconds))
 		while ((SECONDS < deadline)); do
-			read -rsn1 -t $((deadline - SECONDS)) key </dev/tty || continue
+			# On a resize, run the script again, so that it reads the new height.
+			# Not in the trap: after an exec there, bash 3.2 keeps the signal
+			# blocked. exec does not run the EXIT trap, so restore the terminal
+			# settings first.
+			if [[ -n $resized ]]; then
+				stty "$saved" </dev/tty
+				# shellcheck disable=2086
+				exec "$0" watch -i "$seconds" -n "$limit" ${all:+-A} $flags --color="$color"
+			fi
+			read -rsn1 -t 1 key </dev/tty || continue
 			[[ $key == q ]] && exit 0
 			[[ $key == $'\x03' ]] && exit 130
 		done
@@ -328,7 +343,8 @@ while (($#)); do
 		;;
 	esac
 done
-set -- "${args[@]}"
+# Before bash 4.4, "${args[@]}" of an empty array fails under set -u.
+set -- ${args[@]+"${args[@]}"}
 
 case ${1:-} in
 "")
