@@ -81,4 +81,4 @@ Keep the original spelling when you quote something or refer to something that a
 
 ## Git Workflow
 
-- **Always merge, never rebase, when integrating an upstream branch (e.g. `main`) into a feature branch.** Use `git merge` or `git pull --no-rebase`. Never run `git pull --rebase`, `git rebase <upstream>`, or a bare `git pull` (the local default may be rebase). Branches preserve merge topology intentionally; rebasing flattens history and forces reflog recovery.
+- **Prefer merge over rebase for upstream updates to a feature branch (e.g., from `main`).** Use `git merge` or `git pull --no-rebase` by default. Rebase is discouraged, not prohibited; use it when the task calls for it. Avoid a bare `git pull`, because the local default may be rebase. Merge preserves branch topology; rebase rewrites history and can require reflog recovery.
