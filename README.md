@@ -79,6 +79,17 @@ nix develop .#default --command dot-sync
 
 ## Tips
 
+### Custom tmux tab names
+
+The standalone configuration in `tmux/tmux.conf` supports custom tab names.
+
+Press `Alt+b`, then `,`, to enter a custom tab name. Press `Enter` to apply it.
+For example, enter `logs` to replace the directory label with `logs`.
+A manual rename disables automatic rename for that window. Other windows keep
+their directory labels.
+
+Press `Alt+b`, then `r`, to reload the configuration after an update.
+
 ### Fix Tmux Colors on MacOS
 
 See [this gist](https://gist.github.com/bbqtd/a4ac060d6f6b9ea6fe3aabe735aa9d95).
